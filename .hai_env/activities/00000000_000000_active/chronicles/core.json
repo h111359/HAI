@@ -1,7 +1,7 @@
 {
   "core_format_version": 1,
   "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
-  "updated_at": "2026-11-14T07:19:34Z",
+  "updated_at": "2026-11-14T17:20:46Z",
   "sources": [
     {
       "binding": {
@@ -21,8 +21,8 @@
           }
         ]
       },
-      "prefix_bytes": 2918226,
-      "prefix_sha256": "b11cf0142fc06b1a397a7812bb0ed34ac1b89be43a4e55546ff7552f44fd94f0",
+      "prefix_bytes": 3064582,
+      "prefix_sha256": "ff57e2d1ba313e9d82384e4d6f95f5d69e37b5c152ff39081032f3f10a3188b7",
       "segment_path": "chronicles/20261112_195218_segment-01.md",
       "original_started_at": "2026-11-12T19:52:18.056Z",
       "closure_binding": null,
@@ -194,6 +194,38 @@
           "timestamp": "2026-11-14T07:18:24.636Z",
           "message_id": "01a1d8eb-f478-7e70-9f0c-e5a5067d419d",
           "turn_id": "01a1d8eb-f421-7051-aaad-77fbb098cbc1"
+        },
+        {
+          "source_position": 874,
+          "role": "assistant",
+          "text": "Committed as `c6d15f5` \u2014 **Handle recording source format changes with safe reconciliation**.\n\nRecording verified before commit. No push performed. Temporary working files remain untracked.",
+          "timestamp": "2026-11-14T07:20:29.754Z",
+          "message_id": "msg_08f247297895facc016af80bbcc84487d2a75ef2608e2fcb00",
+          "turn_id": "01a1d8eb-f421-7051-aaad-77fbb098cbc1"
+        },
+        {
+          "source_position": 887,
+          "role": "user",
+          "text": "Why you have not committed these temporary working files?\n",
+          "timestamp": "2026-11-14T17:16:26.520Z",
+          "message_id": "01a1db0f-7816-7b81-967a-caf4f7e7fdb0",
+          "turn_id": "01a1db0f-764e-76b2-bff9-e8117b8c237a"
+        },
+        {
+          "source_position": 888,
+          "role": "assistant",
+          "text": "I excluded them because they were tools used to perform the work: runtime request JSON files, chat-operation requests, and the reviewer\u2019s diagnostic script. I committed the implementation, tests, Activity records, review findings, and verified chronicles.\n\n**\u201cTemporary\u201d did not mean disposable**\u2014the files remain preserved locally. I interpreted your commit request as covering the deliverable and recorded evidence, rather than every working file. HAI\u2019s placement rules require keeping those files with the Activity, but do not automatically prohibit committing them.\n\nIf you intended a complete Activity snapshot, my selection was narrower than you intended; those files can also be committed.",
+          "timestamp": "2026-11-14T17:16:35.003Z",
+          "message_id": "msg_0185f1faab9189de016af8976ece9487d280d64b993142dbb0",
+          "turn_id": "01a1db0f-764e-76b2-bff9-e8117b8c237a"
+        },
+        {
+          "source_position": 897,
+          "role": "user",
+          "text": "commit them as well\n",
+          "timestamp": "2026-11-14T17:20:19.161Z",
+          "message_id": "01a1db13-04d5-77a3-8db9-c043edf477d8",
+          "turn_id": "01a1db13-0471-7683-b566-7b9b436c68f5"
         }
       ]
     }
@@ -203,12 +235,12 @@
     "chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/checkpoint.json": "97ff8de5fafb479e1029a56840e67de6571af335dc002cb9bbab1ec9131bc19e",
     "chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/20261112_195218_segment-01.md": "a55a29894ae58fa20a83370f58fcef8350663288966ab424cccb7a88d1254335",
     "chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/reconciliation.json": "c2a5ddce3a395c5e110291b72515fc8bbd553a0ce55f129cd9b99cd1ae38ff66",
-    "chronicles/20261112_195218_segment-01.md": "cdc0a40723eda7da703684b2bfb3136e826096f4c4e7b4e4531c1054d0ffccbd",
-    "chronicles/checkpoint.json": "af4a9a490882b08a6a1b6411c9328e4a5955d509dd09faef9588170034a7a3ab"
+    "chronicles/20261112_195218_segment-01.md": "35890959284bdb700f2d9867ac3c11c107e49d82e05884655cba21e46846f590",
+    "chronicles/checkpoint.json": "a040c4df114f014d61848a08787d5522aa7b3b04661b14bbdca17743aac056e2"
   },
   "provenance": {
-    "source": "current research Activity binding",
-    "reason": "Synchronize saved research exchanges before handoff"
+    "source": "user: commit them as well",
+    "reason": "Preserve complete non-ignored Activity working material"
   },
   "enablement_revision": 2
 }
