@@ -189,6 +189,56 @@ class CodexSourceTests(unittest.TestCase):
         self.assertFalse(json.loads(result.stdout)["ok"])
         self.assertFalse(self.source.exists())
 
+    def test_completed_items_keep_exact_text_and_exclude_nonfinal_work(self):
+        self.save([
+            self.record('event_msg', {'type': 'item_completed', 'turn_id': 'turn-1',
+                'item': {'type': 'UserMessage', 'id': 'item-1',
+                         'content': [{'type': 'text', 'text': '  café\n'}, {'type': 'text', 'text': 'next'}]}}),
+            self.record('event_msg', {'type': 'item_completed',
+                'item': {'type': 'AgentMessage', 'phase': 'commentary', 'content': []}}),
+            self.record('event_msg', {'type': 'item_completed',
+                'item': {'type': 'Reasoning', 'text': 'never record'}}),
+            self.record('event_msg', {'type': 'item_completed',
+                'item': {'type': 'SubAgentActivity', 'text': 'not a human message'}}),
+            self.record('event_msg', {'type': 'item_completed',
+                'item': {'type': 'AgentMessage', 'id': 'item-2', 'phase': 'final_answer',
+                         'content': [{'type': 'Text', 'text': 'Done.\n'}]}}),
+        ])
+        result = read_source(self.source, 'auto', 'session')
+        self.assertTrue(result['ok'], result)
+        self.assertEqual(result['representation'], 'event_msg')
+        self.assertEqual(result['adapters'], ['codex-completed-item-v1'])
+        self.assertEqual([m['text'] for m in result['messages']], ['  café\nnext', 'Done.\n'])
+        self.assertEqual(result['messages'][0]['turn_id'], 'turn-1')
+
+    def test_auto_falls_back_to_response_without_merging_views(self):
+        response = self.record('response_item', {'type': 'message', 'role': 'user',
+            'content': [{'type': 'input_text', 'text': 'prompt'}]})
+        self.save([response])
+        self.assertEqual(read_source(self.source, 'auto')['representation'], 'response_item')
+        self.save([response, self.record('event_msg', {'type': 'user_message', 'message': 'prompt'})])
+        result = read_source(self.source, 'auto')
+        self.assertTrue(result['ok'], result)
+        self.assertEqual(len(result['messages']), 1)
+        self.assertEqual(result['representation'], 'event_msg')
+
+    def test_unknown_nested_shapes_and_content_fail_instead_of_disappearing(self):
+        for item in ({'type': 'FutureMessage', 'content': []},
+                     {'type': 'UserMessage', 'content': [{'type': 'image'}]},
+                     {'type': 'AgentMessage', 'content': [{'type': 'Text', 'text': 'ambiguous'}]},
+                     {}):
+            with self.subTest(item=item):
+                self.save([self.record('event_msg', {'type': 'item_completed', 'item': item})])
+                self.assertFalse(read_source(self.source, 'auto')['ok'])
+        self.save([self.record('event_msg', {'type': 'user_message', 'message': 'known'}),
+                   self.record('event_msg', {'type': 'future_user_message', 'text': 'unread'})])
+        self.assertFalse(read_source(self.source, 'auto')['ok'])
+        self.save([self.record('response_item', {'type': 'future_message', 'role': 'user',
+                   'content': [{'type': 'input_text', 'text': 'unread'}]})])
+        self.assertFalse(read_source(self.source, 'response_item')['ok'])
+        self.save([self.record('response_item', {'type': 'future_chat', 'body': 'unread'})])
+        self.assertFalse(read_source(self.source, 'response_item')['ok'])
+
 
 if __name__ == "__main__":
     unittest.main()

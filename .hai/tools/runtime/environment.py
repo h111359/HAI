@@ -76,7 +76,7 @@ def handle(operation, workspace, request, apply):
         provenance(request)
         if set(request) != {'provenance', 'changes'} or not isinstance(request['changes'], dict) or not request['changes']:
             raise ValueError('Provide explicit named changes')
-        changes = request['changes']; allowed = {'activities.location', 'features.chronicles.enabled', 'features.chronicles.record_every_prompts'}
+        changes = request['changes']; allowed = {'activities.location', 'features.chronicles.enabled', 'features.chronicles.record_every_prompts', 'features.chronicles.mode'}
         if not set(changes) <= allowed: raise ValueError('Unknown environment change')
         rel = STATE; path = checked_path(workspace, rel, allow_missing=False); before = fingerprint(path); state = read_json(path)
         template = read_json(checked_path(workspace, '.hai/templates/state.json', allow_missing=False)); contract = startup.state_contract()

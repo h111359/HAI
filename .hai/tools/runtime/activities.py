@@ -236,6 +236,8 @@ def handle(operation, workspace, request, apply):
                 requirement = request.get('recording_requirement', {'enabled': enabled, 'mandatory': False})
                 if not isinstance(requirement,dict) or type(requirement.get('mandatory')) is not bool or type(requirement.get('enabled')) is not bool or requirement['enabled'] != enabled: raise ValueError('invalid or inconsistent recording_requirement')
                 if rec.get('mandatory') is True: requirement = {**requirement, 'mandatory': True}
+                from .recording_policy import effective, recoverable
+                policy = effective(read_json(checked_path(root, STATE, allow_missing=False)), requirement['mandatory'])
                 core_recording = (requirement['enabled'] or requirement['mandatory']) and not (rec['status'] == 'verified' and request.get('recording_proof') is not None)
                 if rec['status'] == 'verified' and not core_recording:
                     from .recording import assess_closure
@@ -245,8 +247,16 @@ def handle(operation, workspace, request, apply):
                     check_recording_files(root, base, proof, request.get('recording_paths'))
                 elif core_recording:
                     from . import chronicles
-                    core_result, _ = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, False, state_fp, finalize=True)
-                    rec = {'status': 'verified', 'details': 'Core chronicles synchronized and freshly verified through assigned completed source'}
+                    try:
+                        core_result, _ = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, False, state_fp, finalize=True)
+                        rec = {'status': 'verified', 'details': 'Core chronicles synchronized and freshly verified through assigned completed source'}
+                    except SafetyError as exc:
+                        if policy['required'] or not recoverable(exc):
+                            raise
+                        # Only a failed read-only preparation can be downgraded.
+                        # Partial writes, damaged artifacts and unsafe paths remain blockers.
+                        core_recording = False
+                        rec = {'status': 'unavailable', 'details': 'Recording interrupted; retained evidence preserved; coverage gap: ' + str(exc)}
                 name = stamp.replace('-','').replace(':','').replace('T','_').removesuffix('Z') + '_' + label; dest = location + '/' + name; n = 2
                 while checked_path(root,dest).exists(): dest = location + '/' + name + f'_{n:02}'; n += 1
                 outcome_path = base + '/outcome.md'; checked_path(root,outcome_path)

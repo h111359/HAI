@@ -4,6 +4,8 @@
 
 Read-only fresh verification of assigned source coverage and recording status for an Activity.
 
+Recording policy is defined by [chronicles](../conventions/chronicles_conv.md#availability-policy). In default best-effort mode, report a source interruption and continue independent ordinary work; never claim recording succeeded. Required mode or an independently mandatory obligation retains dependent recording gates. Integrity errors and partial writes remain explicit blockers.
+
 ## Inputs
 
 A validated workspace, Activity ID, recording requirement, explicit registered bindings and authorized source access. Verification never invents missing source or assignment boundaries.

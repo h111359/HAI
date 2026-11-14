@@ -22,8 +22,8 @@ renumber occurrences. Conflicting original identity/start still blocks reading.
 
 The API is `read_source(path, representation, expected_session=None)`. JSON output
 has `ok`, source identity/start, `representation`, `durable_path`, `source_sha256`,
-`messages` and `issues`. Each normalized message has exact decoded `text`, `role`,
-actual `timestamp`, `source_session_id`, stable physical `source_position` and an
+`messages`, selected `adapters` and `issues`. Each normalized message has exact decoded `text`, `role`,
+actual `timestamp`, `source_session_id`, physical `source_position` and an
 optional original `message_id`. Physical positions are zero-based JSONL lines,
 including excluded records. Repeated identical messages retain different positions.
 The adapter has no writes, side effects, downloads or external dependencies. Exit 0
@@ -31,6 +31,15 @@ means the selected source subset parsed completely, 1 means unavailable/incomple
 source and 2 is CLI argument misuse. Returned partial messages never prove complete
 coverage. Paths outside the workspace require the caller's supplied source authority;
 acceptance of a path by this parser is not permission to read it.
+
+`auto` (the CLI default) selects supported event messages first, then response
+messages only if a complete event read contains no eligible messages. It never
+merges representations or falls back around an interpretation error. The reviewed
+registry in `adapters.py` supports legacy events, completed nested items and
+response messages. Completed item support excludes known reasoning, tool,
+subagent activity and progress records; unfamiliar message shapes interrupt
+recording. Format changes are handled by reviewed code, not executable definitions
+supplied in a source file. See [maintain source adapters](../../procedures/maintain-source-adapters.md).
 
 This tool neither scans sources nor creates or advances transcripts/checkpoints.
 It does not establish Activity attribution, enabled intervals, retained-source

@@ -1,0 +1,40 @@
+{
+  "core_format_version": 1,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "updated_at": "2026-11-12T20:39:30Z",
+  "sources": [
+    {
+      "binding": {
+        "path": "C:\\Users\\hmhri\\.codex\\sessions\\2026\\11\\12\\rollout-2026-11-12T21-52-18-01a1d151-7046-7d83-89ee-573c30ee6685.jsonl",
+        "session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+        "start_position": 52,
+        "end_position": null,
+        "representation": "event_msg",
+        "enabled_intervals": [
+          {
+            "start": {
+              "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+              "source_position": 52
+            },
+            "end": null,
+            "provenance": "Chronicles enabled before observed workflow research work prompt"
+          }
+        ]
+      },
+      "prefix_bytes": 867141,
+      "prefix_sha256": "1848109b65bfc10854418844f9710526675d07a521476f452b99d7b22cd8481d",
+      "segment_path": "chronicles/20261112_195218_segment-01.md",
+      "original_started_at": "2026-11-12T19:52:18.056Z",
+      "closure_binding": null
+    }
+  ],
+  "artifact_hashes": {
+    "chronicles/20261112_195218_segment-01.md": "a55a29894ae58fa20a83370f58fcef8350663288966ab424cccb7a88d1254335",
+    "chronicles/checkpoint.json": "97ff8de5fafb479e1029a56840e67de6571af335dc002cb9bbab1ec9131bc19e"
+  },
+  "provenance": {
+    "source": "current research Activity binding",
+    "reason": "Synchronize saved research exchanges before handoff"
+  },
+  "enablement_revision": 2
+}

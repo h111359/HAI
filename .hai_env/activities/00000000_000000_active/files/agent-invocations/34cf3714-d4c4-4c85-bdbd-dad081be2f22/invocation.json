@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 1,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "invocation_id": "34cf3714-d4c4-4c85-bdbd-dad081be2f22",
+  "agent": "recording-implementation",
+  "created_at": "2026-11-14T07:02:55Z",
+  "provenance": {
+    "source": "host under required independent verification and coordination policy",
+    "reason": "Allocate bounded reconciliation implementation"
+  }
+}

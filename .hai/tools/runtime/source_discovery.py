@@ -56,7 +56,10 @@ def inspect_source(workspace, path, identity, representation):
     raw = path.read_bytes()
     extracted = read_source(path, representation, identity)
     if not extracted['ok']:
-        raise SafetyError('Saved source is unsupported or incomplete: ' + str(extracted['issues']))
+        from .recording_policy import RecordingInterruption
+        if extracted['source_session_id'] != identity:
+            raise SafetyError('Source session does not match the selected session')
+        raise RecordingInterruption('Saved source is unsupported or incomplete: ' + str(extracted['issues']))
     if fingerprint(path) != before or extracted['source_sha256'] != hashlib.sha256(raw).hexdigest():
         raise SafetyError('Source changed during discovery; no binding was made')
     metadata = [json.loads(line)['payload'] for line in raw.splitlines()
@@ -65,7 +68,8 @@ def inspect_source(workspace, path, identity, representation):
                            or Path(m['cwd']).resolve() != workspace for m in metadata):
         raise SafetyError('Source workspace metadata does not match the selected workspace')
     users = [m for m in extracted['messages'] if m['role'] == 'user']
-    result = {'path': str(path), 'session_id': identity, 'representation': representation,
+    result = {'path': str(path), 'session_id': identity, 'representation': extracted['representation'],
+              'adapters': extracted.get('adapters', []),
               'original_started_at': extracted['original_started_at'],
               'source_sha256': extracted['source_sha256'],
               'latest_user_occurrence': ({'source_position': users[-1]['source_position'],
@@ -78,8 +82,8 @@ def resolve(workspace, request, environ=None):
     root = Path(workspace).resolve(strict=True)
     environ = os.environ if environ is None else environ
     identity = session_identity(request, environ)
-    representation = request.get('representation', 'event_msg')
-    if representation not in ('event_msg', 'response_item'):
+    representation = request.get('representation', 'auto')
+    if representation not in ('auto', 'event_msg', 'response_item'):
         raise ValueError('Unsupported source representation')
     if request.get('source_path') is not None:
         path = canonical(request['source_path'])
@@ -96,6 +100,9 @@ def resolve(workspace, request, environ=None):
             candidates.extend(Path(directory) / name for name in files
                               if name.startswith('rollout-') and name.endswith('-' + identity + '.jsonl'))
         if len(candidates) != 1:
+            if not candidates:
+                from .recording_policy import RecordingInterruption
+                raise RecordingInterruption(f'No source for current session {identity} in configured session store')
             raise SafetyError(f'Expected one source for current session {identity}; found {len(candidates)}')
         path = canonical(candidates[0])
         method = 'current_session_filename'
@@ -119,7 +126,19 @@ def enabled(workspace, request):
 
 def readiness(workspace, activity):
     """Separate recording readiness from environment validity; never write."""
+    from .recording_policy import effective
     root = Path(workspace).resolve(strict=True)
+    policy = effective(read_json(checked_path(root, STATE, allow_missing=False)))
+    result = _readiness(root, activity)
+    result['policy'] = policy['mode']
+    result['continuation_allowed'] = (not policy['required'] or result['status'] in ('verified', 'disabled'))
+    if result['status'] not in ('verified', 'disabled'):
+        result['coverage'] = 'unverified'
+    return result
+
+
+def _readiness(root, activity):
+    """Report evidence separately from the policy for continuing ordinary work."""
     try:
         if not enabled(root, {}):
             return {'status': 'disabled', 'details': 'Optional recording is off; independent obligations remain host-owned'}
@@ -137,7 +156,8 @@ def readiness(workspace, activity):
                 evidence = chronicles.verify(root, activity['path'], activity['activity_id'])
                 return {'status': 'verified', 'details': 'Registered sources only; no claim about unknown sessions', **evidence}
             except SafetyError as exc:
-                if str(exc) == 'Chronicles do not cover current eligible source; synchronize required':
+                if str(exc) in ('Chronicles do not cover current eligible source; synchronize required',
+                                'Chronicle source continuity verified; synchronize to retain reconciliation evidence'):
                     return {'status': 'needs_synchronization', 'details': str(exc), 'next_operation': 'recording synchronize'}
                 raise
         source = resolve(root, {})

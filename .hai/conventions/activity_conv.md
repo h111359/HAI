@@ -146,7 +146,7 @@ and the closed lifecycle remain intact. New substantive work has a separate link
 Activity identity. Delayed synchronization of completed source exchanges can still
 belong to their original closed Activity.
 
-Chronicles have Activity-local segment identity and exact source assignments. Core owns synchronization, transcript and checkpoint writes under the [chronicles convention](chronicles_conv.md) and [transcript convention](transcript-segment_conv.md). The host assigns explicit sources and serializes writers. Enabled or independently mandatory recording requires synchronization and fresh verification before closure; missing or pending required source blocks closure.
+Chronicles have Activity-local segment identity and exact source assignments. Core owns synchronization, transcript and checkpoint writes under the [chronicles convention](chronicles_conv.md) and [transcript convention](transcript-segment_conv.md). The host assigns explicit sources and serializes writers. Enabled recording attempts synchronization and fresh verification before closure. Required-mode or independently mandatory recording blocks closure on missing or pending evidence. Best-effort source interruptions are preserved as explicit unavailable coverage under the chronicles policy; damaged retained artifacts and partial writes remain blockers.
 
 ## References
 

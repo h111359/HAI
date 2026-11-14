@@ -3,6 +3,13 @@
 HAI is a framework for AI-assisted development. Start with [the startup
 instructions](.hai/start.md).
 
+Chronicles support reviewed source adapters and exact-message reconciliation after
+compatible session rewrites. Recording defaults to `best_effort`: source availability
+gaps stay visible while ordinary work continues; `features.chronicles.mode: required`
+and independent mandatory obligations retain strict gates. Retained evidence and
+recovery history remain protected. See [recording compatibility](.hai/tools/runtime/README.md#recording-compatibility-and-policy)
+and [adapter maintenance](.hai/procedures/maintain-source-adapters.md).
+
 Startup shows the registered agents and current Activity state. With no task it
 offers a combined menu of task actions and individual agents, then waits for your
 choice; with a concrete task it shows the summary and proceeds with that task.
@@ -58,7 +65,7 @@ and downloadable assets are tracked on [GitHub Releases](https://github.com/h111
 - Optional chronicles record exact durable-source exchanges in Activity segments.
   Recording starts with subsequent exchanges when enabled, without implicit backfill
   of off periods. Closed records allow attributable supplements and delayed old-source
-  synchronization; new substantive work uses a new linked Activity. The host assigns explicit sources and schedules prompt batches. Core synchronizes and verifies enabled or independently mandatory recording before closure; missing or pending required source blocks closure.
+  synchronization; new substantive work uses a new linked Activity. The host assigns explicit sources and schedules prompt batches. Core attempts enabled recording before closure; required-mode or independently mandatory gaps block closure, while best-effort source interruptions remain explicit unavailable coverage.
 - Workspace agent registrations use `.hai_env/agents/catalogue.md`; a missing workspace catalogue means none are registered.
   Specialist definitions declare generic model class and effort; optional local
   profiles resolve supported models. Core operations require no agent profile.

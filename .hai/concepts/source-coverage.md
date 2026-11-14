@@ -18,8 +18,9 @@ separate from the count of new prompts.
 
 Enabled intervals distinguish eligible source from off-period messages. Disabling
 preserves existing gaps and files; it does not itself authorize historical backfill.
-The enabled-recording closure prerequisite applies when recording is currently
-enabled or independently mandatory. Disabled/no-obligation closure has no transcript
+Successful source verification is a closure prerequisite in required mode or when
+independently mandatory. Best-effort closure attempts verification and may retain
+an explicit unavailable outcome for source interruptions; it never labels a gap verified. Disabled/no-obligation closure has no transcript
 prerequisite, while existing gaps remain part of the historical recording status.
 
 A closure cutoff includes completed saved source through the user's closure

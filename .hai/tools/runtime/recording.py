@@ -11,11 +11,16 @@ def handle(operation, workspace, request, apply):
     op = operation.split('.')[-1].split('/')[-1]
     try:
         source_fields = {'session_id', 'source_path', 'codex_home', 'representation', 'mandatory', 'provenance'}
-        fields = {'status':set(), 'schedule':{'occurrence_ids','covered_ids','threshold','last_dispatched_count'},
+        fields = {'status':set(), 'adapters':set(), 'schedule':{'occurrence_ids','covered_ids','threshold','last_dispatched_count'},
                   'discover': source_fields, 'bind': source_fields | {'activity_id', 'start_position', 'enabled_intervals'},
                   'synchronize': {'activity_id', 'sources', 'provenance', 'mandatory'}, 'verify': {'activity_id'}}
         if not isinstance(request,dict) or (op in fields and set(request) - fields[op]): raise ValueError('Unknown or invalid request fields')
         if apply and op not in ('synchronize', 'bind'): return envelope(operation, 'input_error', issues=['Only recording synchronize/bind support --apply'])
+        if op == 'adapters':
+            from chronicles.adapters import ADAPTERS
+            return envelope(operation, result={'adapters': list(ADAPTERS),
+                'discovery': 'exact host session identity in configured session store',
+                'unknown_formats': 'interrupted; reviewed adapter implementation required'})
         if op in ('synchronize', 'verify', 'discover', 'bind'):
             from .startup import require_mutation_context
             from .activities import store_path, discover, now, required_text, handle as activity_handle
@@ -73,7 +78,8 @@ def handle(operation, workspace, request, apply):
             state = read_json(checked_path(workspace, STATE, allow_missing=False))
             config = state.get('features', {}).get('chronicles', {})
             if type(config.get('enabled')) is not bool: raise ValueError('recording enablement is unverified')
-            return envelope(operation, result={'enabled': config['enabled'], 'record_every_prompts': config.get('record_every_prompts', 5), 'source': 'host_assigned', 'coverage': 'unverified', 'synchronization': 'core recording synchronize'})
+            from .recording_policy import effective
+            return envelope(operation, result={**effective(state), 'record_every_prompts': config.get('record_every_prompts', 5), 'source': 'host_assigned', 'coverage': 'unverified', 'synchronization': 'core recording synchronize'})
         if op == 'schedule':
             occurrences = request.get('occurrence_ids'); covered = request.get('covered_ids', []); threshold = request.get('threshold', 5)
             if (not isinstance(occurrences,list) or not isinstance(covered,list) or type(threshold) is not int or threshold < 1

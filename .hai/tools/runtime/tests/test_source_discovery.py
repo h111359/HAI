@@ -78,6 +78,38 @@ class SourceDiscoveryTests(unittest.TestCase):
         self.assertNotIn('same question', json.dumps(result))
         self.assertEqual(before, self.snapshot())
 
+    def test_discovery_detects_completed_item_adapter(self):
+        self.records = [self.records[0], self.record('event_msg', {
+            'type': 'item_completed', 'item': {'type': 'UserMessage', 'id': 'u-1',
+            'content': [{'type': 'text', 'text': 'saved request'}]}})]
+        self.save()
+        result = self.call('discover', {})
+        self.assertTrue(result['ok'], result)
+        self.assertEqual(result['result']['representation'], 'event_msg')
+        self.assertEqual(result['result']['adapters'], ['codex-completed-item-v1'])
+
+    def test_adapter_registry_is_read_only_and_reports_known_formats(self):
+        before = self.snapshot()
+        result = self.call('adapters', {})
+        self.assertTrue(result['ok'], result)
+        names = [adapter['name'] for adapter in result['result']['adapters']]
+        self.assertIn('codex-completed-item-v1', names)
+        self.assertEqual(before, self.snapshot())
+        self.assertFalse(self.call('adapters', {}, True)['ok'])
+
+    def test_readiness_policy_does_not_claim_missing_coverage_verified(self):
+        with mock.patch.dict(os.environ, self.env, clear=True):
+            ready = sources.readiness(self.root, {'status': 'current',
+                'path': self.base.relative_to(self.root).as_posix(), 'activity_id': self.ident})
+            self.assertEqual(ready['status'], 'needs_binding')
+            self.assertTrue(ready['continuation_allowed'])
+            self.assertEqual(ready['coverage'], 'unverified')
+            self.state['features']['chronicles']['mode'] = 'required'
+            self.save_state()
+            ready = sources.readiness(self.root, {'status': 'current',
+                'path': self.base.relative_to(self.root).as_posix(), 'activity_id': self.ident})
+            self.assertFalse(ready['continuation_allowed'])
+
     def test_host_path_preferred_and_ambiguous_candidates_never_selected(self):
         copy = self.source.parent / ('rollout-copy-' + SID + '.jsonl'); copy.write_bytes(self.source.read_bytes())
         result = self.call('discover', {})
@@ -108,7 +140,7 @@ class SourceDiscoveryTests(unittest.TestCase):
         env.pop('CODEX_THREAD_ID'); env['CODEX_SESSION_ID'] = SID
         self.assertEqual(sources.resolve(self.root, {}, env)['session_id'], SID)
 
-    def test_representation_requires_observed_user_not_implicit_guessing(self):
+    def test_auto_selects_known_representation_and_explicit_choice_remains_strict(self):
         self.records = [self.records[0],
                         self.record('response_item', {'type': 'message', 'role': 'user',
                             'content': [{'type': 'input_text', 'text': 'actual assigned user prompt'}]}),
@@ -116,6 +148,9 @@ class SourceDiscoveryTests(unittest.TestCase):
                             'content': [{'type': 'output_text', 'text': 'actual saved final'}]})]
         self.save()
         result = self.call('discover', {})
+        self.assertTrue(result['ok'], result)
+        self.assertEqual(result['result']['representation'], 'response_item')
+        result = self.call('discover', {'representation': 'event_msg'})
         self.assertFalse(result['ok']); self.assertIn('selected representation', str(result['issues']))
         result = self.call('discover', {'representation': 'response_item'})
         self.assertTrue(result['ok'], result)
@@ -134,7 +169,7 @@ class SourceDiscoveryTests(unittest.TestCase):
         self.records[0]['payload']['cwd'] = str(self.root / 'elsewhere'); self.save()
         self.assertIn('workspace', str(self.call('discover', {})['issues']))
         self.source.unlink()
-        self.assertIn('found 0', str(self.call('discover', {})['issues']))
+        self.assertIn('No source for current session', str(self.call('discover', {})['issues']))
 
     def test_symlinks_hardlinks_and_malformed_tail_fail(self):
         with self.source.open('a') as stream:

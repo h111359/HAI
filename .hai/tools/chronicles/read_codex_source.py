@@ -9,6 +9,11 @@ from pathlib import Path
 import stat
 import sys
 
+try:
+    from .adapters import ADAPTERS, event_message
+except ImportError:  # Direct CLI invocation.
+    from adapters import ADAPTERS, event_message
+
 sys.dont_write_bytecode = True
 
 
@@ -37,8 +42,15 @@ def timestamp(value):
 
 def read_source(path, representation, expected_session=None):
     """Return supported completed text; any interpretation issue prevents ok=true."""
+    if representation == 'auto':
+        # Select one representation, never concatenate duplicate views of a turn.
+        events = read_source(path, 'event_msg', expected_session)
+        if not events['ok'] or events['messages']:
+            return events
+        return read_source(path, 'response_item', expected_session)
     result = {"ok": False, "source_session_id": None, "original_started_at": None,
-              "representation": representation, "source_sha256": None, "messages": [], "issues": []}
+              "representation": representation, "source_sha256": None, "messages": [], "issues": [],
+              "adapters": []}
     if representation not in {"event_msg", "response_item"}:
         result["issues"].append("an explicit supported representation is required")
         return result
@@ -89,21 +101,35 @@ def read_source(path, representation, expected_session=None):
             if not nonblank(payload.get("type")):
                 raise ValueError("selected representation payload type discriminator is missing or invalid")
             if representation == "event_msg":
-                message_type = payload.get("type")
-                if message_type not in {"user_message", "agent_message"}:
-                    if "message" in payload and message_type not in {"error", "warning"}:
-                        raise ValueError("unsupported event message type")
+                adapted = event_message(payload)
+                if adapted is None:
                     continue
+                payload, adapter = adapted
+                if adapter not in result['adapters']:
+                    result['adapters'].append(adapter)
+                message_type = payload['type']
                 role = "user" if message_type == "user_message" else "assistant"
                 content = payload.get("message")
             else:
                 if payload["type"] != "message":
-                    continue
+                    if (payload['type'] == 'agent_message' and nonblank(payload.get('author'))
+                            and nonblank(payload.get('recipient'))):
+                        continue  # Native inter-agent assignment, not human conversation.
+                    if payload['type'] in ('reasoning', 'function_call', 'function_call_output',
+                            'custom_tool_call', 'custom_tool_call_output', 'additional_tools',
+                            'configuration_update', 'web_search_call', 'file_search_call',
+                            'computer_call', 'computer_call_output', 'image_generation_call',
+                            'local_shell_call', 'local_shell_call_output', 'tool_search_call',
+                            'tool_search_output') and 'role' not in payload:
+                        continue
+                    raise ValueError('unsupported response item type')
                 if payload.get("role") in {"system", "developer"}:
                     continue
                 if payload.get("role") not in {"user", "assistant"}:
                     raise ValueError("message role is missing or unsupported")
                 role, content = payload["role"], payload.get("content")
+                if 'codex-response-message-v1' not in result['adapters']:
+                    result['adapters'].append('codex-response-message-v1')
             if role == "assistant":
                 phase = payload.get("phase")
                 if phase in {"commentary", "analysis"}:
@@ -128,6 +154,8 @@ def read_source(path, representation, expected_session=None):
                        "timestamp": record["timestamp"]}
             if nonblank(payload.get("id")):
                 message["message_id"] = payload["id"]
+            if nonblank(record['payload'].get('turn_id')):
+                message['turn_id'] = record['payload']['turn_id']
             result["messages"].append(message)
         except (TypeError, ValueError) as error:
             result["issues"].append(f"source_position {position}: {error}")
@@ -145,7 +173,7 @@ def read_source(path, representation, expected_session=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
-    parser.add_argument("--representation", required=True, choices=["event_msg", "response_item"])
+    parser.add_argument("--representation", default='auto', choices=["auto", "event_msg", "response_item"])
     parser.add_argument("--expected-session")
     args = parser.parse_args()
     result = read_source(args.source, args.representation, args.expected_session)

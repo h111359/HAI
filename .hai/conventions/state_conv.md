@@ -32,6 +32,10 @@ The root is an object with required properties:
 `features.chronicles.enabled` is a required Boolean, default false.
 `record_every_prompts` is an optional positive JSON integer, default 5; Booleans,
 zero, negative/fractional/string/null values are invalid even while disabled.
+`mode` is optional and accepts `best_effort` (default when absent) or `required`.
+Best-effort recording interruptions do not prohibit independent ordinary work.
+Required mode and independently mandatory recording obligations retain strict gates.
+Changing mode does not change enabled intervals or their enablement revision.
 Transcripts remain Activity-local under `chronicles/`; no global location exists.
 Core state stores no current Activity pointer, prompt counter, transcript coverage
 or in-flight-worker marker. runtime owns record discovery policy and lifecycle; the shared startup context helper may perform read-only discovery for host coordinator. Core owns source-backed transcript and checkpoint formats and writes. Configuration changes never alter record lifecycle/content.
@@ -93,7 +97,7 @@ specification/config file or transcript contents are fabricated. runtime creates
 
 Enabling/disabling chronicles preserves existing content and does not override
 mandatory instructions. Return attributable enablement-change boundaries separately;
-threshold changes do not reset coverage or dispatch progress. The host owns source assignment, counting, cadence and continuation limits; core synchronizes and verifies source coverage before enabled or independently mandatory closure. Disabled/no-obligation closure needs no transcript source or recording writes.
+threshold changes do not reset coverage or dispatch progress. The host owns source assignment, counting, cadence and continuation limits; core attempts source synchronization before closure and requires verified success in required mode or under an independently mandatory obligation. Default best-effort source interruptions retain explicit unavailable coverage. Disabled/no-obligation closure needs no transcript source or recording writes.
 
 ## Local model profiles
 

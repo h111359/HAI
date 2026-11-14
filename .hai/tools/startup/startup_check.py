@@ -185,8 +185,12 @@ def state_context(workspace: Path, state: dict, template: dict,
             threshold = value.get("record_every_prompts", CHRONICLES_RECORD_EVERY_PROMPTS)
             if type(threshold) is not int or threshold <= 0:
                 raise Invalid("Feature chronicles.record_every_prompts must be a positive integer")
+            if value.get("mode", "best_effort") not in ("best_effort", "required"):
+                raise Invalid("Feature chronicles.mode must be best_effort or required")
             features[name] = {"enabled": value["enabled"],
                               "record_every_prompts": threshold}
+            if "mode" in value:
+                features[name]["mode"] = value["mode"]
     if version == 2:
         value = state["features"].get("specification")
         if (not isinstance(value, dict) or type(value.get("enabled")) is not bool

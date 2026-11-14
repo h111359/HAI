@@ -5,6 +5,8 @@
 Establish current-session source identity and an attributable Activity work range
 before work that requires chronicles, without reconstructing any exchange.
 
+Recording policy is defined by [chronicles](../conventions/chronicles_conv.md#availability-policy). In default best-effort mode, report a source interruption and continue independent ordinary work; never claim recording succeeded. Required mode or an independently mandatory obligation retains dependent recording gates. Integrity errors and partial writes remain explicit blockers.
+
 ## Inputs
 
 Valid core context and readable instructions, the recording requirement, current
@@ -25,9 +27,10 @@ observed saved first work-prompt position, enabled intervals and provenance.
    Prefer `source_path`; otherwise search exact-ID filenames only under
    `codex_home/sessions`, `CODEX_HOME/sessions` or `~/.codex/sessions`. Embedded
    identity/workspace, source schema, safe paths and a stable read are checked.
-   The default representation is `event_msg`. When that representation has no
-   saved user occurrence (as on some participant surfaces), explicitly select a
-   supported representation such as `response_item`; never guess or merge them.
+   The default representation is `auto`: select completely parsed supported event
+   messages first, otherwise supported response items. An interpretation error
+   interrupts recording rather than triggering fallback. Explicit selection is
+   still available; never guess unknown schemas or merge representations.
    Zero/multiple matches or invalid evidence stop binding; do not select by
    recency, broaden the search to unrelated sessions or reconstruct source text.
 3. Identify the actual saved first user occurrence assigned to the Activity from

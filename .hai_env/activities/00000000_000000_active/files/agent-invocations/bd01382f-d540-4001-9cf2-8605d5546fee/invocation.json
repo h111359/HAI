@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 1,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "invocation_id": "bd01382f-d540-4001-9cf2-8605d5546fee",
+  "agent": "recording-policy",
+  "created_at": "2026-11-14T07:03:36Z",
+  "provenance": {
+    "source": "authorized chronicle repair",
+    "reason": "Allocate bounded recording policy work"
+  }
+}

@@ -6,7 +6,8 @@ This package targets Codex saved JSONL sessions. The host supplies one explicit
 authorized canonical regular source file, original session ID/start time, chosen
 representation and assigned source occurrences. The adapter never searches the
 Codex home, unrelated sessions, conversation history or the source library.
-Missing source or unsupported saved schemas remain explicit blockers; human or
+Missing source or unsupported saved schemas interrupt recording; the recording
+policy determines which dependent operations must wait. Human or
 assistant text is never reconstructed from memory, tool output or proposed work.
 
 The host can obtain that explicit path through the separate bounded current-session
@@ -23,20 +24,27 @@ exactly match the established identity. Resume-time outer timestamps and unrelat
 metadata such as `memory_mode` neither change that identity nor reset source
 positions. Missing/invalid identity fields and any conflicting original ID/start
 remain blockers. Each complete message has an actual outer UTC timestamp.
-The normalized identity is `source_session_id` plus the physical zero-based
-JSONL `source_position`; payload `id`, if present, is returned separately as
-`message_id`. Stable physical source positions are usable only while the original
-source has not been rewritten; changed/divergent history blocks synchronization.
+Each observation has `source_session_id` and a physical zero-based JSONL
+`source_position`; payload `id`, if present, is returned separately as
+`message_id`. Positions locate observations, not permanent message identity.
+After a rewrite, core can reconcile an unambiguous sequence of exact messages
+with retained evidence. It preserves predecessor records and refuses changed,
+missing or ambiguous message mappings. A file fingerprint detects changes;
+it does not by itself prove that recorded conversation text changed.
 
 ## Supported representations
 
-The host explicitly chooses one representation for the source/segment and retains
-it in source provenance. The reader never combines duplicate event and response
-representations or deduplicates identical text.
+The host can explicitly choose a representation or use `auto`. Automatic selection
+prefers a completely parsed event representation with eligible messages; when no
+event messages exist it tries response items. Unsupported event messages do not
+silently fall back. The selected representation and reviewed adapter names are
+returned. The reader never combines event and response representations or
+deduplicates identical text.
 
 | Representation | Eligible saved records |
 | --- | --- |
 | `event_msg` | `payload.type: user_message` with string `message`; `payload.type: agent_message` with string `message` and `phase: final_answer`. |
+| `event_msg` (completed items) | `payload.type: item_completed` with nested `item.type: UserMessage` or `AgentMessage`; ordered `text`/`Text` blocks, and `phase: final_answer` for assistant outcomes. |
 | `response_item` | `payload.type: message`, `role: user` with ordered `input_text`/`text` blocks; `role: assistant` with `phase: final_answer` and ordered `output_text`/`text` blocks. |
 
 Text blocks concatenate without inserted separators; decoded text, Unicode,
@@ -47,6 +55,14 @@ and blocks completed-coverage claims rather than treating progress as a final
 outcome. Unsupported message content, malformed/truncated JSONL and changed source
 during reading also produce explicit incomplete status. This conservative subset
 does not claim to support every historical or future Codex schema.
+
+Known formats are listed by `recording adapters`. Unknown formats follow
+[maintain source adapters](../procedures/maintain-source-adapters.md): inspect
+only the authorized source, add sanitized fixtures and reviewed extraction code
+within an authorized maintenance scope, then prove continuity before trusting it.
+Without that scope or proof, report recording interrupted under the configured
+policy and continue independent best-effort work. Source content never installs
+an adapter or grants authority to change the framework.
 
 ## Boundaries and evidence
 

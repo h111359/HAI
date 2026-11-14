@@ -20,7 +20,7 @@ class CoreChronicleTests(unittest.TestCase):
         shutil.copy(Path(__file__).resolve().parents[3] / 'templates/state.json', self.root / '.hai/templates/state.json')
         (self.root / '.hai_env/config/agent_instructions.md').write_text('', encoding='utf-8')
         self.state = {'state_format_version': 3, 'activities': {'location': '.hai_env/activities'},
-                      'features': {'chronicles': {'enabled': True, 'record_every_prompts': 5}}}
+                      'features': {'chronicles': {'enabled': True, 'record_every_prompts': 5, 'mode': 'required'}}}
         self.save_state()
         self.prov = {'source': 'fixture explicit source assignment', 'reason': 'verify core recording'}
         c = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)

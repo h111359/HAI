@@ -4,6 +4,8 @@
 
 Synchronize explicitly assigned, completed Codex source exchanges into Activity-local chronicles under the [chronicles convention](../conventions/chronicles_conv.md).
 
+Recording policy is defined by [chronicles](../conventions/chronicles_conv.md#availability-policy). In default best-effort mode, report a source interruption and continue independent ordinary work; never claim recording succeeded. Required mode or an independently mandatory obligation retains dependent recording gates. Integrity errors and partial writes remain explicit blockers.
+
 ## Inputs
 
 A valid workspace and instructions, an existing stable Activity ID, actual authority, the recording requirement, and explicit source assignment and enablement provenance are required. For each initial source supply its canonical authorized path, session ID, inclusive start position, optional inclusive end position, explicit `event_msg` or `response_item` representation and enabled intervals with source occurrences and attributable provenance. A null interval end means enablement continues. Establish new current-session identity through [bounded discovery and binding](establish-recording-source.md); the synchronizer itself does no discovery. Resolve ambiguous/conflicting attribution before writes; never infer historical import authority or reconstruct text.

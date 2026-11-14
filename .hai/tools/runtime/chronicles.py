@@ -6,10 +6,11 @@ import json
 import re
 from pathlib import Path, PurePosixPath
 import uuid
-from path_contract import native_source_path, is_link_or_reparse
+from path_contract import native_source_path, is_link_or_reparse, foreign_absolute
 
 from .storage import SafetyError, checked_path, fingerprint, read_json, write_bytes, write_json
 from .usage import binding, provenance, stamp
+from .recording_policy import RecordingInterruption
 
 
 def digest(raw):
@@ -25,7 +26,7 @@ def assignment(root, value):
         raise ValueError('Invalid chronicle source assignment')
     b = binding(root, {k: v for k, v in value.items() if k in {'path', 'session_id', 'start_position', 'end_position'}})
     b['representation'] = value.get('representation')
-    if b['representation'] not in ('event_msg', 'response_item'):
+    if b['representation'] not in ('event_msg', 'response_item', 'auto'):
         raise ValueError('Explicit chronicle representation required')
     intervals = value.get('enabled_intervals')
     if not isinstance(intervals, list) or not intervals:
@@ -68,8 +69,23 @@ def load(root, base, ident, *, metadata_only=False):
         raise SafetyError('Invalid chronicle core sources/artifacts')
     seen = set()
     for entry in data['sources']:
-        if not isinstance(entry, dict) or set(entry) != {'binding', 'prefix_bytes', 'prefix_sha256', 'segment_path', 'original_started_at', 'closure_binding'}:
+        if not isinstance(entry, dict) or set(entry) - {'binding', 'prefix_bytes', 'prefix_sha256', 'segment_path', 'original_started_at', 'closure_binding', 'message_index'} or not {'binding', 'prefix_bytes', 'prefix_sha256', 'segment_path', 'original_started_at', 'closure_binding'} <= set(entry):
             raise SafetyError('Invalid chronicle core source')
+        if 'message_index' in entry:
+            index = entry['message_index']
+            if not isinstance(index, list) or not index:
+                raise SafetyError('Invalid recorded message index')
+            last_position = -1
+            for message in index:
+                if (not isinstance(message, dict) or set(message) - {'source_position', 'role', 'text', 'timestamp', 'message_id', 'turn_id'}
+                        or not {'source_position', 'role', 'text', 'timestamp'} <= set(message)
+                        or type(message['source_position']) is not int or message['source_position'] <= last_position
+                        or message['role'] not in ('user', 'assistant') or not isinstance(message['text'], str)
+                        or not isinstance(message['timestamp'], str)
+                        or ('message_id' in message and not isinstance(message['message_id'], str))
+                        or ('turn_id' in message and not isinstance(message['turn_id'], str))):
+                    raise SafetyError('Invalid recorded message index')
+                last_position = message['source_position']
         b = assignment(root, entry['binding'])
         if b != entry['binding'] or b['session_id'] in seen or type(entry['prefix_bytes']) is not int or entry['prefix_bytes'] < 0:
             raise SafetyError('Invalid/duplicate chronicle binding')
@@ -95,6 +111,11 @@ def load(root, base, ident, *, metadata_only=False):
             raise SafetyError('Chronicle artifact changed: ' + relative)
     if metadata_only:
         return data, fp
+    for entry in data['sources']:
+        if 'message_index' in entry:
+            target = checked_path(root, base + '/' + entry['segment_path'], allow_missing=False)
+            if target.read_bytes() != render(ident, entry['binding'], entry['original_started_at'], entry['message_index']):
+                raise SafetyError('Recorded message index differs from retained transcript')
     checkpoint = read_json(checked_path(root, base + '/chronicles/checkpoint.json', allow_missing=False))
     if not isinstance(checkpoint, dict) or type(checkpoint.get('checkpoint_format_version')) is not int or checkpoint['checkpoint_format_version'] != 1 or checkpoint.get('activity_id') != ident:
         raise SafetyError('Invalid chronicle checkpoint identity/format')
@@ -127,23 +148,51 @@ def load(root, base, ident, *, metadata_only=False):
     return data, fp
 
 
-def read_assigned(b, previous=None):
+def read_assigned(b, previous=None, *, root=None, base=None):
     from chronicles.read_codex_source import read_source
-    path = native_source_path(b['path'])
+    original_binding = json.loads(json.dumps(b))
+    # Foreign absolute locators are unavailable here, never workspace-relative.
+    path = None if foreign_absolute(b['path']) else native_source_path(b['path'])
+    relocated = False
+    if (path is None or not path.exists()) and root is not None:
+        from .source_discovery import resolve
+        try:
+            located = resolve(root, {'session_id': b['session_id'], 'representation': b['representation']})
+        except (FileNotFoundError, RecordingInterruption) as exc:
+            raise RecordingInterruption('Assigned source unavailable; bounded discovery failed: ' + str(exc)) from exc
+        path = native_source_path(located['path'])
+        relocated = str(path) != b['path']
+    if path is None or not path.exists():
+        raise RecordingInterruption('Assigned chronicle source is unavailable')
     if path.resolve(strict=True) != path or any(is_link_or_reparse(p.lstat()) for p in (path, *path.parents)) or path.stat().st_nlink != 1:
         raise SafetyError('Chronicle source must be canonical, regular and nonlinked')
     before = fingerprint(path)
     raw = path.read_bytes()
-    if previous and (len(raw) < previous['prefix_bytes'] or digest(raw[:previous['prefix_bytes']]) != previous['prefix_sha256']):
-        raise SafetyError('Previously observed chronicle source changed or was truncated')
+    rewritten = previous and (relocated or len(raw) < previous['prefix_bytes'] or digest(raw[:previous['prefix_bytes']]) != previous['prefix_sha256'])
     extracted = read_source(path, b['representation'], b['session_id'])
+    if ((extracted['source_session_id'] is not None and extracted['source_session_id'] != b['session_id'])
+            or any('conflicting original session identity or start time' in issue for issue in extracted['issues'])):
+        raise SafetyError('Chronicle original source identity changed')
+    if previous and extracted['original_started_at'] is not None and previous['original_started_at'] != extracted['original_started_at']:
+        raise SafetyError('Chronicle original source identity changed')
     if not extracted['ok'] or fingerprint(path) != before or extracted['source_sha256'] != digest(raw):
-        raise SafetyError('Chronicle source unavailable/incomplete/changed: ' + str(extracted['issues']))
+        raise RecordingInterruption('Chronicle source unavailable/incomplete/changed: ' + str(extracted['issues']))
+    if rewritten:
+        if root is None or base is None:
+            raise SafetyError('Previously observed chronicle source changed or was truncated; reconciliation context required')
+        from .source_continuity import rebase
+        transcript = checked_path(root, base + '/' + previous['segment_path'], allow_missing=False).read_bytes().decode('utf-8')
+        try:
+            rebase(b, previous, extracted, transcript)
+        except SafetyError as exc:
+            raise RecordingInterruption(str(exc)) from exc
+        b['path'] = str(path)
+        extracted['reconciliation'] = {'previous_binding': original_binding, 'binding': json.loads(json.dumps(b)),
+                                     'previous_prefix_sha256': previous['prefix_sha256'], 'source_sha256': digest(raw),
+                                     'proof': 'unique exact recorded messages in unchanged order'}
     messages = [m for m in extracted['messages'] if m['source_position'] >= b['start_position'] and (b['end_position'] is None or m['source_position'] <= b['end_position']) and any(m['source_position'] >= interval['start']['source_position'] and (interval['end'] is None or m['source_position'] <= interval['end']['source_position']) for interval in b['enabled_intervals'])]
     if not messages:
-        raise SafetyError('No completed eligible source in assigned chronicle range')
-    if previous and previous['original_started_at'] != extracted['original_started_at']:
-        raise SafetyError('Chronicle original source identity changed')
+        raise RecordingInterruption('No completed eligible source in assigned chronicle range')
     return raw, extracted, messages
 
 
@@ -194,6 +243,16 @@ def check_overlaps(root, base, entries):
             other, _ = load(root, childbase, state['activity_id'])
         for existing in other['sources']:
             b = existing['binding']
+            if any(b['session_id'] == new['session_id'] for new in entries):
+                # Numeric spans in another Activity are meaningful only while its
+                # source coordinates still refer to that verified observation.
+                # Closed/multi-interval history cannot silently move here.
+                try:
+                    _, proof, _ = read_assigned(json.loads(json.dumps(b)), existing, root=root, base=childbase)
+                    if proof.get('reconciliation'):
+                        raise SafetyError('Related Activity source positions changed; explicit boundary reconciliation required')
+                except RecordingInterruption as exc:
+                    raise SafetyError('Related Activity source positions cannot be verified: ' + str(exc)) from exc
             for new in entries:
                 if b['session_id'] == new['session_id'] and max(b['start_position'], new['start_position']) <= min(b['end_position'] if b['end_position'] is not None else float('inf'), new['end_position'] if new['end_position'] is not None else float('inf')):
                     raise SafetyError('Chronicle assignment overlaps another Activity; finalize prior boundary explicitly')
@@ -250,13 +309,18 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
     if boundary_changed and not {e['binding']['session_id'] for e in old['sources']} <= seen:
         raise SafetyError('Updated enabled intervals required for every recorded source')
     if not entries:
-        raise SafetyError('Enabled chronicles require explicit source assignments before closure/synchronization')
+        raise RecordingInterruption('Enabled chronicles require explicit source assignments before closure/synchronization')
     check_overlaps(root, base, [e['binding'] for e in entries.values()])
     outputs, new_entries, observations, sources, verified, cursors = {}, [], [], [], [], {}
+    reconciliations = []
     taken = set(old['artifact_hashes']) if old else set()
     for entry in entries.values():
         b = json.loads(json.dumps(entry['binding'])); previous = entry if 'prefix_bytes' in entry else None
-        raw, extracted, messages = read_assigned(b, previous)
+        raw, extracted, messages = read_assigned(b, previous, root=root, base=base)
+        if extracted.get('reconciliation'):
+            if boundary_changed:
+                raise SafetyError('Resolve source rewrite separately from recording enablement changes')
+            reconciliations.append(extracted['reconciliation'])
         if boundary_changed and previous:
             prior = next(e for e in old['sources'] if e['binding']['session_id'] == b['session_id'])
             _, _, prior_messages = read_assigned(prior['binding'], prior)
@@ -280,18 +344,26 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
                 n += 1
             taken.add(segment)
         outputs[segment] = render(ident, b, extracted['original_started_at'], messages)
-        new_entries.append({'binding': b, 'prefix_bytes': len(raw), 'prefix_sha256': digest(raw), 'segment_path': segment, 'original_started_at': extracted['original_started_at'], 'closure_binding': closure_binding})
+        from .source_continuity import snapshot
+        new_entries.append({'binding': b, 'prefix_bytes': len(raw), 'prefix_sha256': digest(raw), 'segment_path': segment, 'original_started_at': extracted['original_started_at'], 'closure_binding': closure_binding, 'message_index': snapshot(messages)})
         observations.append((b, raw, messages))
         r = {'start': occurrence(b['session_id'], messages[0]['source_position']), 'end': occurrence(b['session_id'], messages[-1]['source_position'])}
         sources.append({'source_session_id': b['session_id'], 'durable_path': b['path'], 'original_started_at': extracted['original_started_at'], 'assigned_ranges': [r], 'enabled_intervals': b['enabled_intervals'], 'retained_source_complete': True})
         verified.append({'range': r, 'segment_path': segment, 'verified_at': time})
         users = [m for m in messages if m['role'] == 'user']
         if users: cursors[b['session_id']] = occurrence(b['session_id'], users[-1]['source_position'])
+    check_overlaps(root, base, [e['binding'] for e in new_entries])
     attempt = str(uuid.uuid4())
+    if reconciliations:
+        history = 'chronicles/history/' + attempt
+        for relative in ['chronicles/core.json', 'chronicles/checkpoint.json'] + [e['segment_path'] for e in old['sources']]:
+            outputs[history + '/' + PurePosixPath(relative).name] = checked_path(root, base + '/' + relative, allow_missing=False).read_bytes()
+        outputs[history + '/reconciliation.json'] = (json.dumps({'recorded_at': time, 'provenance': request['provenance'], 'sources': reconciliations}, ensure_ascii=True, indent=2) + '\n').encode()
     checkpoint = {'checkpoint_format_version': 1, 'activity_id': ident, 'sources': sources, 'verified_ranges': verified, 'pending_ranges': [], 'cadence_cursors': cursors,
                   'last_attempt': {'attempt_id': attempt, 'dispatch_cursors': cursors, 'started_at': time, 'finished_at': time, 'status': 'verified', 'error': None}, 'last_successful_at': time, 'in_flight': None}
     outputs['chronicles/checkpoint.json'] = (json.dumps(checkpoint, ensure_ascii=True, indent=2) + '\n').encode()
-    ledger = {'core_format_version': 1, 'activity_id': ident, 'updated_at': time, 'sources': new_entries, 'artifact_hashes': {p: digest(raw) for p, raw in outputs.items()}, 'provenance': provenance(request['provenance']), 'enablement_revision': revision}
+    retained_hashes = {p: h for p, h in old['artifact_hashes'].items() if p.startswith('chronicles/history/')} if old else {}
+    ledger = {'core_format_version': 1, 'activity_id': ident, 'updated_at': time, 'sources': new_entries, 'artifact_hashes': {**retained_hashes, **{p: digest(raw) for p, raw in outputs.items()}}, 'provenance': provenance(request['provenance']), 'enablement_revision': revision}
     expected_artifacts = {}
     for relative in outputs:
         current = fingerprint(checked_path(root, base + '/' + relative))
@@ -299,7 +371,7 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
         if (expected_hash is None and current is not None) or (expected_hash is not None and (current is None or current[-1] != expected_hash)):
             raise SafetyError('Chronicle target changed during preparation: ' + relative)
         expected_artifacts[relative] = current
-    result = {'activity_id': ident, 'status': 'verified' if apply else 'planned', 'segments': [e['segment_path'] for e in new_entries], 'checkpoint_path': base + '/chronicles/checkpoint.json', 'cutoff': [v['range']['end'] for v in verified], 'source_count': len(new_entries), 'message_count': sum(len(o[2]) for o in observations)}
+    result = {'activity_id': ident, 'status': 'verified' if apply else 'planned', 'segments': [e['segment_path'] for e in new_entries], 'checkpoint_path': base + '/chronicles/checkpoint.json', 'cutoff': [v['range']['end'] for v in verified], 'source_count': len(new_entries), 'message_count': sum(len(o[2]) for o in observations), 'reconciliations': reconciliations}
     if not apply:
         return result, []
     changed = []
@@ -313,7 +385,14 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
         for b, raw, messages in observations: assert_fresh(b, raw, messages)
         directory = checked_path(root, base + '/chronicles')
         if not directory.exists(): directory.mkdir(); changed.append(base + '/chronicles')
-        for relative, content in outputs.items():
+        # Preserve predecessor evidence before replacing any current artifact.
+        for relative, content in sorted(outputs.items(), key=lambda item: not item[0].startswith('chronicles/history/')):
+            parent = PurePosixPath(base + '/' + relative).parent
+            missing = []
+            while not checked_path(root, parent.as_posix()).exists():
+                missing.append(parent); parent = parent.parent
+            for directory in reversed(missing):
+                checked_path(root, directory.as_posix()).mkdir(); changed.append(directory.as_posix())
             write_bytes(root, base + '/' + relative, content, expected_artifacts[relative])
             changed.append(base + '/' + relative)
         write_json(root, base + '/chronicles/core.json', ledger, ledger_fp); changed.append(base + '/chronicles/core.json')
@@ -337,7 +416,9 @@ def verify(root, base, ident, closing=False):
     if active and revision != data['enablement_revision']:
         raise SafetyError('Recording enablement changed; synchronize explicit intervals first')
     for entry in data['sources']:
-        b = entry['binding']; raw, extracted, messages = read_assigned(b, entry)
+        b = json.loads(json.dumps(entry['binding'])); raw, extracted, messages = read_assigned(b, entry, root=root, base=base)
+        if extracted.get('reconciliation'):
+            raise RecordingInterruption('Chronicle source continuity verified; synchronize to retain reconciliation evidence')
         if active and not closing and entry['closure_binding'] is not None:
             raise SafetyError('Interrupted closure assignment requires fresh synchronization')
         target = checked_path(root, base + '/' + entry['segment_path'], allow_missing=False)

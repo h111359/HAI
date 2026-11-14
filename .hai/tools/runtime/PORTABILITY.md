@@ -18,9 +18,12 @@ be workspace-relative resource names. Existing incompatible names require explic
 review; startup does not rename them.
 
 Absolute external recording/usage source paths remain native filesystem paths.
-Foreign absolute paths retained in historical metadata are not reinterpreted as
-paths under the current workspace. They remain unavailable for source reads on
-the other OS; this change neither relocates sessions nor waives recording.
+Foreign absolute paths retained in historical metadata are never reinterpreted as
+paths under the current workspace. Chronicle synchronization can rediscover the
+exact current host session in the configured local store and reconcile a live
+continuous assignment only when identity, workspace and exact message continuity
+are proved. Otherwise the source remains unavailable; no source relocation is
+performed and required recording is not waived.
 
 Runtime writes reject symbolic links and Windows reparse points, including
 junctions on Python 3.11. Protected-path comparisons respect native case semantics.
