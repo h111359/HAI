@@ -40,8 +40,11 @@ results of one run remain Activity evidence.
 
 ## Ownership, retention and verification
 
-Use validated current Activity context and its `files/` or `results/` locations
-for supporting material, with assigned invocation folders for participant work.
+Use validated current Activity context and its layout-specific destinations.
+Layout 2 uses results/ for review outputs, evidence/ for retained checks, history/
+for predecessors and work/ for declared disposable material; operational records
+live in system/. Legacy files/ paths remain valid only for legacy Activities.
+Use assigned invocation folders for participant work.
 Canonical Activity records and managed service records remain with their existing
 owners; this convention creates no additional lifecycle or storage root.
 

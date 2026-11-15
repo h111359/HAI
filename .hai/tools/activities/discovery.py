@@ -10,6 +10,8 @@ import uuid
 from agent_tools import Invalid, load_json
 from startup_check import safe_path
 from path_contract import is_link_or_reparse
+from activity_layout import version as layout_version, artifact, BUCKETS
+from runtime.storage import SafetyError, fingerprint
 
 CURRENT = '00000000_000000_active'
 STEPS = {'clarification', 'analysis', 'planning', 'implementation', 'verification'}
@@ -36,6 +38,17 @@ def _timestamp(value):
 def _validate_state(state):
     if not isinstance(state, dict):
         raise Invalid('Activity state must be an object')
+    layout = state.get('activity_layout_version', 1)
+    if type(layout) is not int or layout not in (1, 2):
+        raise Invalid('Unsupported Activity layout version')
+    if layout == 2:
+        initial = state.get('initial_message_id')
+        if initial is not None:
+            try:
+                if str(uuid.UUID(initial)) != initial:
+                    raise ValueError()
+            except (ValueError, TypeError, AttributeError):
+                raise Invalid('Invalid initial_message_id')
     ident = state.get('activity_id')
     try:
         if not isinstance(ident, str) or not ident.strip():
@@ -113,18 +126,46 @@ def discover(workspace, location):
                 raise Invalid('Activity store child must be a nonlinked directory')
             if child.resolve(strict=True).parent != store:
                 raise Invalid('Activity folder escapes store')
-            state_path = child / 'state.json'
+            layout = layout_version(workspace, relative)
+            migration = safe_path(workspace, relative + '/evidence/migrations/activity-layout.json')
+            migration_fp = fingerprint(migration)
+            report = None
+            if migration_fp is not None:
+                _regular(migration)
+                report = load_json(migration)
+                if (not isinstance(report, dict) or type(report.get('activity_layout_migration_format')) is not int
+                        or report.get('activity_layout_migration_format') != 1 or report.get('status') != 'completed'):
+                    raise Invalid('Incomplete Activity migration requires inspection of retained evidence before dependent work')
+            state_path = workspace / artifact(workspace, relative, 'state.json')
             _regular(state_path)
             state = load_json(state_path)
             ident = _validate_state(state)
+            if fingerprint(migration) != migration_fp:
+                raise Invalid('Activity migration metadata changed during discovery; inspect current state')
+            if report is not None and report.get('activity_id') != ident:
+                raise Invalid('Activity migration report has a different owning identity')
             if ident in ids:
                 raise Invalid(f'Duplicate Activity ID also present at {ids[ident]}')
             ids[ident] = relative
-            required = ('input.md', 'log.md') + (('outcome.md',) if state['lifecycle'] == 'closed' else ())
+            required = (('README.md', 'log.md', 'chat.jsonl') if layout == 2 else
+                        ('input.md', 'log.md') + (('outcome.md',) if state['lifecycle'] == 'closed' else ()))
             for name in required:
-                _regular(child / name)
-            for name in ('decisions.md', 'definition.md', 'analysis.md', 'plan.md', 'outcome.md', 'chat.jsonl', 'usage.md', 'usage.json'):
-                path = child / name
+                _regular(workspace / artifact(workspace, relative, name))
+            optional = ('decisions.md', 'definition.md', 'analysis.md', 'plan.md', 'chat.jsonl', 'usage.md', 'usage.json')
+            if layout == 1:
+                optional += ('outcome.md',)
+            elif any((child / name).exists() for name in ('input.md', 'outcome.md', 'log.md', 'chat.jsonl', 'usage.md', 'usage.json')):
+                raise Invalid('Layout-2 Activity has conflicting legacy root records')
+            if layout == 2:
+                for entry in child.iterdir():
+                    if entry.name == 'README.md': continue
+                    if entry.name not in BUCKETS:
+                        raise Invalid('Unexpected Activity-root artifact; use a declared results/evidence/work destination: ' + entry.name)
+                    safe_path(workspace, entry.relative_to(workspace).as_posix())
+                    if not entry.is_dir() or is_link_or_reparse(entry.lstat()):
+                        raise Invalid('Activity bucket must be a nonlinked directory: ' + entry.name)
+            for name in optional:
+                path = workspace / artifact(workspace, relative, name)
                 if name not in required and (path.exists() or path.is_symlink()):
                     _regular(path)
             if state['lifecycle'] == 'closed':
@@ -139,7 +180,7 @@ def discover(workspace, location):
                     raise Invalid('Active Activity must use the current folder')
             elif child.name == CURRENT:
                 raise Invalid('Current folder cannot contain a closed Activity')
-        except (Invalid, OSError, UnicodeError, ValueError, TypeError, RuntimeError) as exc:
+        except (Invalid, SafetyError, OSError, UnicodeError, ValueError, TypeError, RuntimeError) as exc:
             issue(relative, exc)
     if len(active) > 1:
         issue(location, Invalid('Multiple active Activities'))
@@ -155,9 +196,11 @@ def discover(workspace, location):
                       ('activity_id', 'lifecycle', 'created_at', 'closed_at', 'outcome',
                        'implementation_started_at', 'steps')})
     result['state']['steps'] = {key: state['steps'][key] for key in sorted(STEPS)}
-    for name, limit, tail in (('input.md', 384, False), ('plan.md', 768, True),
+    if state.get('activity_layout_version') == 2:
+        result['state'].update(activity_layout_version=2, initial_message_id=state.get('initial_message_id'))
+    for name, limit, tail in ((('README.md' if state.get('activity_layout_version') == 2 else 'input.md'), 768, False), ('plan.md', 768, True),
                                ('decisions.md', 512, True), ('log.md', 1024, True)):
-        path = child / name
+        path = workspace / artifact(workspace, child.relative_to(workspace).as_posix(), name)
         relative = path.relative_to(workspace).as_posix()
         try:
             if not path.exists() and not path.is_symlink():

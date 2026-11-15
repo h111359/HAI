@@ -95,7 +95,7 @@ Do not infer a mapping from interface preselection or wording similarity.
 
 No new core operation is needed. The supported operation is existing
 `activity record`, whose allowlist includes `decisions.md`. It retains exact
-predecessors under `files/revisions/decisions/` and appends provenance to the
+predecessors under `history/decisions/` and appends provenance to the
 new artifact. This is host-coordinated append semantics over a versioned artifact,
 not a new database or an OS-enforced append-only file.
 

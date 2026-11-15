@@ -27,7 +27,7 @@ None.
 
 1. Read the selected definition and requested change from [input:target] and [input:request]. Retain exact bytes/hash/revision and scoped known run references; do not inspect unrelated run content.
 
-2. Preserve the predecessor at an unused path in [input:activity] files/revisions before a material edit. Record actual source, reason and affected contracts. Increase the definition revision for material changes.
+2. Preserve the predecessor at an unused path in [input:activity] history/ before a material edit. Record actual source, reason and affected contracts. Increase the definition revision for material changes.
 
 3. Prepare scoped edits and compare original versus revised meaning, including optional inputs, result conditions, failure paths, limits and handoff completeness. Do not infer approval of newly introduced restrictions.
 

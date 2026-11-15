@@ -8,6 +8,8 @@ import re
 import stat
 from path_contract import source_path_string, native_source_path, is_link_or_reparse
 
+from activity_layout import artifact
+
 from .storage import SafetyError, _pairs, checked_path, fingerprint, read_json, write_bytes, write_json
 
 METRICS = ('input_tokens', 'cached_input_tokens', 'output_tokens',
@@ -253,8 +255,8 @@ def render(data):
 
 
 def load(root, base, activity_id):
-    ledger = checked_path(root, base + '/usage.json')
-    report = checked_path(root, base + '/usage.md')
+    ledger = checked_path(root, artifact(root, base, 'usage.json'))
+    report = checked_path(root, artifact(root, base, 'usage.md'))
     ledger_fp, report_fp = fingerprint(ledger), fingerprint(report)
     if ledger_fp is None:
         if report_fp is not None:
@@ -350,20 +352,20 @@ def update(root, base, activity_id, request, time, apply, expected_state):
             'pricing': rates, 'reported_spend': spend, 'summary': summarize(entries, rates, spend)}
     markdown = render(data)
     data['markdown_sha256'] = hashlib.sha256(markdown).hexdigest()
-    result = {'activity_id': activity_id, 'path': base + '/usage.md',
-              'checkpoint_path': base + '/usage.json', 'updated_at': time, 'summary': data['summary']}
+    result = {'activity_id': activity_id, 'path': artifact(root, base, 'usage.md'),
+              'checkpoint_path': artifact(root, base, 'usage.json'), 'updated_at': time, 'summary': data['summary']}
     if not apply:
         return result, []
     changed = []
     try:
-        if fingerprint(checked_path(root, base + '/state.json', allow_missing=False)) != expected_state:
+        if fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)) != expected_state:
             raise SafetyError('Activity changed before usage update')
-        write_json(root, base + '/usage.json', data, ledger_fp)
-        changed.append(base + '/usage.json')
-        write_bytes(root, base + '/usage.md', markdown, report_fp)
-        changed.append(base + '/usage.md')
+        write_json(root, artifact(root, base, 'usage.json'), data, ledger_fp)
+        changed.append(artifact(root, base, 'usage.json'))
+        write_bytes(root, artifact(root, base, 'usage.md'), markdown, report_fp)
+        changed.append(artifact(root, base, 'usage.md'))
         load(root, base, activity_id)
-        if fingerprint(checked_path(root, base + '/state.json', allow_missing=False)) != expected_state:
+        if fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)) != expected_state:
             raise SafetyError('Activity changed during usage update')
         return result, changed
     except (SafetyError, OSError) as exc:
@@ -373,6 +375,6 @@ def update(root, base, activity_id, request, time, apply, expected_state):
 
 def read(root, base, activity_id):
     data, _, _ = load(root, base, activity_id)
-    return {'activity_id': activity_id, 'path': base + '/usage.md', 'available': data is not None,
+    return {'activity_id': activity_id, 'path': artifact(root, base, 'usage.md'), 'available': data is not None,
             'updated_at': data['updated_at'] if data else None,
             'summary': data['summary'] if data else {'coverage': 'unavailable', 'tokens': None}}

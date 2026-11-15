@@ -1,6 +1,8 @@
 """Allocate Activity-local working folders; the host owns actual agent dispatch."""
 import re
 import uuid
+from pathlib import PurePosixPath
+from activity_layout import artifact, invocation_path
 
 from .storage import SafetyError, checked_path, fingerprint, read_json, write_json
 
@@ -12,9 +14,13 @@ def prepare(root, base, activity_id, request, stamp):
     if not isinstance(agent, str) or len(agent) > 64 or not AGENT.fullmatch(agent):
         raise ValueError('agent must be a lower-case agent name of at most 64 characters')
     invocation_id = str(uuid.uuid4())
-    suffix = 'files/agent-invocations/' + invocation_id
-    relative = base + '/' + suffix
-    for parent in (base + '/files', base + '/files/agent-invocations'):
+    relative = invocation_path(root, base, agent, invocation_id)
+    suffix = relative[len(base) + 1:]
+    parents = []
+    parent = PurePosixPath(relative).parent
+    while parent.as_posix() != base:
+        parents.append(parent.as_posix()); parent = parent.parent
+    for parent in reversed(parents):
         path = checked_path(root, parent)
         if path.exists() and not path.is_dir():
             raise SafetyError('Invocation parent must be a directory: ' + parent)
@@ -35,10 +41,14 @@ def allocate(root, base, result, expected_state):
     """Called under the runtime lock. Preserve and report all partial creations."""
     changed = []
     try:
-        state_path = base + '/state.json'
+        state_path = artifact(root, base, 'state.json')
         if fingerprint(checked_path(root, state_path, allow_missing=False)) != expected_state:
             raise SafetyError('Activity changed before invocation allocation')
-        for relative in (base + '/files', base + '/files/agent-invocations', result['path']):
+        parents = []
+        parent = PurePosixPath(result['path'])
+        while parent.as_posix() != base:
+            parents.append(parent.as_posix()); parent = parent.parent
+        for relative in reversed(parents):
             path = checked_path(root, relative)
             if relative == result['path'] or not path.exists():
                 path.mkdir()  # Exclusive: never overlay, retry or reuse an invocation.

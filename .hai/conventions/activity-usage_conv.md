@@ -2,7 +2,7 @@
 
 ## Purpose and files
 
-An Activity's `usage.md` is its readable token/credit snapshot; `usage.json` is the
+A layout-2 Activity's `system/usage.md` is its readable token/credit snapshot; `system/usage.json` is the
 managed source/checkpoint record behind it. Both are optional until the first
 update, and both move with the Activity on archival. Core state format is unchanged.
 
@@ -135,3 +135,6 @@ lifecycle writes. Exact-source chronicle verification remains a separate obligat
 - [Activity convention](activity_conv.md) — ownership and archival.
 - [Invocation working folders](agent-invocation_conv.md) — real host evidence and writers.
 - [Recording evidence](recording-evidence_conv.md) — independent closure-source proof.
+
+Layout-1 reports retain their original root paths. The shared Activity layout resolver
+selects physical storage; reads do not migrate records or reset observed counters.

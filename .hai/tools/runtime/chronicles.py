@@ -1,5 +1,6 @@
 """Core exact-source Activity chronicles. Never discovers session sources."""
 from environment_paths import STATE, PROFILES, INSTRUCTIONS
+from activity_layout import artifact
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -52,11 +53,13 @@ def assignment(root, value):
 
 
 def load(root, base, ident, *, metadata_only=False):
-    ledger = checked_path(root, base + '/chronicles/core.json')
+    ledger = checked_path(root, artifact(root, base, 'chronicles/core.json'))
     fp = fingerprint(ledger)
     directory = checked_path(root, base + '/chronicles')
     if fp is None:
-        if directory.exists() and any(directory.iterdir()):
+        metadata_directory = ledger.parent
+        if ((directory.exists() and any(directory.iterdir()))
+                or (metadata_directory != directory and metadata_directory.exists() and any(metadata_directory.iterdir()))):
             raise SafetyError('Existing chronicles lack a core binding ledger; explicit adoption required')
         return None, fp
     data = read_json(ledger)
@@ -104,9 +107,9 @@ def load(root, base, ident, *, metadata_only=False):
         if not isinstance(expected, str) or not re.fullmatch('[a-f0-9]{64}', expected):
             raise SafetyError('Invalid chronicle artifact fingerprint')
         if metadata_only:
-            checked_path(root, base + '/' + relative)
+            checked_path(root, artifact(root, base, relative))
             continue
-        target = checked_path(root, base + '/' + relative, allow_missing=False)
+        target = checked_path(root, artifact(root, base, relative), allow_missing=False)
         if fingerprint(target)[-1] != expected:
             raise SafetyError('Chronicle artifact changed: ' + relative)
     if metadata_only:
@@ -116,7 +119,7 @@ def load(root, base, ident, *, metadata_only=False):
             target = checked_path(root, base + '/' + entry['segment_path'], allow_missing=False)
             if target.read_bytes() != render(ident, entry['binding'], entry['original_started_at'], entry['message_index']):
                 raise SafetyError('Recorded message index differs from retained transcript')
-    checkpoint = read_json(checked_path(root, base + '/chronicles/checkpoint.json', allow_missing=False))
+    checkpoint = read_json(checked_path(root, artifact(root, base, 'chronicles/checkpoint.json'), allow_missing=False))
     if not isinstance(checkpoint, dict) or type(checkpoint.get('checkpoint_format_version')) is not int or checkpoint['checkpoint_format_version'] != 1 or checkpoint.get('activity_id') != ident:
         raise SafetyError('Invalid chronicle checkpoint identity/format')
     if checkpoint.get('pending_ranges') != [] or checkpoint.get('in_flight') is not None:
@@ -210,10 +213,10 @@ def check_overlaps(root, base, entries):
         if not child.is_dir() or child == root / base:
             continue
         checked_path(root, child.relative_to(root).as_posix(), allow_missing=False)
-        otherpath = checked_path(root, child.relative_to(root).as_posix() + '/chronicles/core.json')
+        otherpath = checked_path(root, artifact(root, child.relative_to(root).as_posix(), 'chronicles/core.json'))
         if not otherpath.exists():
             # Legacy checkpoint metadata may claim ranges we cannot infer safely.
-            legacy = checked_path(root, child.relative_to(root).as_posix() + '/chronicles/checkpoint.json')
+            legacy = checked_path(root, artifact(root, child.relative_to(root).as_posix(), 'chronicles/checkpoint.json'))
             if legacy.exists():
                 old = read_json(legacy)
                 if not isinstance(old, dict) or not isinstance(old.get('sources'), list) or not old['sources']:
@@ -235,7 +238,7 @@ def check_overlaps(root, base, entries):
                                 raise SafetyError('Chronicle assignment overlaps retained legacy coverage')
             continue
         childbase = child.relative_to(root).as_posix()
-        state = read_json(checked_path(root, childbase + '/state.json', allow_missing=False))
+        state = read_json(checked_path(root, artifact(root, childbase, 'state.json'), allow_missing=False))
         other, _ = load(root, childbase, state['activity_id'], metadata_only=True)
         # Unrelated historical content may be unavailable after a workspace move.
         # Its validated assignment metadata is enough to rule out overlap.
@@ -284,7 +287,7 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
     entries = {e['binding']['session_id']: e for e in old['sources']} if old else {}
     # A fresh explicit operation on the still-active Activity resumes its retained
     # live assignment after an interrupted closure. Historical closed ranges stay fixed.
-    state = read_json(checked_path(root, base + '/state.json', allow_missing=False))
+    state = read_json(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False))
     if state['lifecycle'] != 'active':
         raise SafetyError('Synchronization requires an active Activity')
     for sid, entry in list(entries.items()):
@@ -357,7 +360,7 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
     if reconciliations:
         history = 'chronicles/history/' + attempt
         for relative in ['chronicles/core.json', 'chronicles/checkpoint.json'] + [e['segment_path'] for e in old['sources']]:
-            outputs[history + '/' + PurePosixPath(relative).name] = checked_path(root, base + '/' + relative, allow_missing=False).read_bytes()
+            outputs[history + '/' + PurePosixPath(relative).name] = checked_path(root, artifact(root, base, relative), allow_missing=False).read_bytes()
         outputs[history + '/reconciliation.json'] = (json.dumps({'recorded_at': time, 'provenance': request['provenance'], 'sources': reconciliations}, ensure_ascii=True, indent=2) + '\n').encode()
     checkpoint = {'checkpoint_format_version': 1, 'activity_id': ident, 'sources': sources, 'verified_ranges': verified, 'pending_ranges': [], 'cadence_cursors': cursors,
                   'last_attempt': {'attempt_id': attempt, 'dispatch_cursors': cursors, 'started_at': time, 'finished_at': time, 'status': 'verified', 'error': None}, 'last_successful_at': time, 'in_flight': None}
@@ -366,39 +369,39 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
     ledger = {'core_format_version': 1, 'activity_id': ident, 'updated_at': time, 'sources': new_entries, 'artifact_hashes': {**retained_hashes, **{p: digest(raw) for p, raw in outputs.items()}}, 'provenance': provenance(request['provenance']), 'enablement_revision': revision}
     expected_artifacts = {}
     for relative in outputs:
-        current = fingerprint(checked_path(root, base + '/' + relative))
+        current = fingerprint(checked_path(root, artifact(root, base, relative)))
         expected_hash = old['artifact_hashes'].get(relative) if old else None
         if (expected_hash is None and current is not None) or (expected_hash is not None and (current is None or current[-1] != expected_hash)):
             raise SafetyError('Chronicle target changed during preparation: ' + relative)
         expected_artifacts[relative] = current
-    result = {'activity_id': ident, 'status': 'verified' if apply else 'planned', 'segments': [e['segment_path'] for e in new_entries], 'checkpoint_path': base + '/chronicles/checkpoint.json', 'cutoff': [v['range']['end'] for v in verified], 'source_count': len(new_entries), 'message_count': sum(len(o[2]) for o in observations), 'reconciliations': reconciliations}
+    result = {'activity_id': ident, 'status': 'verified' if apply else 'planned', 'segments': [e['segment_path'] for e in new_entries], 'checkpoint_path': artifact(root, base, 'chronicles/checkpoint.json'), 'cutoff': [v['range']['end'] for v in verified], 'source_count': len(new_entries), 'message_count': sum(len(o[2]) for o in observations), 'reconciliations': reconciliations}
     if not apply:
         return result, []
     changed = []
     try:
-        if fingerprint(checked_path(root, base + '/state.json', allow_missing=False)) != expected_state:
+        if fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)) != expected_state:
             raise SafetyError('Activity changed before recording')
         if fingerprint(environment_path) != environment_fp:
             raise SafetyError('Recording settings changed before synchronization')
-        if fingerprint(checked_path(root, base + '/chronicles/core.json')) != ledger_fp:
+        if fingerprint(checked_path(root, artifact(root, base, 'chronicles/core.json'))) != ledger_fp:
             raise SafetyError('Chronicle ledger changed before recording')
         for b, raw, messages in observations: assert_fresh(b, raw, messages)
         directory = checked_path(root, base + '/chronicles')
         if not directory.exists(): directory.mkdir(); changed.append(base + '/chronicles')
         # Preserve predecessor evidence before replacing any current artifact.
         for relative, content in sorted(outputs.items(), key=lambda item: not item[0].startswith('chronicles/history/')):
-            parent = PurePosixPath(base + '/' + relative).parent
+            parent = PurePosixPath(artifact(root, base, relative)).parent
             missing = []
             while not checked_path(root, parent.as_posix()).exists():
                 missing.append(parent); parent = parent.parent
             for directory in reversed(missing):
                 checked_path(root, directory.as_posix()).mkdir(); changed.append(directory.as_posix())
-            write_bytes(root, base + '/' + relative, content, expected_artifacts[relative])
-            changed.append(base + '/' + relative)
-        write_json(root, base + '/chronicles/core.json', ledger, ledger_fp); changed.append(base + '/chronicles/core.json')
+            write_bytes(root, artifact(root, base, relative), content, expected_artifacts[relative])
+            changed.append(artifact(root, base, relative))
+        write_json(root, artifact(root, base, 'chronicles/core.json'), ledger, ledger_fp); changed.append(artifact(root, base, 'chronicles/core.json'))
         load(root, base, ident)
         for b, raw, messages in observations: assert_fresh(b, raw, messages)
-        if fingerprint(checked_path(root, base + '/state.json', allow_missing=False)) != expected_state:
+        if fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)) != expected_state:
             raise SafetyError('Activity changed during recording')
         if fingerprint(environment_path) != environment_fp:
             raise SafetyError('Recording settings changed during synchronization')
@@ -412,7 +415,7 @@ def verify(root, base, ident, closing=False):
     if data is None:
         raise SafetyError('No core chronicle checkpoint to verify')
     revision = read_json(checked_path(root, STATE, allow_missing=False))['features']['chronicles'].get('enablement_revision', 0)
-    active = read_json(checked_path(root, base + '/state.json', allow_missing=False))['lifecycle'] == 'active'
+    active = read_json(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False))['lifecycle'] == 'active'
     if active and revision != data['enablement_revision']:
         raise SafetyError('Recording enablement changed; synchronize explicit intervals first')
     for entry in data['sources']:
@@ -428,4 +431,4 @@ def verify(root, base, ident, closing=False):
             _, _, live = read_assigned(entry['closure_binding'], entry)
             if live != messages:
                 raise SafetyError('New eligible exchange appeared after closure cutoff')
-    return {'activity_id': ident, 'status': 'verified', 'source_count': len(data['sources']), 'checkpoint_path': base + '/chronicles/checkpoint.json'}
+    return {'activity_id': ident, 'status': 'verified', 'source_count': len(data['sources']), 'checkpoint_path': artifact(root, base, 'chronicles/checkpoint.json')}

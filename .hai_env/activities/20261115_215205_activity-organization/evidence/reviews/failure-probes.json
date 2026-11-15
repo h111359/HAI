@@ -1,0 +1,97 @@
+{
+  "purpose": "Retained failed probes and subsequent fixes explained in activity-layout.md",
+  "probes": [
+    {
+      "probe": "migration-report-appearance-failure.txt",
+      "source_sha256": "93f937518fc1e6c9663ef526cc3921447f343ebeaa823855d7052aa49f1518bc",
+      "evidence": "UnboundLocalError: cannot access local variable 'report' where it is not associated with a value"
+    },
+    {
+      "probe": "partial-migration-continuation-failure.json",
+      "source_sha256": "0525f104084fff33a5f3380005ce3cd0b09b49c90809a38aa0956659966b0196",
+      "evidence": {
+        "migration_report_status": "partial",
+        "subsequent_record": {
+          "ok": true,
+          "status": "ok",
+          "operation": "record",
+          "result": {
+            "state": {
+              "activity_id": "83756c5e-803e-48c6-8498-0b67861e3003",
+              "lifecycle": "active",
+              "created_at": "2026-11-15T21:24:12Z",
+              "closed_at": null,
+              "outcome": null,
+              "implementation_started_at": null,
+              "steps": {
+                "analysis": "not_started",
+                "clarification": "not_started",
+                "implementation": "not_started",
+                "planning": "not_started",
+                "verification": "not_started"
+              },
+              "activity_layout_version": 2,
+              "initial_message_id": "dd00a8cf-8309-4cd2-96cf-419e6aeb4104"
+            }
+          },
+          "changed_files": [
+            ".hai_env/activities/00000000_000000_active/system/log.md",
+            ".hai_env/activities/00000000_000000_active/system/state.json"
+          ],
+          "issues": []
+        }
+      }
+    },
+    {
+      "probe": "resolved-artifact-alias-failure.json",
+      "source_sha256": "ad5078e9feba12bf5e926b0bfebaa228c4ca374b26421484b7274cc864d7a863",
+      "evidence": {
+        "preview": {
+          "ok": true,
+          "status": "planned",
+          "operation": "record",
+          "result": {
+            "state": {
+              "activity_id": "960c8eff-de15-45fa-b2ce-28bbc596904f",
+              "lifecycle": "active",
+              "created_at": "2026-11-15T21:13:07Z",
+              "closed_at": null,
+              "outcome": null,
+              "implementation_started_at": null,
+              "steps": {
+                "analysis": "not_started",
+                "clarification": "not_started",
+                "implementation": "not_started",
+                "planning": "not_started",
+                "verification": "not_started"
+              },
+              "activity_layout_version": 2,
+              "initial_message_id": "f86dc3b9-0710-4a23-93eb-5673d8667ec3"
+            },
+            "paths": [
+              ".hai_env/activities/00000000_000000_active/results/definition.md",
+              ".hai_env/activities/00000000_000000_active/results/definition.md",
+              ".hai_env/activities/00000000_000000_active/system/log.md",
+              ".hai_env/activities/00000000_000000_active/system/state.json"
+            ]
+          },
+          "changed_files": [],
+          "issues": []
+        },
+        "applied": {
+          "ok": false,
+          "status": "partial",
+          "operation": "record",
+          "result": {},
+          "changed_files": [
+            ".hai_env/activities/00000000_000000_active/results",
+            ".hai_env/activities/00000000_000000_active/results/definition.md"
+          ],
+          "issues": [
+            "Inspected input changed: .hai_env/activities/00000000_000000_active/results/definition.md"
+          ]
+        }
+      }
+    }
+  ]
+}

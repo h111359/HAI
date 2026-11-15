@@ -7,7 +7,11 @@ workspace-contained regression runner. Startup includes observed
 
 Run `python -B .hai/tools/hai.py startup --workspace .` for core environment, Activity and separate read-only `recording_context` readiness. Required recording needs binding/synchronization before substantive recorded work, even when core `ok` is true. Common options may precede or follow the group. Commands emit JSON with `ok`, `status`, `operation`, `result`, `changed_files`, and `issues`. Exit codes are 0 for success or a valid plan, 1 for blocked, partial or unsupported work, and 2 for invalid invocation. Optional registration and model profile issues are reported separately from core environment validity.
 
-Use `--request PATH` for a UTF-8 JSON object within the workspace. Duplicate keys and nonstandard numeric constants are rejected. Mutations are previews by default; add `--apply` to perform them. Mutation requests include `"provenance": {"source": "...", "reason": "..."}` with nonblank values. A pre-existing `.hai_env/.runtime.lock` blocks writes and requires inspection; do not remove an unexplained lock automatically. Partial results identify paths that were changed and must be inspected before another attempt.
+Use `--request-stdin` for a strict UTF-8 JSON object on standard input, or
+`--request PATH` for an existing workspace-contained JSON file. These options are
+mutually exclusive. Framework-generated file requests belong in the assigned work
+folder, never loose in the Activity root. Prefer in-memory/standard-input calls.
+ Duplicate keys and nonstandard numeric constants are rejected. Mutations are previews by default; add `--apply` to perform them. Mutation requests include `"provenance": {"source": "...", "reason": "..."}` with nonblank values. A pre-existing `.hai_env/.runtime.lock` blocks writes and requires inspection; do not remove an unexplained lock automatically. Partial results identify paths that were changed and must be inspected before another attempt.
 
 - `environment initialize`: provenance only; creates absent state and missing instructions, preserving existing instructions.
 - `environment migrate-layout`: provenance only; previews relocation of legacy `.hai_env/` state, profiles and instructions into `.hai_env/config/`. Add `--apply` only for explicitly authorized migration after stopping other writers. Preserves exact bytes and optional profile absence; retains recovery copies and a migration manifest. Mixed, conflicting or incomplete layouts require explicit reconciliation, never automatic overwrite or retry. See [migration procedure](../../procedures/migrate-environment-layout.md).
@@ -123,13 +127,62 @@ When versioning run evidence, preserve exact bytes: the repository's
 conversion of hashed snapshots, records and outputs. Apply equivalent attributes
 in another repository before committing its run evidence.
 
+## Activity layout and conversation
+
+New `activity create` defaults to layout 2: `README.md` and
+`system/state.json`, `system/log.md`, `system/chat.jsonl`. `initial_input` is
+preserved exactly as a typed human message; state references its message ID.
+Optional `summary` supplies a human objective for README without replacing original
+content. Explicit `layout_version: 1` is retained for compatibility; startup/reads
+never migrate old records. Environment state format remains 3.
+
+- `activity chat-post` accepts optional `role` (human/assistant/agent/system),
+  `message_type` (instruction/reply/coordination/legacy-input), `source_message_id`
+  and `delivery_status` (received/prepared/delivered) for layout 2. Agent defaults
+  remain coordination. Assistant defaults to prepared, never claimed delivered.
+  Stable source-ID replay acknowledges identical content without appending; changed
+  content conflicts. Human text is not truncated to the legacy 64KiB limit.
+- `activity record` uses explicit `artifacts` names under results/ or evidence/,
+  or README.md. Canonical analysis.md/plan.md/etc names resolve under results/.
+  Overlapping destinations are rejected before writes. Revisions go to history/.
+  `input_append` is legacy-only: post original human messages through typed chat.
+- `activity close` retains the existing request fields but layout 2 appends the
+  final outcome/recording report to README.md, preserving its predecessor under
+  history/readme/. It creates no outcome.md. State/log/usage are under system/.
+- `activity migrate-layout` takes selected `activity_id`, provenance and optional
+  `summary` and `allow_closed` Boolean (default false). Preview is read-only; apply explicitly converts the current legacy
+  Activity, preserving original state/input and context provenance, existing IDs,
+  timestamps and accepted evidence. Unknown/mixed/partial destinations block.
+  Stop all writers before migration and hand off new invocation paths afterward.
+  Closed archives are never automatically changed. Explicit allow_closed: true
+  permits only the selected archive while a separate work Activity is active;
+  closure identity/timestamps/outcome remain unchanged and exact prior outcome
+  content becomes the README final report. Retired agent work is durable history,
+  rather than ignored disposable work. Other archives remain untouched.
+- `activity work-cleanup` takes current `activity_id`, provenance, exact
+  Activity-relative `paths` under work/, and actual `writers_ended: true`,
+  `evidence_retained: true` host attestations. Preview lists the scope. Apply removes
+  only the selected declared disposable work, refusing links, overlaps and
+  invocation manifests. It never cleans results/evidence/history/system/run data.
+  Close does not silently discard unexplained work or uncertain failures.
+
+Requests to public APIs can run in memory; CLI --request-stdin avoids disposable
+request files. The coordinator consolidates verification under evidence/ and keeps
+only meaningful detailed proof. Runtime roles and the shared Activity convention
+specify output owners and retention. README navigation derives from existing paths.
+
+Host instructions capture received human messages before dependent work regardless
+of chronicles, and record assistant content with truthful delivery status. This is
+an explicit host integration protocol, not a claim of an unavailable automatic UI
+hook or authentication. Optional chronicles still verify actual saved-source coverage.
+
 ## Activity and package operations
 
 Requests are JSON objects. All applied Activity and package mutations require valid current core state and readable mandatory instructions. For example, `python -B .hai/tools/hai.py activity discover --workspace .` reads the current Activity; add `--request request.json` where fields are listed below. Every mutation requires the provenance object described above.
 
 - `activity discover` takes `{}`. `activity show` takes `activity_id`.
 - `activity usage-update` takes `activity_id`, provenance and optional `sources`, `pricing` and `reported_spend`. It previews by default; `--apply` refreshes assigned source ranges into Activity-local `usage.json` and `usage.md`. `activity usage-read` takes only `activity_id` and reads a retained snapshot, including archives. Closure automatically refreshes usage before lifecycle writes; unknown data is unavailable/stale, never fabricated zero. See [source attribution, counters and estimates](../../conventions/activity-usage_conv.md).
-- `activity invocation-allocate` takes `activity_id`, `agent` and provenance. Preview creates nothing (`allocated: false`); `--apply` exclusively creates `files/agent-invocations/<uuid>/invocation.json` below the current Activity and returns its existing folder (`allocated: true`), stable IDs, Activity-relative suffix and metadata. Closed/stale IDs, collisions and unsafe paths are rejected. Partial results retain and name changed paths. See [allocation and actual host handoff](../../conventions/agent-invocation_conv.md); the runtime does not spawn agents.
+- `activity invocation-allocate` takes `activity_id`, `agent` and provenance. Preview creates nothing (`allocated: false`); `--apply` exclusively creates `work/agents/<agent>/<uuid>/invocation.json` in layout 2 (legacy Activities keep files/agent-invocations/<uuid>/invocation.json) below the current Activity and returns its existing folder (`allocated: true`), stable IDs, Activity-relative suffix and metadata. Closed/stale IDs, collisions and unsafe paths are rejected. Partial results retain and name changed paths. See [allocation and actual host handoff](../../conventions/agent-invocation_conv.md); the runtime does not spawn agents.
 - `activity chat-read` takes `activity_id`, optional nonnegative integer `after_sequence` (default `0`) and optional integer `limit` (`1..1000`, default `100`). Returns a page with `messages`, `total_messages`, `next_after_sequence` and `has_more`; reads closed Activities too. Omit `--apply` for reads. `activity chat-post` takes `activity_id`, `author`, `text` and provenance. It previews by default; `--apply` appends to the current Activity's `chat.jsonl` under the runtime lock. No edit/delete action exists. See [chat format and participation](../../conventions/activity-chat_conv.md), including attribution and filesystem-access limits.
 - `activity create` takes `initial_input` and provenance. `activity record` takes `activity_id`, optional `steps` mapping step names to statuses, optional `implementation_start` Boolean, optional `artifacts` array of `{name, text, reason}`, optional `input_append`, `log`, and provenance. `activity close` takes `activity_id`, `outcome`, `archive_label`, `outcome_text`, `recording` with `status` and `details`, and provenance. It also accepts `recording_requirement` with Boolean `enabled` and `mandatory`, and a `recording_proof` gate request. Verified closure additionally supplies `recording_paths` with `sources` mapping source IDs to workspace-relative files and `artifacts` mapping artifact IDs to files inside the Activity; their hashes must match the gate evidence. `activity supplement` takes `activity_id`, `text`, and provenance. When chronicles are enabled, closure attempts synchronization through completed saved exchanges. Required mode and independent mandatory obligations retain recording gates; best-effort source interruptions detected before writes become explicit unavailable coverage. Integrity and partial-write failures still block closure. Explicit compatible proof remains supported. Disabled/no-obligation closure requires no transcript. These operations preserve partial results on failure.
 - `packages validate` takes `definition`; `packages resolve` takes `definition` and `runtime`, a capability snapshot shaped as `{"models":{"model-id":["high"]}}`. `packages audit` takes `{}`. `packages install` takes workspace-relative `source`, `name`, provenance, and optional Boolean `replace` and `register`. Replacement additionally requires the exact `reviewed_differences` list returned by a preview; the previous package is retained as a backup. Registration may require a separate reconciliation after replacement. `packages register` takes `name` and provenance. Remote acquisition is unsupported. Safe no-overwrite package and Activity moves require an available native atomic rename primitive. Implementations cover Linux, Windows and macOS; only Linux has been tested here.

@@ -3,6 +3,14 @@
 HAI is a framework for AI-assisted development. Start with [the startup
 instructions](.hai/start.md).
 
+New Activities use a predictable [layout](.hai/conventions/activity_conv.md):
+`README.md` is the entry point and final report; operational records live in
+`system/`; review outputs, evidence, predecessors and disposable work use
+`results/`, `evidence/`, `history/` and `work/`. Human instructions persist in typed
+conversation records even with chronicles off. Legacy archives remain readable;
+current-Activity migration is explicit. Runtime commands accept `--request-stdin`
+so routine operations need no saved request JSON file.
+
 Optional [workflows](.hai/concepts/workflow.md) describe coordinated agent steps,
 named results and explicit file handoffs in one Markdown definition per workflow
 under `.hai_env/workflows/`. Each run belongs to one Activity and retains its

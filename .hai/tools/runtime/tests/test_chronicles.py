@@ -23,7 +23,7 @@ class CoreChronicleTests(unittest.TestCase):
                       'features': {'chronicles': {'enabled': True, 'record_every_prompts': 5, 'mode': 'required'}}}
         self.save_state()
         self.prov = {'source': 'fixture explicit source assignment', 'reason': 'verify core recording'}
-        c = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        c = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         self.assertTrue(c['ok'], c)
         self.ident = c['result']['state']['activity_id']; self.base = self.root / c['result']['path']
         self.source = self.root / 'session.jsonl'
@@ -53,7 +53,7 @@ class CoreChronicleTests(unittest.TestCase):
         ledger = json.loads((archive / 'chronicles/core.json').read_text(encoding='utf-8'))
         segment = archive / ledger['sources'][0]['segment_path']
         segment.write_bytes(b'retained altered historical content')
-        created = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        created = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         self.ident = created['result']['state']['activity_id']
         self.base = self.root / created['result']['path']
         # A matching session still needs full historical verification.
@@ -144,21 +144,21 @@ class CoreChronicleTests(unittest.TestCase):
     def test_new_activity_can_use_later_same_session_range(self):
         self.assertTrue(self.sync(sources=[self.assignment])['ok']); self.assertTrue(self.close()['ok'])
         self.lines.append(self.message('user_message', 'new Activity')); self.save()
-        c = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        c = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         self.ident = c['result']['state']['activity_id']; self.base = self.root / c['result']['path']
         later = {**self.assignment, 'start_position': 5, 'enabled_intervals': [{'start': {'source_session_id': 'one', 'source_position': 5}, 'end': None, 'provenance': 'new Activity'}]}
         self.assertTrue(self.sync(sources=[later])['ok'])
 
     def test_overlap_with_previous_activity_is_rejected(self):
         self.assertTrue(self.sync(sources=[self.assignment])['ok']); self.assertTrue(self.close()['ok'])
-        c = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True); self.ident = c['result']['state']['activity_id']; self.base = self.root / c['result']['path']
+        c = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True); self.ident = c['result']['state']['activity_id']; self.base = self.root / c['result']['path']
         self.assertFalse(self.sync(sources=[self.assignment])['ok'])
 
     def test_corrupt_neighbor_ledger_cannot_hide_overlapping_recorded_ranges(self):
         self.assertTrue(self.sync(sources=[self.assignment])['ok']); closed = self.close(); self.assertTrue(closed['ok'])
         ledger = self.root / closed['result']['archive_path'] / 'chronicles/core.json'
         data = json.loads(ledger.read_text(encoding='utf-8')); data['sources'] = []; ledger.write_text(json.dumps(data), encoding='utf-8')
-        c = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        c = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         self.ident = c['result']['state']['activity_id']; self.base = self.root / c['result']['path']
         self.assertFalse(self.sync(sources=[self.assignment])['ok']); self.assertFalse((self.base / 'chronicles').exists())
 

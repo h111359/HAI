@@ -43,7 +43,7 @@ class ContinuityTests(CoreChronicleTests):
         from runtime import activities
         self.assertTrue(self.sync(sources=[self.assignment])['ok'])
         self.assertTrue(self.close()['ok'])
-        created = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        created = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         self.ident = created['result']['state']['activity_id']; self.base = self.root / created['result']['path']
         self.lines[1:1] = [self.record('event_msg', {'type': 'token_count'}) for _ in range(3)]
         self.save()

@@ -1,0 +1,11 @@
+{
+  "manifest_sha256": "8117978eddf0313fa8829912725f2d84170db4a52f90f732aa9112090757f02a",
+  "files": 7,
+  "directories": 4,
+  "readback_status": "finished",
+  "outcome": "feasible",
+  "revision": 4,
+  "state_projection_exact": true,
+  "show_zero_write": true,
+  "legacy_external_absent": true
+}

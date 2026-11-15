@@ -1,0 +1,22 @@
+{
+  "usage_format_version": 2,
+  "activity_id": "2eae43f2-0dcc-49f8-8736-c67043f8ea05",
+  "updated_at": "2026-11-15T21:52:05Z",
+  "provenance": {
+    "source": "user: close the activity and commit",
+    "reason": "refresh human entry point and evidence for authorized closure and local commit"
+  },
+  "sources": [],
+  "pricing": null,
+  "reported_spend": null,
+  "summary": {
+    "coverage": "unavailable",
+    "tokens": null,
+    "by_model": {},
+    "estimated_credits": null,
+    "reported_credits": null,
+    "reported_spend_current": false,
+    "missing_rate_models": []
+  },
+  "markdown_sha256": "aef5016d31b2e8ac16315a3c3ab91d0ed8a3e35f16a8d88e5f2661b2ee3e8cf1"
+}

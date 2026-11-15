@@ -26,3 +26,9 @@ define their ownership and formats; no workflow catalogue or global current poin
 Optional workspace agent packages live at `.hai_env/agents/<name>/` and their explicit registration catalogue at `.hai_env/agents/catalogue.md`. Their reusable source packages under `hai_agents_library/agents/` are data, not a runtime execution origin. A package's settings are stored separately in `.hai_env/config/agents/`; source changes do not automatically replace installed packages. See [agent convention](agent_conv.md) and [agent configuration](agent-configuration_conv.md).
 
 Activity records use the configured store and the shared [Activity convention](activity_conv.md). Core source-backed recording lives in `tools/chronicles/` and runtime; see [chronicles](chronicles_conv.md) and [recording evidence](recording-evidence_conv.md). Explicit source assignment remains the host’s responsibility.
+
+New Activities use layout 2: README.md at root; operational records under system/;
+review outputs in results/, retained proof in evidence/, prior versions in history/,
+and disposable material in work/. Human instructions persist in typed chat even
+when chronicles are disabled. Existing archives retain layout 1 until explicit
+compatible migration. See the Activity convention for exact generation/cleanup rules.

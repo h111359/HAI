@@ -1,0 +1,3535 @@
+{
+  "activity_layout_migration_format": 1,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "recorded_at": "2026-11-15T21:37:48Z",
+  "provenance": {
+    "source": "user accepted proposed Activity organization and instructed: Apply the proposed changes",
+    "reason": "explicitly migrate the inspected workflow archive without altering its historical closure or accepted workflow evidence"
+  },
+  "status": "completed",
+  "mapping": [
+    {
+      "source": "chat.jsonl",
+      "destination": "system/chat.jsonl",
+      "artifact": {
+        "kind": "file",
+        "sha256": "b256b61a3cc2791d49ddb68a1ec982e962918158d5183aa736c7d0af2afc53a5",
+        "bytes": 17963
+      }
+    },
+    {
+      "source": "chronicles/checkpoint.json",
+      "destination": "system/chronicles/checkpoint.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "52514a39471681837339606db36752fde6f4a5a865a16215f83ef56a3985f527",
+        "bytes": 2198
+      }
+    },
+    {
+      "source": "chronicles/core.json",
+      "destination": "system/chronicles/core.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "5074868bdc1547b17cefff5b07ceab05f12304c66d4ac07ee64542e45ea8a798",
+        "bytes": 77239
+      }
+    },
+    {
+      "source": "chronicles/history",
+      "destination": "system/chronicles/history",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "619643f9b2077763d9a5af6949aa66bc3c84127c03e96a971dd142c0f5a8ce26",
+        "manifest": [
+          {
+            "path": "fda37473-6b3f-43f6-98c6-19e0aac3d167",
+            "kind": "directory"
+          },
+          {
+            "path": "fda37473-6b3f-43f6-98c6-19e0aac3d167/20261112_195218_segment-01.md",
+            "kind": "file",
+            "sha256": "a55a29894ae58fa20a83370f58fcef8350663288966ab424cccb7a88d1254335",
+            "bytes": 14461
+          },
+          {
+            "path": "fda37473-6b3f-43f6-98c6-19e0aac3d167/checkpoint.json",
+            "kind": "file",
+            "sha256": "97ff8de5fafb479e1029a56840e67de6571af335dc002cb9bbab1ec9131bc19e",
+            "bytes": 2194
+          },
+          {
+            "path": "fda37473-6b3f-43f6-98c6-19e0aac3d167/core.json",
+            "kind": "file",
+            "sha256": "ea3d2af097ef32a424647d464171b24f522ea7ecb6b544c20c7fd0a1d5298a51",
+            "bytes": 1510
+          },
+          {
+            "path": "fda37473-6b3f-43f6-98c6-19e0aac3d167/reconciliation.json",
+            "kind": "file",
+            "sha256": "c2a5ddce3a395c5e110291b72515fc8bbd553a0ce55f129cd9b99cd1ae38ff66",
+            "bytes": 1807
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/activity-create-request.json",
+      "destination": "history/legacy-material/files/activity-create-request.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "6e838f2ea3c250575cf8fa0fcaaaf0b94d98a1fddff48a6f06f959a1a835f00a",
+        "bytes": 764
+      }
+    },
+    {
+      "source": "files/agent-invocations/34cf3714-d4c4-4c85-bdbd-dad081be2f22",
+      "destination": "history/legacy-material/agent-work/recording-implementation/34cf3714-d4c4-4c85-bdbd-dad081be2f22",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "6d5de161c99c9aeb22520c363e3148f8a8559686be28f06dc9e37101ef41bb6b",
+        "manifest": [
+          {
+            "path": "chat-handoff.json",
+            "kind": "file",
+            "sha256": "993dd9ccb3d2e0497d768abedc9fa0971e7207239d17751b0e245a6bc5620716",
+            "bytes": 813
+          },
+          {
+            "path": "chat-read.json",
+            "kind": "file",
+            "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+            "bytes": 55
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "1a60c90628f10b38181278c82ed63d9ea4a34d40d8e8b14d52529389e1e6e79d",
+            "bytes": 404
+          },
+          {
+            "path": "tmp",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/4df87d4f-9b4e-4e2e-8066-a63c394a827f",
+      "destination": "history/legacy-material/agent-work/workflow-definition-implementation/4df87d4f-9b4e-4e2e-8066-a63c394a827f",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "569151936a94dd374e9cb8b147cad9c39f45ea602c40ac643cac9ab88175bc1f",
+        "manifest": [
+          {
+            "path": "developer-checks.json",
+            "kind": "file",
+            "sha256": "e111ca0ba63388f6f707a0cd9a2cb2ffc9542980b2619f3d6b8fb5486d5865bb",
+            "bytes": 590
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "370746e79ea757bae755170802f5cafbed18046fc3c174c3825ba4d8952821ee",
+            "bytes": 455
+          },
+          {
+            "path": "test-work",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/54114a86-cc14-4e53-ac1a-5aaa7e673328",
+      "destination": "history/legacy-material/agent-work/workflow-design-review/54114a86-cc14-4e53-ac1a-5aaa7e673328",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "8d46e4ddbdfd8df4fdf40757234264f544ccb23edd342909431a0bdc0d55b84c",
+        "manifest": [
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "4bf8a66746a250f8a6c76df66049fda59dc8e23b8a1fe6fca44ac1b27b349e1d",
+            "bytes": 391
+          },
+          {
+            "path": "review.md",
+            "kind": "file",
+            "sha256": "d4ec90e1286291a3e8d28de1100a7698c73bb804ae265a3ce1b2b62a93f11686",
+            "bytes": 3973
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff",
+      "destination": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "8bf928aad407b59f9a53536ee3c241879bad21c49ad16951af91d13a965e3271",
+        "manifest": [
+          {
+            "path": "chat-post.json",
+            "kind": "file",
+            "sha256": "63cf3d897037162a89b8cfc2d618337b58b22a149b722b5856b86c7f4dacfe41",
+            "bytes": 889
+          },
+          {
+            "path": "chat-read.json",
+            "kind": "file",
+            "sha256": "3add3786fd6611050fbf3c79a1d528fbd335592fddec84a889bb244cc862476d",
+            "bytes": 70
+          },
+          {
+            "path": "checks-and-source-hashes.json",
+            "kind": "file",
+            "sha256": "e3a0234074f7437d4fd5603eb4d1716bd853ca77b75fcc72ce18f9dff80a26de",
+            "bytes": 3211
+          },
+          {
+            "path": "final-source-evidence.json",
+            "kind": "file",
+            "sha256": "94f8d501fc83d1c167aad3edf139344772b7f835fd32980991c2cf28ae163526",
+            "bytes": 3637
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "183a5c367f6052890f70c0bb0ba9c3c7406a761d6298fadbf40c186b3253c488",
+            "bytes": 426
+          },
+          {
+            "path": "show-request.json",
+            "kind": "file",
+            "sha256": "71c10ce3ec5e07393b940b0a1a6ecfb60b3cf19b312f3a1148ab4205a3274f3c",
+            "bytes": 105
+          },
+          {
+            "path": "show-result.json",
+            "kind": "file",
+            "sha256": "9d85487aa4f9b6b44deaf7a189faa3e41ccfdeeaedded7098f4a219b599ee8db",
+            "bytes": 2395
+          },
+          {
+            "path": "validate-request.json",
+            "kind": "file",
+            "sha256": "8bdc72558b8f7a019791ea82830a5a0067993c634f22c540c18778f2a5a9a064",
+            "bytes": 57
+          },
+          {
+            "path": "validate-result.json",
+            "kind": "file",
+            "sha256": "83ca17c74039a43162c2a83507425ff5b7de1676e2e868d82a36f5accfa0200b",
+            "bytes": 4089
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/bd01382f-d540-4001-9cf2-8605d5546fee",
+      "destination": "history/legacy-material/agent-work/recording-policy/bd01382f-d540-4001-9cf2-8605d5546fee",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "f9112e79c15adfcbf766426a67690b500e316585510c7c9bb20dcbad7b283c8e",
+        "manifest": [
+          {
+            "path": "chat-post-entry.json",
+            "kind": "file",
+            "sha256": "8a4a4c4abb0757ab88d2fb4a5a2a5d0c4656a4031642f73a6f56010a2d5aeb1e",
+            "bytes": 324
+          },
+          {
+            "path": "chat-post-final.json",
+            "kind": "file",
+            "sha256": "2d97fccbfb920779f65ed2ba84af03f074055627a68e4388b286d00d6f781422",
+            "bytes": 785
+          },
+          {
+            "path": "chat-read-entry.json",
+            "kind": "file",
+            "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+            "bytes": 55
+          },
+          {
+            "path": "chat-read-final.json",
+            "kind": "file",
+            "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+            "bytes": 55
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "d638c1292ee80a229bc8bd9b9515fc7c75b6a5f1df4ddc6a685b61caf1f4240d",
+            "bytes": 347
+          },
+          {
+            "path": "test-work",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6",
+      "destination": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "29abd5324ae4ff8abd13f0e1deff3d1bfde36361b67b61d686dbfbc70c1eb3b6",
+        "manifest": [
+          {
+            "path": "chat-post-clearance.json",
+            "kind": "file",
+            "sha256": "fa6405653312e0808b7a29f43fa1a465ca024c9550ad04df59ee150802046c71",
+            "bytes": 569
+          },
+          {
+            "path": "chat-post-entry.json",
+            "kind": "file",
+            "sha256": "77509add47ae77be94ca4efe212e136d1dce9ceb64e9f9e9c2fbb315c01859af",
+            "bytes": 305
+          },
+          {
+            "path": "chat-post-final.json",
+            "kind": "file",
+            "sha256": "82f441060b5cfd7a801aedfd34a5a82def626a5457a6c2f617b0d4478a3070b8",
+            "bytes": 609
+          },
+          {
+            "path": "chat-post-followup.json",
+            "kind": "file",
+            "sha256": "3ae08ad7e14f8b0d2167481d109c09609dc9a12844f095997ba35aca0ba9e18d",
+            "bytes": 502
+          },
+          {
+            "path": "chat-read-clearance.json",
+            "kind": "file",
+            "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+            "bytes": 55
+          },
+          {
+            "path": "chat-read-entry.json",
+            "kind": "file",
+            "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+            "bytes": 55
+          },
+          {
+            "path": "chat-read-final.json",
+            "kind": "file",
+            "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+            "bytes": 55
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "200888faa1b0c667f7e992f600df3865ab15f0b8fbd2e10ca069694a48f3e5d4",
+            "bytes": 360
+          },
+          {
+            "path": "review.md",
+            "kind": "file",
+            "sha256": "f33a6475f14b190dd21be44ae810e37cd82c2b3663cce55a9c521430afa0c021",
+            "bytes": 3525
+          },
+          {
+            "path": "review_probes.py",
+            "kind": "file",
+            "sha256": "e9b5823032e35f61fd5cc74e6aea3a3cccc91b7a057c3859a2eff96a9f0affaf",
+            "bytes": 2008
+          },
+          {
+            "path": "test-work",
+            "kind": "directory"
+          },
+          {
+            "path": "test-work/tmp",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4",
+      "destination": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "df9a98596e0f0b1743a5b128fc326fab535f706fd447107ce1bad02f7334533a",
+        "manifest": [
+          {
+            "path": "chat-post.json",
+            "kind": "file",
+            "sha256": "33396a161b976c81fb336f16bd87dc7f5f03326c5f41efae7d313b4bd1082747",
+            "bytes": 1037
+          },
+          {
+            "path": "chat-read.json",
+            "kind": "file",
+            "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+            "bytes": 55
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "613cffe2af523160a896cc49a8b7c2438b29bd2fbea004fd6a6e60589248931f",
+            "bytes": 395
+          },
+          {
+            "path": "trial-check-results.md",
+            "kind": "file",
+            "sha256": "6a75d4804a3259a58b43489ec2f0cc20e5d0f0cb01cee9d558487cb4cefc05db",
+            "bytes": 2196
+          },
+          {
+            "path": "trial-package",
+            "kind": "directory"
+          },
+          {
+            "path": "trial-package/00-review-guide.md",
+            "kind": "file",
+            "sha256": "d049a70dbf89b1739bc564c05525a91778b9a3991361dd56d381e565b7aacef6",
+            "bytes": 4004
+          },
+          {
+            "path": "trial-package/01-requirements.md",
+            "kind": "file",
+            "sha256": "64ed774b5162c45487d2e8fc48772f983dca5a04cbb9eaf6ee21dd65e3eb7cb4",
+            "bytes": 4161
+          },
+          {
+            "path": "trial-package/02-specification.md",
+            "kind": "file",
+            "sha256": "8d0722929b68b7939c791615b82d9e6935a494d9d0216d6f1d88f05d0453b09e",
+            "bytes": 8481
+          },
+          {
+            "path": "trial-package/02a-reading-guide.md",
+            "kind": "file",
+            "sha256": "c6b4114136c4f7aaa1ccae740ce3af9094c7baeec336578409267cf7eee29ca7",
+            "bytes": 3886
+          },
+          {
+            "path": "trial-package/03-examples.md",
+            "kind": "file",
+            "sha256": "0badf286a98c610385cdccc2e327755999047241a7fcb24549187d18f781891d",
+            "bytes": 5801
+          },
+          {
+            "path": "trial-package/05-delivery-plan.md",
+            "kind": "file",
+            "sha256": "c81f16ed377a8f7003610952a50ad5f141f2dcd776bac79b9cd0a3a58255cd68",
+            "bytes": 4109
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/ee3ea5b3-4c2e-4652-8961-eaca02039eba",
+      "destination": "history/legacy-material/agent-work/workflow-run-implementation/ee3ea5b3-4c2e-4652-8961-eaca02039eba",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "e06046f08c5569a32f673ccd5d235af0d6828bc822a643153bf507ec178c685d",
+        "manifest": [
+          {
+            "path": "developer-checks.json",
+            "kind": "file",
+            "sha256": "0b341fefc852b0f4931b0bb67ff6b714d9afdee7ea9e35cd30bd892574b8d168",
+            "bytes": 1177
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "d6e225726fbb1782cf2fa032846df1f6832996cffa654bf730dfba3a49445d90",
+            "bytes": 448
+          },
+          {
+            "path": "test-work",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a",
+      "destination": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "48e74ab38cc078078514c54b2c6061da98bbdcc858706c539ab00a0e87e07726",
+        "manifest": [
+          {
+            "path": "activity-local-lineage-race-fixed.json",
+            "kind": "file",
+            "sha256": "d2ae2602479ab7b1d6d5b1ae42d5cefe428bd718f002245168ec9da940f11a68",
+            "bytes": 280
+          },
+          {
+            "path": "activity-local-refactor-tests.json",
+            "kind": "file",
+            "sha256": "4cdcbb83f27b341753b46286d7d3a63b72478f375ef65d78555fb32e03dd6e28",
+            "bytes": 200
+          },
+          {
+            "path": "final-focused-tests.json",
+            "kind": "file",
+            "sha256": "4bf2f1875792668296280db58eda248f7dd25c0b0d2e65ffb31b254e2d221833",
+            "bytes": 211
+          },
+          {
+            "path": "final-independent-probes.json",
+            "kind": "file",
+            "sha256": "840b14150e6cc90715cd5ce98630c1a0136d1d5e3caee9050d7380876a8fa54f",
+            "bytes": 176
+          },
+          {
+            "path": "final-integration-tests.json",
+            "kind": "file",
+            "sha256": "4c563cc23a5e212eabb709ba3412d49d255a4411116bec04264cf75040c4d68e",
+            "bytes": 200
+          },
+          {
+            "path": "final-recovery-tests.json",
+            "kind": "file",
+            "sha256": "3da2de82e6bde912973bb6671322cda882f2d8d0c60210fdffcbe9cf120b229e",
+            "bytes": 71
+          },
+          {
+            "path": "independent-pilot-relocation-check.json",
+            "kind": "file",
+            "sha256": "2abd5b1410f6e57f3c5bb2b54e032516af927a67661daabee5c45836ddd787b2",
+            "bytes": 305
+          },
+          {
+            "path": "independent-review-probes.json",
+            "kind": "file",
+            "sha256": "77ce6e1822c07db2f0529241d53679551ae09180d035ac9cf0c1d6b79e355f40",
+            "bytes": 518
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "822d83137c930efa534fab5671748ea633194c563d30a05012153f4bdc249f5b",
+            "bytes": 409
+          },
+          {
+            "path": "preview-checks.json",
+            "kind": "file",
+            "sha256": "25176a77ac1e9376790873e44212704d032f07468f0f0ed9b14814c651716782",
+            "bytes": 167
+          },
+          {
+            "path": "refactor-lineage-race.json",
+            "kind": "file",
+            "sha256": "861e46999e3875059917e479b5017790b166f6abf4fd1cb34dca74137af498e3",
+            "bytes": 142
+          },
+          {
+            "path": "review-handoff.md",
+            "kind": "file",
+            "sha256": "5ccb6c925190163a6ab84b4915569c82c3ffe1771f64b7e2a2376586e2edcfc6",
+            "bytes": 6509
+          },
+          {
+            "path": "test-work",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/allocate-recording-implementation.json",
+      "destination": "history/legacy-material/files/allocate-recording-implementation.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "7b11cd0c90606702fd061183a0df781715233d502e89d5e3988091561594af69",
+        "bytes": 250
+      }
+    },
+    {
+      "source": "files/allocate-recording-policy.json",
+      "destination": "history/legacy-material/files/allocate-recording-policy.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "7dd1557ff77ad8a8e51dabf340e6dc3c678e471b07f7473db60d2d4bb4743df8",
+        "bytes": 193
+      }
+    },
+    {
+      "source": "files/allocate-recording-review.json",
+      "destination": "history/legacy-material/files/allocate-recording-review.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "b3bdf4f6e2918109aa658a78ff9d01e892063cedf86d03582ec1afe92e245a75",
+        "bytes": 206
+      }
+    },
+    {
+      "source": "files/analysis-completion-request.json",
+      "destination": "history/legacy-material/files/analysis-completion-request.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "cf0bb6a4d0393ec89be8a35aaa5fbe1157574c226612076ffef47a976414d9ba",
+        "bytes": 883
+      }
+    },
+    {
+      "source": "files/analysis-progress-request.json",
+      "destination": "history/legacy-material/files/analysis-progress-request.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "23b93fe3d498971a5a19427b067848640e9a5724941db0f630f8accedc164758",
+        "bytes": 626
+      }
+    },
+    {
+      "source": "files/recording-bind-request.json",
+      "destination": "history/legacy-material/files/recording-bind-request.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "972a2e8d02724060b3df9a3f29f3876b823b9711737a87164c99699c168235b4",
+        "bytes": 435
+      }
+    },
+    {
+      "source": "files/recording-commit-preparation.json",
+      "destination": "history/legacy-material/files/recording-commit-preparation.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "3347625ced59a7f58adaab2bb5aca21e32f1ce1757bde978458c3c1c90e5b62c",
+        "bytes": 663
+      }
+    },
+    {
+      "source": "files/recording-implementation-completion.json",
+      "destination": "history/legacy-material/files/recording-implementation-completion.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "d48bde9284a4109afda5c35de4927c0646659d400a26a524cdc5e19aa59957ea",
+        "bytes": 984
+      }
+    },
+    {
+      "source": "files/recording-implementation-start.json",
+      "destination": "history/legacy-material/files/recording-implementation-start.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "98d7d5e2cb9f126082adcdb4651c85712e3ccdc86e3dcbe14a0d84881718a66a",
+        "bytes": 737
+      }
+    },
+    {
+      "source": "files/recording-launches.json",
+      "destination": "history/legacy-material/files/recording-launches.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "e8c2eaeb7985bb355387710b15643832df30724a18eac54dda3592359b486236",
+        "bytes": 379
+      }
+    },
+    {
+      "source": "files/recording-policy-launch.json",
+      "destination": "history/legacy-material/files/recording-policy-launch.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "29602f149f4ea808dc47c85053a52565adb11591c02d3798b4ed6d95403dbde3",
+        "bytes": 376
+      }
+    },
+    {
+      "source": "files/recording-sync-request.json",
+      "destination": "history/legacy-material/files/recording-sync-request.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "5bd4857bb6d827f95fff85b6c9eec1b1d0834689c29bd3a3b94f2cfbe518d1ac",
+        "bytes": 183
+      }
+    },
+    {
+      "source": "files/recording-verify-request.json",
+      "destination": "history/legacy-material/files/recording-verify-request.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+        "bytes": 55
+      }
+    },
+    {
+      "source": "files/revisions",
+      "destination": "history/legacy-revisions",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "f3cae43e3987b86c7f133c9dc01d4fc22c44746b3c43905537b41ba07eed8a38",
+        "manifest": [
+          {
+            "path": "workflow-design",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/00-review-guide.md",
+            "kind": "file",
+            "sha256": "ee8f424996053cbceb0a546c068a63b6da4304937c9185d12469a5dfd037b369",
+            "bytes": 4749
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/01-requirements.md",
+            "kind": "file",
+            "sha256": "d95d0b3a6a29d8abbbda65cd4ac528f6b80c3f4eb5008ab201d4b5e6845e0cdc",
+            "bytes": 6359
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/02-solution-specification.md",
+            "kind": "file",
+            "sha256": "bc93b130a49aa46f7f48ff696276d7fdee02c7bec7c4137c697d3ca083fd98fe",
+            "bytes": 23344
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/03-worked-examples.md",
+            "kind": "file",
+            "sha256": "2e9d8b122f75779958f5f99f1e622e9d0fe31abca225060ea1ad08352228e263",
+            "bytes": 11577
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/04-manager-design.md",
+            "kind": "file",
+            "sha256": "f4a73750e7b73755276880a169e790e6665096011cffbbc8fd6a314f01971455",
+            "bytes": 10416
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/05-implementation-plan.md",
+            "kind": "file",
+            "sha256": "95de9596db7c7934a63fb168f285ceb92fe15ea39517ddb6f0f43173250858c7",
+            "bytes": 9145
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/examples",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/examples/change-assessment.md",
+            "kind": "file",
+            "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+            "bytes": 2282
+          },
+          {
+            "path": "workflow-design/20261114_191919_reviewed-draft/examples/customer-request.md",
+            "kind": "file",
+            "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+            "bytes": 9841
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/00-review-guide.md",
+            "kind": "file",
+            "sha256": "2d2f6585fa424f1e6e8e75954a3e766f635b412e129dc3675277e951e3b8d26a",
+            "bytes": 6545
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/01-requirements.md",
+            "kind": "file",
+            "sha256": "9ce8b5a6ab5e0b91fa5cee3dd4618c9a4ce2ab3b0064b3abc8cb33f0f748115e",
+            "bytes": 6888
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/02-solution-specification.md",
+            "kind": "file",
+            "sha256": "6a5feea6440264b2ef60dbb7e51cb629be99fbb247a3c7dae3d7c404e463f59e",
+            "bytes": 24593
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/03-worked-examples.md",
+            "kind": "file",
+            "sha256": "2e9d8b122f75779958f5f99f1e622e9d0fe31abca225060ea1ad08352228e263",
+            "bytes": 11577
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/04-manager-design.md",
+            "kind": "file",
+            "sha256": "f4a73750e7b73755276880a169e790e6665096011cffbbc8fd6a314f01971455",
+            "bytes": 10416
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/05-implementation-plan.md",
+            "kind": "file",
+            "sha256": "1a701e75f0e9995543a89ecfafc0cc1fceafc713fc0fcda17631abdf628a2a02",
+            "bytes": 9145
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/examples",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/examples/change-assessment.md",
+            "kind": "file",
+            "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+            "bytes": 2282
+          },
+          {
+            "path": "workflow-design/20261115_052720_before-user-review/examples/customer-request.md",
+            "kind": "file",
+            "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+            "bytes": 9841
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/00-review-guide.md",
+            "kind": "file",
+            "sha256": "5181e686dcc6ea99031158de0ec1fc409334ae46264fd977edc9ff3979f7b5d5",
+            "bytes": 9347
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/01-requirements.md",
+            "kind": "file",
+            "sha256": "3aef2d2a0fd19cf11314e9d878bae2d0b515b8f62364019bc757b941968a8a64",
+            "bytes": 8295
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/02-solution-specification.md",
+            "kind": "file",
+            "sha256": "1676e1da08d806dd1dcb98c56a9bcbe7a1819be8c53a8350827c6e29d1043a1d",
+            "bytes": 26764
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/03-worked-examples.md",
+            "kind": "file",
+            "sha256": "c51c96f14bd239cb309a303c434cb6a94590d6744bbb4baab2c6d687979235fd",
+            "bytes": 11738
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/04-manager-design.md",
+            "kind": "file",
+            "sha256": "3275bb787b6b525c877011316b63fb7cd421ed047131452d3df72fb997356fd2",
+            "bytes": 10816
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/05-implementation-plan.md",
+            "kind": "file",
+            "sha256": "2dc04c756d15bd0087da3bcb5544ce163525ca4af3b380d2d67c4437b6dc11ab",
+            "bytes": 9910
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/examples",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/examples/change-assessment.md",
+            "kind": "file",
+            "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+            "bytes": 2282
+          },
+          {
+            "path": "workflow-design/20261115_055357_before-requirement-wording-review/examples/customer-request.md",
+            "kind": "file",
+            "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+            "bytes": 9841
+          },
+          {
+            "path": "workflow-design/20261115_061404_before-A1-clarification",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_061404_before-A1-clarification/01-requirements.md",
+            "kind": "file",
+            "sha256": "1d9229bb48b3a4a4a15990313a6f13ea34a4a88852eaffd54357a9b7b54741e9",
+            "bytes": 13199
+          },
+          {
+            "path": "workflow-design/20261115_062358_before-acceptance-language-review",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_062358_before-acceptance-language-review/01-requirements.md",
+            "kind": "file",
+            "sha256": "95dd700fa2de4c94cb00c09f1ffa79a0dfba908ff77975c965fe94c74675cc57",
+            "bytes": 13643
+          },
+          {
+            "path": "workflow-design/20261115_063604_before-A19-scope-correction",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_063604_before-A19-scope-correction/01-requirements.md",
+            "kind": "file",
+            "sha256": "18f42c823df6d1cf5b09a4b0d29f2b3bfc1be2f1e9673bc2c7b1d39d7ad3dbb2",
+            "bytes": 18039
+          },
+          {
+            "path": "workflow-design/20261115_063604_before-A19-scope-correction/05-implementation-plan.md",
+            "kind": "file",
+            "sha256": "2dc04c756d15bd0087da3bcb5544ce163525ca4af3b380d2d67c4437b6dc11ab",
+            "bytes": 9910
+          },
+          {
+            "path": "workflow-design/20261115_064150_before-A23-clarification",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_064150_before-A23-clarification/01-requirements.md",
+            "kind": "file",
+            "sha256": "aaf729956b112a9b4129a0337f2a3991c1bfbc4d4e849b26f7da7b212d2d1252",
+            "bytes": 17973
+          },
+          {
+            "path": "workflow-design/20261115_135102_before-reading-guide",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-design/20261115_135102_before-reading-guide/00-review-guide.md",
+            "kind": "file",
+            "sha256": "7770d6c00f57bc098ee6580b126a4a343ac9ab63db3051b837f865f93c795689",
+            "bytes": 10176
+          },
+          {
+            "path": "workflow-design/20261115_135102_before-reading-guide/02-solution-specification.md",
+            "kind": "file",
+            "sha256": "d9de83d0e03b96a426842d6287f77eb69451bd7de9262619e013ebbcf1af6625",
+            "bytes": 26769
+          },
+          {
+            "path": "workflow-storage-activity-local",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-storage-activity-local/00-review-guide.md",
+            "kind": "file",
+            "sha256": "e015ec7676f183465c817a125906c4fcf6d92a2631a533a1c8a3986f3b4dcd05",
+            "bytes": 10368
+          },
+          {
+            "path": "workflow-storage-activity-local/01-requirements.md",
+            "kind": "file",
+            "sha256": "780cad54c9dc9d0eac79a9cd334d9192fdda89a58a0e8434684b03f26f1d0f52",
+            "bytes": 19490
+          },
+          {
+            "path": "workflow-storage-activity-local/02-solution-specification.md",
+            "kind": "file",
+            "sha256": "1c90c0911da002120ec673d19a88ada0c1cbb3ad61452ecdcbe32bc742191c99",
+            "bytes": 27007
+          },
+          {
+            "path": "workflow-storage-activity-local/02a-solution-reading-guide.md",
+            "kind": "file",
+            "sha256": "26b2d649f85a7e0814765399b26707a7faf8e25932c6ed5018680c304a7af78d",
+            "bytes": 19842
+          },
+          {
+            "path": "workflow-storage-activity-local/03-worked-examples.md",
+            "kind": "file",
+            "sha256": "c51c96f14bd239cb309a303c434cb6a94590d6744bbb4baab2c6d687979235fd",
+            "bytes": 11738
+          },
+          {
+            "path": "workflow-storage-activity-local/04-manager-design.md",
+            "kind": "file",
+            "sha256": "3275bb787b6b525c877011316b63fb7cd421ed047131452d3df72fb997356fd2",
+            "bytes": 10816
+          },
+          {
+            "path": "workflow-storage-activity-local/05-implementation-plan.md",
+            "kind": "file",
+            "sha256": "a08dd1a37ae44fe4961f0e363c69c0a3a626649a74b06642baeabbc0fc0164ae",
+            "bytes": 10141
+          },
+          {
+            "path": "workflow-storage-activity-local/workflow-implementation-report.md",
+            "kind": "file",
+            "sha256": "17e757e130398a49536f0a4618e4482b338232952f0694de951bfd2e8802896b",
+            "bytes": 8596
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/test-work",
+      "destination": "work/test-work",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "a31de101a00159635706418a0f15ac55111dda993b14e9c2dca466e37582cb67",
+        "manifest": [
+          {
+            "path": "adapter-targeted",
+            "kind": "directory"
+          },
+          {
+            "path": "adapter-tests",
+            "kind": "directory"
+          },
+          {
+            "path": "recording-final",
+            "kind": "directory"
+          },
+          {
+            "path": "recording-final/tmp",
+            "kind": "directory"
+          },
+          {
+            "path": "recording-regressions",
+            "kind": "directory"
+          },
+          {
+            "path": "recording-regressions/tmp",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-compatibility",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-compatibility/tmp",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-final-targeted",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-first-checks",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-first-checks/tmp",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-integration-check",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-integration-check/tmp",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-local-full",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-local-full/tmp",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-local-storage",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-local-storage-final",
+            "kind": "directory"
+          },
+          {
+            "path": "workflow-local-storage-recheck",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/usage-request.json",
+      "destination": "history/legacy-material/files/usage-request.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "786c268118b5e837a5e503160ea1a6f12d3eecf09a37c321fc8af531e9edfdc4",
+        "bytes": 391
+      }
+    },
+    {
+      "source": "files/workflow-constraints-request.json",
+      "destination": "history/legacy-material/files/workflow-constraints-request.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "91d4cdf686abf9388795d7c320ca49cab4171eb43d489f444a194e51a8793df1",
+        "bytes": 1351
+      }
+    },
+    {
+      "source": "files/workflow-design-checks.json",
+      "destination": "history/legacy-material/files/workflow-design-checks.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "eb8b5c3fe7bdfbe2905d4fe767ba8e68ae9519f77b785327d704a8e73ccaa8df",
+        "bytes": 780
+      }
+    },
+    {
+      "source": "files/workflow-storage-refactor",
+      "destination": "history/legacy-material/files/workflow-storage-refactor",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "7ff9930ae75d1324d672576e57bd1240aac7d118cbefda17e1db0f918193a0de",
+        "manifest": [
+          {
+            "path": "migration-before.json",
+            "kind": "file",
+            "sha256": "2dd9bfd7381ec06bf87523126565a47017e6ed64ece58bad557bd39631e67263",
+            "bytes": 2309
+          },
+          {
+            "path": "migration-complete.json",
+            "kind": "file",
+            "sha256": "76abc9b5a1310372cb2f631e611c7c0cd78a1d53ff45e67c34eba53e6c9a73c9",
+            "bytes": 4193
+          }
+        ]
+      }
+    },
+    {
+      "source": "input.md",
+      "destination": "history/migrations/20261115_213748/input.md",
+      "artifact": {
+        "kind": "file",
+        "sha256": "682ef6df52c16169fea02f6e4507cb5fc2a748a3511a5b8e63d0fcea8ad2c44a",
+        "bytes": 1891
+      }
+    },
+    {
+      "source": "log.md",
+      "destination": "system/log.md",
+      "artifact": {
+        "kind": "file",
+        "sha256": "e88f23f9d70c8354d36dd84b72e4888c86a2031487d3fe18e1f59d3fd63a4682",
+        "bytes": 23711
+      }
+    },
+    {
+      "source": "outcome.md",
+      "destination": "history/migrations/20261115_213748/outcome.md",
+      "artifact": {
+        "kind": "file",
+        "sha256": "1d0c4c47fea14f419bf552a18b955e8c48bfb5f1c6554783e9e0375cf864ec95",
+        "bytes": 2175
+      }
+    },
+    {
+      "source": "state.json",
+      "destination": "history/migrations/20261115_213748/state.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "ca9e0c0e6e52708f25eddcd7e67ea46c73a2cd08cf1bc4cab4d994a9371f0c21",
+        "bytes": 422
+      }
+    },
+    {
+      "source": "usage.json",
+      "destination": "system/usage.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "395f1f06a1b6d5d19dadd778c5f784ec2d1b8fddae98f5ce404f9b7ca425cf5d",
+        "bytes": 2285
+      }
+    },
+    {
+      "source": "usage.md",
+      "destination": "system/usage.md",
+      "artifact": {
+        "kind": "file",
+        "sha256": "abef2d2cac308dd129b6357d6dfc2c2d4a6fe77729f50b74d1e82a990b57af5a",
+        "bytes": 1457
+      }
+    }
+  ],
+  "before_manifest": [
+    {
+      "path": "chat.jsonl",
+      "kind": "file",
+      "sha256": "b256b61a3cc2791d49ddb68a1ec982e962918158d5183aa736c7d0af2afc53a5",
+      "bytes": 17963
+    },
+    {
+      "path": "chronicles",
+      "kind": "directory"
+    },
+    {
+      "path": "chronicles/20261112_195218_segment-01.md",
+      "kind": "file",
+      "sha256": "a336e05a991b2c1616fed1ebd85e72aa512be8d8da2b5996db5bb579aac6a01c",
+      "bytes": 59797
+    },
+    {
+      "path": "chronicles/checkpoint.json",
+      "kind": "file",
+      "sha256": "52514a39471681837339606db36752fde6f4a5a865a16215f83ef56a3985f527",
+      "bytes": 2198
+    },
+    {
+      "path": "chronicles/core.json",
+      "kind": "file",
+      "sha256": "5074868bdc1547b17cefff5b07ceab05f12304c66d4ac07ee64542e45ea8a798",
+      "bytes": 77239
+    },
+    {
+      "path": "chronicles/history",
+      "kind": "directory"
+    },
+    {
+      "path": "chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167",
+      "kind": "directory"
+    },
+    {
+      "path": "chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/20261112_195218_segment-01.md",
+      "kind": "file",
+      "sha256": "a55a29894ae58fa20a83370f58fcef8350663288966ab424cccb7a88d1254335",
+      "bytes": 14461
+    },
+    {
+      "path": "chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/checkpoint.json",
+      "kind": "file",
+      "sha256": "97ff8de5fafb479e1029a56840e67de6571af335dc002cb9bbab1ec9131bc19e",
+      "bytes": 2194
+    },
+    {
+      "path": "chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/core.json",
+      "kind": "file",
+      "sha256": "ea3d2af097ef32a424647d464171b24f522ea7ecb6b544c20c7fd0a1d5298a51",
+      "bytes": 1510
+    },
+    {
+      "path": "chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/reconciliation.json",
+      "kind": "file",
+      "sha256": "c2a5ddce3a395c5e110291b72515fc8bbd553a0ce55f129cd9b99cd1ae38ff66",
+      "bytes": 1807
+    },
+    {
+      "path": "files",
+      "kind": "directory"
+    },
+    {
+      "path": "files/activity-create-request.json",
+      "kind": "file",
+      "sha256": "6e838f2ea3c250575cf8fa0fcaaaf0b94d98a1fddff48a6f06f959a1a835f00a",
+      "bytes": 764
+    },
+    {
+      "path": "files/agent-invocations",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/34cf3714-d4c4-4c85-bdbd-dad081be2f22",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/34cf3714-d4c4-4c85-bdbd-dad081be2f22/chat-handoff.json",
+      "kind": "file",
+      "sha256": "993dd9ccb3d2e0497d768abedc9fa0971e7207239d17751b0e245a6bc5620716",
+      "bytes": 813
+    },
+    {
+      "path": "files/agent-invocations/34cf3714-d4c4-4c85-bdbd-dad081be2f22/chat-read.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "files/agent-invocations/34cf3714-d4c4-4c85-bdbd-dad081be2f22/invocation.json",
+      "kind": "file",
+      "sha256": "1a60c90628f10b38181278c82ed63d9ea4a34d40d8e8b14d52529389e1e6e79d",
+      "bytes": 404
+    },
+    {
+      "path": "files/agent-invocations/34cf3714-d4c4-4c85-bdbd-dad081be2f22/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/4df87d4f-9b4e-4e2e-8066-a63c394a827f",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/4df87d4f-9b4e-4e2e-8066-a63c394a827f/developer-checks.json",
+      "kind": "file",
+      "sha256": "e111ca0ba63388f6f707a0cd9a2cb2ffc9542980b2619f3d6b8fb5486d5865bb",
+      "bytes": 590
+    },
+    {
+      "path": "files/agent-invocations/4df87d4f-9b4e-4e2e-8066-a63c394a827f/invocation.json",
+      "kind": "file",
+      "sha256": "370746e79ea757bae755170802f5cafbed18046fc3c174c3825ba4d8952821ee",
+      "bytes": 455
+    },
+    {
+      "path": "files/agent-invocations/4df87d4f-9b4e-4e2e-8066-a63c394a827f/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/54114a86-cc14-4e53-ac1a-5aaa7e673328",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/54114a86-cc14-4e53-ac1a-5aaa7e673328/invocation.json",
+      "kind": "file",
+      "sha256": "4bf8a66746a250f8a6c76df66049fda59dc8e23b8a1fe6fca44ac1b27b349e1d",
+      "bytes": 391
+    },
+    {
+      "path": "files/agent-invocations/54114a86-cc14-4e53-ac1a-5aaa7e673328/review.md",
+      "kind": "file",
+      "sha256": "d4ec90e1286291a3e8d28de1100a7698c73bb804ae265a3ce1b2b62a93f11686",
+      "bytes": 3973
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/chat-post.json",
+      "kind": "file",
+      "sha256": "63cf3d897037162a89b8cfc2d618337b58b22a149b722b5856b86c7f4dacfe41",
+      "bytes": 889
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/chat-read.json",
+      "kind": "file",
+      "sha256": "3add3786fd6611050fbf3c79a1d528fbd335592fddec84a889bb244cc862476d",
+      "bytes": 70
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/checks-and-source-hashes.json",
+      "kind": "file",
+      "sha256": "e3a0234074f7437d4fd5603eb4d1716bd853ca77b75fcc72ce18f9dff80a26de",
+      "bytes": 3211
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/final-source-evidence.json",
+      "kind": "file",
+      "sha256": "94f8d501fc83d1c167aad3edf139344772b7f835fd32980991c2cf28ae163526",
+      "bytes": 3637
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/invocation.json",
+      "kind": "file",
+      "sha256": "183a5c367f6052890f70c0bb0ba9c3c7406a761d6298fadbf40c186b3253c488",
+      "bytes": 426
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/show-request.json",
+      "kind": "file",
+      "sha256": "71c10ce3ec5e07393b940b0a1a6ecfb60b3cf19b312f3a1148ab4205a3274f3c",
+      "bytes": 105
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/show-result.json",
+      "kind": "file",
+      "sha256": "9d85487aa4f9b6b44deaf7a189faa3e41ccfdeeaedded7098f4a219b599ee8db",
+      "bytes": 2395
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/validate-request.json",
+      "kind": "file",
+      "sha256": "8bdc72558b8f7a019791ea82830a5a0067993c634f22c540c18778f2a5a9a064",
+      "bytes": 57
+    },
+    {
+      "path": "files/agent-invocations/9b442266-8056-46d9-af41-d32da5aab0ff/validate-result.json",
+      "kind": "file",
+      "sha256": "83ca17c74039a43162c2a83507425ff5b7de1676e2e868d82a36f5accfa0200b",
+      "bytes": 4089
+    },
+    {
+      "path": "files/agent-invocations/bd01382f-d540-4001-9cf2-8605d5546fee",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/bd01382f-d540-4001-9cf2-8605d5546fee/chat-post-entry.json",
+      "kind": "file",
+      "sha256": "8a4a4c4abb0757ab88d2fb4a5a2a5d0c4656a4031642f73a6f56010a2d5aeb1e",
+      "bytes": 324
+    },
+    {
+      "path": "files/agent-invocations/bd01382f-d540-4001-9cf2-8605d5546fee/chat-post-final.json",
+      "kind": "file",
+      "sha256": "2d97fccbfb920779f65ed2ba84af03f074055627a68e4388b286d00d6f781422",
+      "bytes": 785
+    },
+    {
+      "path": "files/agent-invocations/bd01382f-d540-4001-9cf2-8605d5546fee/chat-read-entry.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "files/agent-invocations/bd01382f-d540-4001-9cf2-8605d5546fee/chat-read-final.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "files/agent-invocations/bd01382f-d540-4001-9cf2-8605d5546fee/invocation.json",
+      "kind": "file",
+      "sha256": "d638c1292ee80a229bc8bd9b9515fc7c75b6a5f1df4ddc6a685b61caf1f4240d",
+      "bytes": 347
+    },
+    {
+      "path": "files/agent-invocations/bd01382f-d540-4001-9cf2-8605d5546fee/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-post-clearance.json",
+      "kind": "file",
+      "sha256": "fa6405653312e0808b7a29f43fa1a465ca024c9550ad04df59ee150802046c71",
+      "bytes": 569
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-post-entry.json",
+      "kind": "file",
+      "sha256": "77509add47ae77be94ca4efe212e136d1dce9ceb64e9f9e9c2fbb315c01859af",
+      "bytes": 305
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-post-final.json",
+      "kind": "file",
+      "sha256": "82f441060b5cfd7a801aedfd34a5a82def626a5457a6c2f617b0d4478a3070b8",
+      "bytes": 609
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-post-followup.json",
+      "kind": "file",
+      "sha256": "3ae08ad7e14f8b0d2167481d109c09609dc9a12844f095997ba35aca0ba9e18d",
+      "bytes": 502
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-read-clearance.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-read-entry.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-read-final.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/invocation.json",
+      "kind": "file",
+      "sha256": "200888faa1b0c667f7e992f600df3865ab15f0b8fbd2e10ca069694a48f3e5d4",
+      "bytes": 360
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/review.md",
+      "kind": "file",
+      "sha256": "f33a6475f14b190dd21be44ae810e37cd82c2b3663cce55a9c521430afa0c021",
+      "bytes": 3525
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/review_probes.py",
+      "kind": "file",
+      "sha256": "e9b5823032e35f61fd5cc74e6aea3a3cccc91b7a057c3859a2eff96a9f0affaf",
+      "bytes": 2008
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/test-work/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/chat-post.json",
+      "kind": "file",
+      "sha256": "33396a161b976c81fb336f16bd87dc7f5f03326c5f41efae7d313b4bd1082747",
+      "bytes": 1037
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/chat-read.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/invocation.json",
+      "kind": "file",
+      "sha256": "613cffe2af523160a896cc49a8b7c2438b29bd2fbea004fd6a6e60589248931f",
+      "bytes": 395
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-check-results.md",
+      "kind": "file",
+      "sha256": "6a75d4804a3259a58b43489ec2f0cc20e5d0f0cb01cee9d558487cb4cefc05db",
+      "bytes": 2196
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/00-review-guide.md",
+      "kind": "file",
+      "sha256": "d049a70dbf89b1739bc564c05525a91778b9a3991361dd56d381e565b7aacef6",
+      "bytes": 4004
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/01-requirements.md",
+      "kind": "file",
+      "sha256": "64ed774b5162c45487d2e8fc48772f983dca5a04cbb9eaf6ee21dd65e3eb7cb4",
+      "bytes": 4161
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/02-specification.md",
+      "kind": "file",
+      "sha256": "8d0722929b68b7939c791615b82d9e6935a494d9d0216d6f1d88f05d0453b09e",
+      "bytes": 8481
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/02a-reading-guide.md",
+      "kind": "file",
+      "sha256": "c6b4114136c4f7aaa1ccae740ce3af9094c7baeec336578409267cf7eee29ca7",
+      "bytes": 3886
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/03-examples.md",
+      "kind": "file",
+      "sha256": "0badf286a98c610385cdccc2e327755999047241a7fcb24549187d18f781891d",
+      "bytes": 5801
+    },
+    {
+      "path": "files/agent-invocations/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/05-delivery-plan.md",
+      "kind": "file",
+      "sha256": "c81f16ed377a8f7003610952a50ad5f141f2dcd776bac79b9cd0a3a58255cd68",
+      "bytes": 4109
+    },
+    {
+      "path": "files/agent-invocations/ee3ea5b3-4c2e-4652-8961-eaca02039eba",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/ee3ea5b3-4c2e-4652-8961-eaca02039eba/developer-checks.json",
+      "kind": "file",
+      "sha256": "0b341fefc852b0f4931b0bb67ff6b714d9afdee7ea9e35cd30bd892574b8d168",
+      "bytes": 1177
+    },
+    {
+      "path": "files/agent-invocations/ee3ea5b3-4c2e-4652-8961-eaca02039eba/invocation.json",
+      "kind": "file",
+      "sha256": "d6e225726fbb1782cf2fa032846df1f6832996cffa654bf730dfba3a49445d90",
+      "bytes": 448
+    },
+    {
+      "path": "files/agent-invocations/ee3ea5b3-4c2e-4652-8961-eaca02039eba/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/activity-local-lineage-race-fixed.json",
+      "kind": "file",
+      "sha256": "d2ae2602479ab7b1d6d5b1ae42d5cefe428bd718f002245168ec9da940f11a68",
+      "bytes": 280
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/activity-local-refactor-tests.json",
+      "kind": "file",
+      "sha256": "4cdcbb83f27b341753b46286d7d3a63b72478f375ef65d78555fb32e03dd6e28",
+      "bytes": 200
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/final-focused-tests.json",
+      "kind": "file",
+      "sha256": "4bf2f1875792668296280db58eda248f7dd25c0b0d2e65ffb31b254e2d221833",
+      "bytes": 211
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/final-independent-probes.json",
+      "kind": "file",
+      "sha256": "840b14150e6cc90715cd5ce98630c1a0136d1d5e3caee9050d7380876a8fa54f",
+      "bytes": 176
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/final-integration-tests.json",
+      "kind": "file",
+      "sha256": "4c563cc23a5e212eabb709ba3412d49d255a4411116bec04264cf75040c4d68e",
+      "bytes": 200
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/final-recovery-tests.json",
+      "kind": "file",
+      "sha256": "3da2de82e6bde912973bb6671322cda882f2d8d0c60210fdffcbe9cf120b229e",
+      "bytes": 71
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/independent-pilot-relocation-check.json",
+      "kind": "file",
+      "sha256": "2abd5b1410f6e57f3c5bb2b54e032516af927a67661daabee5c45836ddd787b2",
+      "bytes": 305
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/independent-review-probes.json",
+      "kind": "file",
+      "sha256": "77ce6e1822c07db2f0529241d53679551ae09180d035ac9cf0c1d6b79e355f40",
+      "bytes": 518
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/invocation.json",
+      "kind": "file",
+      "sha256": "822d83137c930efa534fab5671748ea633194c563d30a05012153f4bdc249f5b",
+      "bytes": 409
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/preview-checks.json",
+      "kind": "file",
+      "sha256": "25176a77ac1e9376790873e44212704d032f07468f0f0ed9b14814c651716782",
+      "bytes": 167
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/refactor-lineage-race.json",
+      "kind": "file",
+      "sha256": "861e46999e3875059917e479b5017790b166f6abf4fd1cb34dca74137af498e3",
+      "bytes": 142
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/review-handoff.md",
+      "kind": "file",
+      "sha256": "5ccb6c925190163a6ab84b4915569c82c3ffe1771f64b7e2a2376586e2edcfc6",
+      "bytes": 6509
+    },
+    {
+      "path": "files/agent-invocations/f0caac64-10c5-4980-9012-9fe5f61eb93a/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/allocate-recording-implementation.json",
+      "kind": "file",
+      "sha256": "7b11cd0c90606702fd061183a0df781715233d502e89d5e3988091561594af69",
+      "bytes": 250
+    },
+    {
+      "path": "files/allocate-recording-policy.json",
+      "kind": "file",
+      "sha256": "7dd1557ff77ad8a8e51dabf340e6dc3c678e471b07f7473db60d2d4bb4743df8",
+      "bytes": 193
+    },
+    {
+      "path": "files/allocate-recording-review.json",
+      "kind": "file",
+      "sha256": "b3bdf4f6e2918109aa658a78ff9d01e892063cedf86d03582ec1afe92e245a75",
+      "bytes": 206
+    },
+    {
+      "path": "files/analysis-completion-request.json",
+      "kind": "file",
+      "sha256": "cf0bb6a4d0393ec89be8a35aaa5fbe1157574c226612076ffef47a976414d9ba",
+      "bytes": 883
+    },
+    {
+      "path": "files/analysis-progress-request.json",
+      "kind": "file",
+      "sha256": "23b93fe3d498971a5a19427b067848640e9a5724941db0f630f8accedc164758",
+      "bytes": 626
+    },
+    {
+      "path": "files/recording-bind-request.json",
+      "kind": "file",
+      "sha256": "972a2e8d02724060b3df9a3f29f3876b823b9711737a87164c99699c168235b4",
+      "bytes": 435
+    },
+    {
+      "path": "files/recording-commit-preparation.json",
+      "kind": "file",
+      "sha256": "3347625ced59a7f58adaab2bb5aca21e32f1ce1757bde978458c3c1c90e5b62c",
+      "bytes": 663
+    },
+    {
+      "path": "files/recording-implementation-completion.json",
+      "kind": "file",
+      "sha256": "d48bde9284a4109afda5c35de4927c0646659d400a26a524cdc5e19aa59957ea",
+      "bytes": 984
+    },
+    {
+      "path": "files/recording-implementation-start.json",
+      "kind": "file",
+      "sha256": "98d7d5e2cb9f126082adcdb4651c85712e3ccdc86e3dcbe14a0d84881718a66a",
+      "bytes": 737
+    },
+    {
+      "path": "files/recording-launches.json",
+      "kind": "file",
+      "sha256": "e8c2eaeb7985bb355387710b15643832df30724a18eac54dda3592359b486236",
+      "bytes": 379
+    },
+    {
+      "path": "files/recording-policy-launch.json",
+      "kind": "file",
+      "sha256": "29602f149f4ea808dc47c85053a52565adb11591c02d3798b4ed6d95403dbde3",
+      "bytes": 376
+    },
+    {
+      "path": "files/recording-sync-request.json",
+      "kind": "file",
+      "sha256": "5bd4857bb6d827f95fff85b6c9eec1b1d0834689c29bd3a3b94f2cfbe518d1ac",
+      "bytes": 183
+    },
+    {
+      "path": "files/recording-verify-request.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "files/revisions",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/00-review-guide.md",
+      "kind": "file",
+      "sha256": "ee8f424996053cbceb0a546c068a63b6da4304937c9185d12469a5dfd037b369",
+      "bytes": 4749
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/01-requirements.md",
+      "kind": "file",
+      "sha256": "d95d0b3a6a29d8abbbda65cd4ac528f6b80c3f4eb5008ab201d4b5e6845e0cdc",
+      "bytes": 6359
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "bc93b130a49aa46f7f48ff696276d7fdee02c7bec7c4137c697d3ca083fd98fe",
+      "bytes": 23344
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "2e9d8b122f75779958f5f99f1e622e9d0fe31abca225060ea1ad08352228e263",
+      "bytes": 11577
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/04-manager-design.md",
+      "kind": "file",
+      "sha256": "f4a73750e7b73755276880a169e790e6665096011cffbbc8fd6a314f01971455",
+      "bytes": 10416
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "95de9596db7c7934a63fb168f285ceb92fe15ea39517ddb6f0f43173250858c7",
+      "bytes": 9145
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/examples",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/examples/change-assessment.md",
+      "kind": "file",
+      "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+      "bytes": 2282
+    },
+    {
+      "path": "files/revisions/workflow-design/20261114_191919_reviewed-draft/examples/customer-request.md",
+      "kind": "file",
+      "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+      "bytes": 9841
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/00-review-guide.md",
+      "kind": "file",
+      "sha256": "2d2f6585fa424f1e6e8e75954a3e766f635b412e129dc3675277e951e3b8d26a",
+      "bytes": 6545
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/01-requirements.md",
+      "kind": "file",
+      "sha256": "9ce8b5a6ab5e0b91fa5cee3dd4618c9a4ce2ab3b0064b3abc8cb33f0f748115e",
+      "bytes": 6888
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "6a5feea6440264b2ef60dbb7e51cb629be99fbb247a3c7dae3d7c404e463f59e",
+      "bytes": 24593
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "2e9d8b122f75779958f5f99f1e622e9d0fe31abca225060ea1ad08352228e263",
+      "bytes": 11577
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/04-manager-design.md",
+      "kind": "file",
+      "sha256": "f4a73750e7b73755276880a169e790e6665096011cffbbc8fd6a314f01971455",
+      "bytes": 10416
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "1a701e75f0e9995543a89ecfafc0cc1fceafc713fc0fcda17631abdf628a2a02",
+      "bytes": 9145
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/examples",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/examples/change-assessment.md",
+      "kind": "file",
+      "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+      "bytes": 2282
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_052720_before-user-review/examples/customer-request.md",
+      "kind": "file",
+      "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+      "bytes": 9841
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/00-review-guide.md",
+      "kind": "file",
+      "sha256": "5181e686dcc6ea99031158de0ec1fc409334ae46264fd977edc9ff3979f7b5d5",
+      "bytes": 9347
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/01-requirements.md",
+      "kind": "file",
+      "sha256": "3aef2d2a0fd19cf11314e9d878bae2d0b515b8f62364019bc757b941968a8a64",
+      "bytes": 8295
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "1676e1da08d806dd1dcb98c56a9bcbe7a1819be8c53a8350827c6e29d1043a1d",
+      "bytes": 26764
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "c51c96f14bd239cb309a303c434cb6a94590d6744bbb4baab2c6d687979235fd",
+      "bytes": 11738
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/04-manager-design.md",
+      "kind": "file",
+      "sha256": "3275bb787b6b525c877011316b63fb7cd421ed047131452d3df72fb997356fd2",
+      "bytes": 10816
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "2dc04c756d15bd0087da3bcb5544ce163525ca4af3b380d2d67c4437b6dc11ab",
+      "bytes": 9910
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/examples",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/examples/change-assessment.md",
+      "kind": "file",
+      "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+      "bytes": 2282
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_055357_before-requirement-wording-review/examples/customer-request.md",
+      "kind": "file",
+      "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+      "bytes": 9841
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_061404_before-A1-clarification",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_061404_before-A1-clarification/01-requirements.md",
+      "kind": "file",
+      "sha256": "1d9229bb48b3a4a4a15990313a6f13ea34a4a88852eaffd54357a9b7b54741e9",
+      "bytes": 13199
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_062358_before-acceptance-language-review",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_062358_before-acceptance-language-review/01-requirements.md",
+      "kind": "file",
+      "sha256": "95dd700fa2de4c94cb00c09f1ffa79a0dfba908ff77975c965fe94c74675cc57",
+      "bytes": 13643
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_063604_before-A19-scope-correction",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_063604_before-A19-scope-correction/01-requirements.md",
+      "kind": "file",
+      "sha256": "18f42c823df6d1cf5b09a4b0d29f2b3bfc1be2f1e9673bc2c7b1d39d7ad3dbb2",
+      "bytes": 18039
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_063604_before-A19-scope-correction/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "2dc04c756d15bd0087da3bcb5544ce163525ca4af3b380d2d67c4437b6dc11ab",
+      "bytes": 9910
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_064150_before-A23-clarification",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_064150_before-A23-clarification/01-requirements.md",
+      "kind": "file",
+      "sha256": "aaf729956b112a9b4129a0337f2a3991c1bfbc4d4e849b26f7da7b212d2d1252",
+      "bytes": 17973
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_135102_before-reading-guide",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_135102_before-reading-guide/00-review-guide.md",
+      "kind": "file",
+      "sha256": "7770d6c00f57bc098ee6580b126a4a343ac9ab63db3051b837f865f93c795689",
+      "bytes": 10176
+    },
+    {
+      "path": "files/revisions/workflow-design/20261115_135102_before-reading-guide/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "d9de83d0e03b96a426842d6287f77eb69451bd7de9262619e013ebbcf1af6625",
+      "bytes": 26769
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local",
+      "kind": "directory"
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local/00-review-guide.md",
+      "kind": "file",
+      "sha256": "e015ec7676f183465c817a125906c4fcf6d92a2631a533a1c8a3986f3b4dcd05",
+      "bytes": 10368
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local/01-requirements.md",
+      "kind": "file",
+      "sha256": "780cad54c9dc9d0eac79a9cd334d9192fdda89a58a0e8434684b03f26f1d0f52",
+      "bytes": 19490
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "1c90c0911da002120ec673d19a88ada0c1cbb3ad61452ecdcbe32bc742191c99",
+      "bytes": 27007
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local/02a-solution-reading-guide.md",
+      "kind": "file",
+      "sha256": "26b2d649f85a7e0814765399b26707a7faf8e25932c6ed5018680c304a7af78d",
+      "bytes": 19842
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "c51c96f14bd239cb309a303c434cb6a94590d6744bbb4baab2c6d687979235fd",
+      "bytes": 11738
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local/04-manager-design.md",
+      "kind": "file",
+      "sha256": "3275bb787b6b525c877011316b63fb7cd421ed047131452d3df72fb997356fd2",
+      "bytes": 10816
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "a08dd1a37ae44fe4961f0e363c69c0a3a626649a74b06642baeabbc0fc0164ae",
+      "bytes": 10141
+    },
+    {
+      "path": "files/revisions/workflow-storage-activity-local/workflow-implementation-report.md",
+      "kind": "file",
+      "sha256": "17e757e130398a49536f0a4618e4482b338232952f0694de951bfd2e8802896b",
+      "bytes": 8596
+    },
+    {
+      "path": "files/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/adapter-targeted",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/adapter-tests",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/recording-final",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/recording-final/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/recording-regressions",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/recording-regressions/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-compatibility",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-compatibility/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-final-targeted",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-first-checks",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-first-checks/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-integration-check",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-integration-check/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-local-full",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-local-full/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-local-storage",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-local-storage-final",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/workflow-local-storage-recheck",
+      "kind": "directory"
+    },
+    {
+      "path": "files/usage-request.json",
+      "kind": "file",
+      "sha256": "786c268118b5e837a5e503160ea1a6f12d3eecf09a37c321fc8af531e9edfdc4",
+      "bytes": 391
+    },
+    {
+      "path": "files/workflow-constraints-request.json",
+      "kind": "file",
+      "sha256": "91d4cdf686abf9388795d7c320ca49cab4171eb43d489f444a194e51a8793df1",
+      "bytes": 1351
+    },
+    {
+      "path": "files/workflow-design-checks.json",
+      "kind": "file",
+      "sha256": "eb8b5c3fe7bdfbe2905d4fe767ba8e68ae9519f77b785327d704a8e73ccaa8df",
+      "bytes": 780
+    },
+    {
+      "path": "files/workflow-storage-refactor",
+      "kind": "directory"
+    },
+    {
+      "path": "files/workflow-storage-refactor/migration-before.json",
+      "kind": "file",
+      "sha256": "2dd9bfd7381ec06bf87523126565a47017e6ed64ece58bad557bd39631e67263",
+      "bytes": 2309
+    },
+    {
+      "path": "files/workflow-storage-refactor/migration-complete.json",
+      "kind": "file",
+      "sha256": "76abc9b5a1310372cb2f631e611c7c0cd78a1d53ff45e67c34eba53e6c9a73c9",
+      "bytes": 4193
+    },
+    {
+      "path": "input.md",
+      "kind": "file",
+      "sha256": "682ef6df52c16169fea02f6e4507cb5fc2a748a3511a5b8e63d0fcea8ad2c44a",
+      "bytes": 1891
+    },
+    {
+      "path": "log.md",
+      "kind": "file",
+      "sha256": "e88f23f9d70c8354d36dd84b72e4888c86a2031487d3fe18e1f59d3fd63a4682",
+      "bytes": 23711
+    },
+    {
+      "path": "outcome.md",
+      "kind": "file",
+      "sha256": "1d0c4c47fea14f419bf552a18b955e8c48bfb5f1c6554783e9e0375cf864ec95",
+      "bytes": 2175
+    },
+    {
+      "path": "results",
+      "kind": "directory"
+    },
+    {
+      "path": "results/design-package-skill-validation.json",
+      "kind": "file",
+      "sha256": "8efebe8daf18b882119ac985caf1782a78d9f2b93dedd3cbaf6ff6b95bb1edfd",
+      "bytes": 1207
+    },
+    {
+      "path": "results/recording-compatibility-implementation.md",
+      "kind": "file",
+      "sha256": "9774bbd0b3f8d73c54f43e271c952864d0dedb42c69806e85131e40567c529df",
+      "bytes": 2898
+    },
+    {
+      "path": "results/workflow-design",
+      "kind": "directory"
+    },
+    {
+      "path": "results/workflow-design/00-review-guide.md",
+      "kind": "file",
+      "sha256": "c1b04ff5192ef62cdd5e90c1590cda7a94b995b88fe8936b7b1d1076cffa0f79",
+      "bytes": 10790
+    },
+    {
+      "path": "results/workflow-design/01-requirements.md",
+      "kind": "file",
+      "sha256": "a3aed0e4383acc0e18fe3ff45afe385059fa2d16e026abf7163932a8270ceee4",
+      "bytes": 19919
+    },
+    {
+      "path": "results/workflow-design/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "dd9fb7c20f0ce17e1a47687e703650f95e94fef6f1460a9cf6def76d465a760c",
+      "bytes": 27770
+    },
+    {
+      "path": "results/workflow-design/02a-solution-reading-guide.md",
+      "kind": "file",
+      "sha256": "155999a665f76169b893f38ae5fa2d923ba07f263bcbd8f2a8bd58c6bd9bb2c0",
+      "bytes": 20775
+    },
+    {
+      "path": "results/workflow-design/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "9a98a846c657e02fe864d293a0ac9f5e27ddaac213e0ce2ea8d3b128cffd6ab8",
+      "bytes": 12272
+    },
+    {
+      "path": "results/workflow-design/04-manager-design.md",
+      "kind": "file",
+      "sha256": "c867ca20e7d72cc770ed9606677d9041d555ff84a6d6ab62a73e433119b38d6c",
+      "bytes": 11322
+    },
+    {
+      "path": "results/workflow-design/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "917964a98dea6c8bda532f1c2a1ab387a3174b20cdf14c172c36ec1875a2b258",
+      "bytes": 10554
+    },
+    {
+      "path": "results/workflow-design/examples",
+      "kind": "directory"
+    },
+    {
+      "path": "results/workflow-design/examples/change-assessment.md",
+      "kind": "file",
+      "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+      "bytes": 2282
+    },
+    {
+      "path": "results/workflow-design/examples/customer-request.md",
+      "kind": "file",
+      "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+      "bytes": 9841
+    },
+    {
+      "path": "results/workflow-implementation-report.md",
+      "kind": "file",
+      "sha256": "4d259837f8dc49ba646f6c088cc48fdbbfe8039c125ce475e7c3904de0dc818d",
+      "bytes": 8966
+    },
+    {
+      "path": "results/workflow-storage-refactor.md",
+      "kind": "file",
+      "sha256": "f8087d12b101a2680678314e667aef02ab65865ab98e85509738d97349b36dc1",
+      "bytes": 4223
+    },
+    {
+      "path": "results/workflows-assessment.md",
+      "kind": "file",
+      "sha256": "05005e8b551cdf130abf4cbc4e2bb7622382d738d732d4ca66e06a224780d3b3",
+      "bytes": 17492
+    },
+    {
+      "path": "state.json",
+      "kind": "file",
+      "sha256": "ca9e0c0e6e52708f25eddcd7e67ea46c73a2cd08cf1bc4cab4d994a9371f0c21",
+      "bytes": 422
+    },
+    {
+      "path": "usage.json",
+      "kind": "file",
+      "sha256": "395f1f06a1b6d5d19dadd778c5f784ec2d1b8fddae98f5ce404f9b7ca425cf5d",
+      "bytes": 2285
+    },
+    {
+      "path": "usage.md",
+      "kind": "file",
+      "sha256": "abef2d2cac308dd129b6357d6dfc2c2d4a6fe77729f50b74d1e82a990b57af5a",
+      "bytes": 1457
+    },
+    {
+      "path": "workflow-runs",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001/assessment.md",
+      "kind": "file",
+      "sha256": "063d38ff927380a4981965f539545fe134d95712468c9efa17db35a22832a9f6",
+      "bytes": 15783
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001/assignment.json",
+      "kind": "file",
+      "sha256": "83a3a0b2ea49507426bedd7dd76f14138aa3b6a7078c2a6422c141a66b4a52d8",
+      "bytes": 3752
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001/result.json",
+      "kind": "file",
+      "sha256": "bf9ce97b14002ccfb214882ceace02ce2d3b8afb5d173d7a7777fd5e5e47b1fd",
+      "bytes": 1923
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/definition.md",
+      "kind": "file",
+      "sha256": "24391b94e0a49f6745a055edad4d5670ce94c2ec6a2c00fd3ce8eff92643fa23",
+      "bytes": 2257
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/events.jsonl",
+      "kind": "file",
+      "sha256": "f2974250fca3779e096fa703f72961b6a717ef5994aa25abad3a2b3527472366",
+      "bytes": 8710
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/inputs",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/inputs/request.md",
+      "kind": "file",
+      "sha256": "81752bbf479439f2b76f710fa80a5efca539c6834592dcadcf0d244beef04b25",
+      "bytes": 1701
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/state.json",
+      "kind": "file",
+      "sha256": "fbaf9cf3d9ab9906cab2ea306817f7a9d7debba2b2a4f206949dc08fc2c2bf56",
+      "bytes": 4097
+    }
+  ],
+  "after_manifest_excludes": [
+    "evidence/migrations/activity-layout.json"
+  ],
+  "container_relocation": {
+    "source": "files",
+    "destination": "history/legacy-material/empty-files-containers"
+  },
+  "after_manifest": [
+    {
+      "path": "README.md",
+      "kind": "file",
+      "sha256": "4dc40f53c78932bd8fb96b337fa64b077d809e5ac1e1af58f003f4317000bf2e",
+      "bytes": 2869
+    },
+    {
+      "path": "chronicles",
+      "kind": "directory"
+    },
+    {
+      "path": "chronicles/20261112_195218_segment-01.md",
+      "kind": "file",
+      "sha256": "a336e05a991b2c1616fed1ebd85e72aa512be8d8da2b5996db5bb579aac6a01c",
+      "bytes": 59797
+    },
+    {
+      "path": "evidence",
+      "kind": "directory"
+    },
+    {
+      "path": "evidence/migrations",
+      "kind": "directory"
+    },
+    {
+      "path": "history",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/chat-post.json",
+      "kind": "file",
+      "sha256": "33396a161b976c81fb336f16bd87dc7f5f03326c5f41efae7d313b4bd1082747",
+      "bytes": 1037
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/chat-read.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/invocation.json",
+      "kind": "file",
+      "sha256": "613cffe2af523160a896cc49a8b7c2438b29bd2fbea004fd6a6e60589248931f",
+      "bytes": 395
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-check-results.md",
+      "kind": "file",
+      "sha256": "6a75d4804a3259a58b43489ec2f0cc20e5d0f0cb01cee9d558487cb4cefc05db",
+      "bytes": 2196
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/00-review-guide.md",
+      "kind": "file",
+      "sha256": "d049a70dbf89b1739bc564c05525a91778b9a3991361dd56d381e565b7aacef6",
+      "bytes": 4004
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/01-requirements.md",
+      "kind": "file",
+      "sha256": "64ed774b5162c45487d2e8fc48772f983dca5a04cbb9eaf6ee21dd65e3eb7cb4",
+      "bytes": 4161
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/02-specification.md",
+      "kind": "file",
+      "sha256": "8d0722929b68b7939c791615b82d9e6935a494d9d0216d6f1d88f05d0453b09e",
+      "bytes": 8481
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/02a-reading-guide.md",
+      "kind": "file",
+      "sha256": "c6b4114136c4f7aaa1ccae740ce3af9094c7baeec336578409267cf7eee29ca7",
+      "bytes": 3886
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/03-examples.md",
+      "kind": "file",
+      "sha256": "0badf286a98c610385cdccc2e327755999047241a7fcb24549187d18f781891d",
+      "bytes": 5801
+    },
+    {
+      "path": "history/legacy-material/agent-work/design-skill-trial/e0d05bf3-0172-4678-8494-5f621613b3a4/trial-package/05-delivery-plan.md",
+      "kind": "file",
+      "sha256": "c81f16ed377a8f7003610952a50ad5f141f2dcd776bac79b9cd0a3a58255cd68",
+      "bytes": 4109
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-implementation",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-implementation/34cf3714-d4c4-4c85-bdbd-dad081be2f22",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-implementation/34cf3714-d4c4-4c85-bdbd-dad081be2f22/chat-handoff.json",
+      "kind": "file",
+      "sha256": "993dd9ccb3d2e0497d768abedc9fa0971e7207239d17751b0e245a6bc5620716",
+      "bytes": 813
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-implementation/34cf3714-d4c4-4c85-bdbd-dad081be2f22/chat-read.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-implementation/34cf3714-d4c4-4c85-bdbd-dad081be2f22/invocation.json",
+      "kind": "file",
+      "sha256": "1a60c90628f10b38181278c82ed63d9ea4a34d40d8e8b14d52529389e1e6e79d",
+      "bytes": 404
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-implementation/34cf3714-d4c4-4c85-bdbd-dad081be2f22/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-policy",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-policy/bd01382f-d540-4001-9cf2-8605d5546fee",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-policy/bd01382f-d540-4001-9cf2-8605d5546fee/chat-post-entry.json",
+      "kind": "file",
+      "sha256": "8a4a4c4abb0757ab88d2fb4a5a2a5d0c4656a4031642f73a6f56010a2d5aeb1e",
+      "bytes": 324
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-policy/bd01382f-d540-4001-9cf2-8605d5546fee/chat-post-final.json",
+      "kind": "file",
+      "sha256": "2d97fccbfb920779f65ed2ba84af03f074055627a68e4388b286d00d6f781422",
+      "bytes": 785
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-policy/bd01382f-d540-4001-9cf2-8605d5546fee/chat-read-entry.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-policy/bd01382f-d540-4001-9cf2-8605d5546fee/chat-read-final.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-policy/bd01382f-d540-4001-9cf2-8605d5546fee/invocation.json",
+      "kind": "file",
+      "sha256": "d638c1292ee80a229bc8bd9b9515fc7c75b6a5f1df4ddc6a685b61caf1f4240d",
+      "bytes": 347
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-policy/bd01382f-d540-4001-9cf2-8605d5546fee/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-post-clearance.json",
+      "kind": "file",
+      "sha256": "fa6405653312e0808b7a29f43fa1a465ca024c9550ad04df59ee150802046c71",
+      "bytes": 569
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-post-entry.json",
+      "kind": "file",
+      "sha256": "77509add47ae77be94ca4efe212e136d1dce9ceb64e9f9e9c2fbb315c01859af",
+      "bytes": 305
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-post-final.json",
+      "kind": "file",
+      "sha256": "82f441060b5cfd7a801aedfd34a5a82def626a5457a6c2f617b0d4478a3070b8",
+      "bytes": 609
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-post-followup.json",
+      "kind": "file",
+      "sha256": "3ae08ad7e14f8b0d2167481d109c09609dc9a12844f095997ba35aca0ba9e18d",
+      "bytes": 502
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-read-clearance.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-read-entry.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/chat-read-final.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/invocation.json",
+      "kind": "file",
+      "sha256": "200888faa1b0c667f7e992f600df3865ab15f0b8fbd2e10ca069694a48f3e5d4",
+      "bytes": 360
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/review.md",
+      "kind": "file",
+      "sha256": "f33a6475f14b190dd21be44ae810e37cd82c2b3663cce55a9c521430afa0c021",
+      "bytes": 3525
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/review_probes.py",
+      "kind": "file",
+      "sha256": "e9b5823032e35f61fd5cc74e6aea3a3cccc91b7a057c3859a2eff96a9f0affaf",
+      "bytes": 2008
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/recording-review/cdcdb7e1-c78e-4e3d-8fae-7d586ab4d1f6/test-work/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/chat-post.json",
+      "kind": "file",
+      "sha256": "63cf3d897037162a89b8cfc2d618337b58b22a149b722b5856b86c7f4dacfe41",
+      "bytes": 889
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/chat-read.json",
+      "kind": "file",
+      "sha256": "3add3786fd6611050fbf3c79a1d528fbd335592fddec84a889bb244cc862476d",
+      "bytes": 70
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/checks-and-source-hashes.json",
+      "kind": "file",
+      "sha256": "e3a0234074f7437d4fd5603eb4d1716bd853ca77b75fcc72ce18f9dff80a26de",
+      "bytes": 3211
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/final-source-evidence.json",
+      "kind": "file",
+      "sha256": "94f8d501fc83d1c167aad3edf139344772b7f835fd32980991c2cf28ae163526",
+      "bytes": 3637
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/invocation.json",
+      "kind": "file",
+      "sha256": "183a5c367f6052890f70c0bb0ba9c3c7406a761d6298fadbf40c186b3253c488",
+      "bytes": 426
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/show-request.json",
+      "kind": "file",
+      "sha256": "71c10ce3ec5e07393b940b0a1a6ecfb60b3cf19b312f3a1148ab4205a3274f3c",
+      "bytes": 105
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/show-result.json",
+      "kind": "file",
+      "sha256": "9d85487aa4f9b6b44deaf7a189faa3e41ccfdeeaedded7098f4a219b599ee8db",
+      "bytes": 2395
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/validate-request.json",
+      "kind": "file",
+      "sha256": "8bdc72558b8f7a019791ea82830a5a0067993c634f22c540c18778f2a5a9a064",
+      "bytes": 57
+    },
+    {
+      "path": "history/legacy-material/agent-work/solution-architect/9b442266-8056-46d9-af41-d32da5aab0ff/validate-result.json",
+      "kind": "file",
+      "sha256": "83ca17c74039a43162c2a83507425ff5b7de1676e2e868d82a36f5accfa0200b",
+      "bytes": 4089
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-definition-implementation",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-definition-implementation/4df87d4f-9b4e-4e2e-8066-a63c394a827f",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-definition-implementation/4df87d4f-9b4e-4e2e-8066-a63c394a827f/developer-checks.json",
+      "kind": "file",
+      "sha256": "e111ca0ba63388f6f707a0cd9a2cb2ffc9542980b2619f3d6b8fb5486d5865bb",
+      "bytes": 590
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-definition-implementation/4df87d4f-9b4e-4e2e-8066-a63c394a827f/invocation.json",
+      "kind": "file",
+      "sha256": "370746e79ea757bae755170802f5cafbed18046fc3c174c3825ba4d8952821ee",
+      "bytes": 455
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-definition-implementation/4df87d4f-9b4e-4e2e-8066-a63c394a827f/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-design-review",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-design-review/54114a86-cc14-4e53-ac1a-5aaa7e673328",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-design-review/54114a86-cc14-4e53-ac1a-5aaa7e673328/invocation.json",
+      "kind": "file",
+      "sha256": "4bf8a66746a250f8a6c76df66049fda59dc8e23b8a1fe6fca44ac1b27b349e1d",
+      "bytes": 391
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-design-review/54114a86-cc14-4e53-ac1a-5aaa7e673328/review.md",
+      "kind": "file",
+      "sha256": "d4ec90e1286291a3e8d28de1100a7698c73bb804ae265a3ce1b2b62a93f11686",
+      "bytes": 3973
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/activity-local-lineage-race-fixed.json",
+      "kind": "file",
+      "sha256": "d2ae2602479ab7b1d6d5b1ae42d5cefe428bd718f002245168ec9da940f11a68",
+      "bytes": 280
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/activity-local-refactor-tests.json",
+      "kind": "file",
+      "sha256": "4cdcbb83f27b341753b46286d7d3a63b72478f375ef65d78555fb32e03dd6e28",
+      "bytes": 200
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/final-focused-tests.json",
+      "kind": "file",
+      "sha256": "4bf2f1875792668296280db58eda248f7dd25c0b0d2e65ffb31b254e2d221833",
+      "bytes": 211
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/final-independent-probes.json",
+      "kind": "file",
+      "sha256": "840b14150e6cc90715cd5ce98630c1a0136d1d5e3caee9050d7380876a8fa54f",
+      "bytes": 176
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/final-integration-tests.json",
+      "kind": "file",
+      "sha256": "4c563cc23a5e212eabb709ba3412d49d255a4411116bec04264cf75040c4d68e",
+      "bytes": 200
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/final-recovery-tests.json",
+      "kind": "file",
+      "sha256": "3da2de82e6bde912973bb6671322cda882f2d8d0c60210fdffcbe9cf120b229e",
+      "bytes": 71
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/independent-pilot-relocation-check.json",
+      "kind": "file",
+      "sha256": "2abd5b1410f6e57f3c5bb2b54e032516af927a67661daabee5c45836ddd787b2",
+      "bytes": 305
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/independent-review-probes.json",
+      "kind": "file",
+      "sha256": "77ce6e1822c07db2f0529241d53679551ae09180d035ac9cf0c1d6b79e355f40",
+      "bytes": 518
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/invocation.json",
+      "kind": "file",
+      "sha256": "822d83137c930efa534fab5671748ea633194c563d30a05012153f4bdc249f5b",
+      "bytes": 409
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/preview-checks.json",
+      "kind": "file",
+      "sha256": "25176a77ac1e9376790873e44212704d032f07468f0f0ed9b14814c651716782",
+      "bytes": 167
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/refactor-lineage-race.json",
+      "kind": "file",
+      "sha256": "861e46999e3875059917e479b5017790b166f6abf4fd1cb34dca74137af498e3",
+      "bytes": 142
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/review-handoff.md",
+      "kind": "file",
+      "sha256": "5ccb6c925190163a6ab84b4915569c82c3ffe1771f64b7e2a2376586e2edcfc6",
+      "bytes": 6509
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-implementation-review/f0caac64-10c5-4980-9012-9fe5f61eb93a/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-run-implementation",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-run-implementation/ee3ea5b3-4c2e-4652-8961-eaca02039eba",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-run-implementation/ee3ea5b3-4c2e-4652-8961-eaca02039eba/developer-checks.json",
+      "kind": "file",
+      "sha256": "0b341fefc852b0f4931b0bb67ff6b714d9afdee7ea9e35cd30bd892574b8d168",
+      "bytes": 1177
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-run-implementation/ee3ea5b3-4c2e-4652-8961-eaca02039eba/invocation.json",
+      "kind": "file",
+      "sha256": "d6e225726fbb1782cf2fa032846df1f6832996cffa654bf730dfba3a49445d90",
+      "bytes": 448
+    },
+    {
+      "path": "history/legacy-material/agent-work/workflow-run-implementation/ee3ea5b3-4c2e-4652-8961-eaca02039eba/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/empty-files-containers",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/empty-files-containers/agent-invocations",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/files",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/files/activity-create-request.json",
+      "kind": "file",
+      "sha256": "6e838f2ea3c250575cf8fa0fcaaaf0b94d98a1fddff48a6f06f959a1a835f00a",
+      "bytes": 764
+    },
+    {
+      "path": "history/legacy-material/files/allocate-recording-implementation.json",
+      "kind": "file",
+      "sha256": "7b11cd0c90606702fd061183a0df781715233d502e89d5e3988091561594af69",
+      "bytes": 250
+    },
+    {
+      "path": "history/legacy-material/files/allocate-recording-policy.json",
+      "kind": "file",
+      "sha256": "7dd1557ff77ad8a8e51dabf340e6dc3c678e471b07f7473db60d2d4bb4743df8",
+      "bytes": 193
+    },
+    {
+      "path": "history/legacy-material/files/allocate-recording-review.json",
+      "kind": "file",
+      "sha256": "b3bdf4f6e2918109aa658a78ff9d01e892063cedf86d03582ec1afe92e245a75",
+      "bytes": 206
+    },
+    {
+      "path": "history/legacy-material/files/analysis-completion-request.json",
+      "kind": "file",
+      "sha256": "cf0bb6a4d0393ec89be8a35aaa5fbe1157574c226612076ffef47a976414d9ba",
+      "bytes": 883
+    },
+    {
+      "path": "history/legacy-material/files/analysis-progress-request.json",
+      "kind": "file",
+      "sha256": "23b93fe3d498971a5a19427b067848640e9a5724941db0f630f8accedc164758",
+      "bytes": 626
+    },
+    {
+      "path": "history/legacy-material/files/recording-bind-request.json",
+      "kind": "file",
+      "sha256": "972a2e8d02724060b3df9a3f29f3876b823b9711737a87164c99699c168235b4",
+      "bytes": 435
+    },
+    {
+      "path": "history/legacy-material/files/recording-commit-preparation.json",
+      "kind": "file",
+      "sha256": "3347625ced59a7f58adaab2bb5aca21e32f1ce1757bde978458c3c1c90e5b62c",
+      "bytes": 663
+    },
+    {
+      "path": "history/legacy-material/files/recording-implementation-completion.json",
+      "kind": "file",
+      "sha256": "d48bde9284a4109afda5c35de4927c0646659d400a26a524cdc5e19aa59957ea",
+      "bytes": 984
+    },
+    {
+      "path": "history/legacy-material/files/recording-implementation-start.json",
+      "kind": "file",
+      "sha256": "98d7d5e2cb9f126082adcdb4651c85712e3ccdc86e3dcbe14a0d84881718a66a",
+      "bytes": 737
+    },
+    {
+      "path": "history/legacy-material/files/recording-launches.json",
+      "kind": "file",
+      "sha256": "e8c2eaeb7985bb355387710b15643832df30724a18eac54dda3592359b486236",
+      "bytes": 379
+    },
+    {
+      "path": "history/legacy-material/files/recording-policy-launch.json",
+      "kind": "file",
+      "sha256": "29602f149f4ea808dc47c85053a52565adb11591c02d3798b4ed6d95403dbde3",
+      "bytes": 376
+    },
+    {
+      "path": "history/legacy-material/files/recording-sync-request.json",
+      "kind": "file",
+      "sha256": "5bd4857bb6d827f95fff85b6c9eec1b1d0834689c29bd3a3b94f2cfbe518d1ac",
+      "bytes": 183
+    },
+    {
+      "path": "history/legacy-material/files/recording-verify-request.json",
+      "kind": "file",
+      "sha256": "49ae3f4a8a9286cadfd1fe386f5f986759d3c1e8d3deb5dd1f592c9122503a12",
+      "bytes": 55
+    },
+    {
+      "path": "history/legacy-material/files/usage-request.json",
+      "kind": "file",
+      "sha256": "786c268118b5e837a5e503160ea1a6f12d3eecf09a37c321fc8af531e9edfdc4",
+      "bytes": 391
+    },
+    {
+      "path": "history/legacy-material/files/workflow-constraints-request.json",
+      "kind": "file",
+      "sha256": "91d4cdf686abf9388795d7c320ca49cab4171eb43d489f444a194e51a8793df1",
+      "bytes": 1351
+    },
+    {
+      "path": "history/legacy-material/files/workflow-design-checks.json",
+      "kind": "file",
+      "sha256": "eb8b5c3fe7bdfbe2905d4fe767ba8e68ae9519f77b785327d704a8e73ccaa8df",
+      "bytes": 780
+    },
+    {
+      "path": "history/legacy-material/files/workflow-storage-refactor",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/files/workflow-storage-refactor/migration-before.json",
+      "kind": "file",
+      "sha256": "2dd9bfd7381ec06bf87523126565a47017e6ed64ece58bad557bd39631e67263",
+      "bytes": 2309
+    },
+    {
+      "path": "history/legacy-material/files/workflow-storage-refactor/migration-complete.json",
+      "kind": "file",
+      "sha256": "76abc9b5a1310372cb2f631e611c7c0cd78a1d53ff45e67c34eba53e6c9a73c9",
+      "bytes": 4193
+    },
+    {
+      "path": "history/legacy-revisions",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/00-review-guide.md",
+      "kind": "file",
+      "sha256": "ee8f424996053cbceb0a546c068a63b6da4304937c9185d12469a5dfd037b369",
+      "bytes": 4749
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/01-requirements.md",
+      "kind": "file",
+      "sha256": "d95d0b3a6a29d8abbbda65cd4ac528f6b80c3f4eb5008ab201d4b5e6845e0cdc",
+      "bytes": 6359
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "bc93b130a49aa46f7f48ff696276d7fdee02c7bec7c4137c697d3ca083fd98fe",
+      "bytes": 23344
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "2e9d8b122f75779958f5f99f1e622e9d0fe31abca225060ea1ad08352228e263",
+      "bytes": 11577
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/04-manager-design.md",
+      "kind": "file",
+      "sha256": "f4a73750e7b73755276880a169e790e6665096011cffbbc8fd6a314f01971455",
+      "bytes": 10416
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "95de9596db7c7934a63fb168f285ceb92fe15ea39517ddb6f0f43173250858c7",
+      "bytes": 9145
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/examples",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/examples/change-assessment.md",
+      "kind": "file",
+      "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+      "bytes": 2282
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261114_191919_reviewed-draft/examples/customer-request.md",
+      "kind": "file",
+      "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+      "bytes": 9841
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/00-review-guide.md",
+      "kind": "file",
+      "sha256": "2d2f6585fa424f1e6e8e75954a3e766f635b412e129dc3675277e951e3b8d26a",
+      "bytes": 6545
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/01-requirements.md",
+      "kind": "file",
+      "sha256": "9ce8b5a6ab5e0b91fa5cee3dd4618c9a4ce2ab3b0064b3abc8cb33f0f748115e",
+      "bytes": 6888
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "6a5feea6440264b2ef60dbb7e51cb629be99fbb247a3c7dae3d7c404e463f59e",
+      "bytes": 24593
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "2e9d8b122f75779958f5f99f1e622e9d0fe31abca225060ea1ad08352228e263",
+      "bytes": 11577
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/04-manager-design.md",
+      "kind": "file",
+      "sha256": "f4a73750e7b73755276880a169e790e6665096011cffbbc8fd6a314f01971455",
+      "bytes": 10416
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "1a701e75f0e9995543a89ecfafc0cc1fceafc713fc0fcda17631abdf628a2a02",
+      "bytes": 9145
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/examples",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/examples/change-assessment.md",
+      "kind": "file",
+      "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+      "bytes": 2282
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_052720_before-user-review/examples/customer-request.md",
+      "kind": "file",
+      "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+      "bytes": 9841
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/00-review-guide.md",
+      "kind": "file",
+      "sha256": "5181e686dcc6ea99031158de0ec1fc409334ae46264fd977edc9ff3979f7b5d5",
+      "bytes": 9347
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/01-requirements.md",
+      "kind": "file",
+      "sha256": "3aef2d2a0fd19cf11314e9d878bae2d0b515b8f62364019bc757b941968a8a64",
+      "bytes": 8295
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "1676e1da08d806dd1dcb98c56a9bcbe7a1819be8c53a8350827c6e29d1043a1d",
+      "bytes": 26764
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "c51c96f14bd239cb309a303c434cb6a94590d6744bbb4baab2c6d687979235fd",
+      "bytes": 11738
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/04-manager-design.md",
+      "kind": "file",
+      "sha256": "3275bb787b6b525c877011316b63fb7cd421ed047131452d3df72fb997356fd2",
+      "bytes": 10816
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "2dc04c756d15bd0087da3bcb5544ce163525ca4af3b380d2d67c4437b6dc11ab",
+      "bytes": 9910
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/examples",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/examples/change-assessment.md",
+      "kind": "file",
+      "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+      "bytes": 2282
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_055357_before-requirement-wording-review/examples/customer-request.md",
+      "kind": "file",
+      "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+      "bytes": 9841
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_061404_before-A1-clarification",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_061404_before-A1-clarification/01-requirements.md",
+      "kind": "file",
+      "sha256": "1d9229bb48b3a4a4a15990313a6f13ea34a4a88852eaffd54357a9b7b54741e9",
+      "bytes": 13199
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_062358_before-acceptance-language-review",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_062358_before-acceptance-language-review/01-requirements.md",
+      "kind": "file",
+      "sha256": "95dd700fa2de4c94cb00c09f1ffa79a0dfba908ff77975c965fe94c74675cc57",
+      "bytes": 13643
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_063604_before-A19-scope-correction",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_063604_before-A19-scope-correction/01-requirements.md",
+      "kind": "file",
+      "sha256": "18f42c823df6d1cf5b09a4b0d29f2b3bfc1be2f1e9673bc2c7b1d39d7ad3dbb2",
+      "bytes": 18039
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_063604_before-A19-scope-correction/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "2dc04c756d15bd0087da3bcb5544ce163525ca4af3b380d2d67c4437b6dc11ab",
+      "bytes": 9910
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_064150_before-A23-clarification",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_064150_before-A23-clarification/01-requirements.md",
+      "kind": "file",
+      "sha256": "aaf729956b112a9b4129a0337f2a3991c1bfbc4d4e849b26f7da7b212d2d1252",
+      "bytes": 17973
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_135102_before-reading-guide",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_135102_before-reading-guide/00-review-guide.md",
+      "kind": "file",
+      "sha256": "7770d6c00f57bc098ee6580b126a4a343ac9ab63db3051b837f865f93c795689",
+      "bytes": 10176
+    },
+    {
+      "path": "history/legacy-revisions/workflow-design/20261115_135102_before-reading-guide/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "d9de83d0e03b96a426842d6287f77eb69451bd7de9262619e013ebbcf1af6625",
+      "bytes": 26769
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local/00-review-guide.md",
+      "kind": "file",
+      "sha256": "e015ec7676f183465c817a125906c4fcf6d92a2631a533a1c8a3986f3b4dcd05",
+      "bytes": 10368
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local/01-requirements.md",
+      "kind": "file",
+      "sha256": "780cad54c9dc9d0eac79a9cd334d9192fdda89a58a0e8434684b03f26f1d0f52",
+      "bytes": 19490
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "1c90c0911da002120ec673d19a88ada0c1cbb3ad61452ecdcbe32bc742191c99",
+      "bytes": 27007
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local/02a-solution-reading-guide.md",
+      "kind": "file",
+      "sha256": "26b2d649f85a7e0814765399b26707a7faf8e25932c6ed5018680c304a7af78d",
+      "bytes": 19842
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "c51c96f14bd239cb309a303c434cb6a94590d6744bbb4baab2c6d687979235fd",
+      "bytes": 11738
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local/04-manager-design.md",
+      "kind": "file",
+      "sha256": "3275bb787b6b525c877011316b63fb7cd421ed047131452d3df72fb997356fd2",
+      "bytes": 10816
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "a08dd1a37ae44fe4961f0e363c69c0a3a626649a74b06642baeabbc0fc0164ae",
+      "bytes": 10141
+    },
+    {
+      "path": "history/legacy-revisions/workflow-storage-activity-local/workflow-implementation-report.md",
+      "kind": "file",
+      "sha256": "17e757e130398a49536f0a4618e4482b338232952f0694de951bfd2e8802896b",
+      "bytes": 8596
+    },
+    {
+      "path": "history/migrations",
+      "kind": "directory"
+    },
+    {
+      "path": "history/migrations/20261115_213748",
+      "kind": "directory"
+    },
+    {
+      "path": "history/migrations/20261115_213748/input.md",
+      "kind": "file",
+      "sha256": "682ef6df52c16169fea02f6e4507cb5fc2a748a3511a5b8e63d0fcea8ad2c44a",
+      "bytes": 1891
+    },
+    {
+      "path": "history/migrations/20261115_213748/outcome.md",
+      "kind": "file",
+      "sha256": "1d0c4c47fea14f419bf552a18b955e8c48bfb5f1c6554783e9e0375cf864ec95",
+      "bytes": 2175
+    },
+    {
+      "path": "history/migrations/20261115_213748/state.json",
+      "kind": "file",
+      "sha256": "ca9e0c0e6e52708f25eddcd7e67ea46c73a2cd08cf1bc4cab4d994a9371f0c21",
+      "bytes": 422
+    },
+    {
+      "path": "results",
+      "kind": "directory"
+    },
+    {
+      "path": "results/design-package-skill-validation.json",
+      "kind": "file",
+      "sha256": "8efebe8daf18b882119ac985caf1782a78d9f2b93dedd3cbaf6ff6b95bb1edfd",
+      "bytes": 1207
+    },
+    {
+      "path": "results/recording-compatibility-implementation.md",
+      "kind": "file",
+      "sha256": "9774bbd0b3f8d73c54f43e271c952864d0dedb42c69806e85131e40567c529df",
+      "bytes": 2898
+    },
+    {
+      "path": "results/workflow-design",
+      "kind": "directory"
+    },
+    {
+      "path": "results/workflow-design/00-review-guide.md",
+      "kind": "file",
+      "sha256": "c1b04ff5192ef62cdd5e90c1590cda7a94b995b88fe8936b7b1d1076cffa0f79",
+      "bytes": 10790
+    },
+    {
+      "path": "results/workflow-design/01-requirements.md",
+      "kind": "file",
+      "sha256": "a3aed0e4383acc0e18fe3ff45afe385059fa2d16e026abf7163932a8270ceee4",
+      "bytes": 19919
+    },
+    {
+      "path": "results/workflow-design/02-solution-specification.md",
+      "kind": "file",
+      "sha256": "dd9fb7c20f0ce17e1a47687e703650f95e94fef6f1460a9cf6def76d465a760c",
+      "bytes": 27770
+    },
+    {
+      "path": "results/workflow-design/02a-solution-reading-guide.md",
+      "kind": "file",
+      "sha256": "155999a665f76169b893f38ae5fa2d923ba07f263bcbd8f2a8bd58c6bd9bb2c0",
+      "bytes": 20775
+    },
+    {
+      "path": "results/workflow-design/03-worked-examples.md",
+      "kind": "file",
+      "sha256": "9a98a846c657e02fe864d293a0ac9f5e27ddaac213e0ce2ea8d3b128cffd6ab8",
+      "bytes": 12272
+    },
+    {
+      "path": "results/workflow-design/04-manager-design.md",
+      "kind": "file",
+      "sha256": "c867ca20e7d72cc770ed9606677d9041d555ff84a6d6ab62a73e433119b38d6c",
+      "bytes": 11322
+    },
+    {
+      "path": "results/workflow-design/05-implementation-plan.md",
+      "kind": "file",
+      "sha256": "917964a98dea6c8bda532f1c2a1ab387a3174b20cdf14c172c36ec1875a2b258",
+      "bytes": 10554
+    },
+    {
+      "path": "results/workflow-design/examples",
+      "kind": "directory"
+    },
+    {
+      "path": "results/workflow-design/examples/change-assessment.md",
+      "kind": "file",
+      "sha256": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+      "bytes": 2282
+    },
+    {
+      "path": "results/workflow-design/examples/customer-request.md",
+      "kind": "file",
+      "sha256": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+      "bytes": 9841
+    },
+    {
+      "path": "results/workflow-implementation-report.md",
+      "kind": "file",
+      "sha256": "4d259837f8dc49ba646f6c088cc48fdbbfe8039c125ce475e7c3904de0dc818d",
+      "bytes": 8966
+    },
+    {
+      "path": "results/workflow-storage-refactor.md",
+      "kind": "file",
+      "sha256": "f8087d12b101a2680678314e667aef02ab65865ab98e85509738d97349b36dc1",
+      "bytes": 4223
+    },
+    {
+      "path": "results/workflows-assessment.md",
+      "kind": "file",
+      "sha256": "05005e8b551cdf130abf4cbc4e2bb7622382d738d732d4ca66e06a224780d3b3",
+      "bytes": 17492
+    },
+    {
+      "path": "system",
+      "kind": "directory"
+    },
+    {
+      "path": "system/chat.jsonl",
+      "kind": "file",
+      "sha256": "47dd4198d66d48b7483e8516cffab457a1f4a7c7c39290dda579e3b2559b7deb",
+      "bytes": 20410
+    },
+    {
+      "path": "system/chronicles",
+      "kind": "directory"
+    },
+    {
+      "path": "system/chronicles/checkpoint.json",
+      "kind": "file",
+      "sha256": "52514a39471681837339606db36752fde6f4a5a865a16215f83ef56a3985f527",
+      "bytes": 2198
+    },
+    {
+      "path": "system/chronicles/core.json",
+      "kind": "file",
+      "sha256": "5074868bdc1547b17cefff5b07ceab05f12304c66d4ac07ee64542e45ea8a798",
+      "bytes": 77239
+    },
+    {
+      "path": "system/chronicles/history",
+      "kind": "directory"
+    },
+    {
+      "path": "system/chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167",
+      "kind": "directory"
+    },
+    {
+      "path": "system/chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/20261112_195218_segment-01.md",
+      "kind": "file",
+      "sha256": "a55a29894ae58fa20a83370f58fcef8350663288966ab424cccb7a88d1254335",
+      "bytes": 14461
+    },
+    {
+      "path": "system/chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/checkpoint.json",
+      "kind": "file",
+      "sha256": "97ff8de5fafb479e1029a56840e67de6571af335dc002cb9bbab1ec9131bc19e",
+      "bytes": 2194
+    },
+    {
+      "path": "system/chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/core.json",
+      "kind": "file",
+      "sha256": "ea3d2af097ef32a424647d464171b24f522ea7ecb6b544c20c7fd0a1d5298a51",
+      "bytes": 1510
+    },
+    {
+      "path": "system/chronicles/history/fda37473-6b3f-43f6-98c6-19e0aac3d167/reconciliation.json",
+      "kind": "file",
+      "sha256": "c2a5ddce3a395c5e110291b72515fc8bbd553a0ce55f129cd9b99cd1ae38ff66",
+      "bytes": 1807
+    },
+    {
+      "path": "system/log.md",
+      "kind": "file",
+      "sha256": "e88f23f9d70c8354d36dd84b72e4888c86a2031487d3fe18e1f59d3fd63a4682",
+      "bytes": 23711
+    },
+    {
+      "path": "system/state.json",
+      "kind": "file",
+      "sha256": "3a29f629a2b325db979a11d753e8235e9fa80cd2699136cad9360716d544213e",
+      "bytes": 518
+    },
+    {
+      "path": "system/usage.json",
+      "kind": "file",
+      "sha256": "395f1f06a1b6d5d19dadd778c5f784ec2d1b8fddae98f5ce404f9b7ca425cf5d",
+      "bytes": 2285
+    },
+    {
+      "path": "system/usage.md",
+      "kind": "file",
+      "sha256": "abef2d2cac308dd129b6357d6dfc2c2d4a6fe77729f50b74d1e82a990b57af5a",
+      "bytes": 1457
+    },
+    {
+      "path": "work",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/adapter-targeted",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/adapter-tests",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/recording-final",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/recording-final/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/recording-regressions",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/recording-regressions/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-compatibility",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-compatibility/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-final-targeted",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-first-checks",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-first-checks/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-integration-check",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-integration-check/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-local-full",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-local-full/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-local-storage",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-local-storage-final",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/workflow-local-storage-recheck",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001/assessment.md",
+      "kind": "file",
+      "sha256": "063d38ff927380a4981965f539545fe134d95712468c9efa17db35a22832a9f6",
+      "bytes": 15783
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001/assignment.json",
+      "kind": "file",
+      "sha256": "83a3a0b2ea49507426bedd7dd76f14138aa3b6a7078c2a6422c141a66b4a52d8",
+      "bytes": 3752
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001/result.json",
+      "kind": "file",
+      "sha256": "bf9ce97b14002ccfb214882ceace02ce2d3b8afb5d173d7a7777fd5e5e47b1fd",
+      "bytes": 1923
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/definition.md",
+      "kind": "file",
+      "sha256": "24391b94e0a49f6745a055edad4d5670ce94c2ec6a2c00fd3ce8eff92643fa23",
+      "bytes": 2257
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/events.jsonl",
+      "kind": "file",
+      "sha256": "f2974250fca3779e096fa703f72961b6a717ef5994aa25abad3a2b3527472366",
+      "bytes": 8710
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/inputs",
+      "kind": "directory"
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/inputs/request.md",
+      "kind": "file",
+      "sha256": "81752bbf479439f2b76f710fa80a5efca539c6834592dcadcf0d244beef04b25",
+      "bytes": 1701
+    },
+    {
+      "path": "workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b/state.json",
+      "kind": "file",
+      "sha256": "fbaf9cf3d9ab9906cab2ea306817f7a9d7debba2b2a4f206949dc08fc2c2bf56",
+      "bytes": 4097
+    }
+  ]
+}

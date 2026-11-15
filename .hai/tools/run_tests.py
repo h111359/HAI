@@ -26,8 +26,11 @@ def test_work_path(root, relative):
     owned = (len(tail) >= 3 and tail[1:3] == ['files', 'test-work'])
     invocation = (len(tail) >= 5 and tail[1:3] == ['files', 'agent-invocations']
                   and tail[4] == 'test-work')
-    if parts[:len(store)] != store or not (owned or invocation):
-        raise SafetyError('work-dir must be inside an Activity files/test-work or files/agent-invocations/<id>/test-work directory under the configured store')
+    owned_v2 = len(tail) >= 3 and tail[1:3] == ['work', 'test-work']
+    invocation_v2 = (len(tail) >= 6 and tail[1:3] == ['work', 'agents']
+                     and tail[5] == 'test-work')
+    if parts[:len(store)] != store or not (owned or invocation or owned_v2 or invocation_v2):
+        raise SafetyError('work-dir must be inside an Activity work/test-work or work/agents/<agent>/<id>/test-work area (legacy files areas remain supported) under the configured store')
     return work
 
 

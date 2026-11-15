@@ -1,5 +1,6 @@
 """Read-only recording evidence and scheduling; no background hooks are assumed."""
 from environment_paths import STATE, PROFILES, INSTRUCTIONS
+from activity_layout import artifact
 from pathlib import Path
 import sys
 from .storage import checked_path, read_json, SafetyError, lock, fingerprint
@@ -57,7 +58,7 @@ def handle(operation, workspace, request, apply):
                     chronicles.assignment(root, binding)
                     request_for_sync = {'sources': [binding], 'provenance': request['provenance']}
                     result, changed = chronicles.synchronize(root, base, ident, request_for_sync, now(), apply,
-                        fingerprint(checked_path(root, base + '/state.json', allow_missing=False)))
+                        fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)))
                     result['source'] = source
                     result['usage_source'] = {k: binding[k] for k in ('path', 'session_id', 'start_position')}
                     return envelope(operation, 'ok' if apply else 'planned', result, changed)
@@ -66,7 +67,7 @@ def handle(operation, workspace, request, apply):
                 if type(mandatory) is not bool:
                     raise ValueError('mandatory must be Boolean and attributable to workspace instructions')
                 result, changed = chronicles.synchronize(root, base, ident, request, now(), apply,
-                    fingerprint(checked_path(root, base + '/state.json', allow_missing=False)), required=enabled or mandatory)
+                    fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)), required=enabled or mandatory)
                 return envelope(operation, 'ok' if apply else 'planned', result, changed)
             if apply:
                 with lock(root): return execute()

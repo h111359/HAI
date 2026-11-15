@@ -6,6 +6,7 @@ import re
 import sys
 import uuid
 from pathlib import Path, PurePosixPath
+from activity_layout import invocation_path
 
 from .storage import SafetyError, checked_path, fingerprint, read_json, write_bytes, write_json, lock
 from .activities import envelope, provenance, now, store_path, discover, handle as activity_handle
@@ -329,7 +330,7 @@ def _verified_executor(root, context, step, value):
     value = _executor(value)
     if value['mode'] == 'spawned':
         invocation = ident(value['invocation_id'], 'invocation_id')
-        metadata = read_json(checked_path(root, context['path'] + '/files/agent-invocations/' + invocation + '/invocation.json', allow_missing=False))
+        metadata = read_json(checked_path(root, invocation_path(root, context['path'], step['agent'], invocation) + '/invocation.json', allow_missing=False))
         if (metadata.get('activity_id') != context['activity_id'] or metadata.get('invocation_id') != invocation
                 or metadata.get('agent') != step['agent']):
             raise SafetyError('Executor invocation is not allocated to this Activity and role')

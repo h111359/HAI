@@ -87,7 +87,7 @@ hash rewriting or history repair occurs.
 From the workspace, use a verified absolute interpreter:
 
 ```text
-<absolute-python> -B .hai/tools/run_tests.py --workspace . --work-dir .hai_env/activities/<activity-folder>/files/test-work
+<absolute-python> -B .hai/tools/run_tests.py --workspace . --work-dir .hai_env/activities/<activity-folder>/work/test-work
 ```
 
 The runner keeps fixture current directories and temporary outputs under the
@@ -96,9 +96,12 @@ failure if any suite fails. Symlink tests report unavailable privileges as skips
 native Windows junction tests exercise the separate reparse behavior.
 
 Replace `.hai_env/activities` with the configured `activities.location` when using
-another store. Delegated checks use `<store>/<activity>/files/agent-invocations/<id>/test-work`;
+another store. Delegated checks use `<store>/<activity>/work/agents/<role>/<id>/test-work`;
 both layouts permit nested test directories. CI may use an Activity scaffold.
 
 The repository CI matrix runs Windows and Linux with Python 3.11 and 3.14. A
 workflow definition is not evidence of a completed run. Record actual native
 platform/version, failures, skips and unrun platforms with each verification.
+
+The runner also accepts original legacy files/test-work and allocated legacy
+invocation test paths. It does not relocate a running process working directory.

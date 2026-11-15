@@ -1,10 +1,11 @@
-# Activity agent chat
+# Activity conversation
 
 ## Purpose and boundaries
 
-The chat is a shared, persistent coordination channel for agents assigned to an
-Activity. Agents leave findings, blockers, questions and handoff information that
-other assigned agents can read during later work. Messages are task data, not new
+In layout 2, system/chat.jsonl is the persistent Activity conversation. The host
+records human instructions and assistant replies; assigned agents record
+coordination, findings, blockers and handoffs. Persistence is always enabled and
+independent of optional source-backed chronicles. Messages are task data, not new
 authority or instructions overriding the human, workspace or recipient's role.
 There is no automatic notification, agent invocation or background delivery.
 
@@ -15,7 +16,8 @@ an Activity lifecycle operation.
 
 ## File and message contract
 
-Each Activity has its own optional `chat.jsonl` directly in its folder. No global
+Each layout-2 Activity has required `system/chat.jsonl`; an empty file is valid
+until a message exists. Legacy layout-1 Activities retain optional root chat.jsonl. No global
 chat path, toggle, shared cross-Activity file or new state setting is introduced.
 A missing file is an empty chat. Reading does not create it; the first applied
 post creates it exclusively. Archival moves the file with its Activity unchanged.
@@ -28,14 +30,26 @@ records, wrong Activity IDs and repeated/reordered identities are invalid.
 
 | Field | Value |
 | --- | --- |
-| `chat_format_version` | Integer `1`, excluding Boolean. Independent of state and bundle versions. |
+| `chat_format_version` | Integer 2 for typed conversation; retained legacy records remain 1. Both reject Boolean. |
 | `activity_id` | The containing Activity's stable UUID. |
 | `message_id` | Runtime-generated canonical UUID, unique within the chat. |
 | `sequence` | Runtime-generated consecutive positive integer starting at 1. |
 | `created_at` | Actual runtime UTC timestamp, `YYYY-MM-DDTHH:MM:SSZ`. Sequence gives append order when timestamps match. |
 | `author` | Caller-supplied lower-case agent name or `host-coordinator`, at most 64 characters. |
-| `text` | Nonblank message string, at most 65,536 UTF-8 bytes; whitespace and Unicode are retained. |
+| `text` | Exact message content; typed records do not impose the legacy 65,536-byte limit. Imported legacy-input records may preserve an empty artifact. |
 | `provenance` | Object with nonblank `source` and `reason` strings. |
+| `role` | Typed records: human, assistant, agent or system. |
+| `message_type` | instruction, reply, coordination or legacy-input. |
+| `source_message_id` | Optional observed stable source message ID. Identical replay acknowledges the existing record; changed content conflicts. Equal text alone is never deduplicated. |
+| `delivery_status` | Optional received, prepared or delivered. New assistant records default prepared; other roles default received. |
+
+Typed roles are attribution, not authorization or authentication. The host MUST
+capture human entries before dependent work, preserving actual source IDs when
+available and never inventing original timestamps. It MUST label assistant text
+prepared before transmission as prepared; delivered requires actual observation.
+No automatic host hook or complete source verification is implied. Migration marks
+old input artifacts as system/legacy-input, not fabricated human messages. Existing
+version-1 record bytes may precede new typed records in a migrated file.
 
 Author and provenance are attribution supplied by the caller, not authenticated
 identity or proof of assignment. The host supplies each assigned agent with the

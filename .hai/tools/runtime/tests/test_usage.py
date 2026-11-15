@@ -27,7 +27,7 @@ class UsageTests(unittest.TestCase):
         (self.root / '.hai_env/config/state.json').write_text(json.dumps({'state_format_version': 3,
             'activities': {'location': '.hai_env/activities'}, 'features': {'chronicles': {'enabled': False}}}), encoding='utf-8')
         self.prov = {'source': 'fixture host', 'reason': 'verify assigned usage'}
-        c = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        c = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         self.assertTrue(c['ok'], c)
         self.ident = c['result']['state']['activity_id']
         self.base = self.root / c['result']['path']

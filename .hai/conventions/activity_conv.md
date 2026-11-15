@@ -1,163 +1,150 @@
 # Activity convention
 
-## Artifacts and formats
+## Layout and ownership
 
-Use UTF-8 Markdown for content and duplicate-free UTF-8 JSON for state. Canonical
-artifacts live directly in one Activity folder:
+New Activities use layout version 2. Their only root document is README.md. The
+runtime records activity_layout_version: 2 in system/state.json, independently of
+the environment state format and conversation format. Missing layout markers on
+legacy root state.json mean layout 1. Unknown versions, mixed layouts, unsafe
+paths and duplicate Activity identities require explicit resolution.
 
-| Artifact | Requirement and content |
+```text
+<activity>/
+  README.md                         Human entry point and final report
+  results/<deliverable>/            Reviewable Activity outputs
+  evidence/                         Retained proof, reviews and verification
+  history/<document>/<timestamp>/   Exact predecessors and migration recovery
+  work/coordinator/                 Disposable coordinator material
+  work/test-work/                   Disposable test fixtures
+  work/agents/<role>/<uuid>/        Allocated participant work, manifest retained
+  system/state.json                 Identity, lifecycle and phase metadata
+  system/log.md                     Append-only work and decision history
+  system/chat.jsonl                 Persistent typed conversation
+  system/usage.md                   Readable usage summary, when available
+  system/usage.json                 Usage bindings and checkpoint
+  system/chronicles/                Recording ledger, checkpoints and recovery
+  chronicles/                      Optional readable source segments
+  workflow-runs/<run-id>/            Optional run records and declared outputs
+```
+
+Only README.md and system/state.json, system/log.md and system/chat.jsonl are
+created initially. Other folders/files appear only with meaningful content.
+Runtime validates the root bucket names; agents MUST NOT invent additional root
+files or folders. Human-readable JSON deliverables still belong in results:
+purpose and ownership determine placement, rather than filename extension.
+
+README.md states or links the objective, original message identity, useful outputs
+and evidence. Its managed navigation is derived from existing paths, never a second
+status database. The coordinator may revise its authored sections with provenance;
+material revisions retain exact predecessors. Closure appends the final result,
+performed/skipped checks, limitations, unresolved work and recording coverage to
+README.md. Layout 2 has no separate input.md or outcome.md and no virtual aliases.
+
+Results and evidence are retained; work is disposable only after its meaningful
+outputs have been collected and writers/effects reconciled. The initial generation
+contract declares expected artifact purpose, exact destination, owner and retention.
+Canonical product code/specifications and reusable resources keep their normal
+locations outside the Activity. Results are Activity-specific review deliverables.
+
+## Conversation and recording
+
+The host MUST persist each received human instruction verbatim through typed chat
+before dependent substantive work, even when chronicles are disabled or unavailable.
+It MUST distinguish human instructions, assistant replies, agent coordination and
+legacy imported context. Generated summaries never replace original human messages.
+Initial message IDs identify original records; original source identities/timestamps
+are retained when observed and MUST NOT be invented. The runtime append timestamp
+is the actual capture time. See the [conversation contract](activity-chat_conv.md).
+
+The host MUST persist assistant reply text with truthful delivery status. A reply
+written before transmission is prepared, not proven delivered; only actual observed
+delivery permits delivered status. No background hook or automatic host interception
+is claimed. Agents use the append API for coordination and cannot treat an agent
+message or prepared reply as human authorization. Chat is required in layout 2 and
+independent of optional chronicles, which provide readable source verification.
+
+The host MUST NOT manually rewrite runtime state, log, chat, usage, checkpoints or
+workflow metadata. Core operations own those records. Log entries are append-only,
+UTC-dated meaningful actions/decisions/checks/failures; posting chat does not require
+a duplicate log entry. The coordinator maintains summaries and declared outputs.
+
+## Generation, naming and retention
+
+- The coordinator MUST declare review outputs under results/ and verification
+  evidence under evidence/ before assigning their creation. Runtime record supports
+  explicit paths in these buckets and rejects overlapping destinations.
+- Agents MUST put their scratch below their allocated work folder. The coordinator
+  MUST put temporary requests/scripts below work/coordinator/; tests use work/test-work/.
+- When supported, the coordinator MUST send requests in memory or through --request-stdin. Routine chat
+  reads, status updates and successful commands MUST NOT generate permanent request
+  and response files. Necessary failed-operation diagnostics remain attributable.
+- The coordinator MUST consolidate meaningful verification into evidence/verification.md
+  and retain detailed raw files only for reproducibility, failure investigation or
+  an explicit requirement. It MUST preserve failures and their later resolution.
+- Material document revisions MUST preserve exact predecessors under history/ with
+  author/source, actual UTC date, reason, predecessor and dependent impact.
+- Human file/folder names use lowercase words separated by hyphens, except README.md
+  and exact machine-contract names. Numbered prefixes indicate actual reading order.
+  UTC history names use YYYYMMDD_HHMMSS plus an unused sequence where needed.
+- work-cleanup previews exact selected work paths and requires host confirmation of
+  ended writers and retained evidence. It MUST NOT remove allocation manifests,
+  results/evidence/history/system/run records or follow links. Closure does not
+  silently delete unexplained material; the coordinator reconciles disposal first.
+
+## Identity, lifecycle and state
+
+Every Activity is one direct child of configured activities.location (default
+.hai_env/activities). At most one is active and it uses 00000000_000000_active.
+There is no global current pointer or alternate store fallback. State requires:
+
+| Field | Meaning |
 | --- | --- |
-| `state.json` | Mandatory identity, lifecycle and independent step metadata below. |
-| `input.md` | Mandatory single initial input, preserved as supplied; may be empty until supplied. Never synthesize human input. Appended scope changes retain their source and date rather than replacing initial input. |
-| `log.md` | Mandatory append-only UTC-dated meaningful actions, decisions, revisions, transitions, results, checks and failures. Related operations may share one entry; logging does not require recursive entries. |
-| `chat.jsonl` | Optional append-only coordination messages for assigned agents; owned by runtime chat operations under the [chat convention](activity-chat_conv.md). |
-| `usage.md`, `usage.json` | Runtime-managed usage report and source checkpoint; updated on request and before closure under the [usage convention](activity-usage_conv.md). |
-| `decisions.md` | When useful: actual questions and answers, decisions, unresolved issues, author/source and date. Silence is not approval. |
-| `definition.md` | When useful: agreed objective, scope, constraints and available acceptance criteria. |
-| `analysis.md` | When useful: evidence, affected paths, comparisons, impact, risks, unknowns and conclusions. |
-| `plan.md` | When useful: concrete proposed work and verification tied to the objective. |
-| `outcome.md` | Required on closure: result against the objective, evidence, performed/skipped work, limitations, unresolved work and closure outcome. May be drafted earlier without implying closure. |
+| activity_id | Unique stable UUID, unchanged by migration, rename or archival. |
+| lifecycle | active or closed. |
+| created_at | Actual Activity initialization UTC time. |
+| closed_at | Null while active; actual UTC closure time. |
+| outcome | Null while active; completed, cancelled or stopped when closed. |
+| implementation_started_at | Null until first real implementation attempt; never reset. |
+| steps | clarification, analysis, planning, implementation, verification, independently not_started/in_progress/completed/skipped. |
+| activity_layout_version | 2 for the current layout; absent means legacy 1 only. |
+| initial_message_id | Original instruction or explicitly imported legacy-context message ID, or null until supplied. |
 
-The initial artifact set is state, input and log. Optional artifacts have meaningful
-content rather than empty scaffold. `files/` holds supporting material and revision
-history; `questionnaires/` holds useful numbered saved question sets with stable
-question IDs; `results/` holds Activity-specific outputs; `chronicles/` holds exact
-source segments. Product code/durable specification retain canonical locations and
-attributable links. A discussion summary is attributed analysis or decisions,
-not a mandatory duplicate `discussion.md` or substitute for exact chronicles.
+Times use YYYY-MM-DDTHH:MM:SSZ. State and JSON records reject duplicate keys.
+Lifecycle does not imply phase completion. Analysis alone can meet an objective;
+implementation claims require the original start marker and appropriate checks.
+Unsupported states are not silently repaired. Stores, record folders and canonical
+artifacts must be contained nonlinked paths; hard-link aliases are rejected.
 
-Apply the [artifact placement contract](artifact-placement_conv.md) to supporting
-material for every task type. Implementation coverage records, review findings,
-test-run results, execution traces and scratch outputs belong to this Activity
-unless the request or governing contract makes them designated deliverables.
-Reusable tests/fixtures and maintained operational resources retain their own
-canonical locations. Do not create a parallel lifecycle or move unrelated existing
-material merely because a new placement rule applies prospectively.
+## Closure, archival and compatibility
 
-Each new sub-agent spawn receives a separate runtime-allocated folder at
-`files/agent-invocations/<invocation-uuid>/`. Its manifest attributes the allocation;
-supporting work stays with that invocation and archives with the Activity. The
-[invocation convention](agent-invocation_conv.md) defines host handoff, same-instance
-follow-ups, failed-launch retention and writer checks before closure. Product and
-canonical Activity record ownership remain unchanged.
+Closure requires resolved workflow runs and ended known writers. It appends the
+final report to README.md and preserves its predecessor in history/readme/.
+Usage is refreshed under system/, and recording follows best-effort/required policy
+with explicit gaps. Closed folders use YYYYMMDD_HHMMSS_short-label, matching actual
+UTC closure time; labels contain one to five lowercase alphanumeric words separated
+by hyphens. Collisions use _02, _03, etc. All contained runs and records move with
+the Activity. Durable references use stable IDs plus Activity-relative paths.
 
-Assigned agents share this Activity's chat through `activity chat-read` and
-`activity chat-post`, using the stable Activity ID. Chat messages are communication,
-not edits to canonical artifacts, accepted decisions or transcripts; their existing
-owners still manage those records. The runtime provides read and append operations
-only. Agents never edit or delete posted messages or the chat file directly; they
-append corrections as new messages. Chat remains with the Activity on archival.
+Existing layout-1 archives remain readable with their original state.json,
+input.md, log.md and outcome.md; normal reads/startup never move them. An explicit
+activity migrate-layout operation converts the selected current Activity by default,
+preserving original bytes/provenance and reporting partial/conflicting operations.
+Explicit allow_closed: true may migrate a specifically selected archive while a
+separate work Activity is active. It preserves closure timestamps/outcome and the
+original final-report bytes; retired agent material stays under durable history.
+Other archives remain unchanged. Migration never labels a whole legacy input
+artifact as a verified human message.
+New create defaults to layout 2; explicit layout_version: 1 remains available for
+compatibility callers and legacy regression fixtures. Legacy creation is not the
+normal host flow. Canonical fields and original lifecycle timestamps survive.
 
-## State schema
-
-The state root is an object without duplicate property names. Required fields:
-
-| Field | Type and meaning |
-| --- | --- |
-| `activity_id` | Nonblank unique UUID string assigned once at creation; never regenerated during renames, revisions, supplements or transcript segmentation. |
-| `lifecycle` | `active` or `closed`, independent of work steps. |
-| `created_at` | Actual initialization UTC timestamp, including for historical-import Activities. Imported source timestamps remain in their source records, not an invented earlier Activity creation time. |
-| `closed_at` | `null` while active; actual UTC closure timestamp when closed. |
-| `outcome` | `null` while active; `completed`, `cancelled` or `stopped` when closed. |
-| `implementation_started_at` | `null` until a real first implementation attempt, then its UTC timestamp. Set before its changes/tests; never clear or replace on retries, revisions or closure. |
-| `steps` | Object with required `clarification`, `analysis`, `planning`, `implementation`, `verification` keys. Each value is `not_started`, `in_progress`, `completed` or `skipped`. |
-
-Use `YYYY-MM-DDTHH:MM:SSZ` timestamps. Initial state is active with null closure,
-outcome and implementation-start fields, all steps `not_started`. Preserve unrelated
-properties. Related Activities may be referenced with stable IDs plus final archive
-paths when available; a path alone is not a stable identity. Imported historical
-material must state its provenance and actual import date, without inventing prior
-performed steps, continuity, completion, or missing source.
-
-Lifecycle does not imply step completion. `completed` closure means the agreed
-objective was met, which can be brainstorming or analysis alone. An implementation
-objective requires its relevant checks and required external completion evidence.
-Completed or in-progress implementation requires a real implementation-start marker.
-Unperformed steps may stay `not_started` or be deliberately `skipped`, with the reason
-in log/outcome. Record failed attempts and blocked/unrun verification honestly.
-A closed Activity requires outcome.md, a closure timestamp and outcome; those fields
-are null for an active Activity. Do not silently reinterpret unsupported records.
-
-## Revisions and evidence
-
-Material revisions retain the exact predecessor in an unused dated path under
-`files/revisions/<artifact>/`, for example `20261028_120000_01.md`. Provenance identifies
-author/source, UTC date, reason, predecessor and dependent impact. Earlier evidence
-and valid relative references remain attributable even when superseded.
-
-A new artifact may first appear after implementation began; its date/source cannot
-imply earlier existence or retroactive approval. Revised dependent step results
-reflect the reassessment, with stale evidence retained and the required repeat work
-identified. The original implementation-start marker stays unchanged.
-
-## Location and sole current record
-
-HAI provides mandatory caller-validated `activities.location`, default
-`.hai_env/activities`. There is no Activity toggle, standalone fallback or global
-chronicle location. Never guess another store or bypass invalid configuration.
-
-Every Activity occupies one direct child folder of its store. At most one has
-`lifecycle: active`, and it MUST use `00000000_000000_active`. All previous records
-are closed. The fixed folder and its own state identify current work; no collection
-state file or external current pointer is created or consulted. An absent store
-or current folder is valid before meaningful new work, not an error to repair.
-
-The consistency contract rejects multiple active records, an active record under
-another name, a closed record at the current path, duplicate IDs, unsupported state,
-or missing/unreadable states that prevent validation. Activity folders are contained
-nonlinked direct-child directories with regular nonlinked canonical artifacts.
-A store-level `state.json` is unsupported, not a pointer. Record discovery and
-creation ordering belong to runtime's owning procedures.
-
-### Safe paths
-
-The workspace is an existing directory; store and record paths resolve inside it,
-including existing ancestors of missing targets and native case/alias behavior.
-Blank/traversal paths, workspace-root stores, escaping links/junctions,
-version-control metadata, reusable framework paths and overlaps with protected
-configuration/other configured content are invalid. Stores and record folders are
-directories; record folders cannot be links/junctions, and canonical artifacts are
-regular nonlinked files. Caller configuration assurance is separate from local
-containment/type validation. A location reference conveys no relocation/overwrite
-permission, and configuration changes do not alter record lifecycle or contents.
-
-## Closure, archival and references
-
-Workflow runs are optional Activity-owned executions stored at
-`<activity>/workflow-runs/<run-id>/`. Requested closure must resolve
-all unfinished runs and uncertain writers before lifecycle changes. Closing never
-starts or silently cancels a workflow. Runs move with their Activity on archival
-and become read-only through its closed lifecycle. References resolve stable
-Activity/run IDs to the current path; exporting the Activity includes its runs.
-See [run ownership](workflow-run_conv.md).
-
-A closed record has `outcome.md`, an actual UTC `closed_at` timestamp and closure
-outcome. Its archive folder is `YYYYMMDD_HHMMSS_short-label` with the same closure
-time. Labels have one to five lowercase ASCII alphanumeric words separated by
-single hyphens. A collision suffix is the first unused `_02`, `_03`, and so on
-with at least two digits, outside the label word count; for example
-`20261028_140000_activity-records_02`.
-
-Closure preserves stable ID, creation time, original implementation start and all
-contents. Persistent historical references identify stable IDs and final archive
-paths rather than the reusable current path; internal references remain relative
-where possible. A consistent completed closure has matching archive/state time,
-no current folder and correct affected references. Rename and file writes are not
-one atomic transaction; partial operations remain explicit results. Execution
-ordering and authorized closure decisions belong to the owner procedure.
-
-## Closed-record supplements and chronicles
-
-A supplement is append-only evidence with author/source, UTC date, reason,
-supporting evidence and the earlier assertion supplemented. Historical assertions
-and the closed lifecycle remain intact. New substantive work has a separate linked
-Activity identity. Delayed synchronization of completed source exchanges can still
-belong to their original closed Activity.
-
-Chronicles have Activity-local segment identity and exact source assignments. Core owns synchronization, transcript and checkpoint writes under the [chronicles convention](chronicles_conv.md) and [transcript convention](transcript-segment_conv.md). The host assigns explicit sources and serializes writers. Enabled recording attempts synchronization and fresh verification before closure. Required-mode or independently mandatory recording blocks closure on missing or pending evidence. Best-effort source interruptions are preserved as explicit unavailable coverage under the chronicles policy; damaged retained artifacts and partial writes remain blockers.
+Closed-record supplements append attributed evidence without reopening or rewriting
+historical claims. New substantive work uses a new linked Activity. No commit,
+publication, migration or Activity closure is inferred from a discussion alone.
 
 ## References
 
-- [Activity concept](../concepts/activity.md): work unit and lifecycle boundaries.
-- [runtime](../tools/runtime/README.md): discovery, work, revisions and closure procedures.
-- [Transcript convention](transcript-segment_conv.md): source, naming and checkpoint compatibility.
+- [Artifact placement](artifact-placement_conv.md).
+- [Conversation](activity-chat_conv.md), [invocations](agent-invocation_conv.md).
+- [Workflow runs](workflow-run_conv.md), [usage](activity-usage_conv.md).
+- [Chronicles](chronicles_conv.md), [runtime commands](../tools/runtime/README.md).

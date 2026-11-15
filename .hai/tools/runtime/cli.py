@@ -4,7 +4,7 @@ import importlib
 import json
 from pathlib import Path
 import sys
-from .storage import SafetyError, checked_path, read_json
+from .storage import SafetyError, checked_path, read_json, _pairs
 
 GROUPS = {'startup':'startup', 'environment':'environment', 'profiles':'environment',
           'configuration':'environment', 'activities':'activities', 'activity':'activities',
@@ -14,7 +14,9 @@ GROUPS = {'startup':'startup', 'environment':'environment', 'profiles':'environm
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--workspace', default=None)
-    parser.add_argument('--request', default=None)
+    requests = parser.add_mutually_exclusive_group()
+    requests.add_argument('--request', default=None)
+    requests.add_argument('--request-stdin', action='store_true', help='Read a strict JSON request from standard input without creating a request file')
     parser.add_argument('--apply', action='store_true')
     parser.add_argument('group', choices=GROUPS)
     parser.add_argument('action', nargs='?', default='')
@@ -30,6 +32,14 @@ def main(argv=None):
         workspace = Path(args.workspace or '.').resolve(strict=True)
         if not workspace.is_dir(): raise SafetyError('Workspace must be a directory')
         request = {}
+        if args.request_stdin:
+            try:
+                source = sys.stdin.buffer.read().decode('utf-8') if hasattr(sys.stdin, 'buffer') else sys.stdin.read()
+                request = json.loads(source, object_pairs_hook=_pairs,
+                                     parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonstandard JSON constant')))
+            except (ValueError, UnicodeError, SafetyError) as exc:
+                raise ValueError('Invalid standard-input request: ' + str(exc)) from exc
+            if not isinstance(request, dict): raise ValueError('Request must be a JSON object')
         if args.request:
             path = Path(args.request)
             if path.is_absolute():

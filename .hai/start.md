@@ -38,11 +38,32 @@ Before optional role work, apply the shared [role execution and delegation polic
 Organize substantive work under a valid current Activity, creating one through the runtime when authorized meaningful work starts and none exists. Do not close an Activity without an instruction permitting closure. Register known Activity-attributed usage sources when available; [usage records](conventions/activity-usage_conv.md) refresh on request and automatically before closure, keeping missing charges explicit. Preserve source provenance and record only actual decisions, work and check results; never invent approvals, artifacts, or successful checks. Use only the work needed for the user's objective, without forcing a sequence of optional extensions.
 
 For an explicit workflow selection or run-control request, follow
+the layout-specific artifact rules below and
 [Execute workflow](procedures/execute-workflow.md). Discover single-file definitions
 with `workflow list`; file presence does not start work. Keep runs within the owning
 Activity and use `<activity>/workflow-runs/<run-id>/` storage. Ordinary tasks
 do not require a workflow or its optional definition manager. Core startup must not
 create workflow scaffolds or blanket-audit the collection merely to report status.
+
+New Activities use [layout 2](conventions/activity_conv.md): README.md is the human
+entry point and final report; state/log/chat/usage and recording recovery metadata
+live in system/. Capture each actual received human message verbatim with
+`activity chat-post`, role human, message_type instruction, before dependent work,
+independently of chronicles. Use observed source_message_id when available for safe
+replay; never invent source IDs or original times. New creation records initial_input
+as a typed message without creating input.md. Capture assistant replies truthfully:
+text written before delivery is prepared; delivered requires observation. No automatic
+host delivery hook is assumed. Existing legacy Activities remain readable; migration
+is explicit, never a startup side effect.
+
+Declare output paths and retention before assignment: results/ for review outputs,
+evidence/ for meaningful checks, history/ for predecessors, work/coordinator/ or
+allocated work/agents/<role>/<uuid>/ for scratch, work/test-work/ for test fixtures.
+Use in-memory requests or --request-stdin rather than accumulating request/response
+JSON files. Consolidate verification; preserve meaningful failure evidence. Before
+closure reconcile writers/effects and use previewed work-cleanup only for declared
+disposable paths after collecting outputs. Never delete allocation manifests or
+unexplained evidence. Runtime owns canonical operational and workflow records.
 
 Recording uses `features.chronicles.mode`: absent means `best_effort`; `required` or an independently mandatory obligation requires verified source readiness. In best-effort mode, the host MUST attempt recording and report interruptions and coverage gaps, but MUST continue ordinary independent work without requesting permission to disable recording. Explicit recording commands report failures honestly; artifact corruption, unsafe paths and partial writes are never waived.
 

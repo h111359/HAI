@@ -27,7 +27,7 @@ class WorkflowTests(unittest.TestCase):
     def call(self, op, **kw):
         return activities.handle(op, self.root, kw, True)
     def test_create_record_revision_close_and_supplement(self):
-        created = self.call('create', initial_input='exact\ninput', provenance=self.prov)
+        created = self.call('create', layout_version=1, initial_input='exact\ninput', provenance=self.prov)
         self.assertTrue(created['ok'], created)
         ident = created['result']['state']['activity_id']; base = self.root / created['result']['path']
         self.assertEqual((base/'input.md').read_text(encoding='utf-8'), 'exact\ninput')
@@ -47,17 +47,17 @@ class WorkflowTests(unittest.TestCase):
         self.assertTrue(supplement['ok'], supplement)
         self.assertIn('additional evidence', (self.root/closed['result']['archive_path']/'log.md').read_text(encoding='utf-8'))
     def test_safety_and_recording(self):
-        c = self.call('create', initial_input='x', provenance=self.prov); ident=c['result']['state']['activity_id']
+        c = self.call('create', layout_version=1, initial_input='x', provenance=self.prov); ident=c['result']['state']['activity_id']
         r = self.call('record', activity_id=ident, steps={'implementation':'in_progress'}, artifacts=[], log='x', provenance=self.prov)
         self.assertFalse(r['ok'])
         r = self.call('close', activity_id=ident, outcome='completed', archive_label='x', outcome_text='x', recording={'status':'pending','details':'x','mandatory':True}, provenance=self.prov)
         self.assertFalse(r['ok'])
-        self.assertFalse(self.call('create',initial_input='x',provenance=self.prov)['ok'])
+        self.assertFalse(self.call('create',layout_version=1, initial_input='x',provenance=self.prov)['ok'])
         r=recording.handle('schedule',self.root,{'occurrence_ids':['1','2','3','4','5'], 'covered_ids':['1'], 'last_dispatched_count':1},False)
         self.assertFalse(r['result']['dispatch_due']); self.assertEqual(r['result']['gaps'],['2','3','4','5'])
         self.assertFalse(host.handle('invoke',self.root,{},False)['ok'])
     def test_verified_closure_checks_actual_file_bytes(self):
-        c = self.call('create',initial_input='x',provenance=self.prov); ident=c['result']['state']['activity_id']; base=c['result']['path']
+        c = self.call('create',layout_version=1, initial_input='x',provenance=self.prov); ident=c['result']['state']['activity_id']; base=c['result']['path']
         (self.root/'source.txt').write_text('source', encoding='utf-8')
         (self.root/base/'segment.txt').write_text('artifact', encoding='utf-8')
         digest = lambda text: hashlib.sha256(text.encode()).hexdigest()
@@ -76,10 +76,10 @@ class WorkflowTests(unittest.TestCase):
 
     def test_guard_and_partial_write(self):
         (self.root/'.hai_env/config/agent_instructions.md').unlink()
-        r = self.call('create', initial_input='x', provenance=self.prov)
+        r = self.call('create', layout_version=1, initial_input='x', provenance=self.prov)
         self.assertFalse(r['ok']); self.assertFalse((self.root/'.hai_env/activities/00000000_000000_active').exists())
         (self.root/'.hai_env/config/agent_instructions.md').write_text('', encoding='utf-8')
-        c = self.call('create', initial_input='x', provenance=self.prov); ident = c['result']['state']['activity_id']
+        c = self.call('create', layout_version=1, initial_input='x', provenance=self.prov); ident = c['result']['state']['activity_id']
         original = activities.write_bytes
         def fail_log(root, path, data, expected=None):
             if path.endswith('/log.md'): raise OSError('simulated write failure')

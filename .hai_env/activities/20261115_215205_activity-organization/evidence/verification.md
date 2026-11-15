@@ -1,0 +1,37 @@
+# Verification
+
+Implemented layout 2 with README entry/final report, system-owned operational records, persistent typed conversation, declared results/evidence paths, history, named-role agent work, in-memory/UTF-8 standard-input requests and explicit disposable-work cleanup.
+
+## Checks
+
+| Check | Result |
+| --- | --- |
+| Broad runtime | 251 tests successful, including 10 platform skips. |
+| Startup | 66 successful, including 8 platform skips. |
+| Activities | 16 passed. |
+| Chronicles | 17 successful, including 1 platform skip. |
+| Configuration | 13 successful, including 3 platform skips. |
+| Agent definitions | 75 successful, including 6 platform skips. |
+| Workflow parser | 23 successful, including 1 platform skip. |
+| Final focused layout/conversation/migration/services | 28 passed, no skips. |
+| Independent review | 79 combined checks (2 platform skips), followed by final targeted review; no remaining material finding. |
+
+Platform: Windows/Python 3.14.7. Broad checks preceded final selected-archive, UTF-8 and recovery amendments; those were covered by the final focused tests and independent probes. Other OSes and large-run performance remain unverified.
+
+## Defects found and resolved
+
+Independent review exposed resolved artifact aliases causing partial writes, continuation after a failed migration, and migration metadata appearing during discovery. Each now rejects safely before dependent writes. Layout2 artifacts retain exact UTF-8 content, including valid JSON; provenance is recorded in the log instead of appending a Markdown footer. Detailed essential failed probes and their resolution are retained in reviews/activity-layout.md and reviews/failure-probes.json.
+
+## Actual migration
+
+The current Activity and specifically selected historical workflow Activity 1b440d51-819b-4299-862b-0182f0f4fca5 were migrated through preview/apply. Other archives were not changed. Current mappings and before/after evidence are in migrations/activity-layout.json; the historical Activity has its own corresponding report.
+
+The historical closure fields and archive name are unchanged; its exact original outcome is preserved and included in README. All workflow-run bytes remain unchanged and the pilot still reads finished/feasible. Retained chronicle metadata and usage remain readable. All 148 previously tracked archive files have retained destinations, with none excluded by current ignore rules. Historical agent work is durable history, not disposable work. Original input artifacts are explicitly imported as legacy context, not relabeled fabricated human messages.
+
+Review evidence was collected before writers ended and their current invocation paths were handed off after relocation. Root files and all original bytes were preserved according to each migration map; no blanket JSON deletion occurred.
+
+## Operational boundaries
+
+Human capture is an explicit host protocol independent of chronicles, not an automatic UI interceptor. Assistant text stored before transmission is marked prepared; delivered requires actual observation. Source message IDs/times are used only when observed. Historical chat is not reconstructed or claimed complete. Optional chronicles retain their independent source-compatibility/binding gaps. Work cleanup requires ended writers, retained evidence and exact selected paths; it does not silently delete uncertain material.
+
+Following verification, the human explicitly requested Activity closure and a local commit. Publication was not requested.

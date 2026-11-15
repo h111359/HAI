@@ -234,6 +234,11 @@ logs/
 
 # Disposable Activity-local test workspaces (results are summarized in Activity records).
 .hai_env/activities/*/files/test-work/
+# Layout-2 disposable work; meaningful outputs belong in results/evidence.
+**/work/test-work/
+**/work/coordinator/
+**/work/agents/*/*/*
+!**/work/agents/*/*/invocation.json
 
 # Runtime-owned recoverable package staging and backups are retained locally.
 .hai_env/agents/.hai-stage-*/

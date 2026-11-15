@@ -1,0 +1,509 @@
+{
+  "activity_layout_migration_format": 1,
+  "activity_id": "2eae43f2-0dcc-49f8-8736-c67043f8ea05",
+  "recorded_at": "2026-11-15T21:36:59Z",
+  "provenance": {
+    "source": "user: Apply the proposed changes; accepted organization proposal includes migration of the inspected archive",
+    "reason": "apply verified layout2 and preserve all legacy evidence"
+  },
+  "status": "completed",
+  "mapping": [
+    {
+      "source": "chat.jsonl",
+      "destination": "system/chat.jsonl",
+      "artifact": {
+        "kind": "file",
+        "sha256": "6ffb1ba91411ee09729f64b50a164ab9a33fb4ca9c1cc125cb42e18f5ce6e321",
+        "bytes": 7290
+      }
+    },
+    {
+      "source": "files/agent-invocations/083d9f2f-563f-4ee8-b751-2a1dd9732479",
+      "destination": "work/agents/software-developer/083d9f2f-563f-4ee8-b751-2a1dd9732479",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "461d8c899ca743b32a65f7de80491b68be23dbdd65b8bf331292f5a25d1db34e",
+        "manifest": [
+          {
+            "path": "developer-checks.json",
+            "kind": "file",
+            "sha256": "59033edd3d78b587708700f6d2f3a1c682f98cbdc76efc91c3af86d5315ce19c",
+            "bytes": 829
+          },
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "ac50148a316cccece1f0fac352bb3f3ae6f3e8f38d9fd6bb449a07aa942e4cbd",
+            "bytes": 404
+          },
+          {
+            "path": "legacy-service-checks.json",
+            "kind": "file",
+            "sha256": "99059afc50ce6c26424bd9179c6a1810e97213431d4c3ac325c3e143e78b750e",
+            "bytes": 239
+          },
+          {
+            "path": "test-work",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/agent-invocations/463cb39a-2e09-4c01-a486-6c20cd095c87",
+      "destination": "work/agents/quality-assurance/463cb39a-2e09-4c01-a486-6c20cd095c87",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "59e9b9f367b001f1489599641993fb51fbd246e8cc33ef69f07aa68410f7ab5c",
+        "manifest": [
+          {
+            "path": "invocation.json",
+            "kind": "file",
+            "sha256": "336868b5e677d8d6cb882738d8557f45ce1d626085460a25675f8a5be02c4870",
+            "bytes": 403
+          },
+          {
+            "path": "migration-report-appearance-failure.txt",
+            "kind": "file",
+            "sha256": "93f937518fc1e6c9663ef526cc3921447f343ebeaa823855d7052aa49f1518bc",
+            "bytes": 96
+          },
+          {
+            "path": "partial-migration-continuation-failure.json",
+            "kind": "file",
+            "sha256": "0525f104084fff33a5f3380005ce3cd0b09b49c90809a38aa0956659966b0196",
+            "bytes": 967
+          },
+          {
+            "path": "resolved-artifact-alias-failure.json",
+            "kind": "file",
+            "sha256": "ad5078e9feba12bf5e926b0bfebaa228c4ca374b26421484b7274cc864d7a863",
+            "bytes": 1504
+          },
+          {
+            "path": "review.md",
+            "kind": "file",
+            "sha256": "fd579df77ecba4c63b7d359f970d19203d775ea63a5fd2ce9ec1133fca6eb694",
+            "bytes": 7040
+          },
+          {
+            "path": "test-work",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "files/test-work",
+      "destination": "work/test-work",
+      "artifact": {
+        "kind": "directory",
+        "sha256": "165600f93ea3fc3acf6fe2202f0ecef48de16a6589ea149228097e56d9dafefc",
+        "manifest": [
+          {
+            "path": "activity-layout-broad",
+            "kind": "directory"
+          },
+          {
+            "path": "activity-layout-broad/tmp",
+            "kind": "directory"
+          },
+          {
+            "path": "activity-layout-final-check",
+            "kind": "directory"
+          },
+          {
+            "path": "activity-layout-final-targeted",
+            "kind": "directory"
+          },
+          {
+            "path": "activity-layout-first",
+            "kind": "directory"
+          },
+          {
+            "path": "activity-layout-verified",
+            "kind": "directory"
+          }
+        ]
+      }
+    },
+    {
+      "source": "input.md",
+      "destination": "history/migrations/20261115_213659/input.md",
+      "artifact": {
+        "kind": "file",
+        "sha256": "abf258fd2fae448506ab12d9275aa171be011e650ae1ac01c380ed82a6b33443",
+        "bytes": 17
+      }
+    },
+    {
+      "source": "log.md",
+      "destination": "system/log.md",
+      "artifact": {
+        "kind": "file",
+        "sha256": "b87a5b08ce1fecdb634ed931690ce83db9191566506b216e2351e52303b49b49",
+        "bytes": 2137
+      }
+    },
+    {
+      "source": "state.json",
+      "destination": "history/migrations/20261115_213659/state.json",
+      "artifact": {
+        "kind": "file",
+        "sha256": "b97798015ea5b0261848305992f8c3e3e76c3a8a6334e000945048671b9aa88f",
+        "bytes": 401
+      }
+    }
+  ],
+  "before_manifest": [
+    {
+      "path": "chat.jsonl",
+      "kind": "file",
+      "sha256": "6ffb1ba91411ee09729f64b50a164ab9a33fb4ca9c1cc125cb42e18f5ce6e321",
+      "bytes": 7290
+    },
+    {
+      "path": "evidence",
+      "kind": "directory"
+    },
+    {
+      "path": "evidence/reviews",
+      "kind": "directory"
+    },
+    {
+      "path": "evidence/reviews/activity-layout.md",
+      "kind": "file",
+      "sha256": "fd579df77ecba4c63b7d359f970d19203d775ea63a5fd2ce9ec1133fca6eb694",
+      "bytes": 7040
+    },
+    {
+      "path": "evidence/reviews/failure-probes.json",
+      "kind": "file",
+      "sha256": "f2acf96e761d5cfbcbea3f1d27937cdd7ac3f99633893d63e45be00602de538c",
+      "bytes": 3708
+    },
+    {
+      "path": "files",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/083d9f2f-563f-4ee8-b751-2a1dd9732479",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/083d9f2f-563f-4ee8-b751-2a1dd9732479/developer-checks.json",
+      "kind": "file",
+      "sha256": "59033edd3d78b587708700f6d2f3a1c682f98cbdc76efc91c3af86d5315ce19c",
+      "bytes": 829
+    },
+    {
+      "path": "files/agent-invocations/083d9f2f-563f-4ee8-b751-2a1dd9732479/invocation.json",
+      "kind": "file",
+      "sha256": "ac50148a316cccece1f0fac352bb3f3ae6f3e8f38d9fd6bb449a07aa942e4cbd",
+      "bytes": 404
+    },
+    {
+      "path": "files/agent-invocations/083d9f2f-563f-4ee8-b751-2a1dd9732479/legacy-service-checks.json",
+      "kind": "file",
+      "sha256": "99059afc50ce6c26424bd9179c6a1810e97213431d4c3ac325c3e143e78b750e",
+      "bytes": 239
+    },
+    {
+      "path": "files/agent-invocations/083d9f2f-563f-4ee8-b751-2a1dd9732479/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/463cb39a-2e09-4c01-a486-6c20cd095c87",
+      "kind": "directory"
+    },
+    {
+      "path": "files/agent-invocations/463cb39a-2e09-4c01-a486-6c20cd095c87/invocation.json",
+      "kind": "file",
+      "sha256": "336868b5e677d8d6cb882738d8557f45ce1d626085460a25675f8a5be02c4870",
+      "bytes": 403
+    },
+    {
+      "path": "files/agent-invocations/463cb39a-2e09-4c01-a486-6c20cd095c87/migration-report-appearance-failure.txt",
+      "kind": "file",
+      "sha256": "93f937518fc1e6c9663ef526cc3921447f343ebeaa823855d7052aa49f1518bc",
+      "bytes": 96
+    },
+    {
+      "path": "files/agent-invocations/463cb39a-2e09-4c01-a486-6c20cd095c87/partial-migration-continuation-failure.json",
+      "kind": "file",
+      "sha256": "0525f104084fff33a5f3380005ce3cd0b09b49c90809a38aa0956659966b0196",
+      "bytes": 967
+    },
+    {
+      "path": "files/agent-invocations/463cb39a-2e09-4c01-a486-6c20cd095c87/resolved-artifact-alias-failure.json",
+      "kind": "file",
+      "sha256": "ad5078e9feba12bf5e926b0bfebaa228c4ca374b26421484b7274cc864d7a863",
+      "bytes": 1504
+    },
+    {
+      "path": "files/agent-invocations/463cb39a-2e09-4c01-a486-6c20cd095c87/review.md",
+      "kind": "file",
+      "sha256": "fd579df77ecba4c63b7d359f970d19203d775ea63a5fd2ce9ec1133fca6eb694",
+      "bytes": 7040
+    },
+    {
+      "path": "files/agent-invocations/463cb39a-2e09-4c01-a486-6c20cd095c87/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/activity-layout-broad",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/activity-layout-broad/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/activity-layout-final-check",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/activity-layout-final-targeted",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/activity-layout-first",
+      "kind": "directory"
+    },
+    {
+      "path": "files/test-work/activity-layout-verified",
+      "kind": "directory"
+    },
+    {
+      "path": "input.md",
+      "kind": "file",
+      "sha256": "abf258fd2fae448506ab12d9275aa171be011e650ae1ac01c380ed82a6b33443",
+      "bytes": 17
+    },
+    {
+      "path": "log.md",
+      "kind": "file",
+      "sha256": "b87a5b08ce1fecdb634ed931690ce83db9191566506b216e2351e52303b49b49",
+      "bytes": 2137
+    },
+    {
+      "path": "state.json",
+      "kind": "file",
+      "sha256": "b97798015ea5b0261848305992f8c3e3e76c3a8a6334e000945048671b9aa88f",
+      "bytes": 401
+    }
+  ],
+  "after_manifest_excludes": [
+    "evidence/migrations/activity-layout.json"
+  ],
+  "container_relocation": {
+    "source": "files",
+    "destination": "history/legacy-material/empty-files-containers"
+  },
+  "after_manifest": [
+    {
+      "path": "README.md",
+      "kind": "file",
+      "sha256": "4f6e865f522b78f41a9e476a8e87593031440ea45151044cd21b2f4b3d3e072a",
+      "bytes": 486
+    },
+    {
+      "path": "evidence",
+      "kind": "directory"
+    },
+    {
+      "path": "evidence/migrations",
+      "kind": "directory"
+    },
+    {
+      "path": "evidence/reviews",
+      "kind": "directory"
+    },
+    {
+      "path": "evidence/reviews/activity-layout.md",
+      "kind": "file",
+      "sha256": "fd579df77ecba4c63b7d359f970d19203d775ea63a5fd2ce9ec1133fca6eb694",
+      "bytes": 7040
+    },
+    {
+      "path": "evidence/reviews/failure-probes.json",
+      "kind": "file",
+      "sha256": "f2acf96e761d5cfbcbea3f1d27937cdd7ac3f99633893d63e45be00602de538c",
+      "bytes": 3708
+    },
+    {
+      "path": "history",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/empty-files-containers",
+      "kind": "directory"
+    },
+    {
+      "path": "history/legacy-material/empty-files-containers/agent-invocations",
+      "kind": "directory"
+    },
+    {
+      "path": "history/migrations",
+      "kind": "directory"
+    },
+    {
+      "path": "history/migrations/20261115_213659",
+      "kind": "directory"
+    },
+    {
+      "path": "history/migrations/20261115_213659/input.md",
+      "kind": "file",
+      "sha256": "abf258fd2fae448506ab12d9275aa171be011e650ae1ac01c380ed82a6b33443",
+      "bytes": 17
+    },
+    {
+      "path": "history/migrations/20261115_213659/state.json",
+      "kind": "file",
+      "sha256": "b97798015ea5b0261848305992f8c3e3e76c3a8a6334e000945048671b9aa88f",
+      "bytes": 401
+    },
+    {
+      "path": "system",
+      "kind": "directory"
+    },
+    {
+      "path": "system/chat.jsonl",
+      "kind": "file",
+      "sha256": "58ded819bd9f44565bcb8c778ffdbeeb6f199ccdf218c39aa93951ae29645508",
+      "bytes": 7802
+    },
+    {
+      "path": "system/log.md",
+      "kind": "file",
+      "sha256": "b87a5b08ce1fecdb634ed931690ce83db9191566506b216e2351e52303b49b49",
+      "bytes": 2137
+    },
+    {
+      "path": "system/state.json",
+      "kind": "file",
+      "sha256": "3f521856927e97319ed847ab04b508ed8f3eca21830400d0a85db038cb285651",
+      "bytes": 497
+    },
+    {
+      "path": "work",
+      "kind": "directory"
+    },
+    {
+      "path": "work/agents",
+      "kind": "directory"
+    },
+    {
+      "path": "work/agents/quality-assurance",
+      "kind": "directory"
+    },
+    {
+      "path": "work/agents/quality-assurance/463cb39a-2e09-4c01-a486-6c20cd095c87",
+      "kind": "directory"
+    },
+    {
+      "path": "work/agents/quality-assurance/463cb39a-2e09-4c01-a486-6c20cd095c87/invocation.json",
+      "kind": "file",
+      "sha256": "336868b5e677d8d6cb882738d8557f45ce1d626085460a25675f8a5be02c4870",
+      "bytes": 403
+    },
+    {
+      "path": "work/agents/quality-assurance/463cb39a-2e09-4c01-a486-6c20cd095c87/migration-report-appearance-failure.txt",
+      "kind": "file",
+      "sha256": "93f937518fc1e6c9663ef526cc3921447f343ebeaa823855d7052aa49f1518bc",
+      "bytes": 96
+    },
+    {
+      "path": "work/agents/quality-assurance/463cb39a-2e09-4c01-a486-6c20cd095c87/partial-migration-continuation-failure.json",
+      "kind": "file",
+      "sha256": "0525f104084fff33a5f3380005ce3cd0b09b49c90809a38aa0956659966b0196",
+      "bytes": 967
+    },
+    {
+      "path": "work/agents/quality-assurance/463cb39a-2e09-4c01-a486-6c20cd095c87/resolved-artifact-alias-failure.json",
+      "kind": "file",
+      "sha256": "ad5078e9feba12bf5e926b0bfebaa228c4ca374b26421484b7274cc864d7a863",
+      "bytes": 1504
+    },
+    {
+      "path": "work/agents/quality-assurance/463cb39a-2e09-4c01-a486-6c20cd095c87/review.md",
+      "kind": "file",
+      "sha256": "fd579df77ecba4c63b7d359f970d19203d775ea63a5fd2ce9ec1133fca6eb694",
+      "bytes": 7040
+    },
+    {
+      "path": "work/agents/quality-assurance/463cb39a-2e09-4c01-a486-6c20cd095c87/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "work/agents/software-developer",
+      "kind": "directory"
+    },
+    {
+      "path": "work/agents/software-developer/083d9f2f-563f-4ee8-b751-2a1dd9732479",
+      "kind": "directory"
+    },
+    {
+      "path": "work/agents/software-developer/083d9f2f-563f-4ee8-b751-2a1dd9732479/developer-checks.json",
+      "kind": "file",
+      "sha256": "59033edd3d78b587708700f6d2f3a1c682f98cbdc76efc91c3af86d5315ce19c",
+      "bytes": 829
+    },
+    {
+      "path": "work/agents/software-developer/083d9f2f-563f-4ee8-b751-2a1dd9732479/invocation.json",
+      "kind": "file",
+      "sha256": "ac50148a316cccece1f0fac352bb3f3ae6f3e8f38d9fd6bb449a07aa942e4cbd",
+      "bytes": 404
+    },
+    {
+      "path": "work/agents/software-developer/083d9f2f-563f-4ee8-b751-2a1dd9732479/legacy-service-checks.json",
+      "kind": "file",
+      "sha256": "99059afc50ce6c26424bd9179c6a1810e97213431d4c3ac325c3e143e78b750e",
+      "bytes": 239
+    },
+    {
+      "path": "work/agents/software-developer/083d9f2f-563f-4ee8-b751-2a1dd9732479/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/activity-layout-broad",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/activity-layout-broad/tmp",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/activity-layout-final-check",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/activity-layout-final-targeted",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/activity-layout-first",
+      "kind": "directory"
+    },
+    {
+      "path": "work/test-work/activity-layout-verified",
+      "kind": "directory"
+    }
+  ]
+}

@@ -38,7 +38,7 @@ class SourceDiscoveryTests(unittest.TestCase):
                       'features': {'chronicles': {'enabled': True, 'record_every_prompts': 5}}}
         self.save_state()
         self.prov = {'source': 'fixture explicit enabled-current-session policy', 'reason': 'test registration'}
-        created = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        created = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         self.assertTrue(created['ok'], created)
         self.ident = created['result']['state']['activity_id']; self.base = self.root / created['result']['path']
 

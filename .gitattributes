@@ -1,7 +1,16 @@
 # Chronicle and usage hashes cover exact bytes; checkout must not translate them.
+# Activity migrations also retain exact original documents and metadata bytes.
+.hai_env/activities/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 .hai_env/activities/**/chronicles/** -text
 .hai_env/activities/**/usage.md -text
 .hai_env/activities/**/usage.json -text
 # Workflow snapshots, events and artifact manifests also require exact bytes.
 # Match configured Activity stores as well as the default environment location.
 **/workflow-runs/** -text
+# Layout-2 runtime records and retained predecessors/evidence are byte-preserving.
+**/system/chat.jsonl -text
+**/system/chronicles/** -text
+**/system/usage.md -text
+**/system/usage.json -text
+**/history/** -text
+**/evidence/** -text

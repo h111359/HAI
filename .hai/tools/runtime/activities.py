@@ -6,6 +6,8 @@ import re
 import os
 import sys
 import uuid
+from activity_layout import artifact, version as layout_version, revision_root
+from .workflow_artifacts import mkdirs
 from .storage import SafetyError, checked_path, fingerprint, read_json, write_bytes, write_json, lock
 
 _TOOLS = Path(__file__).resolve().parents[1]
@@ -15,7 +17,7 @@ from discovery import discover, _validate_state, STEPS, STEP_VALUES
 
 CURRENT = '00000000_000000_active'
 ARTIFACTS = {'definition.md', 'analysis.md', 'decisions.md', 'plan.md', 'requirements.md'}
-MUTATIONS = ('create', 'record', 'close', 'supplement', 'chat-post', 'invocation-allocate', 'usage-update')
+MUTATIONS = ('create', 'record', 'close', 'supplement', 'chat-post', 'invocation-allocate', 'usage-update', 'migrate-layout', 'work-cleanup')
 
 def now():
     return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -104,9 +106,11 @@ def handle(operation, workspace, request, apply):
     root = Path(workspace).resolve(strict=True)
     changed = []
     try:
-        fields = {'discover':set(), 'show':{'activity_id'}, 'create':{'initial_input','provenance'}, 'record':{'activity_id','steps','implementation_start','artifacts','input_append','log','provenance'}, 'close':{'activity_id','outcome','archive_label','outcome_text','recording','recording_requirement','recording_proof','recording_paths','provenance'}, 'supplement':{'activity_id','text','provenance'}}
+        fields = {'discover':set(), 'show':{'activity_id'}, 'create':{'initial_input','summary','layout_version','provenance'}, 'record':{'activity_id','steps','implementation_start','artifacts','input_append','log','provenance'}, 'close':{'activity_id','outcome','archive_label','outcome_text','recording','recording_requirement','recording_proof','recording_paths','provenance'}, 'supplement':{'activity_id','text','provenance'}}
         fields['chat-read'] = {'activity_id', 'after_sequence', 'limit'}
-        fields['chat-post'] = {'activity_id', 'author', 'text', 'provenance'}
+        fields['chat-post'] = {'activity_id', 'author', 'text', 'role', 'message_type', 'source_message_id', 'delivery_status', 'provenance'}
+        fields['migrate-layout'] = {'activity_id', 'summary', 'allow_closed', 'provenance'}
+        fields['work-cleanup'] = {'activity_id', 'paths', 'writers_ended', 'evidence_retained', 'provenance'}
         fields['invocation-allocate'] = {'activity_id', 'agent', 'provenance'}
         fields['usage-read'] = {'activity_id'}
         fields['usage-update'] = {'activity_id', 'sources', 'pricing', 'reported_spend', 'provenance'}
@@ -125,7 +129,7 @@ def handle(operation, workspace, request, apply):
                 ident = required_text(request.get('activity_id'), 'activity_id')
                 matches = []
                 for child in checked_path(root, location).iterdir():
-                    state = read_json(checked_path(root, f'{location}/{child.name}/state.json', allow_missing=False))
+                    state = read_json(checked_path(root, artifact(root, child.relative_to(root).as_posix(), 'state.json'), allow_missing=False))
                     if state.get('activity_id') == ident: matches.append((child, state))
                 if len(matches) != 1: raise SafetyError('Activity ID not uniquely found')
                 child, state = matches[0]
@@ -138,41 +142,85 @@ def handle(operation, workspace, request, apply):
                 return envelope(operation, result={'path': child.relative_to(root).as_posix(), 'state': state})
             prov = provenance(request)
             stamp = now()
+            if op == 'migrate-layout':
+                allow_closed = request.get('allow_closed', False)
+                if type(allow_closed) is not bool: raise ValueError('allow_closed must be Boolean')
+                selected = required_text(request.get('activity_id'), 'activity_id')
+                if allow_closed and selected != d.get('activity_id'):
+                    if d['status'] != 'current':
+                        raise SafetyError('Closed-record migration needs an active owning work Activity')
+                    matches = []
+                    for child in checked_path(root, location).iterdir():
+                        state = read_json(checked_path(root, artifact(root, child.relative_to(root).as_posix(), 'state.json'), allow_missing=False))
+                        if state.get('activity_id') == selected and state.get('lifecycle') == 'closed': matches.append(child)
+                    if len(matches) != 1: raise SafetyError('Closed Activity not uniquely selected')
+                    from .activity_migration import migrate
+                    result, created = migrate(root, matches[0].relative_to(root).as_posix(), selected,
+                        request['provenance'], stamp, apply, request.get('summary'), allow_closed=True)
+                    return envelope(operation, 'ok' if apply else 'planned', result, created)
             if op == 'create':
                 initial = request.get('initial_input')
                 if not isinstance(initial, str): raise ValueError('initial_input must be text')
+                layout = request.get('layout_version', 2)
+                if type(layout) is not int or layout not in (1, 2):
+                    raise ValueError('layout_version must be 1 or 2')
+                summary = request.get('summary')
+                if summary is not None: required_text(summary, 'summary')
                 if d['status'] != 'absent': raise SafetyError('A current Activity already exists')
                 base = f'{location}/{CURRENT}'
                 state = {'activity_id': str(uuid.uuid4()), 'lifecycle': 'active', 'created_at': stamp,
                          'closed_at': None, 'outcome': None, 'implementation_started_at': None,
                          'steps': {k: 'not_started' for k in sorted(STEPS)}}
-                paths = [base + '/' + n for n in ('state.json', 'input.md', 'log.md')]
+                message = None
+                if layout == 2:
+                    from . import chat, activity_documents
+                    if initial.strip(): message = chat.initial_message(state['activity_id'], initial, request['provenance'], stamp)
+                    state.update(activity_layout_version=2, initial_message_id=message['message_id'] if message else None)
+                    paths = [base + '/system/state.json', base + '/README.md', base + '/system/log.md', base + '/system/chat.jsonl']
+                    payloads = [None, activity_documents.initial(state, summary),
+                                f'# Activity log\n\n- {stamp} Created Activity ({prov}).\n'.encode(),
+                                chat.encode(message) if message else b'']
+                else:
+                    paths = [base + '/' + n for n in ('state.json', 'input.md', 'log.md')]
+                    payloads = [None, initial.encode(), f'# Activity log\n\n- {stamp} Created Activity ({prov}).\n'.encode()]
                 if not apply: return envelope(operation, 'planned', {'state': state, 'paths': paths})
                 store = checked_path(root, location)
                 if not store.exists():
                     store.mkdir(parents=True); changed.append(location)
                 checked_path(root, base).mkdir(); changed.append(base)
-                for path, data in [(paths[0], None), (paths[1], initial.encode()), (paths[2], f'# Activity log\n\n- {stamp} — Created Activity ({prov}).\n'.encode())]:
+                if layout == 2: mkdirs(root, base + '/system', changed)
+                for path, data in zip(paths, payloads):
                     if data is None: write_json(root, path, state)
                     else: write_bytes(root, path, data)
                     changed.append(path)
+                if layout == 2:
+                    readme = checked_path(root, base + '/README.md', allow_missing=False)
+                    write_bytes(root, base + '/README.md', activity_documents.navigation(root, base, readme.read_bytes()), fingerprint(readme))
                 if discover(root,location)['activity_id'] != state['activity_id']: raise SafetyError('Created Activity readback failed')
                 return envelope(operation, result={'state': state, 'path': base}, changed=changed)
             ident = required_text(request.get('activity_id'), 'activity_id')
             if op == 'supplement':
                 found = []
                 for child in checked_path(root, location).iterdir():
-                    s = read_json(checked_path(root, f'{location}/{child.name}/state.json', allow_missing=False))
+                    s = read_json(checked_path(root, artifact(root, child.relative_to(root).as_posix(), 'state.json'), allow_missing=False))
                     if s.get('activity_id') == ident and s.get('lifecycle') == 'closed': found.append(child)
                 if len(found) != 1: raise SafetyError('Closed Activity ID not uniquely found')
                 text = required_text(request.get('text'), 'text')
-                path = (found[0] / 'log.md').relative_to(root).as_posix(); target = checked_path(root, path, allow_missing=False); old = fingerprint(target)
+                path = artifact(root, found[0].relative_to(root).as_posix(), 'log.md'); target = checked_path(root, path, allow_missing=False); old = fingerprint(target)
                 data = append_bytes(target.read_bytes(), f'\n- {stamp} — Supplement ({prov}): {text}')
                 if apply: write_bytes(root, path, data, old); changed.append(path)
                 return envelope(operation, 'ok' if apply else 'planned', {'path': path}, changed)
             if d['status'] != 'current' or d['activity_id'] != ident: raise SafetyError('Selected ID is not the sole current Activity')
-            base = d['path']; state_path = base + '/state.json'; state_target = checked_path(root, state_path, allow_missing=False)
+            base = d['path']; state_path = artifact(root, base, 'state.json'); state_target = checked_path(root, state_path, allow_missing=False)
             state_fp = fingerprint(state_target); state = read_json(state_target); _validate_state(state)
+            if op == 'migrate-layout':
+                from .activity_migration import migrate
+                result, created = migrate(root, base, ident, request['provenance'], stamp, apply, request.get('summary'), allow_closed=request.get('allow_closed', False))
+                return envelope(operation, 'ok' if apply else 'planned', result, created)
+            if op == 'work-cleanup':
+                from .activity_work import cleanup
+                result, created = cleanup(root, base, request, apply)
+                return envelope(operation, 'ok' if apply else 'planned', result, created)
             if op == 'usage-update':
                 from . import usage
                 result, created = usage.update(root, base, ident, request, stamp, apply, state_fp)
@@ -189,8 +237,12 @@ def handle(operation, workspace, request, apply):
                 relative, message, raw, expected = chat.prepare(root, base, ident, request, stamp)
                 if not apply:
                     return envelope(operation, 'planned', {'path': relative, 'message': message})
-                chat.append(root, relative, ident, message, raw, expected)
-                return envelope(operation, result={'path': relative, 'message': message}, changed=[relative])
+                appended = chat.append(root, relative, ident, message, raw, expected)
+                posted_changes = [] if appended is False else [relative]
+                if layout_version(root, base) == 2 and state.get('initial_message_id') is None and message.get('role') == 'human':
+                    state['initial_message_id'] = message['message_id']
+                    write_json(root, state_path, state, state_fp); posted_changes.append(state_path)
+                return envelope(operation, result={'path': relative, 'message': message, 'replayed': appended is False}, changed=posted_changes)
             if op == 'record':
                 steps = request.get('steps', {})
                 if not isinstance(steps, dict) or any(k not in STEPS or v not in STEP_VALUES for k,v in steps.items()): raise ValueError('invalid steps')
@@ -203,29 +255,49 @@ def handle(operation, workspace, request, apply):
                 staged = []
                 seen = set()
                 for item in artifacts:
-                    if not isinstance(item, dict) or item.get('name') not in ARTIFACTS or item['name'] in seen: raise ValueError('invalid or duplicate artifact')
-                    name = item['name']; seen.add(name); text = required_text(item.get('text'), 'artifact.text'); reason = required_text(item.get('reason'), 'artifact.reason')
-                    path = base + '/' + name; target = checked_path(root, path); fp = fingerprint(target)
+                    if not isinstance(item, dict): raise ValueError('invalid artifact')
+                    candidate = item.get('name')
+                    if layout_version(root, base) == 2:
+                        allowed = isinstance(candidate, str) and (candidate == 'README.md' or candidate in ARTIFACTS or
+                                  re.fullmatch(r'(?:results|evidence)/(?:[a-z0-9][a-z0-9._-]*/)*[a-z0-9][a-z0-9._-]*', candidate))
+                    else: allowed = candidate in ARTIFACTS
+                    if not allowed: raise ValueError('invalid artifact')
+                    name = item['name']; text = required_text(item.get('text'), 'artifact.text'); reason = required_text(item.get('reason'), 'artifact.reason')
+                    path = artifact(root, base, name); target = checked_path(root, path); fp = fingerprint(target)
+                    key = path.casefold()
+                    if any(key == old or key.startswith(old + '/') or old.startswith(key + '/') for old in seen):
+                        raise ValueError('Artifact destinations overlap or alias')
+                    seen.add(key)
                     if fp:
-                        revdir = base + '/files/revisions/' + name[:-3]; checked_path(root, revdir)
+                        revdir = revision_root(root, base, name[:-3]); checked_path(root, revdir)
                         seq = 1
                         while checked_path(root, f'{revdir}/{stamp.replace("-", "").replace(":", "").replace("T", "_").removesuffix("Z")}_{seq:02}.md').exists(): seq += 1
                         rev = f'{revdir}/{stamp.replace("-", "").replace(":", "").replace("T", "_").removesuffix("Z")}_{seq:02}.md'
                         staged.append((rev, target.read_bytes(), None, True))
-                    staged.append((path, (text + f'\n\nRevision provenance: {prov}; reason: {reason}; recorded {stamp}.\n').encode(), fp, False))
+                    payload = text.encode('utf-8') if layout_version(root, base) == 2 else (text + f'\n\nRevision provenance: {prov}; reason: {reason}; recorded {stamp}.\n').encode()
+                    staged.append((path, payload, fp, False))
                 input_append = request.get('input_append')
                 if input_append is not None:
                     if not isinstance(input_append, str): raise ValueError('input_append must be text')
+                    if layout_version(root, base) == 2:
+                        raise ValueError('Use typed chat-post for original human messages; input_append is legacy-only')
                     ipath = base + '/input.md'; it = checked_path(root, ipath, allow_missing=False); ifp = fingerprint(it)
                     staged.append((ipath, it.read_bytes() + input_append.encode('utf-8'), ifp, False))
-                log = required_text(request.get('log'), 'log'); logpath = base + '/log.md'; lt = checked_path(root, logpath, allow_missing=False); lfp = fingerprint(lt)
-                staged.append((logpath, append_bytes(lt.read_bytes(), f'\n- {stamp} — {log} ({prov}).'), lfp, False))
+                log = required_text(request.get('log'), 'log'); logpath = artifact(root, base, 'log.md'); lt = checked_path(root, logpath, allow_missing=False); lfp = fingerprint(lt)
+                details = '; '.join(str(item['name']) + ': ' + str(item['reason']) for item in artifacts)
+                staged.append((logpath, append_bytes(lt.read_bytes(), f'\n- {stamp} — {log} ({prov}).' + (' Artifacts: ' + details if details else '')), lfp, False))
                 if not apply: return envelope(operation, 'planned', {'state': state, 'paths': [x[0] for x in staged] + [state_path]})
                 for path,data,fp,revision in staged:
-                    if revision:
-                        parent = checked_path(root, PurePosixPath(path).parent.as_posix()); parent.mkdir(parents=True, exist_ok=True)
+                    if revision or layout_version(root, base) == 2:
+                        mkdirs(root, PurePosixPath(path).parent.as_posix(), changed)
                     write_bytes(root, path, data, fp); changed.append(path)
                 write_json(root, state_path, state, state_fp); changed.append(state_path)
+                if layout_version(root, base) == 2:
+                    from .activity_documents import navigation
+                    path = base + '/README.md'; target = checked_path(root, path, allow_missing=False)
+                    updated = navigation(root, base, target.read_bytes())
+                    if updated != target.read_bytes():
+                        write_bytes(root, path, updated, fingerprint(target)); changed.append(path)
                 if read_json(checked_path(root,state_path,allow_missing=False)) != state: raise SafetyError('State readback mismatch')
                 return envelope(operation, result={'state': state}, changed=changed)
             if op == 'close':
@@ -262,8 +334,13 @@ def handle(operation, workspace, request, apply):
                         rec = {'status': 'unavailable', 'details': 'Recording interrupted; retained evidence preserved; coverage gap: ' + str(exc)}
                 name = stamp.replace('-','').replace(':','').replace('T','_').removesuffix('Z') + '_' + label; dest = location + '/' + name; n = 2
                 while checked_path(root,dest).exists(): dest = location + '/' + name + f'_{n:02}'; n += 1
-                outcome_path = base + '/outcome.md'; checked_path(root,outcome_path)
-                if fingerprint(root / outcome_path) is not None: raise SafetyError('outcome already exists')
+                new_layout = layout_version(root, base) == 2
+                outcome_path = base + ('/README.md' if new_layout else '/outcome.md')
+                outcome_target = checked_path(root, outcome_path)
+                outcome_fp = fingerprint(outcome_target)
+                if not new_layout and outcome_fp is not None: raise SafetyError('outcome already exists')
+                if new_layout and outcome_fp is None: raise SafetyError('Layout-2 Activity requires README.md before closure')
+                prior_readme = outcome_target.read_bytes() if new_layout else b''
                 state.update(lifecycle='closed',closed_at=stamp,outcome=outcome); _validate_state(state)
                 if not apply: return envelope(operation,'planned',{'archive_path':dest,'state':state,'recording':rec})
                 rename_preflight()
@@ -278,9 +355,18 @@ def handle(operation, workspace, request, apply):
                 changed.extend(usage_changed)
                 if rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
                 if core_recording: chronicles.verify(root, base, ident, closing=True)
-                logpath = base + '/log.md'; logtarget = checked_path(root,logpath,allow_missing=False); logfp = fingerprint(logtarget)
+                logpath = artifact(root, base, 'log.md'); logtarget = checked_path(root,logpath,allow_missing=False); logfp = fingerprint(logtarget)
                 write_bytes(root,logpath,append_bytes(logtarget.read_bytes(), f'\n- {stamp} — Closed as {outcome}; Activity path moved from {base} to {dest} ({prov}).'),logfp); changed.append(logpath)
-                write_bytes(root,outcome_path,(f'# Outcome\n\n{text}\n\nRecording: {rec["status"]} — {rec["details"]}\n\nProvenance: {prov}\n').encode()); changed.append(outcome_path)
+                report = (f'{"## Final outcome" if new_layout else "# Outcome"}\n\n{text}\n\nRecording: {rec["status"]} — {rec["details"]}\n\nProvenance: {prov}\n').encode()
+                if new_layout:
+                    revdir = revision_root(root, base, 'readme')
+                    mkdirs(root, revdir, changed)
+                    rev = revdir + '/' + stamp.replace('-', '').replace(':', '').replace('T', '_').removesuffix('Z') + '-before-closure.md'
+                    write_bytes(root, rev, prior_readme); changed.append(rev)
+                    report = prior_readme.rstrip() + b'\n\n' + report
+                    from .activity_documents import navigation
+                    report = navigation(root, base, report)
+                write_bytes(root,outcome_path,report,outcome_fp); changed.append(outcome_path)
                 if rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
                 if core_recording: chronicles.verify(root, base, ident, closing=True)
                 write_json(root,state_path,state,state_fp); changed.append(state_path)
@@ -292,8 +378,8 @@ def handle(operation, workspace, request, apply):
                 if core_recording: chronicles.verify(root, base, ident, closing=True)
                 if any(fingerprint(checked_path(root,p,allow_missing=False)) != fp for p,fp in final_fingerprints.items()): raise SafetyError('Closure files changed before archival')
                 rename_exclusive(checked_path(root,base,allow_missing=False), checked_path(root,dest)); changed.append(dest)
-                if read_json(checked_path(root,dest + '/state.json',allow_missing=False)) != state or discover(root,location)['status'] != 'absent': raise SafetyError('Closure readback mismatch')
-                usage_result.update(path=dest + '/usage.md', checkpoint_path=dest + '/usage.json')
+                if read_json(checked_path(root,artifact(root, dest, 'state.json'),allow_missing=False)) != state or discover(root,location)['status'] != 'absent': raise SafetyError('Closure readback mismatch')
+                usage_result.update(path=artifact(root, dest, 'usage.md'), checkpoint_path=artifact(root, dest, 'usage.json'))
                 return envelope(operation,result={'archive_path':dest,'state':state,'recording':rec,'usage':usage_result},changed=changed)
             raise ValueError('unsupported Activity operation')
         if apply and op in MUTATIONS:

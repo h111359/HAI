@@ -41,8 +41,9 @@ not a freeze on later planning or proof of success.
 
 ### Record and product locations
 
-State, preserved initial input and the action log form the minimum persistent
-record. Decisions, analysis, plan, outcome and supporting artifacts add meaningful
+README.md and system-owned state, typed conversation and action log form the
+layout-2 minimum record. Original human input is a message, not input.md. Closure
+appends the final report to README.md rather than creating outcome.md. Decisions, analysis, plan, outcome and supporting artifacts add meaningful
 context when needed; product code and durable specification retain their canonical
 product locations. Exact-source chronicles are attributable optional segments,
 not a replacement for decision or action records. Closed records can gain dated

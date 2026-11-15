@@ -31,7 +31,7 @@ class ChatTests(unittest.TestCase):
             'state_format_version': 3, 'activities': {'location': '.hai_env/activities'},
             'features': {'chronicles': {'enabled': False, 'record_every_prompts': 5}}}), encoding='utf-8')
         self.prov = {'source': 'fixture agent assignment', 'reason': 'verify chat behavior'}
-        created = activities.handle('create', self.root, {'initial_input': 'Chat fixture', 'provenance': self.prov}, True)
+        created = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': 'Chat fixture', 'provenance': self.prov}, True)
         self.assertTrue(created['ok'], created)
         self.ident = created['result']['state']['activity_id']
         self.base = self.root / created['result']['path']
@@ -128,7 +128,7 @@ class ChatTests(unittest.TestCase):
         self.assertEqual((self.root / closed['result']['archive_path'] / 'chat.jsonl').read_bytes(), raw)
         self.assertEqual(len(self.read()['result']['messages']), 1)
         self.assertFalse(self.post()['ok'])
-        new = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        new = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         self.assertTrue(new['ok'])
         old_id = self.ident
         self.ident = new['result']['state']['activity_id']

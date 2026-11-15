@@ -13,10 +13,17 @@ launch processes or discover host capabilities. The caller cannot set the UUID
 or destination; the runtime derives:
 
 ```text
-<Activity>/files/agent-invocations/<invocation-uuid>/
+<Activity>/work/agents/<agent-name>/<invocation-uuid>/
   invocation.json
   <agent-created supporting material>
 ```
+
+Layout-1 Activities keep their existing files/agent-invocations/<uuid> paths.
+Explicit Activity migration preserves manifests and returns the new named-role
+paths. Never move live participant folders without stopping writers and a new
+path handoff. Retired invocation trees in an explicitly migrated closed archive
+remain under history/legacy-material/agent-work/<role>/<uuid>/; the migration map
+provides their location, and they cannot authorize new execution.
 
 The manifest is strict JSON with exactly these fields:
 

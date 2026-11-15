@@ -51,7 +51,7 @@ assignment, original path, actual import date and exact-source limitations.
 
 ## Recording checkpoint
 
-Core owns the optional `chronicles/checkpoint.json` inside the stable
+Core owns the optional `system/chronicles/checkpoint.json` inside the stable
 Activity. It is operational progress, separate from global environment settings,
 Activity lifecycle state and verbatim segment text.
 
@@ -93,7 +93,7 @@ stable Activity ID, with contained relative segment paths.
 
 ## Core binding ledger
 
-Core `chronicles/core.json` supplements the retained checkpoint format. Its root
+Core `system/chronicles/core.json` in layout 2 supplements the retained checkpoint format. Its root
 contains `core_format_version: 1`, `activity_id`, UTC `updated_at`,
 `enablement_revision`, `provenance` with nonblank source/reason, `sources` and
 `artifact_hashes`. The nonempty source array has entries containing the explicit
@@ -136,4 +136,9 @@ source coverage. Prepared final-text entries remain distinct from saved source.
 - [Durable session source](../concepts/durable-session-source.md) — source meaning and evidence limits.
 - [Source coverage](../concepts/source-coverage.md) — exact coverage meaning.
 
-Core also maintains `chronicles/core.json` as a binding and hash ledger. An existing checkpoint or segment without that ledger requires explicit adoption; unsupported, malformed or unknown legacy state blocks synchronization rather than being implicitly rewritten or repaired.
+Core also maintains `system/chronicles/core.json` in layout 2 as a binding and hash ledger. An existing checkpoint or segment without that ledger requires explicit adoption; unsupported, malformed or unknown legacy state blocks synchronization rather than being implicitly rewritten or repaired.
+
+Layout-1 recording checkpoints/recovery remain under chronicles/. Layout 2 moves
+operational metadata and recovery copies under system/chronicles/ while readable
+segments stay chronicles/*.md. Logical artifact hash keys and source ranges remain
+unchanged; the shared layout resolver maps physical metadata paths.

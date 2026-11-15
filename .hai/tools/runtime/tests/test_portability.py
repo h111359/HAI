@@ -62,7 +62,7 @@ class PortabilityTests(unittest.TestCase):
         return data['result']
 
     def create(self):
-        result = self.good('activity', 'create', {'initial_input': '', 'provenance': self.prov}, True)
+        result = self.good('activity', 'create', {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         return result['state']['activity_id'], result['path']
 
     def test_cli_lifecycle_recording_both_representations(self):

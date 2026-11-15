@@ -1,8 +1,0 @@
-{
-  "tests": 44,
-  "failures": 0,
-  "errors": 0,
-  "skipped": [
-    "(<test_definition.DefinitionTests testMethod=test_load_rejects_symlink_when_platform_allows_it>, 'symlink creation unavailable')"
-  ]
-}

@@ -31,7 +31,7 @@ class InvocationTests(unittest.TestCase):
             'state_format_version': 3, 'activities': {'location': '.hai_env/activities'},
             'features': {'chronicles': {'enabled': False, 'record_every_prompts': 5}}}), encoding='utf-8')
         self.prov = {'source': 'fixture host', 'reason': 'allocate before dispatch'}
-        created = activities.handle('create', self.root, {'initial_input': 'fixture', 'provenance': self.prov}, True)
+        created = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': 'fixture', 'provenance': self.prov}, True)
         self.assertTrue(created['ok'], created)
         self.ident = created['result']['state']['activity_id']
         self.base = self.root / created['result']['path']
@@ -189,7 +189,7 @@ class InvocationTests(unittest.TestCase):
         self.assertEqual((archived / 'invocation.json').read_bytes(), manifest)
         self.assertEqual((archived / 'notes.md').read_text(encoding='utf-8'), 'retained work')
         self.assertFalse(self.allocate()['ok'])
-        new = activities.handle('create', self.root, {'initial_input': '', 'provenance': self.prov}, True)
+        new = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
         old_id = self.ident
         self.ident = new['result']['state']['activity_id']
         b = self.allocate()['result']
