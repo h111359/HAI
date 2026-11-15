@@ -157,7 +157,8 @@ def state_context(workspace: Path, state: dict, template: dict,
             or not activities["location"].strip()):
         raise Invalid("Mandatory activities requires a nonblank workspace-relative location and no enabled switch")
     reserved = [".hai", ".git", STATE, ".hai_env/agents",
-                ".hai_env/config", PROFILES, INSTRUCTIONS, *LEGACY.values()]
+                ".hai_env/config", ".hai_env/workflows", ".hai_env/workflow-runs",
+                PROFILES, INSTRUCTIONS, *LEGACY.values()]
     reserved_paths = [workspace / name for name in reserved]
     for name in reserved:
         try:

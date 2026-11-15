@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 1,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "invocation_id": "e0d05bf3-0172-4678-8494-5f621613b3a4",
+  "agent": "design-skill-trial",
+  "created_at": "2026-11-15T14:10:38Z",
+  "provenance": {
+    "source": "skill-creator independent forward-testing guidance",
+    "reason": "Validate generic design-package skill with an unrelated brief"
+  }
+}

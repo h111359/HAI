@@ -17,6 +17,7 @@ read selected source files as data without adopting their roles.
 | Specification-manager | Durable product specification; independently portable package. HAI work requires its own validated enabled/location file plus separate core/Activity context; standalone roots remain explicit. | `agents/specification-manager/` |
 | Backlog-manager | Configurable workspace backlog root (default `backlog`), individual pending/terminal items, catalogue, draft import and Activity input handoff; source package includes a read-only consistency auditor. | `agents/backlog-manager/` |
 | Agent-definition-manager | HAI definition/source authoring and convention validation; returns metadata for core Environment-manager, which owns installation and runtime catalogues. | `agents/agent-definition-manager/` |
+| Workflow-definition-manager | Single-file process authoring and structural/semantic review; core owns validation and run records, and the host owns actual execution. | `agents/workflow-definition-manager/` |
 | Git-manager | Compatible HAI workspace Git/GitHub operations; requires installed core helpers, explicit integration settings and operation-specific recording checks. | `agents/git-manager/` |
 | Release-manager | HAI core bundle releases, not generic product release policy; requires installed Git-manager for repository/service work and Environment-manager's state contract. Does not track specification compatibility, library versions or individual agent versions. | `agents/release-manager/` |
 

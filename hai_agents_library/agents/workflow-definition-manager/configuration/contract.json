@@ -1,0 +1,7 @@
+{
+  "contract_format_version": 1,
+  "agent": "workflow-definition-manager",
+  "current_config_format_version": 1,
+  "supported_config_format_versions": [1],
+  "settings": {}
+}

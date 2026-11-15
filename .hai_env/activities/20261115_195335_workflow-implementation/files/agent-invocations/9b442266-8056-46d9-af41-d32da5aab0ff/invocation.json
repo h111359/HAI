@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 1,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "invocation_id": "9b442266-8056-46d9-af41-d32da5aab0ff",
+  "agent": "solution-architect",
+  "created_at": "2026-11-15T14:35:07Z",
+  "provenance": {
+    "source": "user: OK, now implement the workflow agents and the whole design",
+    "reason": "controlled read-only change-assessment pilot of implemented workflow execution"
+  }
+}

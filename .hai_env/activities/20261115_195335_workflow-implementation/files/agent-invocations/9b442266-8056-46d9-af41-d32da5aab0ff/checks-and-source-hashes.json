@@ -1,0 +1,39 @@
+{
+  "checks": [
+    {
+      "operation": "workflow validate",
+      "exit_code": 0,
+      "changed_files": [],
+      "status": "ok"
+    },
+    {
+      "operation": "workflow show",
+      "exit_code": 0,
+      "changed_files": [],
+      "status": "ok"
+    }
+  ],
+  "source_hashes": {
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/00-review-guide.md": "e015ec7676f183465c817a125906c4fcf6d92a2631a533a1c8a3986f3b4dcd05",
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/01-requirements.md": "780cad54c9dc9d0eac79a9cd334d9192fdda89a58a0e8434684b03f26f1d0f52",
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/02-solution-specification.md": "1c90c0911da002120ec673d19a88ada0c1cbb3ad61452ecdcbe32bc742191c99",
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/02a-solution-reading-guide.md": "26b2d649f85a7e0814765399b26707a7faf8e25932c6ed5018680c304a7af78d",
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/03-worked-examples.md": "c51c96f14bd239cb309a303c434cb6a94590d6744bbb4baab2c6d687979235fd",
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/04-manager-design.md": "3275bb787b6b525c877011316b63fb7cd421ed047131452d3df72fb997356fd2",
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/05-implementation-plan.md": "a08dd1a37ae44fe4961f0e363c69c0a3a626649a74b06642baeabbc0fc0164ae",
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/examples/change-assessment.md": "85343423b8e66afc4608dc7d14124b208b4e50773a79bfd2eb7cf361ca755baa",
+    ".hai_env/activities/00000000_000000_active/results/workflow-design/examples/customer-request.md": "997b83143889cb4b9641dfe597b88cd4102612d6484da529f543f6115bccccf4",
+    ".hai/tools/runtime/workflows.py": "f306de6b2099a42f490e05dbc06dfb56f98c37b891f3e5a050aa543cfd7e3253",
+    ".hai/tools/runtime/workflow_artifacts.py": "0efe005cd55a7e6fa0929183f2f7bb5c4c2b0c01d7d24293e1264765044f5f42",
+    ".hai/conventions/workflow_conv.md": "71c1b541e5624dd8962435f085fe13d1b6602306bc90c8649e9225231beb00d4",
+    ".hai/conventions/workflow-run_conv.md": "54e48e8164d6bc6709d8a275362d12e003e049a7d11f30a2ee740880ae908314",
+    ".hai/procedures/execute-workflow.md": "e3e3dbfc854fc2b85ce73aede6f6be6ea04b03299040f0de57e4be034b4dc789",
+    ".hai_env/agents/solution-architect/SKILL.md": "1fd92d888c1b11f43529d1510b065b12035470bff0c0b54c7739c3cc4e81b777",
+    ".hai_env/workflow-runs/1b440d51-819b-4299-862b-0182f0f4fca5/e1e8a718-d108-49ea-bec5-24572793827b/definition.md": "24391b94e0a49f6745a055edad4d5670ce94c2ec6a2c00fd3ce8eff92643fa23",
+    ".hai_env/workflow-runs/1b440d51-819b-4299-862b-0182f0f4fca5/e1e8a718-d108-49ea-bec5-24572793827b/inputs/request.md": "81752bbf479439f2b76f710fa80a5efca539c6834592dcadcf0d244beef04b25",
+    ".hai_env/workflow-runs/1b440d51-819b-4299-862b-0182f0f4fca5/e1e8a718-d108-49ea-bec5-24572793827b/attempts/assess/attempt-0001/assignment.json": "83a3a0b2ea49507426bedd7dd76f14138aa3b6a7078c2a6422c141a66b4a52d8"
+  },
+  "pinned_input_role_definition_match": true,
+  "golden_installed_manager_equal": true,
+  "manager_file_count": 6
+}

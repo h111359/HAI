@@ -123,6 +123,14 @@ permission, and configuration changes do not alter record lifecycle or contents.
 
 ## Closure, archival and references
 
+Workflow runs are optional Activity-owned executions stored at
+`<activity>/workflow-runs/<run-id>/`. Requested closure must resolve
+all unfinished runs and uncertain writers before lifecycle changes. Closing never
+starts or silently cancels a workflow. Runs move with their Activity on archival
+and become read-only through its closed lifecycle. References resolve stable
+Activity/run IDs to the current path; exporting the Activity includes its runs.
+See [run ownership](workflow-run_conv.md).
+
 A closed record has `outcome.md`, an actual UTC `closed_at` timestamp and closure
 outcome. Its archive folder is `YYYYMMDD_HHMMSS_short-label` with the same closure
 time. Labels have one to five lowercase ASCII alphanumeric words separated by

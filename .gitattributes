@@ -2,3 +2,6 @@
 .hai_env/activities/**/chronicles/** -text
 .hai_env/activities/**/usage.md -text
 .hai_env/activities/**/usage.json -text
+# Workflow snapshots, events and artifact manifests also require exact bytes.
+# Match configured Activity stores as well as the default environment location.
+**/workflow-runs/** -text

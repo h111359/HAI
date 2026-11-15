@@ -1,0 +1,106 @@
+{
+  "assignment_format": 1,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "run_id": "e1e8a718-d108-49ea-bec5-24572793827b",
+  "step_id": "assess",
+  "attempt_id": "attempt-0001",
+  "agent": "solution-architect",
+  "instruction": "Inspect the proposed change and authorized relevant product material without editing\nthe product. Separate feasible options, unknown facts and authority limits. Write\nthe artifact matching the selected result. Do not start implementation, create a\nrelease or infer permission to broaden the assignment.",
+  "inputs": {
+    "request": {
+      "path": "inputs/request.md",
+      "artifact": {
+        "kind": "file",
+        "sha256": "81752bbf479439f2b76f710fa80a5efca539c6834592dcadcf0d244beef04b25",
+        "bytes": 1701
+      },
+      "source": "workflow:request"
+    }
+  },
+  "outputs": {
+    "assessment": {
+      "name": "assessment",
+      "location": "attempt:assessment.md",
+      "format": "markdown",
+      "expectation": "Feasible approach, evidence, risks, constraints and recommended next decision."
+    },
+    "discovery": {
+      "name": "discovery",
+      "location": "attempt:discovery-questions.md",
+      "format": "markdown",
+      "expectation": "Unknown facts, why each is necessary, bounded ways to establish them and blocked conclusions."
+    },
+    "boundary": {
+      "name": "boundary",
+      "location": "attempt:scope-boundary.md",
+      "format": "markdown",
+      "expectation": "Exact scope conflict, evidence and decision needed to proceed."
+    }
+  },
+  "results": {
+    "feasible": {
+      "name": "feasible",
+      "when": "Scope is authorized and enough evidence supports a feasible approach.",
+      "outputs": [
+        "assessment"
+      ],
+      "next": "end:feasible"
+    },
+    "needs-discovery": {
+      "name": "needs-discovery",
+      "when": "Scope is authorized but necessary technical facts are unknown.",
+      "outputs": [
+        "discovery"
+      ],
+      "next": "end:discovery-needed"
+    },
+    "outside-scope": {
+      "name": "outside-scope",
+      "when": "The requested assessment itself exceeds the authorized assignment.",
+      "outputs": [
+        "boundary"
+      ],
+      "next": "end:outside-scope"
+    }
+  },
+  "readiness": {
+    "agent": "solution-architect",
+    "definition": ".hai_env/agents/solution-architect/SKILL.md",
+    "definition_sha256": "1fd92d888c1b11f43529d1510b065b12035470bff0c0b54c7739c3cc4e81b777",
+    "configuration": {
+      "status": "defaulted",
+      "path": ".hai_env/config/agents/solution-architect.json",
+      "settings": {},
+      "configured_fields": [],
+      "issues": []
+    },
+    "model": {
+      "agent": "solution-architect",
+      "model_class": "advanced",
+      "reasoning_effort": "high",
+      "model": "gpt-6.1-sol"
+    },
+    "runtime": {
+      "models": {
+        "gpt-6.1-sol": [
+          "high"
+        ],
+        "gpt-6.1-terra": [
+          "high"
+        ],
+        "gpt-6-luna": [
+          "high"
+        ]
+      }
+    },
+    "contract_sha256": "bcf79ea7d6b0cc9c0674f35098a06d0a2553f172ed6543224efdcae290f512cb",
+    "prerequisite_assessment": {
+      "accepted": true,
+      "author": "Codex host /root",
+      "evidence": "Selected installed solution-architect; current accepted workflow design and implementation scope supply agreed requirements. Pilot only assesses actual feasibility, writes declared attempt artifact, uses workspace read tools and does not change product or integrations."
+    },
+    "authority": "User: OK, now implement the workflow agents and the whole design. Read-only implementation pilot within current Activity."
+  },
+  "definition_sha256": "24391b94e0a49f6745a055edad4d5670ce94c2ec6a2c00fd3ce8eff92643fa23",
+  "created_at": "2026-11-15T14:35:07Z"
+}

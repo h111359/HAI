@@ -3,6 +3,18 @@
 HAI is a framework for AI-assisted development. Start with [the startup
 instructions](.hai/start.md).
 
+Optional [workflows](.hai/concepts/workflow.md) describe coordinated agent steps,
+named results and explicit file handoffs in one Markdown definition per workflow
+under `.hai_env/workflows/`. Each run belongs to one Activity and retains its
+definition, inputs, attempts and outputs under `<activity>/workflow-runs/<run-id>/`.
+Runs move with their Activity on archival; the runtime resolves their current
+location through the stable Activity ID.
+Several runs may coexist; only one may execute at a time within an Activity.
+The golden library includes a workflow-definition-manager for authoring and
+review. See the [definition format](.hai/conventions/workflow_conv.md),
+[execution procedure](.hai/procedures/execute-workflow.md) and
+[runtime commands](.hai/tools/runtime/README.md#agent-workflow-commands).
+
 Chronicles support reviewed source adapters and exact-message reconciliation after
 compatible session rewrites. Recording defaults to `best_effort`: source availability
 gaps stay visible while ordinary work continues; `features.chronicles.mode: required`

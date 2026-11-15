@@ -1,0 +1,24 @@
+{
+  "deliverable": "skills/crete-design-package",
+  "files": [
+    "SKILL.md",
+    "references/clarity-and-review.md",
+    "references/package-contents.md"
+  ],
+  "frontmatter": "parsed with existing standard-library YAML subset parser; name/description and naming checked",
+  "references": "links and fences checked",
+  "scope": "no project-specific paths, identities or domain roles; no global installation",
+  "bundled_validator": {
+    "status": "unavailable",
+    "reason": "quick_validate.py requires PyYAML, which is not installed; command attempted, not reported passed"
+  },
+  "independent_trial": {
+    "agent": "/root/design_skill_trial",
+    "invocation": "e0d05bf3-0172-4678-8494-5f621613b3a4",
+    "domain": "volunteer equipment lending service",
+    "documents": 6,
+    "result": "complete review proposal; no blocking skill ambiguity or demonstrated fix needed",
+    "checks": "16 trial local links, six corresponding specification/companion sections, identifiers, illustrative date checks; parent independently checked all local links and anchors"
+  },
+  "limitations": "No claim of production operation, legal/safety validation, or exhaustive behavior coverage."
+}

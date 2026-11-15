@@ -11,6 +11,16 @@ Environment configuration is grouped under `.hai_env/config/`: mandatory
 agent-owned files below `agents/`. Explicit layout migration retains recovery
 copies below `config/migration-backups/` and `config/layout-migration.json`.
 
+Optional single-file workflow definitions live directly in `.hai_env/workflows/`.
+Their dedicated run records/artifacts live in `<activity>/workflow-runs/<run-id>/`.
+The runtime resolves the containing Activity through its immutable ID; no extra
+Activity-ID directory or separate environment run root is used. Activity archival
+moves its runs with it and makes them read-only through the closed owner; exports
+and retention include the contained run directories. The definitions root and
+legacy external run root remain protected from conflicting store configuration.
+The [workflow convention](workflow_conv.md) and [run convention](workflow-run_conv.md)
+define their ownership and formats; no workflow catalogue or global current pointer exists.
+
 `.hai/` contains the reusable Python runtime in `tools/`, shared concepts in `concepts/`, conventions in `conventions/`, state contract in `contracts/state.json`, and initialization defaults in `templates/state.json`. `.hai/start.md` is the host entry instruction. `.hai_env/` contains workspace-specific state, fixed instructions, Activity records, optional installed extensions and their settings. Upgrades must preserve workspace data and follow the [state convention](state_conv.md).
 
 Optional workspace agent packages live at `.hai_env/agents/<name>/` and their explicit registration catalogue at `.hai_env/agents/catalogue.md`. Their reusable source packages under `hai_agents_library/agents/` are data, not a runtime execution origin. A package's settings are stored separately in `.hai_env/config/agents/`; source changes do not automatically replace installed packages. See [agent convention](agent_conv.md) and [agent configuration](agent-configuration_conv.md).

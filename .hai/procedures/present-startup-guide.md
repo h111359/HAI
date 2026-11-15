@@ -65,6 +65,7 @@ reporting of missing prerequisites remain possible under `.hai/start.md`.
    | `backlog` | An established, available backlog workflow: select an item through its existing owner |
    | `agent-setup` | Describe an installation, registration, authoring or configuration need; supported operations and their owners are checked before changes |
    | `help` | Refresh this brief overview and menu |
+   | `workflows` | List optional single-file workflow definitions through `workflow list`; do not execute them merely to display choices |
    | `agent:<name>` | Every valid registered agent: select that role for a meaningful assignment |
 
    Stable text choices avoid renumbering when registrations change. Optional
@@ -94,6 +95,12 @@ reporting of missing prerequisites remain possible under `.hai/start.md`.
    existing core operations or the selected registered role under the shared
    delegation policy. Report an actual dependency before blocked work, preserve
    independent valid capabilities and distinguish selection from successful execution.
+   For `workflows`, return the validated list with per-file issues. For an explicit
+   `workflow:<name>` or ordinary-language run request, resolve that definition and
+   follow [Execute workflow](execute-workflow.md), preserving current Activity,
+   authority and readiness checks. An existing run needs its exact identity when
+   several runs make a pause/resume/cancel request ambiguous. Listing workflows
+   does not require the optional definition manager and does not change its catalogue.
 
 ### Illustrative presentations
 

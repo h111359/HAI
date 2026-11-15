@@ -8,7 +8,8 @@ from .storage import SafetyError, checked_path, read_json
 
 GROUPS = {'startup':'startup', 'environment':'environment', 'profiles':'environment',
           'configuration':'environment', 'activities':'activities', 'activity':'activities',
-          'packages':'packages', 'agents':'packages', 'recording':'recording', 'host':'host'}
+          'packages':'packages', 'agents':'packages', 'recording':'recording', 'host':'host',
+          'workflow':'workflows'}
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)

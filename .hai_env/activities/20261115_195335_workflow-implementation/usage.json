@@ -1,0 +1,73 @@
+{
+  "usage_format_version": 2,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "updated_at": "2026-11-15T19:53:35Z",
+  "provenance": {
+    "source": "user: close the activity and commit",
+    "reason": "close completed workflow design, implementation, skill and Activity-local storage refactor"
+  },
+  "sources": [
+    {
+      "binding": {
+        "path": "C:\\Users\\hmhri\\.codex\\sessions\\2026\\11\\12\\rollout-2026-11-12T21-52-18-01a1d151-7046-7d83-89ee-573c30ee6685.jsonl",
+        "session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+        "start_position": 52,
+        "end_position": null
+      },
+      "observation": {
+        "tokens": {
+          "input_tokens": 425857,
+          "cached_input_tokens": 375296,
+          "output_tokens": 2213,
+          "reasoning_output_tokens": 218,
+          "total_tokens": 428070
+        },
+        "by_model": {
+          "gpt-6.1-sol": {
+            "input_tokens": 425857,
+            "cached_input_tokens": 375296,
+            "output_tokens": 2213,
+            "reasoning_output_tokens": 218,
+            "total_tokens": 428070
+          }
+        },
+        "through_position": 109,
+        "through_timestamp": "2026-11-12T19:59:12.724Z",
+        "observed_end_position": 112,
+        "baseline_position": 44,
+        "prefix_bytes": 661918,
+        "prefix_sha256": "dde3cf660dd0a9404cddad3e8862e3b66fcf99d765fc363ef3fea20bb177e468"
+      },
+      "status": "stale",
+      "error": "Previously observed usage source prefix changed or was truncated"
+    }
+  ],
+  "pricing": null,
+  "reported_spend": null,
+  "summary": {
+    "coverage": "partial",
+    "tokens": {
+      "input_tokens": 425857,
+      "cached_input_tokens": 375296,
+      "output_tokens": 2213,
+      "reasoning_output_tokens": 218,
+      "total_tokens": 428070
+    },
+    "by_model": {
+      "gpt-6.1-sol": {
+        "input_tokens": 425857,
+        "cached_input_tokens": 375296,
+        "output_tokens": 2213,
+        "reasoning_output_tokens": 218,
+        "total_tokens": 428070
+      }
+    },
+    "estimated_credits": null,
+    "reported_credits": null,
+    "reported_spend_current": false,
+    "missing_rate_models": [
+      "gpt-6.1-sol"
+    ]
+  },
+  "markdown_sha256": "abef2d2cac308dd129b6357d6dfc2c2d4a6fe77729f50b74d1e82a990b57af5a"
+}

@@ -1,0 +1,72 @@
+{
+  "source": ".hai_env/workflow-runs/1b440d51-819b-4299-862b-0182f0f4fca5/e1e8a718-d108-49ea-bec5-24572793827b",
+  "destination": ".hai_env/activities/00000000_000000_active/workflow-runs/e1e8a718-d108-49ea-bec5-24572793827b",
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "run_id": "e1e8a718-d108-49ea-bec5-24572793827b",
+  "before": {
+    "kind": "directory",
+    "sha256": "8117978eddf0313fa8829912725f2d84170db4a52f90f732aa9112090757f02a",
+    "manifest": [
+      {
+        "path": "attempts",
+        "kind": "directory"
+      },
+      {
+        "path": "attempts/assess",
+        "kind": "directory"
+      },
+      {
+        "path": "attempts/assess/attempt-0001",
+        "kind": "directory"
+      },
+      {
+        "path": "attempts/assess/attempt-0001/assessment.md",
+        "kind": "file",
+        "sha256": "063d38ff927380a4981965f539545fe134d95712468c9efa17db35a22832a9f6",
+        "bytes": 15783
+      },
+      {
+        "path": "attempts/assess/attempt-0001/assignment.json",
+        "kind": "file",
+        "sha256": "83a3a0b2ea49507426bedd7dd76f14138aa3b6a7078c2a6422c141a66b4a52d8",
+        "bytes": 3752
+      },
+      {
+        "path": "attempts/assess/attempt-0001/result.json",
+        "kind": "file",
+        "sha256": "bf9ce97b14002ccfb214882ceace02ce2d3b8afb5d173d7a7777fd5e5e47b1fd",
+        "bytes": 1923
+      },
+      {
+        "path": "definition.md",
+        "kind": "file",
+        "sha256": "24391b94e0a49f6745a055edad4d5670ce94c2ec6a2c00fd3ce8eff92643fa23",
+        "bytes": 2257
+      },
+      {
+        "path": "events.jsonl",
+        "kind": "file",
+        "sha256": "f2974250fca3779e096fa703f72961b6a717ef5994aa25abad3a2b3527472366",
+        "bytes": 8710
+      },
+      {
+        "path": "inputs",
+        "kind": "directory"
+      },
+      {
+        "path": "inputs/request.md",
+        "kind": "file",
+        "sha256": "81752bbf479439f2b76f710fa80a5efca539c6834592dcadcf0d244beef04b25",
+        "bytes": 1701
+      },
+      {
+        "path": "state.json",
+        "kind": "file",
+        "sha256": "fbaf9cf3d9ab9906cab2ea306817f7a9d7debba2b2a4f206949dc08fc2c2bf56",
+        "bytes": 4097
+      }
+    ]
+  },
+  "authority": "User requested Activity-local workflow runs without another Activity-ID directory",
+  "status": "inspected-before-relocation"
+}

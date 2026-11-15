@@ -20,7 +20,110 @@ For example, save `{"provenance":{"source":"user request","reason":"adjust caden
 
 Workflow modules provide Activity, package, recording and host operations. A host capability check reports availability; the runtime does not install dependencies or download packages implicitly.
 
-## Workflow operations
+## Agent workflow commands
+
+Use `python -B .hai/tools/hai.py workflow <operation> --workspace .` with a
+workspace-contained `--request PATH`. Definitions follow the
+[workflow convention](../../conventions/workflow_conv.md); the runtime uses no
+third-party YAML dependency. A valid definition describes possible work; it does
+not prove that the requested work is authorized or its agents are available.
+
+Read commands take these fields and never create storage:
+
+| Operation | Request fields | Result |
+| --- | --- | --- |
+| `list` | None | Markdown definitions present in `.hai_env/workflows/`, including per-file validation issues. No catalogue exists. |
+| `validate` | `definition` | Structural checks of an explicit workspace-relative Markdown path, including templates outside the collection. Meaning and execution readiness remain unchecked. |
+| `show` | `activity_id`, `run_id` | Retained state and whether its projection needs rebuilding; closed Activities remain readable. |
+
+Mutations preview by default; `--apply` performs them under the core runtime lock.
+All require provenance and the current owning `activity_id`. All except `start`
+also require `run_id` and integer `expected_revision` from the last `show`.
+The revision counts saved run transitions, rather than definition versions.
+
+| Operation | Additional fields | Behavior |
+| --- | --- | --- |
+| `start` | `definition` | Requires a registered `.hai_env/workflows/<name>.md`; pins exact definition and initial input snapshots in a new run UUID directory. |
+| `prepare-step` | Readiness fields below | Checks role, prerequisites, input hashes and limits; reserves the Activity execution slot and creates one assignment. Repeating a prepared assignment does not allocate another attempt. |
+| `record-execution` | `step_id`, `attempt_id`, `status`, `executor`, `details` | Records observed `running`, `waiting` or `blocked` execution; details must explain the actual condition. It does not launch an agent. |
+| `complete-step` | `step_id`, `attempt_id`, `result`, `assessment`, `executor` | Accepts one authored result after checking required artifacts, consumed inputs and ended writers. Invalid evidence blocks transition and retains rejection evidence. |
+| `pause` | `executor` when an executor exists | Requires stopped writers; retains attempt history. |
+| `cancel` | `executor` when an executor exists | Records cancellation, or `cancelling` while writers remain. It does not undo product effects. |
+| `resume` | Readiness fields below | Rechecks an unstarted prepared assignment; previously started work needs explicit effect reconciliation through retry. |
+| `retry-step` | `step_id`, `attempt_id`, `executor`, `effect_resolution`, readiness fields | Requires a stopped unfinished attempt and an explanation of actual effects; allocates a new attempt within the pinned limits. |
+
+Readiness fields are `runtime`, `authority`, and `prerequisite_assessment`:
+
+```json
+{
+  "runtime": {"models": {"<actually available model>": ["high"]}},
+  "authority": "Reference to the actual authorized assignment",
+  "prerequisite_assessment": {
+    "accepted": true,
+    "author": "Actual coordinating host identity",
+    "evidence": "Observed tools, scope and operation prerequisites checked"
+  }
+}
+```
+
+The host supplies actual supported model/effort combinations. The runtime resolves
+the installed agent's model class through current profiles and checks registration,
+configuration and the requested capability. A disabled agent-owned feature blocks
+execution; workflow commands do not enable it. Host evidence covers prerequisites
+that code cannot infer from arbitrary agent instructions.
+
+An `assessment` uses the same `accepted`, `author`, `evidence` structure. Its evidence
+must explain why actual outputs meet this result's condition and expectations.
+File extensions, content formats and directory contents are author-defined; the
+runtime checks safe paths and byte/manifest integrity rather than interpreting
+arbitrary formats or selecting a result on the author's behalf.
+
+An `executor` describes an actual host execution:
+
+```json
+{
+  "handle": "<actual host execution handle>",
+  "mode": "spawned",
+  "invocation_id": "<allocated Activity invocation UUID>",
+  "writers_ended": false,
+  "evidence": "Observed launch or termination evidence"
+}
+```
+
+Spawned executions require an existing allocation for the owning Activity and
+assigned role. Direct execution uses `mode: "direct"` without an invocation ID.
+Completion requires `writers_ended: true` from actual observation. The runtime
+does not authenticate supplied host statements or provide OS-level isolation.
+
+Read the returned `assignment` before dispatch. Its `inputs` reference frozen paths
+relative to the run directory; absent optional inputs are null. Output locations
+starting `attempt:` resolve below `attempts/<step>/<attempt>/`. Scratch belongs in
+the invocation's allocated folder. The host must preserve core-owned assignment,
+result, rejection, state and event files.
+
+`complete-step` checks a previously accepted identical label/assessment before
+the revision guard, making acknowledgement replay safe when retained artifacts
+still match. A different report conflicts. Later steps consume the immediately
+preceding accepted result; a return to an earlier step creates a fresh attempt.
+
+Runs live at `<activity>/workflow-runs/<run-id>/`, retaining
+`definition.md`, `inputs/`, `attempts/`, `events.jsonl` and `state.json`.
+Events contain committed transitions; a matching stale state projection can be
+recovered without repeating agent work. Conflicting or partial evidence is
+preserved and blocks dependent work pending inspection. Inspect actual product
+effects before retrying after interruption. Run completion does not close the
+Activity; Activity closure checks unfinished runs and writers first.
+Archival moves runs with their containing Activity, so exporting the Activity
+includes them. Resolve stable Activity/run IDs to the current or archived owner
+path; do not retain an active-folder path as identity. Runtime reads honor a
+configured Activity store. Legacy external run evidence blocks dependent work
+until explicit relocation; it is never silently used as a fallback.
+When versioning run evidence, preserve exact bytes: the repository's
+`.gitattributes` uses `**/workflow-runs/** -text` to prevent Git line-ending
+conversion of hashed snapshots, records and outputs. Apply equivalent attributes
+in another repository before committing its run evidence.
+
+## Activity and package operations
 
 Requests are JSON objects. All applied Activity and package mutations require valid current core state and readable mandatory instructions. For example, `python -B .hai/tools/hai.py activity discover --workspace .` reads the current Activity; add `--request request.json` where fields are listed below. Every mutation requires the provenance object described above.
 

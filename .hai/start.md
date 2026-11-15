@@ -37,6 +37,13 @@ Before optional role work, apply the shared [role execution and delegation polic
 
 Organize substantive work under a valid current Activity, creating one through the runtime when authorized meaningful work starts and none exists. Do not close an Activity without an instruction permitting closure. Register known Activity-attributed usage sources when available; [usage records](conventions/activity-usage_conv.md) refresh on request and automatically before closure, keeping missing charges explicit. Preserve source provenance and record only actual decisions, work and check results; never invent approvals, artifacts, or successful checks. Use only the work needed for the user's objective, without forcing a sequence of optional extensions.
 
+For an explicit workflow selection or run-control request, follow
+[Execute workflow](procedures/execute-workflow.md). Discover single-file definitions
+with `workflow list`; file presence does not start work. Keep runs within the owning
+Activity and use `<activity>/workflow-runs/<run-id>/` storage. Ordinary tasks
+do not require a workflow or its optional definition manager. Core startup must not
+create workflow scaffolds or blanket-audit the collection merely to report status.
+
 Recording uses `features.chronicles.mode`: absent means `best_effort`; `required` or an independently mandatory obligation requires verified source readiness. In best-effort mode, the host MUST attempt recording and report interruptions and coverage gaps, but MUST continue ordinary independent work without requesting permission to disable recording. Explicit recording commands report failures honestly; artifact corruption, unsafe paths and partial writes are never waived.
 
 For enabled or independently mandatory chronicles, establish [recording readiness](procedures/establish-recording-source.md) before substantive work that requires recording. Enabling chronicles authorizes read-only discovery of the current host-identified session: prefer a host-supplied canonical path, otherwise match that exact session ID under the configured Codex session store and verify embedded identity/workspace. This standing authority covers current assigned participants, not unrelated history. Startup reports recording readiness separately from core validity and never writes a binding. The host registers each Activity's explicit observed work-prompt position and attributable enabled intervals with `recording bind`; finding a file does not assign its whole conversation. Resume existing bindings and validate them; do not replace ambiguous, invalid or partial state.

@@ -144,7 +144,8 @@ def workspace_directory_path(workspace, value, reserved_paths=(), *,
     target = _safe_path(workspace, value)
     target_lexical = workspace / value
     reserved = [".hai", ".git", STATE, INSTRUCTIONS,
-                PROFILES, ".hai_env/agents", ".hai_env/config", *LEGACY.values()]
+                PROFILES, ".hai_env/agents", ".hai_env/config", ".hai_env/workflows",
+                ".hai_env/workflow-runs", *LEGACY.values()]
     reserved.extend(_configured_reserved_paths(
         workspace, include_specification=not ignore_legacy_specification))
     reserved.extend(reserved_paths)
@@ -214,7 +215,7 @@ def _effective_settings(contract, raw, workspace=None):
 def _configured_reserved_paths(workspace, include_specification=True):
     """Return fixed and configured core paths without following optional content."""
     reserved = [".hai", ".git", STATE, INSTRUCTIONS,
-                PROFILES, ".hai_env/agents", *LEGACY.values()]
+                PROFILES, ".hai_env/agents", ".hai_env/workflows", ".hai_env/workflow-runs", *LEGACY.values()]
     try:
         state_path = _safe_path(workspace, STATE)
     except ConfigurationError:
