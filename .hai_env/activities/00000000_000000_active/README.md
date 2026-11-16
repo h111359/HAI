@@ -16,3 +16,8 @@ Original message: `166844bf-8458-4e27-8d36-7a39b587a7b7` in [conversation](syste
 - [Verification evidence](evidence)
 - [Previous versions](history)
 <!-- hai-navigation:end -->
+
+
+## Beginner introduction
+
+The root repository README has also been simplified for new users: purpose, capabilities, prerequisites and installation. The predecessor is preserved in history/repository-readme/ and validation is included in evidence/verification.md.

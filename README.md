@@ -1,112 +1,44 @@
 # HAI
 
-HAI is a framework for AI-assisted development. Start with [the startup
-instructions](.hai/start.md).
+HAI helps you organize work with AI across projects and business activities.
+It gives AI clear instructions for planning, carrying out tasks and checking
+results, while keeping your work and decisions organized.
 
-New Activities use a predictable [layout](.hai/conventions/activity_conv.md):
-`README.md` is the entry point and final report; operational records live in
-`system/`; review outputs, evidence, predecessors and disposable work use
-`results/`, `evidence/`, `history/` and `work/`. Human instructions persist in typed
-conversation records even with chronicles off. Legacy archives remain readable;
-current-Activity migration is explicit. Runtime commands accept `--request-stdin`
-so routine operations need no saved request JSON file.
+A **HAI role** provides instructions and tools for a responsibility, such as
+business analysis or review. Your **AI agent** performs the work using those roles.
 
-Optional [workflows](.hai/concepts/workflow.md) describe coordinated agent steps,
-named results and explicit file handoffs in one Markdown definition per workflow
-under `.hai_env/workflows/`. Each run belongs to one Activity and retains its
-definition, inputs, attempts and outputs under `<activity>/workflow-runs/<run-id>/`.
-Runs move with their Activity on archival; the runtime resolves their current
-location through the stable Activity ID.
-Several runs may coexist; only one may execute at a time within an Activity.
-The golden library includes a workflow-definition-manager for authoring and
-review. See the [definition format](.hai/conventions/workflow_conv.md),
-[execution procedure](.hai/procedures/execute-workflow.md) and
-[runtime commands](.hai/tools/runtime/README.md#agent-workflow-commands).
+## What can it do?
 
-Chronicles support reviewed source adapters and exact-message reconciliation after
-compatible session rewrites. Recording defaults to `best_effort`: source availability
-gaps stay visible while ordinary work continues; `features.chronicles.mode: required`
-and independent mandatory obligations retain strict gates. Retained evidence and
-recovery history remain protected. See [recording compatibility](.hai/tools/runtime/README.md#recording-compatibility-and-policy)
-and [adapter maintenance](.hai/procedures/maintain-source-adapters.md).
+- Help turn an idea into clear requirements and a plan.
+- Support research, analysis, writing, software development and other tasks.
+- Guide AI agents through repeatable steps and clearly defined roles.
+- Keep requests, decisions and results so you can continue work later.
 
-Startup shows the registered agents and current Activity state. With no task it
-offers a combined menu of task actions and individual agents, then waits for your
-choice; with a concrete task it shows the summary and proceeds with that task.
-Ask “show the menu” or “Help with HAI” later for a refreshed brief overview. Select
-a displayed choice such as `continue` or `agent:business-analyst`, or describe your
-task in plain language. Registration does not guarantee that an agent's required
-model, tools or configuration are available; those are checked before selected work.
-See the [startup and Help interaction](.hai/procedures/present-startup-guide.md).
+## What do you need?
 
-Version 0.4.0 adds an [Activity-local agent chat](.hai/conventions/activity-chat_conv.md).
-Assigned agents read and append coordination messages through runtime commands;
-each Activity retains its own history. This addition is not in the published 0.3.0 ZIP.
+- **An AI agent**, such as Codex, Claude Code or GitHub Copilot in agent mode.
+  It must be able to read and update files in your project folder and run commands
+  with your permission. You need access to the AI service used by your chosen
+  tool; HAI does not provide the AI itself.
+- **Python 3.11 or newer**, installed on your computer and accessible to your AI agent.
+- **A project folder** where you want to use HAI.
 
-Version 0.4.0 also adds [per-invocation agent working folders](.hai/conventions/agent-invocation_conv.md).
-The host allocates a distinct Activity-local folder before every new spawn and
-passes it to the agent. Same-instance follow-ups retain that folder; new spawns
-receive new ones. Material remains with its Activity on archival.
+You do not need Git to install HAI.
+The core uses Python's standard library, so no extra Python packages are required.
 
-Version 0.4.0 adds [Activity usage records](.hai/conventions/activity-usage_conv.md):
-source-bounded token snapshots, separately labelled configured-rate credit
-estimates and automatic refresh before closure. Missing charges remain unavailable;
-account balances and subscription allowances are not treated as Activity spend.
+## Install and start
 
-This source tree prepares the **0.4.0 release candidate**,
-using current environment state format **3**, with format **2** retained as read-only
-specification-migration context. All substantive HAI work belongs to an Activity, including
-brainstorming and analysis. Startup reports current work and preserves its
-continuity; work resumes after a selection or accompanying concrete task. A new
-chat alone does not create or close an Activity. The host coordinates work and uses the Python runtime for supported environment and Activity operations. Core provides source-backed recording; optional extensions provide domain instructions.
+1. Open the [latest HAI release](https://github.com/h111359/HAI/releases/latest).
+2. Under **Assets**, download the HAI release ZIP.
+3. Extract it and copy the complete `.hai` folder and `LICENSE` into your project
+   folder. Make sure the hidden `.hai` folder is included.
+4. Start your AI agent in your project folder and ask:
 
-The first immutable packaged prototype is **0.1.0**, which uses state format **1**.
-Its [release notes](release-notes/0.1.0.md) and [preserved manifest](https://github.com/h111359/HAI/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/release-notes/0.1.0-manifest.json)
-describe that historical bundle. The [0.2.0 notes](release-notes/0.2.0.md) and
-[preserved manifest](https://github.com/h111359/HAI/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/.hai/release-0.2.0.json) retain that release’s historical
-compatibility targets. The published [0.3.0 release](https://github.com/h111359/HAI/releases/tag/v0.3.0)
-and its [historical notes](release-notes/0.3.0.md) retain their original guarantees.
-The [0.4.0 candidate notes](release-notes/0.4.0.md) and
-[current manifest](.hai/release-0.4.0.json) describe the selected candidate. Exact
-source and package verification are recorded separately. Actual publication status
-and downloadable assets are tracked on [GitHub Releases](https://github.com/h111359/HAI/releases). See [installation and upgrade instructions](INSTALL.md) and
-[Activity migration notes](release-notes/activity-migration.md).
+   > Set up HAI in this project by following `.hai/start.md`, then help me get started.
 
-- `.hai/` contains the Python runtime, shared concepts, conventions and tools.
-- `hai_agents_library/agents/` contains optional golden source packages; see the library index at `hai_agents_library/README.md`. Only complete copies installed and registered in `.hai_env/agents/` execute. Source updates do not update installed snapshots; the library is excluded from the current release bundle. External workspaces start with `.hai` only; core runtime later installs selected individual optional packages and owns runtime catalogues, while Agent-definition-manager authors and verifies definitions.
-- `.hai_env/` holds local state, mandatory fixed instructions, Activity records and
-  optional local context. State configures mandatory `activities.location` (default
-  `.hai_env/activities`) and central chronicles enabled/prompt threshold (default five).
-  Specification-manager owns its separate enabled/location configuration. Transcripts live under assigned Activities; there is no
-  Activity toggle or global chronicles location.
-- One current Activity uses `00000000_000000_active`; closed Activities retain stable
-  IDs under UTC closure timestamp folders. Material definition/analysis/plan revisions
-  preserve history after implementation starts. Completion may be analysis alone.
-- Optional chronicles record exact durable-source exchanges in Activity segments.
-  Recording starts with subsequent exchanges when enabled, without implicit backfill
-  of off periods. Closed records allow attributable supplements and delayed old-source
-  synchronization; new substantive work uses a new linked Activity. The host assigns explicit sources and schedules prompt batches. Core attempts enabled recording before closure; required-mode or independently mandatory gaps block closure, while best-effort source interruptions remain explicit unavailable coverage.
-- Workspace agent registrations use `.hai_env/agents/catalogue.md`; a missing workspace catalogue means none are registered.
-  Specialist definitions declare generic model class and effort; optional local
-  profiles resolve supported models. Core operations require no agent profile.
-- The optional `business-analyst`, `solution-architect`, `software-developer`, `quality-assurance` definitions are golden packages in `hai_agents_library/agents/`, installed and registered in `.hai_env/agents/`. Missing optional owners are isolated task dependencies; core startup and Activity record discovery remain available.
-- Product code and durable specifications remain in their canonical product locations.
-  Activity records link to them rather than becoming product storage.
+5. Describe what you want to do. You can also ask **"Help with HAI"**.
 
-Every agent declares `configuration/contract.json` through SKILL metadata,
-including agents with no customizable settings. Saved agent values live outside
-packages at `.hai_env/config/agents/<name>.json`; missing files use declared
-defaults. Git-manager owns Git/GitHub/auto-push and Specification-manager owns
-specification enabled/location there. Activity location and chronicles remain
-central in format 3; only specification settings move from prior format 2. See the [configuration standard](.hai/conventions/agent-configuration_conv.md)
-and [migration guide](release-notes/agent-configuration-migration.md).
+HAI roles are optional and installed separately. For setup details and upgrades,
+see [the installation guide](INSTALL.md).
 
-Version 0.4.0 groups fixed environment files under `.hai_env/config/`; existing
-root-level environments require the explicit [layout migration](.hai/procedures/migrate-environment-layout.md).
-Startup never moves those files or initializes competing defaults. The
-[workspace write boundary](.hai/conventions/workspace-boundary_conv.md) and
-[artifact placement contract](.hai/conventions/artifact-placement_conv.md) apply
-to all HAI work, including software, documents, research and flow execution.
-
-HAI is distributed under the [MIT license](LICENSE). See the [HAI concept](.hai/concepts/hai.md)
-and [environment concept](.hai/concepts/environment.md) for detailed boundaries.
+HAI is available under the [MIT license](LICENSE).
