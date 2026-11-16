@@ -1,7 +1,7 @@
 ---
-workflow_format: 1
+workflow_format: 2
 name: change-assessment
-revision: 2
+revision: 3
 entry: assess
 max_step_attempts: 2
 max_run_attempts: 2
@@ -31,7 +31,7 @@ results preserve unknowns and scope limits without starting implementation.
 
 ### assess
 
-#### Agent
+#### Role
 
 solution-architect
 

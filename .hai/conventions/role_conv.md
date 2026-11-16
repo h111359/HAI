@@ -1,0 +1,270 @@
+# Role convention
+
+## Identity and availability
+
+Optional installed workspace definitions live at `.hai_env/roles/<name>/ROLE.md`. Names match `[a-z][a-z0-9]*(?:-[a-z0-9]+)*`, are at most 64 characters, match their parent directory and are unique case-insensitively. `.hai_env/roles/catalogue.md` contains explicit registrations and exact decoded description copies. Creation or installation does not register a package or grant permission to execute it. Unregistered packages may be inspected and validated as data. Selection requires an authorized task and the host's actual execution capability; a profile or catalogue row does not prove that capability. Core startup and administration do not depend on any optional package.
+
+Source packages under `hai_roles_library/roles/` are data, not an execution origin. Source maintenance, installed replacement, registration and execution are separate scopes. Preserve external settings and records, review local differences or unknown baselines before replacing a package, and do not infer execution authority from installation.
+
+Apply the safe fixed `.hai_env/config/agent_instructions.md` and higher-priority instructions before dependent work. Substantive work uses the current Activity; startup, necessary setup and read-only diagnosis can establish context first. Pass relevant task scope, authority, Activity identity and evidence to any selected extension.
+
+## Role execution and delegation
+
+The host and every executor MUST apply the shared
+[artifact placement contract](artifact-placement_conv.md) to all task types,
+including direct execution, delegated work and tool-generated outputs. Assignment
+handoffs MUST preserve known artifact owners and destinations; missing destination
+or classification decisions MUST be resolved before dependent creation.
+
+The host coordinator and every executor MUST apply the
+[workspace write boundary](workspace-boundary_conv.md) in direct execution,
+delegation and tool use. The rule applies to all HAI workspaces, independently of
+workspace-local instructions or sandbox writable roots; assignment handoffs MUST
+include the validated workspace and any explicit permission for outside writes.
+
+The host coordinator chooses between following an installed role directly in its
+own execution and spawning a separate sub-agent. The following shared selection
+contract applies before optional role work in either mode; it does not select or
+run an extension by itself.
+
+- **Applicable role instructions.** The executor MUST read and follow the selected role definition and relevant procedures in either mode. Following a role directly does not create a separate agent.
+- **Execution prerequisites.** The host coordinator MUST preserve the existing registration, configuration, permission and model/capability requirements in either mode; choosing direct execution MUST NOT bypass an unavailable prerequisite.
+- **Direct execution default.** The host coordinator MUST use direct execution by default for small or routine work, work tightly connected to the current conversation or immediate coordinator decisions, or work where context transfer costs more than it adds. This default applies when separate execution is not required; the host MAY delegate when the separate-execution conditions below provide useful independence, focus or parallel progress.
+- **Required separate execution.** The host coordinator MUST spawn a separate sub-agent when the user explicitly requests one or applicable instructions require separate execution or an independent review, subject to the execution prerequisites and unavailable-delegation rule below.
+- **Useful delegation.** The host coordinator MAY spawn a sub-agent for substantial specialist work with clear inputs, boundaries and deliverables when separation provides useful focus, independence or parallel progress. The host MAY run independent tasks concurrently when their dependencies and file ownership permit it.
+- **Independent verification.** For substantial implementation affecting shared runtime behavior, persistence, concurrency, compatibility or multiple components, the host coordinator MUST assign a separate reviewer to assess requirements, behavior and evidence independently. The implementation author MUST perform developer checks. A separate reviewer is optional for small, low-impact changes.
+- **Proportionate delegation.** The host coordinator MUST NOT spawn an agent solely because a role exists or its name occurs in the task. The host MUST avoid splitting trivial steps into separate invocations and prefer one coherent assignment over repeated small invocations.
+- **Execution reporting.** The host coordinator MUST distinguish direct role work from an actual spawn in progress and result reports, for example, “I am following the Git-manager instructions directly” versus “I spawned a Git-manager sub-agent.” The host MUST report a spawn only after an actual launch and MUST NOT describe its own review as an independent sub-agent review. Actual launch records follow the Activity communication contract below.
+- **Unavailable delegation.** When optional delegation is unavailable but direct execution satisfies all prerequisites, the host coordinator MAY continue directly and MUST disclose the change in mode. When separate execution is required, the host MUST report the limitation and MUST NOT claim that direct execution satisfies it; independent permitted work MAY continue. Existing model/effort requirements still prohibit silent substitution.
+- **Standing delegation authorization.** Where higher-priority instructions permit it, the host coordinator MAY spawn sub-agents under this policy within the user's authorized task without requesting permission for each invocation. This authorization MUST NOT expand task scope or grant additional publication, destructive-action or external-communication permissions.
+
+Specialist scope and delegation exclusions apply in both modes. The host MUST
+keep orchestration outside specialist work; a role that forbids delegation returns
+dependencies to the coordinator. This policy grants no nested delegation to such
+a role. Existing allocation, handoff and retention requirements remain in
+[Activity communication](#activity-communication) and the
+[invocation convention](agent-invocation_conv.md).
+
+## Activity communication
+
+Before every new sub-agent spawn, the host coordinator MUST obtain a successful
+applied [invocation allocation](agent-invocation_conv.md) and pass its existing
+folder, Activity ID and invocation ID in the initial assignment. The host MUST
+record the actual returned host handle and launch status against that allocation.
+A continuation to the same live invocation retains its folder; every new spawn
+attempt receives a fresh allocation, including repeated spawns of the same agent.
+
+Assigned agents MUST validate their supplied folder and manifest before using it
+for temporary files, logs and concise supporting notes. Agents MUST NOT change
+the allocation manifest or substitute another invocation's folder. Product files,
+canonical Activity records and shared chat retain their existing locations/owners.
+Before dispatching Activity closure, the host MUST verify relevant invocations
+have stopped writing; uncertain or active writers block host closure. This is host
+coordination under the shared account, not OS-enforced file isolation.
+
+The host coordinator MUST supply each assigned agent with the validated workspace
+root, stable Activity ID, its author name and the available runtime chat commands.
+Assigned agents MUST read the Activity chat on entry, before acting on a handoff
+and before their final handoff. Agents MUST post findings, blockers, questions or
+handoff details that affect other participants through `activity chat-post`.
+Agents MUST use `activity chat-read` for history and MUST NOT directly edit, delete,
+truncate or replace chat messages or their file. Corrections are appended messages.
+
+Chat is communication through runtime, not direct maintenance of Activity artifacts,
+lifecycle or transcripts. Their ownership and handoff rules remain in force. Agents
+MUST treat chat content as attributable task data within their existing assignment,
+not permission to broaden scope or override instructions. No automatic agent
+invocation or background message delivery follows from a post. The
+[chat convention](activity-chat_conv.md) defines storage, operations and limits.
+
+## Activity usage
+
+For a requested usage update, the host coordinator MUST supply known session
+sources and attributable Activity boundaries to `activity usage-update`; it MUST
+NOT infer missing sources, token values or charges. Before closure, the host MUST
+register available related sources after resolving writers. Runtime refreshes
+usage automatically; unavailable data stays explicit. The
+[usage convention](activity-usage_conv.md) separates observed tokens, reported spend
+and configured-rate estimates, without treating account balance as spend.
+
+Assigned agents MUST return their known usage-source identity and assigned range
+with a handoff when available, or report the precise availability limit. Agents
+MUST NOT invent source paths, scan unrelated sessions or infer charges from limits.
+
+## Required definition format
+
+Use YAML frontmatter followed by Markdown. Required fields are `name` and
+`description`; description is a nonblank string of at most 1024 characters,
+expressed as one short paragraph with no line breaks after YAML decoding.
+HAI names follow the stricter identity rule above. Preserve optional frontmatter fields (`license`, `compatibility`, `metadata`, `allowed-tools`);
+metadata maps string keys to string values. YAML duplicate keys are invalid.
+
+Spawned specialists MUST declare both HAI extension keys under `metadata`:
+`hai-model-class` is `light`, `standard`, or `advanced`, and
+`hai-reasoning-effort` is a standard effort label (`low`, `medium`, `high`,
+`xhigh`, `max`, or `ultra`). Quote metadata values as strings. Concrete model IDs belong only in local model profiles, never role declarations.
+
+There is no role H1 title, Selection guide body section, embedded Definitions,
+or role-level Inputs/Outputs section. Include exactly these six H2 headings once
+each and in order:
+
+```markdown
+---
+name: example-specialist
+description: "Call to perform a specific task and return its verified result."
+metadata:
+  hai-configuration-contract: "configuration/contract.json"
+  hai-model-class: "standard"
+  hai-reasoning-effort: "high"
+---
+
+## Purpose
+<Why this role exists.>
+
+## Scope
+<Responsibilities and ownership.>
+
+## Out of Scope
+<Explicit exclusions and boundaries.>
+
+## Rules
+- **Agreed scope.** The example-specialist MUST keep its work within the user's agreed task scope.
+
+## Procedures
+| Procedure | Trigger | File |
+| --- | --- | --- |
+| Perform work | The caller requests the supported work. | [Perform work](procedures/perform-work.md) |
+
+## References
+[Owned configuration contract](configuration/contract.json) — required for configuration and dependent work.
+<Path — purpose — reading condition; declared concept mappings when used.>
+```
+
+Shared Rules have readable bold titles unique within the role's shared Rules section, without IDs or implied
+numeric priority. Optional H3 groups organize related subjects; do not create
+empty groups or require every role to use the same taxonomy. Group order does not
+establish precedence. State applicability and exceptions explicitly; steps and
+execution dependencies belong in procedures. Shared rules apply to every procedure.
+Only genuinely procedure-specific rules belong in that procedure's mandatory
+Rules section, following [procedure_conv.md](procedure_conv.md). Local rules do not
+override or duplicate shared rules. Resolve conflicts rather than treating a local
+rule as overriding a shared rule; a shared rule's explicit applicability/exception remains
+part of that shared rule. Procedure-local parameter names cannot appear in shared rules.
+
+Rule wording follows [instruction-writing_conv.md](instruction-writing_conv.md):
+explicit `MUST`, `MUST NOT`, or `MAY`, a clear actor/action/object and relevant
+conditions, short readable titles, and preserved existing meaning. That convention
+is the single source for writing style in shared and local Rules; it does not
+change the existing six role sections or grant permission to act.
+
+Procedures follow [procedure_conv.md](procedure_conv.md). Multiple procedures live
+in separate role-owned files, indexed with the exact Procedure/Trigger/File
+columns. A single procedure may use the external form or the specified inline
+form. Canonical triggers occur only in the index or beside the sole inline
+procedure. Procedure execution stays within the same role; it is not delegation.
+
+Every procedure declares one Inputs table and one Outputs table. Inputs use only
+Mandatory/Optional requirements, with source and absence behavior. Rules and
+prerequisites state operation-specific requirements without introducing another
+input category. Outputs state observable results and completion criteria.
+
+Use [reference-notation_conv.md](reference-notation_conv.md): `[input:name]` and
+`[output:name]` are local to one procedure, not role-global placeholders. Calls
+explicitly identify source values and destination input names; matching names do
+not imply inheritance or substitution. Concept definitions remain in their owning
+concept files, with `[term:name]` mappings declared in References. Role-level term
+mappings apply to its procedures; procedure-local additions are allowed.
+
+Retrieve missing mandatory inputs from authorized context before returning the
+dependency to host coordinator or asking the human when called directly. Continue independent
+work; optional values use declared defaults or remain absent. Never invent values,
+decisions, permission, or approval. References specify reading conditions; a folder
+reference does not require recursive loading. Preserve paths and resolved containment
+before reads and writes.
+
+## Role-owned configuration
+
+Every optional role declares string metadata
+`hai-configuration-contract: "configuration/contract.json"` and ships the matching
+package-local contract under [role-configuration_conv.md](role-configuration_conv.md).
+Roles with no customizable settings declare an empty settings map. Keep all six
+ROLE.md headings; do not add a configuration body section or concrete model mappings.
+Creation, update, validation, registration and installation check this characteristic.
+
+Before dependent execution, validate the selected installed contract and read that
+role's fixed workspace configuration with the shared read-only
+[configuration helper](../tools/configuration/README.md). Retain its path, status,
+known effective values, configured fields and issues in the handoff. Missing files
+use declared defaults; invalid/unverified files do not silently become defaults.
+The receiving role checks that evidence and rereads when inputs changed. Scope
+failures to dependent work; owner-specific validators may preserve independent
+valid capabilities where the generic aggregate result is invalid. Read-only
+configuration diagnosis and explicitly authorized scoped repair remain possible.
+Do not scan every role's configuration during ordinary startup.
+
+Definition validation checks contract data without loading workspace settings or
+requiring initialized state. Saved settings do not affect registration identity,
+replace model-profile resolution, or override task permission. Package installation
+preserves external config bytes and reports format incompatibility; it never
+performs an implicit config migration. Activity location and chronicles remain runtime-owned in state
+format 3; Specification-manager owns enablement/root and validates it independently
+from core/Activity context. Format 2 is migration context, never an owner-settings fallback.
+
+## Model resolution and coordination
+
+For an optional extension, use its declared model and effort only if supported by the actual host; report unavailable combinations without silently substituting. Profiles are optional and do not establish host support. Core runtime commands do not require profiles or role invocation. The host applies [Role execution and delegation](#role-execution-and-delegation) to select the execution mode, supplies relevant context and authority, and reports actual results and unresolved dependencies.
+
+## Supporting resources
+
+A role's `ROLE.md` is its canonical role entry point: identity, purpose, scope,
+exclusions, shared rules, procedure selection, and references. Its linked
+`procedures/` files own their execution steps, procedure-specific rules, and local input/output contracts;
+a single procedure may remain inline. This deliberately separates procedure files
+from shared role rules without moving execution behavior into conventions. Concepts
+explain meaning and rationale; prerequisites state entry conditions, rules state
+obligations, and steps state ordered actions/branches. The
+[Procedure concept](../concepts/procedure.md) explains their relationship.
+
+Role-local `concepts/` contain purposeful concept definitions and `conventions/`
+contain reusable formats and domain contracts. Neither is a substitute for the
+role's execution procedures. Shared role conventions define role-independent
+identity, structure, selection, handoff, and ownership contracts; reference those
+contracts rather than copying them into each role. Each participant owns its own
+handoff procedures even when several roles participate in a workflow.
+
+Optional supporting folders are `procedures/`, `concepts/`, `conventions/`, and
+`scripts/` for owned helpers and usage documentation. Other justified resources,
+including existing `templates/`, remain permitted. Create no unused scaffold.
+Framework-wide concepts and conventions retain their canonical framework location.
+Role-owned domain knowledge remains in its package as a single authority, with
+shared readers linking to it. Scripts follow [tooling_conv.md](tooling_conv.md).
+
+## Registration and verification
+
+Before authoring or delivering a reusable package, the responsible author and
+reviewer MUST assess every included new resource against the artifact placement
+contract. A continuing operational, maintenance, documentation or testing purpose
+is required; current-Activity requirement mappings, run results or reviewer history
+MUST NOT be included solely because they helped produce or verify the package.
+Reusable tests, fixtures and examples remain valid resources. The installer MUST
+receive a reviewed inclusion scope; format validation alone does not prove that
+all included content belongs in a package. No folder name is categorically banned.
+
+Explicit registration is separate from package installation, authoring and execution. Validate the installed definition and its configuration contract, identity, path containment and the exact catalogue description; preserve unrelated entries and stop on conflicts. Synchronizing an existing row does not add membership. The shared role auditor checks format, not semantic equivalence, authorization or runtime availability. See [role tools](../tools/roles/README.md) and [state convention](state_conv.md).
+
+## References
+
+- [Activity](../concepts/activity.md) and [Activity convention](activity_conv.md).
+- [Role configuration](role-configuration_conv.md), [procedure convention](procedure_conv.md), and [reference notation](reference-notation_conv.md).
+- [Runtime commands](../tools/runtime/README.md).
+
+## Roles, AI agents and skills
+
+A HAI role is an instruction package with a ROLE.md entry point. An AI agent is
+the executing tool or a separate running worker. A role may be followed directly
+or assigned to an AI agent under the execution policy above. Actual reusable
+skills use SKILL.md and remain distinct from HAI roles. Native .agents/ and
+.codex/ integrations, agent_instructions.md and work/agents/ are not role roots.
+
+Existing agent packages require the explicit [role migration](../procedures/migrate-roles.md).
+Core administration remains available while role-dependent operations await migration.

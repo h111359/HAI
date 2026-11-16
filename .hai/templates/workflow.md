@@ -1,5 +1,5 @@
 ---
-workflow_format: 1
+workflow_format: 2
 name: workflow
 revision: 2
 entry: assess
@@ -29,7 +29,7 @@ workflow and change its name, instructions and artifact contracts to the actual 
 
 ### assess
 
-#### Agent
+#### Role
 
 business-analyst
 

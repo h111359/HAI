@@ -50,15 +50,15 @@ locations remain incompatible. Format-3 `features.specification` is a mixed-auth
 error, not opaque configuration. Unknown unrelated root/feature values are preserved
 and ignored; duplicate JSON keys/nonstandard constants anywhere are invalid.
 
-### Agent configuration and preservation
+### Role configuration and preservation
 
 Specification-manager owns enabled/location in
-`.hai_env/config/agents/specification-manager.json`; Git-manager owns its settings
+`.hai_env/config/roles/specification-manager.json`; Git-manager owns its settings
 in its corresponding file. Neither is read from state as runtime settings.
 Their installed configuration contracts define defaults/types/versions. Optional
 owner absence or invalid configuration does not invalidate core startup. Startup
 can boundedly report the registered installed Specification-manager's separate
-`agent_configurations` result without loading scripts, product contents or the library.
+`role_configurations` result without loading scripts, product contents or the library.
 
 runtime owns central state, chronicles configuration, model profiles and startup
 policy. It does not perform ordinary specification setup. The explicit format-2-to-3
@@ -66,7 +66,7 @@ extraction is its narrow transition exception, coordinated by host coordinator; 
 grant tree-edit authority. Other extensions' unknown subtrees remain opaque:
 core neither interprets/enables them nor repairs invalid domain data. Authorized
 writers preserve unknown root/nested/sibling values and operate only on owned fields.
-New agent settings use [agent-configuration_conv.md](agent-configuration_conv.md),
+New role settings use [role-configuration_conv.md](role-configuration_conv.md),
 not new state subtrees. Initialization supplies only core defaults.
 
 ### Paths and dependent assurance
@@ -75,7 +75,7 @@ All configured paths use `/` separators and are relative to the workspace. Rejec
 absolute/drive/UNC/blank/traversal paths, dangling or escaping links, nonportable
 Windows names and trailing-dot/space aliases. Resolve existing ancestors before
 reads and immediately before writes. Reject workspace root, `.hai/`, `.git/`, state,
-instructions, profiles, agent registries/packages and `.hai_env/config/` collisions.
+instructions, profiles, role registries/packages and `.hai_env/config/` collisions.
 Validate existing target directory types; missing directories are valid and do not
 authorize creation. An Activity-store reference never moves/deletes records.
 
@@ -108,41 +108,41 @@ requested profile setup under [model-profiles_conv.md](model-profiles_conv.md).
 The host coordinator reports exact runtime availability and bootstrap/override use there.
 Preserve unrelated profiles during state and catalogue updates.
 
-## Workspace agent catalogue
+## Workspace role catalogue
 
-`.hai_env/agents/catalogue.md` is the fixed authoritative workspace agent catalogue and registry, separate from state. Use it for optional workspace extension selection. State has no `agents` property; a present legacy `agents` property is incompatible registration data, not a fallback. Report and preserve it pending explicitly scoped migration.
+`.hai_env/roles/catalogue.md` is the fixed authoritative workspace role catalogue and registry, separate from state. Use it for optional workspace extension selection. State has neither an `agents` nor a `roles` property; either property is incompatible registration data, not a fallback. Report and preserve it pending explicitly scoped migration.
 
-A missing catalogue means no registered workspace agents and is valid, including after minimal initialization. Do not create it during startup or scan agent definitions to reconstruct it. An existing catalogue must be a readable UTF-8 Markdown file resolving inside the workspace. Reject conflicting directories and escaping symlinks/junctions. Its format is:
+A missing catalogue means no registered workspace roles and is valid, including after minimal initialization. Do not create it during startup or sca role definitions to reconstruct it. An existing catalogue must be a readable UTF-8 Markdown file resolving inside the workspace. Reject conflicting directories and escaping symlinks/junctions. Its format is:
 
 ```markdown
-# Workspace agent catalogue
+# Workspace role catalogue
 
-| Agent | Selection guide | Definition |
+| Role | Selection guide | Definition |
 | --- | --- | --- |
-| `release-reviewer` | Call to review a proposed release against its readiness criteria and report unresolved release issues. | [SKILL.md](release-reviewer/SKILL.md) |
+| `release-reviewer` | Call to review a proposed release against its readiness criteria and report unresolved release issues. | [ROLE.md](release-reviewer/ROLE.md) |
 ```
 
-Use exactly one table with these three columns. A header-only table is an empty catalogue; surrounding prose is allowed and preserved. Each row registers one unique name, enclosed in backticks, a nonblank short actionable guide, and one definition link. Names and collisions follow the [agent convention](agent_conv.md). Current-format definition destinations MUST be exactly `<name>/SKILL.md`, relative to `.hai_env/agents/catalogue.md`, and resolve to readable files inside the workspace; reject absolute paths, traversal, queries, fragments, and escaped separators. Reject case-insensitive duplicate names.
+Use exactly one table with these three columns. A header-only table is an empty catalogue; surrounding prose is allowed and preserved. Each row registers one unique name, enclosed in backticks, a nonblank short actionable guide, and one definition link. Names and collisions follow the [role convention](role_conv.md). Current-format definition destinations MUST be exactly `<name>/ROLE.md`, relative to `.hai_env/roles/catalogue.md`, and resolve to readable files inside the workspace; reject absolute paths, traversal, queries, fragments, and escaped separators. Reject case-insensitive duplicate names.
 
 Author the canonical YAML `description` first and copy its decoded string value verbatim into the guide cell. Preserve its characters when encoding table syntax: encode `&`, `\`, and `|` as `&amp;`, `&#92;`, and `&#124;` respectively, in that order; decode those entities once when comparing with the canonical description. Literal Markdown punctuation is retained as source text, not rendered away. Guides must be a single paragraph without line breaks. Validate exact decoded equality when creating or updating a definition or entry; ordinary startup validates table structure and references without loading every definition to compare guide copies. Report discovered stale copies without rewriting them.
 
-Legacy `<name>/knowledge.md` links must be identified as pending agent-format
+Legacy `<name>/knowledge.md` links must be identified as pending role-format
 migration, with their names and paths reported and rows preserved. They are not
 executed or silently unregistered; other valid independent entries remain
 selectable. Do not treat legacy links as current-format definitions or guess a
-replacement. Coordinated authorized migration follows the agent convention.
+replacement. Coordinated authorized migration follows the role convention.
 The legacy version-2 migration described below preserves those links until that
-separate or coordinated agent-format migration is authorized.
+separate or coordinated role-format migration is authorized.
 
 Malformed table structure, unreadable catalogue, or conflicting catalogue target blocks catalogue writes and excludes its entries. Isolated invalid rows are reported and excluded; valid independent rows remain selectable. Duplicate-name rows are all excluded. Preserve invalid material without repair,. Catalogue problems do not invalidate otherwise valid core state or prevent independent feature loading.
 
 runtime owns explicitly requested registration and synchronization of
 existing rows after authorized definition/package updates in the workspace catalogue.
-Agent-definition-manager owns authoring/verification and returns exact decoded
+Role-definition-manager owns authoring/verification and returns exact decoded
 metadata through host coordinator; it never copies packages into installation or mutates
-catalogues. Creation alone does not register an agent. runtime can
+catalogues. Creation alone does not register a role. runtime can
 install and validate the first selected optional package using shared core tools,
-without the optional authoring agent or a whole library. Workspace mutations retain
+without the optional authoring role or a whole library. Workspace mutations retain
 compatible initialized context, instructions and Activity prerequisites. Preserve
 unrelated rows/prose/settings; selection/execution still requires valid registration
 and remains the host coordinator’s responsibility.

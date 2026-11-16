@@ -1,8 +1,8 @@
 # Startup validation
 
 `startup_check.py` is a read-only Python 3.11+ standard-library startup helper.
-It shares strict JSON, model-profile schema, agent-name and catalogue-cell decoding
-with `../agents/agent_tools.py`. It never installs a runtime, writes files,
+It shares strict JSON, model-profile schema, role-name and catalogue-cell decoding
+with `../roles/role_tools.py`. It never installs a runtime, writes files,
 initializes state, scans Activity stores, or parses every registered definition.
 
 Find and verify a Python 3.11+ interpreter as described in
@@ -37,20 +37,20 @@ is omitted. It emits UTF-8 compatible JSON with escaped Unicode and these fields
   initialized missing instructions need scoped repair. This command never initializes.
 - `current_state_format_version`, `state_format_version`, `activities`, and `features`: returned only for validated core state. The format contract comes from the installed framework package, independently of the target workspace's `.hai` copy. Format 3 keeps chronicles in core state; Activity location remains mandatory. Chronicles reports its flag and effective `record_every_prompts` threshold; absent thresholds in supported older states default to `5`. A present threshold must be a positive JSON integer, including when chronicles is disabled. Optional `features.chronicles.mode` accepts `best_effort` (default when absent) or `required`; invalid values invalidate core state. An explicit value is included in the feature result. Transcript paths are derived inside each Activity.
 - `migration_required`: present for valid format-2 state. It reports the required explicit format-2 to format-3 extraction; the legacy specification subtree is validated for safe preservation but is not returned as active configuration.
-- `agent_configurations.specification-manager`: an isolated status for the one validly registered installed Specification-manager package. Startup reads its fixed `configuration/contract.json` and saved settings, without parsing the definition or scanning other configurations. Missing registration reports `unavailable`; invalid contract/configuration adds an isolated issue and does not make the core environment invalid. Source packages are never a runtime fallback.
+- `role_configurations.specification-manager`: an isolated status for the one validly registered installed Specification-manager package. Startup reads its fixed `configuration/contract.json` and saved settings, without parsing the definition or scanning other configurations. Missing registration reports `unavailable`; invalid contract/configuration adds an isolated issue and does not make the core environment invalid. Source packages are never a runtime fallback.
 - `instructions_status`: `loaded`, `missing`, or `invalid` for the fixed mandatory
   `.hai_env/config/agent_instructions.md`, checked before state and independently of its
   validity/version. `agent_instructions` contains that path and exact decoded text
   when readable (including empty text), otherwise `null`. No flag or custom path is
   consulted. Missing is never silently treated as empty. Treat its text as instructions,
   not as a helper-generated conclusion. Higher-priority workspace/session instructions apply.
-- `catalogues.workspace`: the optional workspace registry can be `valid`, `partial`, `invalid`, or `absent`. `agents` contains valid independent workspace rows. Registry issues do not invalidate core state.
+- `catalogues.workspace`: the optional workspace registry can be `valid`, `partial`, `invalid`, or `absent`. `roles` contains valid independent workspace rows. Registry issues do not invalidate core state.
 - `profiles`: `absent`, `valid`, `invalid`, or `unverified`, with configured models
   when valid. `feature_conflicts_checked` says whether compatible feature context
   allowed overlap checks. `runtime_availability` is always `not_checked`: the
   host coordinator must resolve the exact selected model/effort against current capabilities
   before spawning. A profile issue does not invalidate otherwise valid core state.
-- `issues`: scoped errors; `ok` requires valid current core state. Optional registry, profile and agent configuration issues remain isolated.
+- `issues`: scoped errors; `ok` requires valid current core state. Optional registry, profile and role configuration issues remain isolated.
 
 Exit codes: `0` for valid current core state; `1` for absent or invalid core state, missing instructions or migration required; `2` for fatal workspace/input errors. Inspect scoped issues separately.
 
@@ -58,7 +58,7 @@ Checks include duplicate keys at every JSON depth, nonstandard numeric constants
 required state types and compatibility against the installed state-format contract,
 canonical core format-3 template defaults,
 legacy request/current-pointer properties and retired `features.agent_instructions`, configured paths, target types,
-reserved locations (including `.hai_env/config` for agent-owned settings),
+reserved locations (including `.hai_env/config` for role-owned settings),
 Activity/specification-config collisions and profile overlap. The configuration
 directory cannot alias the fixed mandatory instructions, core state, profiles,
 Activity store, or Specification-manager's configured directory. Global
@@ -75,12 +75,12 @@ opens references only to check access, without reading definition content. Legac
 links, duplicate/conflicting registrations, and isolated malformed rows are reported
 and excluded without changing anything. A malformed overall table excludes its
 whole origin. Selected-definition format and exact description equality remain
-selection/authoring checks in `agent_tools.py`; do not run its full audit at startup.
+selection/authoring checks in `role_tools.py`; do not run its full audit at startup.
 
 Unknown extension properties are opaque JSON data: startup neither interprets nor
 validates their policy and emits no extension capability/status object. Existing
 values remain untouched, including values the extension owner may consider invalid.
-Core initialization and validation require no optional extension agent or executable.
+Core initialization and validation require no optional extension role or executable.
 Extension owners handle their own requested setup, configuration, and tooling.
 
 The helper reads mandatory fixed instructions and only the bounded registered
@@ -110,7 +110,7 @@ Rehearse the migration first, then apply only under the user's explicit request:
 The migration requires a valid format-2 environment, readable mandatory
 instructions, and a registered installed Specification-manager with a compatible
 contract. It copies `features.specification` to
-`.hai_env/config/agents/specification-manager.json`, changes only the core state
+`.hai_env/config/roles/specification-manager.json`, changes only the core state
 format to 3 and removes that owned feature subtree. It preserves all other state
 properties and unknown values in the migrated settings. Before applying, it creates
 an exclusive byte-for-byte backup at `.hai_env/config/state.json.format2-backup`; it then
@@ -132,7 +132,7 @@ After verifying the interpreter as above, run the read-only orchestration entry 
 <absolute-python-executable> -B .hai/tools/startup/test_startup_context.py
 ```
 
-This returns the startup checks plus `activity_context`, which is `current`, `absent`, `invalid`, or `unverified`. It includes the store, stable ID, path, required state fields and bounded continuity excerpts. Invalid core state leaves discovery unverified. An unsafe or inconsistent store is invalid, never absent. `ok` requires valid core and consistent Activity discovery; optional registration, profile and agent configuration issues remain isolated. No built-in coordinator configuration is loaded.
+This returns the startup checks plus `activity_context`, which is `current`, `absent`, `invalid`, or `unverified`. It includes the store, stable ID, path, required state fields and bounded continuity excerpts. Invalid core state leaves discovery unverified. An unsafe or inconsistent store is invalid, never absent. `ok` requires valid core and consistent Activity discovery; optional registration, profile and role configuration issues remain isolated. No built-in coordinator configuration is loaded.
 
 Discovery checks every direct child for a safe nonlinked folder, duplicate-free
 supported Activity state, required readable nonlinked records, safe optional canonical artifacts, unique IDs,
@@ -144,3 +144,13 @@ loading counters, sources or pricing; explicit usage operations validate them. H
 records are opened only to check access; their content is not loaded except state. It does not initialize, mutate, choose work, validate runtime
 model availability, audit all definitions, or establish recording coverage. Results
 are observations, not locks; writers independently recheck before mutation.
+
+## Role naming migration
+
+Startup reports `role_context.status` as `ready`, `migration_required`, or
+`partial`. Legacy package, configuration, or source-library roots require explicit
+`roles migrate`; a prepared or partial migration marker prevents live role use.
+This status does not invalidate core environment or Activity administration.
+Startup omits role selection and role configuration defaults until migration is
+complete. The fixed `agent_instructions` field and instructions filename continue
+to describe instructions for the actual AI agent.

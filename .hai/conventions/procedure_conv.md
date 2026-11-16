@@ -2,13 +2,13 @@
 
 ## Ownership and selection
 
-A procedure belongs to its agent. Executing it does not select, register, or
-delegate to another agent. Shared role rules remain in `SKILL.md` and always apply.
+A procedure belongs to its role. Executing it does not select, register, or
+delegate to another role. Shared role rules remain in `ROLE.md` and always apply.
 The selected procedure supplies a short description, inputs, prerequisites,
 procedure-specific rules, execution steps, outputs, and references. The
 [Procedure concept](../concepts/procedure.md) explains these distinctions.
 
-Multiple procedures use a single index in the agent's Procedures section:
+Multiple procedures use a single index in the role's Procedures section:
 
 ```markdown
 | Procedure | Trigger | File |
@@ -20,7 +20,7 @@ Procedure names and resolved files are unique within the index. Every trigger is
 nonblank and canonical in that index, not repeated in its external file. A trigger
 identifies applicability, never permission, priority, or automatic execution.
 File links are exactly `procedures/<lower-case-kebab-name>.md`, relative to
-`SKILL.md`, and must resolve to readable regular files inside the same agent
+`ROLE.md`, and must resolve to readable regular files inside the same role
 package and workspace. Reject escaping links, traversal, queries, fragments,
 alternate separators, and duplicate resolved files.
 
@@ -74,7 +74,7 @@ short '-' bullets beginning with bold readable titles unique within that Rules
 section, without IDs. Optional H3 subject groups organize related rules; use no
 empty groups. Inline procedures use H5 groups. State each rule's applicability and
 exceptions explicitly. Local rules apply only within this procedure: they neither
-override shared rules nor duplicate rules already owned by `SKILL.md` or a
+override shared rules nor duplicate rules already owned by `ROLE.md` or a
 referenced contract. Raise a conflict rather than infer an override from locality.
 The [instruction-writing convention](instruction-writing_conv.md) defines the
 shared `MUST`/`MUST NOT`/`MAY` vocabulary and plain wording. It applies to every
@@ -98,7 +98,7 @@ term mappings, and explicit passing between procedures.
 
 ## Single inline procedure
 
-An agent with one procedure may instead place it inline under Procedures. Use
+A role with one procedure may instead place it inline under Procedures. Use
 `### <name>`, one nonblank `Trigger: ...` line, and the seven sections above as H4
 headings. The inline trigger is canonical beside that procedure. Do not combine
 an inline procedure with an external index or inline several procedures. A single

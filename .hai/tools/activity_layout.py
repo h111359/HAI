@@ -41,18 +41,18 @@ def artifact(root, base, name):
     return base + '/' + name
 
 
-def invocation_root(root, base, agent=None):
+def invocation_root(root, base, role=None):
     if version(root, base) == 1:
         return base + '/files/agent-invocations'
-    if not agent:
+    if not role:
         return base + '/work/agents'
     # Callers validate the role identifier before selecting its owned directory.
-    checked_path(root, base + '/work/agents/' + agent)
-    return base + '/work/agents/' + agent
+    checked_path(root, base + '/work/agents/' + role)
+    return base + '/work/agents/' + role
 
 
-def invocation_path(root, base, agent, invocation_id):
-    return invocation_root(root, base, agent) + '/' + invocation_id
+def invocation_path(root, base, role, invocation_id):
+    return invocation_root(root, base, role) + '/' + invocation_id
 
 
 def revision_root(root, base, document):

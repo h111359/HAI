@@ -1,7 +1,7 @@
 ---
-workflow_format: 1
+workflow_format: 2
 name: customer-request
-revision: 2
+revision: 3
 entry: clarify
 max_step_attempts: 3
 max_run_attempts: 12
@@ -34,7 +34,7 @@ authorized assignment and current participant readiness.
 
 ### clarify
 
-#### Agent
+#### Role
 
 business-analyst
 
@@ -76,7 +76,7 @@ questions; do not reconstruct them from the initial request or conversation memo
 
 ### design
 
-#### Agent
+#### Role
 
 solution-architect
 
@@ -116,7 +116,7 @@ new questions. A reference/hash alone cannot supply the next analyst's baseline.
 
 ### implement
 
-#### Agent
+#### Role
 
 software-developer
 
@@ -152,7 +152,7 @@ checks rather than fabricating implementation success.
 
 ### verify
 
-#### Agent
+#### Role
 
 quality-assurance
 
@@ -189,7 +189,7 @@ verification, block the attempt instead of fabricating a product defect result.
 
 ### document
 
-#### Agent
+#### Role
 
 specification-manager
 

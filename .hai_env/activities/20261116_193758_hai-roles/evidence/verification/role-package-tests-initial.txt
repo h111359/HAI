@@ -1,0 +1,976 @@
+.hai_env/roles/backlog-manager/scripts
+EEEEEEEEEEEE
+======================================================================
+ERROR: test_all_terminal_outcomes (test_audit_backlog.BacklogAuditTests.test_all_terminal_outcomes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 89, in test_all_terminal_outcomes
+    self.catalogue(paths)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_configured_activity_store_is_reserved (test_audit_backlog.BacklogAuditTests.test_configured_activity_store_is_reserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 158, in test_configured_activity_store_is_reserved
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_custom_location_and_read_only_unicode (test_audit_backlog.BacklogAuditTests.test_custom_location_and_read_only_unicode)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 64, in test_custom_location_and_read_only_unicode
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_default_location_and_saved_custom_location (test_audit_backlog.BacklogAuditTests.test_default_location_and_saved_custom_location)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 72, in test_default_location_and_saved_custom_location
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_duplicate_metadata_and_empty_required_section (test_audit_backlog.BacklogAuditTests.test_duplicate_metadata_and_empty_required_section)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 120, in test_duplicate_metadata_and_empty_required_section
+    self.catalogue([p])
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_duplicate_numeric_ids (test_audit_backlog.BacklogAuditTests.test_duplicate_numeric_ids)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 104, in test_duplicate_numeric_ids
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_hardlinked_item (test_audit_backlog.BacklogAuditTests.test_hardlinked_item)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 150, in test_hardlinked_item
+    self.catalogue([p])
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_linked_root_and_item (test_audit_backlog.BacklogAuditTests.test_linked_root_and_item)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 135, in test_linked_root_and_item
+    self.catalogue([p])
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_nonempty_folder_marker_is_not_silently_ignored (test_audit_backlog.BacklogAuditTests.test_nonempty_folder_marker_is_not_silently_ignored)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 165, in test_nonempty_folder_marker_is_not_silently_ignored
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_stale_missing_and_escaping_catalogue_rows (test_audit_backlog.BacklogAuditTests.test_stale_missing_and_escaping_catalogue_rows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 111, in test_stale_missing_and_escaping_catalogue_rows
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_status_folder_mismatch_and_unknown_status (test_audit_backlog.BacklogAuditTests.test_status_folder_mismatch_and_unknown_status)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 96, in test_status_folder_mismatch_and_unknown_status
+    self.catalogue([p])
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_unsafe_roots_and_unexpected_entries (test_audit_backlog.BacklogAuditTests.test_unsafe_roots_and_unexpected_entries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 127, in test_unsafe_roots_and_unexpected_entries
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.145s
+
+FAILED (errors=12)
+
+
+.hai_env/roles/business-analyst/scripts
+......EEEEEEEEF.E...sF..
+======================================================================
+ERROR: test_ambiguous_raw_answer_waits_for_actual_mapping (test_clarification.RuntimeDialogueTests.test_ambiguous_raw_answer_waits_for_actual_mapping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 118, in test_ambiguous_raw_answer_waits_for_actual_mapping
+    self.save(self.batch(2))
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_capability_read_write_and_verification_failures_stop_dependent_work (test_clarification.RuntimeDialogueTests.test_capability_read_write_and_verification_failures_stop_dependent_work)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 171, in test_capability_read_write_and_verification_failures_stop_dependent_work
+    self.save(self.batch())
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_damaged_history_wrong_activity_and_event_marker_in_raw_text (test_clarification.RuntimeDialogueTests.test_damaged_history_wrong_activity_and_event_marker_in_raw_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 223, in test_damaged_history_wrong_activity_and_event_marker_in_raw_text
+    self.save(self.batch())
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_existing_crlf_decisions_are_preserved_as_exact_bytes (test_clarification.RuntimeDialogueTests.test_existing_crlf_decisions_are_preserved_as_exact_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 218, in test_existing_crlf_decisions_are_preserved_as_exact_bytes
+    prefix = self.path.read_bytes()
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmpwxvqm08b\\.hai_env\\activities\\00000000_000000_active\\decisions.md'
+
+======================================================================
+ERROR: test_first_question_exact_readback_batch_display_and_unanswered_reuse (test_clarification.RuntimeDialogueTests.test_first_question_exact_readback_batch_display_and_unanswered_reuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 78, in test_first_question_exact_readback_batch_display_and_unanswered_reuse
+    saved = self.save(self.batch(3))
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_invalid_ids_recommendation_preselection_and_revision_links (test_clarification.RuntimeDialogueTests.test_invalid_ids_recommendation_preselection_and_revision_links)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 142, in test_invalid_ids_recommendation_preselection_and_revision_links
+    self.save(self.batch())
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_ledger_survives_later_work_and_authorized_fixture_archival (test_clarification.RuntimeDialogueTests.test_ledger_survives_later_work_and_authorized_fixture_archival)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 235, in test_ledger_survives_later_work_and_authorized_fixture_archival
+    self.save(self.batch())
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_multipart_revision_mapping_holds_proposal_until_every_target_is_saved (test_clarification.RuntimeDialogueTests.test_multipart_revision_mapping_holds_proposal_until_every_target_is_saved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 193, in test_multipart_revision_mapping_holds_proposal_until_every_target_is_saved
+    self.save(self.batch(2))
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_verbatim_multipart_answers_revision_and_restart (test_clarification.RuntimeDialogueTests.test_verbatim_multipart_answers_revision_and_restart)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 93, in test_verbatim_multipart_answers_revision_and_restart
+    self.save(self.batch(2))
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+FAIL: test_partial_runtime_write_retains_ledger_and_prevents_display (test_clarification.RuntimeDialogueTests.test_partial_runtime_write_retains_ledger_and_prevents_display)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_clarification.py", line 189, in test_partial_runtime_write_retains_ledger_and_prevents_display
+    self.assertTrue(self.path.exists())
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_unicode_crlf_missing_context_and_cli_exit_codes (test_context_registry.RegistryTests.test_unicode_crlf_missing_context_and_cli_exit_codes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\business-analyst\scripts\test_context_registry.py", line 123, in test_unicode_crlf_missing_context_and_cli_exit_codes
+    self.assertEqual(result.returncode, 0, result.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : {"error": "'charmap' codec can't encode characters in position 71-77: character maps to <undefined>"}
+
+
+----------------------------------------------------------------------
+Ran 24 tests in 3.519s
+
+FAILED (failures=2, errors=9, skipped=1)
+
+
+.hai_env/roles/git-manager/scripts
+.......F.s........F.s..s.......
+======================================================================
+FAIL: test_preserves_complete_owned_subtrees_and_every_unrelated_value (test_migrate_git_configuration.FormatThreeMigrationTests.test_preserves_complete_owned_subtrees_and_every_unrelated_value)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\git-manager\scripts\test_migrate_git_configuration.py", line 49, in test_preserves_complete_owned_subtrees_and_every_unrelated_value
+    self.assertEqual(json.loads(self.destination.read_text()), {'config_format_version': 1, 'settings': owned})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'con[116 chars]': ['α']}, 'github': {'enabled': True, 'unkno[21 chars]e}}}} != {'con[116 chars]': ['\u03b1']}, 'github': {'enabled': True, 'unknow[20 chars]e}}}}
+  {'config_format_version': 1,
+   'settings': {'git': {'auto_push': {'enabled': False, 'unknown': 4},
+                        'enabled': True,
+-                       'future': ['α']},
+?                                   ^^
+
++                       'future': ['\u03b1']},
+?                                   ^
+
+                'github': {'enabled': True, 'unknown': {'preserve': None}}}}
+
+======================================================================
+FAIL: test_preserves_complete_owned_subtrees_and_every_unrelated_value (test_migrate_git_configuration.MigrationTests.test_preserves_complete_owned_subtrees_and_every_unrelated_value)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\git-manager\scripts\test_migrate_git_configuration.py", line 49, in test_preserves_complete_owned_subtrees_and_every_unrelated_value
+    self.assertEqual(json.loads(self.destination.read_text()), {'config_format_version': 1, 'settings': owned})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'con[116 chars]': ['α']}, 'github': {'enabled': True, 'unkno[21 chars]e}}}} != {'con[116 chars]': ['\u03b1']}, 'github': {'enabled': True, 'unknow[20 chars]e}}}}
+  {'config_format_version': 1,
+   'settings': {'git': {'auto_push': {'enabled': False, 'unknown': 4},
+                        'enabled': True,
+-                       'future': ['α']},
+?                                   ^^
+
++                       'future': ['\u03b1']},
+?                                   ^
+
+                'github': {'enabled': True, 'unknown': {'preserve': None}}}}
+
+----------------------------------------------------------------------
+Ran 31 tests in 3.688s
+
+FAILED (failures=2, skipped=3)
+
+
+.hai_env/roles/software-developer/scripts
+..............E..F...
+======================================================================
+ERROR: test_linked_escape_needs_location_operation_and_purpose (test_execution_contract.ExecutionTests.test_linked_escape_needs_location_operation_and_purpose)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\software-developer\scripts\test_execution_contract.py", line 84, in test_linked_escape_needs_location_operation_and_purpose
+    (self.root/'escape').symlink_to(other,target_is_directory=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 1213, in symlink_to
+    os.symlink(target, self, target_is_directory)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmpw1vt08f_' -> 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmpi1e5m0zy\\escape'
+
+======================================================================
+FAIL: test_preexisting_work_preserved_and_cli_readonly (test_execution_contract.ExecutionTests.test_preexisting_work_preserved_and_cli_readonly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\software-developer\scripts\test_execution_contract.py", line 140, in test_preexisting_work_preserved_and_cli_readonly
+    self.assertEqual(result.returncode,0,result.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {"ok": false, "issues": ["directive hash differs from current host assignment"], "semantic_verification": "not_performed"}
+
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.465s
+
+FAILED (failures=1, errors=1)
+
+
+.hai_env/roles/solution-architect/scripts
+...E..........
+======================================================================
+ERROR: test_cli_readonly_safe_paths_and_json (test_plan_contract.PlanTests.test_cli_readonly_safe_paths_and_json)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\solution-architect\scripts\test_plan_contract.py", line 182, in test_cli_readonly_safe_paths_and_json
+    (root/'linked.md').symlink_to(p)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 1213, in symlink_to
+    os.symlink(target, self, target_is_directory)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmplkzpfxtu\\plan.md' -> 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmplkzpfxtu\\linked.md'
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.341s
+
+FAILED (errors=1)
+
+
+.hai_env/roles/specification-manager/scripts
+.....F..s........................s........s....s...s
+======================================================================
+FAIL: test_catalogue_escapes_literal_metadata_and_encoded_paths (test_audit_specification.AuditTests.test_catalogue_escapes_literal_metadata_and_encoded_paths)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai_env\roles\specification-manager\scripts\test_audit_specification.py", line 459, in test_catalogue_escapes_literal_metadata_and_encoded_paths
+    self.assertIn("&lt;&amp;&gt; \U0001f600&#10;next", rendered)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '&lt;&amp;&gt; \U0001f600&#10;next' not found in '# Specification catalogue\n\n| Node ID | Parent ID | Kind | Type | Title | Location |\n| --- | --- | --- | --- | --- | --- |\n| dd7f782d-3342-4083-85b7-ab6e25815b0b |  | branch |  | Test node | [__ncf__.md](__ncf__.md) |\n| 706eee6b-5557-45a6-a6d8-5473c6444cb4 | dd7f782d-3342-4083-85b7-ab6e25815b0b | leaf | functional-requirements | A &#124; &#91;x&#93; &#42;bold&#42; &#95;u&#95; &#96;code&#96; &#92; &lt;&amp;&gt; 😀&#10;next &#x27;quoted&#x27; | [__ncf__.md](snow%20%26%20%5Bbrackets%5D%20%28round%29%20%23%20%F0%9F%98%80/__ncf__.md) |\n'
+
+----------------------------------------------------------------------
+Ran 52 tests in 9.889s
+
+FAILED (failures=1, skipped=5)
+
+
+hai_roles_library/roles/backlog-manager/scripts
+EEEEEEEEEEEE
+======================================================================
+ERROR: test_all_terminal_outcomes (test_audit_backlog.BacklogAuditTests.test_all_terminal_outcomes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 89, in test_all_terminal_outcomes
+    self.catalogue(paths)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_configured_activity_store_is_reserved (test_audit_backlog.BacklogAuditTests.test_configured_activity_store_is_reserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 158, in test_configured_activity_store_is_reserved
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_custom_location_and_read_only_unicode (test_audit_backlog.BacklogAuditTests.test_custom_location_and_read_only_unicode)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 64, in test_custom_location_and_read_only_unicode
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_default_location_and_saved_custom_location (test_audit_backlog.BacklogAuditTests.test_default_location_and_saved_custom_location)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 72, in test_default_location_and_saved_custom_location
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_duplicate_metadata_and_empty_required_section (test_audit_backlog.BacklogAuditTests.test_duplicate_metadata_and_empty_required_section)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 120, in test_duplicate_metadata_and_empty_required_section
+    self.catalogue([p])
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_duplicate_numeric_ids (test_audit_backlog.BacklogAuditTests.test_duplicate_numeric_ids)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 104, in test_duplicate_numeric_ids
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_hardlinked_item (test_audit_backlog.BacklogAuditTests.test_hardlinked_item)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 150, in test_hardlinked_item
+    self.catalogue([p])
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_linked_root_and_item (test_audit_backlog.BacklogAuditTests.test_linked_root_and_item)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 135, in test_linked_root_and_item
+    self.catalogue([p])
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_nonempty_folder_marker_is_not_silently_ignored (test_audit_backlog.BacklogAuditTests.test_nonempty_folder_marker_is_not_silently_ignored)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 165, in test_nonempty_folder_marker_is_not_silently_ignored
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_stale_missing_and_escaping_catalogue_rows (test_audit_backlog.BacklogAuditTests.test_stale_missing_and_escaping_catalogue_rows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 111, in test_stale_missing_and_escaping_catalogue_rows
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_status_folder_mismatch_and_unknown_status (test_audit_backlog.BacklogAuditTests.test_status_folder_mismatch_and_unknown_status)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 96, in test_status_folder_mismatch_and_unknown_status
+    self.catalogue([p])
+    ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+======================================================================
+ERROR: test_unsafe_roots_and_unexpected_entries (test_audit_backlog.BacklogAuditTests.test_unsafe_roots_and_unexpected_entries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 127, in test_unsafe_roots_and_unexpected_entries
+    self.catalogue([self.item()])
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\backlog-manager\scripts\test_audit_backlog.py", line 58, in catalogue
+    (self.root / 'catalogue.md').write_text('# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n' + ''.join(catalogue_row(parse_item(p)) + '\n' for p in paths))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 810, in write_text
+    return f.write(data)
+           ~~~~~~~^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 84-89: character maps to <undefined>
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.167s
+
+FAILED (errors=12)
+
+
+hai_roles_library/roles/business-analyst/scripts
+......EEEEEEEEF.E...sF..
+======================================================================
+ERROR: test_ambiguous_raw_answer_waits_for_actual_mapping (test_clarification.RuntimeDialogueTests.test_ambiguous_raw_answer_waits_for_actual_mapping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 118, in test_ambiguous_raw_answer_waits_for_actual_mapping
+    self.save(self.batch(2))
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_capability_read_write_and_verification_failures_stop_dependent_work (test_clarification.RuntimeDialogueTests.test_capability_read_write_and_verification_failures_stop_dependent_work)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 171, in test_capability_read_write_and_verification_failures_stop_dependent_work
+    self.save(self.batch())
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_damaged_history_wrong_activity_and_event_marker_in_raw_text (test_clarification.RuntimeDialogueTests.test_damaged_history_wrong_activity_and_event_marker_in_raw_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 223, in test_damaged_history_wrong_activity_and_event_marker_in_raw_text
+    self.save(self.batch())
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_existing_crlf_decisions_are_preserved_as_exact_bytes (test_clarification.RuntimeDialogueTests.test_existing_crlf_decisions_are_preserved_as_exact_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 218, in test_existing_crlf_decisions_are_preserved_as_exact_bytes
+    prefix = self.path.read_bytes()
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmpqaewe_vd\\.hai_env\\activities\\00000000_000000_active\\decisions.md'
+
+======================================================================
+ERROR: test_first_question_exact_readback_batch_display_and_unanswered_reuse (test_clarification.RuntimeDialogueTests.test_first_question_exact_readback_batch_display_and_unanswered_reuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 78, in test_first_question_exact_readback_batch_display_and_unanswered_reuse
+    saved = self.save(self.batch(3))
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_invalid_ids_recommendation_preselection_and_revision_links (test_clarification.RuntimeDialogueTests.test_invalid_ids_recommendation_preselection_and_revision_links)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 142, in test_invalid_ids_recommendation_preselection_and_revision_links
+    self.save(self.batch())
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_ledger_survives_later_work_and_authorized_fixture_archival (test_clarification.RuntimeDialogueTests.test_ledger_survives_later_work_and_authorized_fixture_archival)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 235, in test_ledger_survives_later_work_and_authorized_fixture_archival
+    self.save(self.batch())
+    ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_multipart_revision_mapping_holds_proposal_until_every_target_is_saved (test_clarification.RuntimeDialogueTests.test_multipart_revision_mapping_holds_proposal_until_every_target_is_saved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 193, in test_multipart_revision_mapping_holds_proposal_until_every_target_is_saved
+    self.save(self.batch(2))
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+ERROR: test_verbatim_multipart_answers_revision_and_restart (test_clarification.RuntimeDialogueTests.test_verbatim_multipart_answers_revision_and_restart)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 93, in test_verbatim_multipart_answers_revision_and_restart
+    self.save(self.batch(2))
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 73, in save
+    return dialogue.verify_readback(before, candidate, actual, self.activity, event['event_id'])
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\clarification.py", line 197, in verify_readback
+    raise ValueError('ledger predecessor or exact append readback mismatch')
+ValueError: ledger predecessor or exact append readback mismatch
+
+======================================================================
+FAIL: test_partial_runtime_write_retains_ledger_and_prevents_display (test_clarification.RuntimeDialogueTests.test_partial_runtime_write_retains_ledger_and_prevents_display)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_clarification.py", line 189, in test_partial_runtime_write_retains_ledger_and_prevents_display
+    self.assertTrue(self.path.exists())
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_unicode_crlf_missing_context_and_cli_exit_codes (test_context_registry.RegistryTests.test_unicode_crlf_missing_context_and_cli_exit_codes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\business-analyst\scripts\test_context_registry.py", line 123, in test_unicode_crlf_missing_context_and_cli_exit_codes
+    self.assertEqual(result.returncode, 0, result.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : {"error": "'charmap' codec can't encode characters in position 71-77: character maps to <undefined>"}
+
+
+----------------------------------------------------------------------
+Ran 24 tests in 3.910s
+
+FAILED (failures=2, errors=9, skipped=1)
+
+
+hai_roles_library/roles/git-manager/scripts
+.......F.s........F.s..s.......
+======================================================================
+FAIL: test_preserves_complete_owned_subtrees_and_every_unrelated_value (test_migrate_git_configuration.FormatThreeMigrationTests.test_preserves_complete_owned_subtrees_and_every_unrelated_value)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\git-manager\scripts\test_migrate_git_configuration.py", line 49, in test_preserves_complete_owned_subtrees_and_every_unrelated_value
+    self.assertEqual(json.loads(self.destination.read_text()), {'config_format_version': 1, 'settings': owned})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'con[116 chars]': ['α']}, 'github': {'enabled': True, 'unkno[21 chars]e}}}} != {'con[116 chars]': ['\u03b1']}, 'github': {'enabled': True, 'unknow[20 chars]e}}}}
+  {'config_format_version': 1,
+   'settings': {'git': {'auto_push': {'enabled': False, 'unknown': 4},
+                        'enabled': True,
+-                       'future': ['α']},
+?                                   ^^
+
++                       'future': ['\u03b1']},
+?                                   ^
+
+                'github': {'enabled': True, 'unknown': {'preserve': None}}}}
+
+======================================================================
+FAIL: test_preserves_complete_owned_subtrees_and_every_unrelated_value (test_migrate_git_configuration.MigrationTests.test_preserves_complete_owned_subtrees_and_every_unrelated_value)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\git-manager\scripts\test_migrate_git_configuration.py", line 49, in test_preserves_complete_owned_subtrees_and_every_unrelated_value
+    self.assertEqual(json.loads(self.destination.read_text()), {'config_format_version': 1, 'settings': owned})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'con[116 chars]': ['α']}, 'github': {'enabled': True, 'unkno[21 chars]e}}}} != {'con[116 chars]': ['\u03b1']}, 'github': {'enabled': True, 'unknow[20 chars]e}}}}
+  {'config_format_version': 1,
+   'settings': {'git': {'auto_push': {'enabled': False, 'unknown': 4},
+                        'enabled': True,
+-                       'future': ['α']},
+?                                   ^^
+
++                       'future': ['\u03b1']},
+?                                   ^
+
+                'github': {'enabled': True, 'unknown': {'preserve': None}}}}
+
+----------------------------------------------------------------------
+Ran 31 tests in 3.792s
+
+FAILED (failures=2, skipped=3)
+
+
+hai_roles_library/roles/software-developer/scripts
+..............E..F...
+======================================================================
+ERROR: test_linked_escape_needs_location_operation_and_purpose (test_execution_contract.ExecutionTests.test_linked_escape_needs_location_operation_and_purpose)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\software-developer\scripts\test_execution_contract.py", line 84, in test_linked_escape_needs_location_operation_and_purpose
+    (self.root/'escape').symlink_to(other,target_is_directory=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 1213, in symlink_to
+    os.symlink(target, self, target_is_directory)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmp682fuzf_' -> 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmpwfmarz4k\\escape'
+
+======================================================================
+FAIL: test_preexisting_work_preserved_and_cli_readonly (test_execution_contract.ExecutionTests.test_preexisting_work_preserved_and_cli_readonly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\software-developer\scripts\test_execution_contract.py", line 140, in test_preexisting_work_preserved_and_cli_readonly
+    self.assertEqual(result.returncode,0,result.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {"ok": false, "issues": ["directive hash differs from current host assignment"], "semantic_verification": "not_performed"}
+
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.454s
+
+FAILED (failures=1, errors=1)
+
+
+hai_roles_library/roles/solution-architect/scripts
+...E..........
+======================================================================
+ERROR: test_cli_readonly_safe_paths_and_json (test_plan_contract.PlanTests.test_cli_readonly_safe_paths_and_json)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\solution-architect\scripts\test_plan_contract.py", line 182, in test_cli_readonly_safe_paths_and_json
+    (root/'linked.md').symlink_to(p)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\hmhri\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 1213, in symlink_to
+    os.symlink(target, self, target_is_directory)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmpmjih4zix\\plan.md' -> 'C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\activities\\00000000_000000_active\\work\\test-work\\role-package-checks\\tmpmjih4zix\\linked.md'
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.441s
+
+FAILED (errors=1)
+
+
+hai_roles_library/roles/specification-manager/scripts
+.....F..s........................s........s....s...s
+======================================================================
+FAIL: test_catalogue_escapes_literal_metadata_and_encoded_paths (test_audit_specification.AuditTests.test_catalogue_escapes_literal_metadata_and_encoded_paths)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\hai_roles_library\roles\specification-manager\scripts\test_audit_specification.py", line 459, in test_catalogue_escapes_literal_metadata_and_encoded_paths
+    self.assertIn("&lt;&amp;&gt; \U0001f600&#10;next", rendered)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '&lt;&amp;&gt; \U0001f600&#10;next' not found in '# Specification catalogue\n\n| Node ID | Parent ID | Kind | Type | Title | Location |\n| --- | --- | --- | --- | --- | --- |\n| 837d467a-da4c-4f69-9bd8-a208afaee107 |  | branch |  | Test node | [__ncf__.md](__ncf__.md) |\n| 358f3257-bdaa-4e0f-ba80-d4be1ea25170 | 837d467a-da4c-4f69-9bd8-a208afaee107 | leaf | functional-requirements | A &#124; &#91;x&#93; &#42;bold&#42; &#95;u&#95; &#96;code&#96; &#92; &lt;&amp;&gt; 😀&#10;next &#x27;quoted&#x27; | [__ncf__.md](snow%20%26%20%5Bbrackets%5D%20%28round%29%20%23%20%F0%9F%98%80/__ncf__.md) |\n'
+
+----------------------------------------------------------------------
+Ran 52 tests in 12.831s
+
+FAILED (failures=1, skipped=5)

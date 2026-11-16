@@ -26,7 +26,7 @@ class LayoutMigrationTests(unittest.TestCase):
                       'custom': {'keep': [1, 'value']}}
         self.write(LEGACY[STATE], json.dumps(self.state).encode() + b'\n')
         self.write(LEGACY[INSTRUCTIONS], b'\xef\xbb\xbfKeep these instructions.\r\n')
-        self.write('.hai_env/config/agents/custom.json', b'{"keep":"untouched"}\n')
+        self.write('.hai_env/config/roles/custom.json', b'{"keep":"untouched"}\n')
         self.write('work/activities/retained/input.md', b'existing activity evidence')
         self.request = {'provenance': {'source': 'test', 'reason': 'explicit layout migration'}}
 
@@ -57,7 +57,7 @@ class LayoutMigrationTests(unittest.TestCase):
             self.assertFalse((self.root / old).exists())
             backup = self.root / result['result']['backup_path'] / Path(old).name
             self.assertEqual(backup.read_bytes(), before[old])
-        self.assertEqual((self.root / '.hai_env/config/agents/custom.json').read_bytes(), before['.hai_env/config/agents/custom.json'])
+        self.assertEqual((self.root / '.hai_env/config/roles/custom.json').read_bytes(), before['.hai_env/config/roles/custom.json'])
         self.assertEqual((self.root / 'work/activities/retained/input.md').read_bytes(), before['work/activities/retained/input.md'])
         self.assertTrue(environment.startup.check(self.root)['ok'])
         self.assertEqual(self.call(True)['status'], 'unchanged')
@@ -89,24 +89,24 @@ class LayoutMigrationTests(unittest.TestCase):
         self.assertFalse(environment.startup.check(self.root)['ok'])
 
     def test_schema_two_layout_then_schema_conversion_end_to_end(self):
-        owner = TOOLS.parent.parent / '.hai_env/agents/specification-manager'
+        owner = TOOLS.parent.parent / '.hai_env/roles/specification-manager'
         if not owner.exists() and not owner.is_symlink():
             self.skipTest('optional Specification-manager integration unavailable in core-only distribution')
         state = copy.deepcopy(self.state)
         state['state_format_version'] = 2
         state['features']['specification'] = {'enabled': False, 'location': 'specifications', 'note': 'preserve'}
         self.write(LEGACY[STATE], json.dumps(state).encode())
-        self.write('.hai_env/agents/specification-manager/SKILL.md', b'Installed fixture')
-        self.write('.hai_env/agents/catalogue.md', b'| Agent | Selection guide | Definition |\n| --- | --- | --- |\n| `specification-manager` | Manage specifications. | [SKILL.md](specification-manager/SKILL.md) |\n')
+        self.write('.hai_env/roles/specification-manager/ROLE.md', b'Installed fixture')
+        self.write('.hai_env/roles/catalogue.md', b'| Role | Selection guide | Definition |\n| --- | --- | --- |\n| `specification-manager` | Manage specifications. | [ROLE.md](specification-manager/ROLE.md) |\n')
         source_contract = owner / 'configuration/contract.json'
-        self.write('.hai_env/agents/specification-manager/configuration/contract.json', source_contract.read_bytes())
+        self.write('.hai_env/roles/specification-manager/configuration/contract.json', source_contract.read_bytes())
         self.assertTrue(self.call(True)['ok'])
         result = environment.handle('environment/migrate-specification', self.root, self.request, True)
         self.assertTrue(result['ok'], result)
         self.assertTrue(environment.startup.check(self.root)['ok'])
         current = json.loads((self.root / STATE).read_bytes())
         self.assertEqual(current['custom'], state['custom'])
-        owner = json.loads((self.root / '.hai_env/config/agents/specification-manager.json').read_bytes())
+        owner = json.loads((self.root / '.hai_env/config/roles/specification-manager.json').read_bytes())
         self.assertEqual(owner['settings'], state['features']['specification'])
 
     def test_invalid_sources_block_without_writes(self):

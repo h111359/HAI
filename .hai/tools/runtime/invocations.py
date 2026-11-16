@@ -1,4 +1,4 @@
-"""Allocate Activity-local working folders; the host owns actual agent dispatch."""
+"""Allocate Activity-local working folders; the host owns actual AI-agent dispatch."""
 import re
 import uuid
 from pathlib import PurePosixPath
@@ -6,15 +6,15 @@ from activity_layout import artifact, invocation_path
 
 from .storage import SafetyError, checked_path, fingerprint, read_json, write_json
 
-AGENT = re.compile(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z')
+ROLE = re.compile(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z')
 
 
 def prepare(root, base, activity_id, request, stamp):
-    agent = request.get('agent')
-    if not isinstance(agent, str) or len(agent) > 64 or not AGENT.fullmatch(agent):
-        raise ValueError('agent must be a lower-case agent name of at most 64 characters')
+    role = request.get('role')
+    if not isinstance(role, str) or len(role) > 64 or not ROLE.fullmatch(role):
+        raise ValueError('role must be a lower-case role name of at most 64 characters')
     invocation_id = str(uuid.uuid4())
-    relative = invocation_path(root, base, agent, invocation_id)
+    relative = invocation_path(root, base, role, invocation_id)
     suffix = relative[len(base) + 1:]
     parents = []
     parent = PurePosixPath(relative).parent
@@ -27,12 +27,12 @@ def prepare(root, base, activity_id, request, stamp):
     if checked_path(root, relative).exists():
         raise SafetyError('Invocation allocation collision; existing material was preserved')
     metadata = {
-        'invocation_format_version': 1, 'activity_id': activity_id,
-        'invocation_id': invocation_id, 'agent': agent, 'created_at': stamp,
+        'invocation_format_version': 2, 'activity_id': activity_id,
+        'invocation_id': invocation_id, 'role': role, 'created_at': stamp,
         'provenance': {key: request['provenance'][key] for key in ('source', 'reason')},
     }
     return {'allocated': False, 'activity_id': activity_id,
-            'invocation_id': invocation_id, 'agent': agent,
+            'invocation_id': invocation_id, 'role': role,
             'path': relative, 'activity_relative_path': suffix,
             'metadata_path': relative + '/invocation.json', 'metadata': metadata}
 

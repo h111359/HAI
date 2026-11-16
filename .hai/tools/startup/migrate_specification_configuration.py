@@ -1,4 +1,4 @@
-"""Explicitly migrate format-2 specification settings into agent configuration."""
+"""Explicitly migrate format-2 specification settings into role configuration."""
 from __future__ import annotations
 
 import argparse
@@ -10,16 +10,16 @@ import stat
 import sys
 
 sys.dont_write_bytecode = True
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "agents"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "roles"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "configuration"))
 import startup_check as startup
 from path_contract import is_link_or_reparse
-from agent_tools import Invalid, load_json
+from role_tools import Invalid, load_json
 from configuration_tools import (ConfigurationError, configuration_path,
                                  load_contract, workspace_directory_path)
 
-SPEC_AGENT = "specification-manager"
-CONTRACT = f".hai_env/agents/{SPEC_AGENT}/configuration/contract.json"
+SPEC_ROLE = "specification-manager"
+CONTRACT = f".hai_env/roles/{SPEC_ROLE}/configuration/contract.json"
 STATE = ".hai_env/config/state.json"
 BACKUP = ".hai_env/config/state.json.format2-backup"
 TEMP_STATE = ".hai_env/config/state.json.format3-candidate"
@@ -70,16 +70,16 @@ def _ensure_unaliased(workspace: Path, relative: str, *, kind: str,
 
 
 def _contract(workspace: Path, registered: list[dict]) -> tuple[dict, bytes]:
-    if not any(item.get("name") == SPEC_AGENT and item.get("origin") == ".hai_env"
+    if not any(item.get("name") == SPEC_ROLE and item.get("origin") == ".hai_env"
                for item in registered):
-        raise Invalid("Specification-manager must be validly registered as an installed workspace agent")
-    package = startup.safe_path(workspace, f".hai_env/agents/{SPEC_AGENT}")
+        raise Invalid("Specification-manager must be validly registered as an installed workspace role")
+    package = startup.safe_path(workspace, f".hai_env/roles/{SPEC_ROLE}")
     path = startup.safe_path(workspace, CONTRACT)
     if not path.is_relative_to(package):
         raise Invalid("Specification-manager contract resolves outside its installed package")
-    contract = load_contract(path, SPEC_AGENT)
+    contract = load_contract(path, SPEC_ROLE)
     required = {"enabled", "location"}
-    if (contract["contract_format_version"] != 2
+    if (contract["contract_format_version"] != 3
             or contract["current_config_format_version"] != 1
             or set(contract["settings"]) != required
             or contract["settings"]["enabled"] != {"type": "boolean", "default": False}
@@ -113,8 +113,8 @@ def migrate(workspace: Path, apply: bool = False) -> dict:
     startup.state_context(workspace, original, template, state_format_contract)
     legacy = original["features"]["specification"]
 
-    owner_contract, contract_bytes = _contract(workspace, startup_result["agents"])
-    target = configuration_path(workspace, SPEC_AGENT)
+    owner_contract, contract_bytes = _contract(workspace, startup_result["roles"])
+    target = configuration_path(workspace, SPEC_ROLE)
     if target.exists():
         raise Invalid("Specification-manager configuration already exists; resolve the destination before extraction")
     workspace_directory_path(workspace, legacy["location"],
@@ -122,7 +122,7 @@ def migrate(workspace: Path, apply: bool = False) -> dict:
     backup = startup.safe_path(workspace, BACKUP)
     candidate_path = startup.safe_path(workspace, TEMP_STATE)
     _ensure_unaliased(workspace, ".hai_env/config", kind="directory", must_exist=False)
-    _ensure_unaliased(workspace, ".hai_env/config/agents", kind="directory", must_exist=False)
+    _ensure_unaliased(workspace, ".hai_env/config/roles", kind="directory", must_exist=False)
     _ensure_unaliased(workspace, BACKUP, kind="file", must_exist=False)
     _ensure_unaliased(workspace, TEMP_STATE, kind="file", must_exist=False)
     if backup.exists() or candidate_path.exists():
@@ -141,7 +141,7 @@ def migrate(workspace: Path, apply: bool = False) -> dict:
     plan = {"ok": True, "status": "ready" if not apply else "in_progress",
             "source_state_format_version": 2, "target_state_format_version": 3,
             "specification": {"enabled": legacy["enabled"], "location": legacy["location"]},
-            "configuration": _write_status(".hai_env/config/agents/specification-manager.json", False),
+            "configuration": _write_status(".hai_env/config/roles/specification-manager.json", False),
             "backup": _write_status(BACKUP, False), "state_updated": False,
             "applied": bool(apply), "issues": []}
     if not apply:
@@ -164,18 +164,18 @@ def migrate(workspace: Path, apply: bool = False) -> dict:
         current_contract_path = startup.safe_path(workspace, CONTRACT)
         if current_contract_path.read_bytes() != contract_bytes or target.exists():
             raise Invalid("Contract or destination changed before configuration creation")
-        configuration_path(workspace, SPEC_AGENT)
-        for relative in (".hai_env/config", ".hai_env/config/agents"):
+        configuration_path(workspace, SPEC_ROLE)
+        for relative in (".hai_env/config", ".hai_env/config/roles"):
             directory = startup.safe_path(workspace, relative)
             if not directory.exists():
                 directory.mkdir()
                 plan.setdefault("created_directories", []).append(relative)
             _ensure_unaliased(workspace, relative, kind="directory")
-        target = configuration_path(workspace, SPEC_AGENT)
+        target = configuration_path(workspace, SPEC_ROLE)
         _write_exclusive(target, config_bytes)
-        plan["configuration"] = _write_status(".hai_env/config/agents/specification-manager.json", target.exists())
+        plan["configuration"] = _write_status(".hai_env/config/roles/specification-manager.json", target.exists())
         configuration_identity = _ensure_unaliased(
-            workspace, ".hai_env/config/agents/specification-manager.json", kind="file")
+            workspace, ".hai_env/config/roles/specification-manager.json", kind="file")
         if (target.read_bytes() != config_bytes or original_path.read_bytes() != original_bytes
                 or _ensure_unaliased(workspace, STATE, kind="file") != original_identity
                 or current_contract_path.read_bytes() != contract_bytes):
@@ -198,7 +198,7 @@ def migrate(workspace: Path, apply: bool = False) -> dict:
         if (original_path.read_bytes() != original_bytes
                 or _ensure_unaliased(workspace, STATE, kind="file") != original_identity
                 or target.read_bytes() != config_bytes
-                or _ensure_unaliased(workspace, ".hai_env/config/agents/specification-manager.json",
+                or _ensure_unaliased(workspace, ".hai_env/config/roles/specification-manager.json",
                                      kind="file") != configuration_identity
                 or backup.read_bytes() != original_bytes
                 or _ensure_unaliased(workspace, BACKUP, kind="file") != backup_identity
@@ -210,7 +210,7 @@ def migrate(workspace: Path, apply: bool = False) -> dict:
         if original_path.read_bytes() != state_bytes:
             raise Invalid("Replaced state bytes differ from the complete validated candidate")
         verified = startup.check(workspace)
-        spec_status = verified.get("agent_configurations", {}).get(SPEC_AGENT, {})
+        spec_status = verified.get("role_configurations", {}).get(SPEC_ROLE, {})
         expected_effective = {"enabled": legacy["enabled"], "location": legacy["location"]}
         if (verified.get("environment") != "valid"
                 or verified.get("state_format_version") != 3

@@ -241,5 +241,5 @@ logs/
 !**/work/agents/*/*/invocation.json
 
 # Runtime-owned recoverable package staging and backups are retained locally.
-.hai_env/agents/.hai-stage-*/
-.hai_env/agents/.hai-backup-*/
+.hai_env/roles/.hai-stage-*/
+.hai_env/roles/.hai-backup-*/

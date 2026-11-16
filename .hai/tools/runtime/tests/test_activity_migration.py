@@ -55,7 +55,7 @@ class ActivityMigrationTests(unittest.TestCase):
 
     def test_explicit_closed_conversion_preserves_archive_identity_and_exact_outcome(self):
         invocation = activities.handle('invocation-allocate', self.root, {'activity_id': self.aid,
-            'agent': 'software-developer', 'provenance': self.prov}, True)
+            'role': 'software-developer', 'provenance': self.prov}, True)
         self.assertTrue(invocation['ok'], invocation)
         iid = invocation['result']['invocation_id']
         invocation_path = self.root / invocation['result']['path']
@@ -98,7 +98,7 @@ class ActivityMigrationTests(unittest.TestCase):
         (self.directory / 'files/questionnaires').mkdir(); (self.directory / 'files/questionnaires/request.md').write_bytes(b'Authored questions')
         (self.directory / 'unknown-root.data').write_bytes(b'Unknown root bytes')
         invocation = activities.handle('invocation-allocate', self.root, {'activity_id': self.aid,
-            'agent': 'software-developer', 'provenance': self.prov}, True)
+            'role': 'software-developer', 'provenance': self.prov}, True)
         self.assertTrue(invocation['ok'], invocation)
         iid = invocation['result']['invocation_id']
         invpath = self.root / invocation['result']['path']; (invpath / 'evidence.bin').write_bytes(b'\x01')

@@ -2,15 +2,15 @@
 
 ## Definition
 
-A workflow is a reusable single-file process that assigns steps to agent roles,
+A workflow is a reusable single-file process that assigns steps to HAI roles,
 declares input/output artifacts and follows explicit result-dependent transitions.
 One execution is a run; one performance of a step is an attempt. Each run belongs
 to exactly one Activity. A workflow cannot transition to another Activity.
 
 ## Purpose
 
-Let users select an organizational process without reconstructing every agent
-handoff. Workflows remain optional; ordinary tasks and agent procedures still work.
+Let users select an organizational process without reconstructing every role
+handoff. Workflows remain optional; ordinary tasks and role procedures still work.
 
 ## Explanation
 

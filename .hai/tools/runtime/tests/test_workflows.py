@@ -90,30 +90,30 @@ class WorkflowTests(unittest.TestCase):
 
     def test_real_package_install_and_registration(self):
         source_repo = TOOLS.parent.parent
-        optional_package = source_repo / '.hai_env/agents/software-developer'
+        optional_package = source_repo / '.hai_env/roles/software-developer'
         if not optional_package.exists() and not optional_package.is_symlink():
             self.skipTest('optional Software-developer integration unavailable in core-only distribution')
         shutil.copytree(source_repo / '.hai', self.root / '.hai', dirs_exist_ok=True)
-        source = self.root / 'sources/agents/software-developer'
+        source = self.root / 'sources/roles/software-developer'
         source.parent.mkdir(parents=True)
         shutil.copytree(optional_package, source)
-        req = {'source':'sources/agents/software-developer', 'name':'software-developer', 'provenance':self.prov, 'register':True}
+        req = {'source':'sources/roles/software-developer', 'name':'software-developer', 'provenance':self.prov, 'register':True}
         result = packages.handle('install',self.root,req,True)
         self.assertTrue(result['ok'],result)
-        self.assertTrue((self.root / '.hai_env/agents/software-developer/SKILL.md').is_file())
+        self.assertTrue((self.root / '.hai_env/roles/software-developer/ROLE.md').is_file())
         result = packages.handle('register',self.root,{'name':'software-developer','provenance':self.prov},True)
         self.assertTrue(result['ok'], result); self.assertEqual(result['changed_files'], [])
 
     def test_untrusted_packages_rejected(self):
         try:
-            (self.root/'src').mkdir(); (self.root/'src/pkg').mkdir(); (self.root/'src/pkg/SKILL.md').symlink_to('/etc/passwd')
+            (self.root/'src').mkdir(); (self.root/'src/pkg').mkdir(); (self.root/'src/pkg/ROLE.md').symlink_to('/etc/passwd')
         except OSError as exc:
             if getattr(exc, 'winerror', None) == 1314:
                 self.skipTest('Windows symlink privilege unavailable')
             raise
-        (self.root/'.hai_env/agents').mkdir()
+        (self.root/'.hai_env/roles').mkdir()
         r=packages.handle('install',self.root,{'source':'src/pkg','name':'pkg','provenance':self.prov},True)
-        self.assertFalse(r['ok']); self.assertFalse((self.root/'.hai_env/agents/pkg').exists())
+        self.assertFalse(r['ok']); self.assertFalse((self.root/'.hai_env/roles/pkg').exists())
         r=packages.handle('install',self.root,{'source':'https://example.test/p','name':'pkg','provenance':self.prov},True)
         self.assertEqual(r['status'],'unsupported')
 

@@ -4,7 +4,7 @@
 
 Implementation details for the Python automation policy in
 [HAI](../concepts/hai.md). Applies to framework automation,
-including framework and workspace agent-owned scripts; it does not choose
+including framework and workspace role-owned scripts; it does not choose
 the product's runtime.
 
 ## Runtime and dependencies
@@ -57,11 +57,10 @@ the product's runtime.
   permission for that location and purpose. If a tool cannot respect the boundary,
   stop its invocation and report the dependency before requesting permission.
 - Shared framework tools live under `.hai/tools/`.
-- Agent-owned tools live under `.hai/agents/<name>/scripts/`.
-- Workspace agent-owned tools live under `.hai_env/agents/<name>/scripts/`
+- Workspace role-owned tools live under `.hai_env/roles/<name>/scripts/`
   and follow the same runtime, documentation, and verification rules.
 - Use descriptive `snake_case.py` filenames and `test_*.py` test files.
-- Keep the owning agent's SKILL.md focused on when to run tools.
+- Keep the owning role's ROLE.md focused on when to run tools.
   Put detailed arguments, examples, side effects, dependencies, exit
   codes, and parsing or validation limits in the adjacent README.md.
 - Document machine-readable output and exit codes for automated callers.

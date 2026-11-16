@@ -150,7 +150,7 @@ def load_run(root, activity_id, run_id):
                 if key not in latest['integrity']:
                     raise SafetyError('Uncommitted workflow attempt metadata requires reconciliation: ' + key)
     pinned = checked_path(root, base + '/definition.md', allow_missing=False)
-    parsed = parse_definition(pinned.read_bytes(), source=base + '/definition.md')
+    parsed = parse_definition(pinned.read_bytes(), source=base + '/definition.md', allow_legacy=True)
     if parsed['sha256'] != latest['definition']['sha256']:
         raise SafetyError('Pinned workflow definition hash differs')
     return latest, parsed, base, stale
@@ -214,7 +214,7 @@ def _source(root, context, location):
     relative = context['path'] + '/' + tail if kind == 'activity' else tail
     path = checked_path(root, relative, allow_missing=False)
     lowered = relative.casefold()
-    forbidden = ('.git', '.hai_env/config', '.hai_env/agents', '.aws', '.codex', '.agents')
+    forbidden = ('.git', '.hai_env/config', '.hai_env/roles', '.hai_env/agents', '.aws', '.codex', '.agents')
     if any(lowered == x or lowered.startswith(x + '/') for x in forbidden):
         raise SafetyError('Workflow input names protected metadata or secrets')
     if any(part.casefold() in {'.env', '.envrc', 'credentials', 'secrets.toml'} for part in path.parts):
@@ -254,29 +254,29 @@ def _source(root, context, location):
     return relative, observed
 
 
-def _readiness(root, agent, request):
-    from .environment import config, agent_tools
-    catalogue = agent_tools.audit(root)
-    registrations = [row for row in catalogue['agents'] if row['name'] == agent]
+def _readiness(root, role_name, request):
+    from .environment import config, role_tools
+    catalogue = role_tools.audit(root)
+    registrations = [row for row in catalogue['roles'] if row['name'] == role_name]
     if len(registrations) != 1:
-        raise SafetyError('Workflow agent is not validly registered: ' + agent)
+        raise SafetyError('Workflow role is not validly registered: ' + role_name)
     rel = registrations[0]['definition']
-    role = checked_path(root, rel, allow_missing=False)
-    fields = agent_tools.read_definition(role, root)
-    contract = config.load_contract(checked_path(root, str(PurePosixPath(rel).parent) + '/configuration/contract.json', allow_missing=False), agent)
-    saved = config.read_configuration(root, agent, contract)
+    role_path = checked_path(root, rel, allow_missing=False)
+    fields = role_tools.read_definition(role_path, root)
+    contract = config.load_contract(checked_path(root, str(PurePosixPath(rel).parent) + '/configuration/contract.json', allow_missing=False), role_name)
+    saved = config.read_configuration(root, role_name, contract)
     if saved['status'] not in ('configured', 'defaulted'):
-        raise SafetyError('Workflow agent configuration is unavailable: ' + str(saved['issues']))
+        raise SafetyError('Workflow role configuration is unavailable: ' + str(saved['issues']))
     if saved['settings'].get('enabled') is False:
-        raise SafetyError('Workflow agent owned feature is disabled: ' + agent)
-    resolved = agent_tools.resolve(root, rel, request.get('runtime'))
+        raise SafetyError('Workflow role owned feature is disabled: ' + role_name)
+    resolved = role_tools.resolve(root, rel, request.get('runtime'))
     if not resolved['ok']:
-        raise SafetyError('Workflow agent model/effort unavailable: ' + str(resolved['issues']))
+        raise SafetyError('Workflow role model/effort unavailable: ' + str(resolved['issues']))
     assessment(request.get('prerequisite_assessment'), 'prerequisite_assessment')
     authority = request.get('authority')
     if not isinstance(authority, str) or not authority.strip():
         raise ValueError('prepare/retry requires an actual authority reference')
-    return {'agent': agent, 'definition': rel, 'definition_sha256': digest(role.read_bytes()),
+    return {'role': role_name, 'definition': rel, 'definition_sha256': digest(role_path.read_bytes()),
             'configuration': saved, 'model': resolved['request'],
             'runtime': request.get('runtime'),
             'contract_sha256': digest(checked_path(root, str(PurePosixPath(rel).parent) + '/configuration/contract.json', allow_missing=False).read_bytes()),
@@ -285,9 +285,9 @@ def _readiness(root, agent, request):
 
 def _unchanged_readiness(root, step, assignment):
     pinned = assignment['readiness']
-    current = _readiness(root, step['agent'], pinned)
+    current = _readiness(root, step['role'], pinned)
     if current != pinned:
-        raise SafetyError('Agent definition, configuration or model changed after preparation; stop and retry with reviewed prerequisites')
+        raise SafetyError('Role definition, configuration or model changed after preparation; stop and retry with reviewed prerequisites')
 
 
 def _inputs(root, base, state, step):
@@ -330,9 +330,11 @@ def _verified_executor(root, context, step, value):
     value = _executor(value)
     if value['mode'] == 'spawned':
         invocation = ident(value['invocation_id'], 'invocation_id')
-        metadata = read_json(checked_path(root, invocation_path(root, context['path'], step['agent'], invocation) + '/invocation.json', allow_missing=False))
-        if (metadata.get('activity_id') != context['activity_id'] or metadata.get('invocation_id') != invocation
-                or metadata.get('agent') != step['agent']):
+        metadata = read_json(checked_path(root, invocation_path(root, context['path'], step['role'], invocation) + '/invocation.json', allow_missing=False))
+        if (type(metadata.get('invocation_format_version')) is not int
+                or metadata['invocation_format_version'] not in (1, 2)
+                or metadata.get('activity_id') != context['activity_id'] or metadata.get('invocation_id') != invocation
+                or metadata.get('role' if metadata['invocation_format_version'] == 2 else 'agent') != step['role']):
             raise SafetyError('Executor invocation is not allocated to this Activity and role')
     return value
 
@@ -381,6 +383,8 @@ def handle(operation, workspace, request, apply):
             context = activity(root, request.get('activity_id'), active=op in MUTATIONS)
             aid = request['activity_id']
             if op == 'start':
+                from role_state import require_ready
+                require_ready(root)
                 provenance(request)
                 parsed, raw = definition(root, request.get('definition'))
                 inputs = {}
@@ -414,6 +418,8 @@ def handle(operation, workspace, request, apply):
                 return envelope(operation, result={'state': state, 'path': base}, changed=changed)
 
             state, parsed, base, stale = load_run(root, aid, request.get('run_id'))
+            if op in ('prepare-step', 'record-execution', 'complete-step', 'retry-step', 'resume') and parsed['workflow_format'] != 2:
+                raise SafetyError('Legacy workflow runs are inspectable; resolve them before explicit role migration, then start a new migrated definition')
             if op == 'show':
                 return envelope(operation, result={'state': state, 'path': base, 'projection_stale': stale})
             provenance(request)
@@ -441,7 +447,7 @@ def handle(operation, workspace, request, apply):
 
             def allocate():
                 _slot(root, aid, state['run_id'])
-                readiness = _readiness(root, step['agent'], request)
+                readiness = _readiness(root, step['role'], request)
                 if state['attempt_count'] >= parsed['max_run_attempts'] or state['step_attempt_counts'].get(step_id, 0) >= parsed['max_step_attempts']:
                     limits = []
                     if state['attempt_count'] >= parsed['max_run_attempts']:
@@ -456,8 +462,8 @@ def handle(operation, workspace, request, apply):
                 relative = 'attempts/' + step_id + '/' + new_attempt
                 if checked_path(root, base + '/' + relative).exists():
                     raise SafetyError('New workflow attempt destination already exists; preserve it for reconciliation')
-                assignment = {'assignment_format': 1, 'activity_id': aid, 'run_id': state['run_id'],
-                              'step_id': step_id, 'attempt_id': new_attempt, 'agent': step['agent'],
+                assignment = {'assignment_format': 2, 'activity_id': aid, 'run_id': state['run_id'],
+                              'step_id': step_id, 'attempt_id': new_attempt, 'role': step['role'],
                               'instruction': step['instruction'], 'inputs': resolved,
                               'outputs': step['outputs'], 'results': step['results'], 'readiness': readiness,
                               'definition_sha256': parsed['sha256'], 'created_at': now()}
@@ -476,7 +482,7 @@ def handle(operation, workspace, request, apply):
                 if state['status'] == 'prepared' and attempt:
                     relative = 'attempts/' + step_id + '/' + attempt + '/assignment.json'
                     _inputs(root, base, state, step)
-                    _readiness(root, step['agent'], request)
+                    _readiness(root, step['role'], request)
                     assignment = read_json(checked_path(root, base + '/' + relative))
                     _unchanged_readiness(root, step, assignment)
                     return envelope(operation, result={'state': state, 'assignment': assignment, 'replayed': True})
@@ -583,7 +589,7 @@ def handle(operation, workspace, request, apply):
                 if attempt and state.get('executor'):
                     candidate.update(status='blocked', block_reason='effect-resolution-required')
                 elif attempt:
-                    _readiness(root, step['agent'], request)
+                    _readiness(root, step['role'], request)
                     assignment = read_json(checked_path(root, base + '/attempts/' + step_id + '/' + attempt + '/assignment.json', allow_missing=False))
                     _unchanged_readiness(root, step, assignment)
                     _inputs(root, base, state, step)

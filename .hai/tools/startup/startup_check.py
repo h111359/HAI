@@ -11,12 +11,13 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from environment_paths import STATE, PROFILES, INSTRUCTIONS, LEGACY, legacy_entries
 from path_contract import relative_parts
+from role_state import status as role_status
 
 sys.dont_write_bytecode = True
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "agents"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "roles"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "configuration"))
-from agent_tools import Invalid, NAMES, decode_cell, load_json, read_profiles
-from configuration_tools import (ConfigurationError, load_contract as load_agent_contract,
+from role_tools import Invalid, NAMES, decode_cell, load_json, read_profiles
+from configuration_tools import (ConfigurationError, load_contract as load_role_contract,
                                  read_configuration)
 
 FEATURES = {"chronicles": None}
@@ -100,8 +101,8 @@ def instruction_path(workspace: Path) -> Path:
         raise Invalid('Mandatory instructions alias another configuration resource')
     if target.exists() and target.is_file() and target.stat().st_nlink != 1:
         raise Invalid('Mandatory instructions must not have hardlink aliases')
-    for relative in (".hai", ".git", STATE, ".hai_env/agents",
-                     ".hai_env/config/agents",
+    for relative in (".hai", ".git", STATE, ".hai_env/roles",
+                     ".hai_env/config/roles", ".hai_env/agents", ".hai_env/config/agents",
                      PROFILES):
         reserved_paths = [workspace / relative]
         try:
@@ -142,21 +143,21 @@ def state_context(workspace: Path, state: dict, template: dict,
     version = state.get("state_format_version") if isinstance(state, dict) else None
     if (not isinstance(state, dict) or type(version) is not int
             or version not in contract["supported_state_format_versions"]
-            or "agents" in state or "requests" in state or "current_request" in state or "current_activity" in state
+            or "agents" in state or "roles" in state or "requests" in state or "current_request" in state or "current_activity" in state
             or not isinstance(state.get("activities"), dict)
             or not isinstance(state.get("features"), dict)
             or "requests" in state["features"]
             or "agent_instructions" in state["features"]):
         raise Invalid("Incompatible core state: expected a supported state format with mandatory activities and features; legacy requests/current pointers and retired features.agent_instructions are unsupported")
     if version == 3 and "specification" in state["features"]:
-        raise Invalid("Incompatible format-3 core state: features.specification is agent-owned and must be migrated to Specification-manager configuration")
+        raise Invalid("Incompatible format-3 core state: features.specification is role-owned and must be migrated to Specification-manager configuration")
     if version == 2 and "specification" not in state["features"]:
         raise Invalid("Incompatible format-2 core state: mandatory legacy features.specification is missing")
     activities = state["activities"]
     if ("enabled" in activities or not isinstance(activities.get("location"), str)
             or not activities["location"].strip()):
         raise Invalid("Mandatory activities requires a nonblank workspace-relative location and no enabled switch")
-    reserved = [".hai", ".git", STATE, ".hai_env/agents",
+    reserved = [".hai", ".git", STATE, ".hai_env/roles", ".hai_env/agents", "hai_agents_library", "hai_roles_library",
                 ".hai_env/config", ".hai_env/workflows", ".hai_env/workflow-runs",
                 PROFILES, INSTRUCTIONS, *LEGACY.values()]
     reserved_paths = [workspace / name for name in reserved]
@@ -214,7 +215,7 @@ def state_context(workspace: Path, state: dict, template: dict,
 
 
 def catalogue(workspace: Path, origin: str, reserved: set[str] | None = None) -> dict:
-    relative = f"{origin}/agents/catalogue.md"
+    relative = f"{origin}/roles/catalogue.md"
     result = {"status": "invalid", "entries": [], "names": set(), "issues": []}
     try:
         path = safe_path(workspace, relative)
@@ -243,7 +244,7 @@ def catalogue(workspace: Path, origin: str, reserved: set[str] | None = None) ->
         start = tables[0]
         def cells(line):
             return [cell.strip() for cell in line.strip().strip("|").split("|")]
-        if (cells(lines[start]) != ["Agent", "Selection guide", "Definition"]
+        if (cells(lines[start]) != ["Role", "Selection guide", "Definition"]
                 or start + 1 >= len(lines) or cells(lines[start + 1]) != ["---"] * 3):
             raise Invalid("Invalid catalogue header or separator")
         rows = []
@@ -267,44 +268,47 @@ def catalogue(workspace: Path, origin: str, reserved: set[str] | None = None) ->
                     raise Invalid("Selection guide must be nonblank and at most 1024 characters")
                 if row[2] == f"[knowledge.md]({name}/knowledge.md)":
                     raise Invalid(f"Legacy registration {name}/knowledge.md requires authorized migration")
-                if row[2] != f"[SKILL.md]({name}/SKILL.md)":
-                    raise Invalid("Definition link must use canonical <name>/SKILL.md")
-                definition = f"{origin}/agents/{name}/SKILL.md"
+                if row[2] != f"[ROLE.md]({name}/ROLE.md)":
+                    raise Invalid("Definition link must use canonical <name>/ROLE.md")
+                definition = f"{origin}/roles/{name}/ROLE.md"
                 target = safe_path(workspace, definition)
                 readable_file(target)
-                legacy = safe_path(workspace, f"{origin}/agents/{name}/knowledge.md")
+                legacy = safe_path(workspace, f"{origin}/roles/{name}/knowledge.md")
                 if legacy.exists():
                     raise Invalid("Conflicting legacy knowledge.md requires explicit resolution")
+                legacy_entry = safe_path(workspace, f"{origin}/roles/{name}/SKILL.md")
+                if legacy_entry.exists():
+                    raise Invalid("Parallel legacy SKILL.md entry requires explicit conflict resolution")
                 result["entries"].append({"name": name, "selection_guide": guide,
                                           "definition": definition, "origin": origin})
             except (Invalid, OSError, UnicodeError) as exc:
                 result["issues"].append({"code": "registration", "path": relative,
-                                         "agent": name, "message": str(exc)})
+                                         "role": name, "message": str(exc)})
         result["status"] = "partial" if result["issues"] else "valid"
     except (Invalid, OSError, UnicodeError) as exc:
         result["issues"].append({"code": "catalogue", "path": relative, "message": str(exc)})
     return result
 
 
-def specification_configuration(workspace: Path, agents: list[dict]) -> dict:
+def specification_configuration(workspace: Path, roles: list[dict]) -> dict:
     """Read only the registered installed Specification-manager package/config."""
-    result = {"status": "unavailable", "path": ".hai_env/config/agents/specification-manager.json",
+    result = {"status": "unavailable", "path": ".hai_env/config/roles/specification-manager.json",
               "settings": {}, "configured_fields": [], "issues": []}
-    entry = next((agent for agent in agents
-                  if agent.get("name") == "specification-manager"
-                  and agent.get("origin") == ".hai_env"), None)
+    entry = next((role for role in roles
+                  if role.get("name") == "specification-manager"
+                  and role.get("origin") == ".hai_env"), None)
     if entry is None:
         return result
-    contract_relative = ".hai_env/agents/specification-manager/configuration/contract.json"
+    contract_relative = ".hai_env/roles/specification-manager/configuration/contract.json"
     try:
         definition = safe_path(workspace, entry["definition"])
         package = definition.parent
         contract_path = safe_path(workspace, contract_relative)
         if not contract_path.is_relative_to(package):
             raise Invalid("Specification-manager contract resolves outside its installed package")
-        contract = load_agent_contract(contract_path, "specification-manager")
+        contract = load_role_contract(contract_path, "specification-manager")
         expected = {"enabled", "location"}
-        if (contract["contract_format_version"] != 2
+        if (contract["contract_format_version"] != 3
                 or contract["current_config_format_version"] != 1
                 or set(contract["settings"]) != expected
                 or contract["settings"]["enabled"] != {"type": "boolean", "default": False}
@@ -314,8 +318,8 @@ def specification_configuration(workspace: Path, agents: list[dict]) -> dict:
         result.update(read_configuration(workspace, "specification-manager", contract))
     except (Invalid, ConfigurationError, OSError, UnicodeError, RuntimeError) as exc:
         result["status"] = "invalid"
-        result["issues"].append({"code": "agent_configuration", "path": contract_relative,
-                                 "agent": "specification-manager", "message": str(exc)})
+        result["issues"].append({"code": "role_configuration", "path": contract_relative,
+                                 "role": "specification-manager", "message": str(exc)})
     return result
 
 
@@ -325,8 +329,8 @@ def check(workspace: Path) -> dict:
         raise Invalid("Workspace must be an existing directory")
     result = {"ok": False, "environment": "invalid", "activities": {}, "features": {},
               "agent_instructions": None, "instructions_status": "unverified",
-              "agents": [], "catalogues": {},
-              "agent_configurations": {"specification-manager": {
+              "roles": [], "catalogues": {},
+              "role_configurations": {"specification-manager": {
                   "status": "unavailable", "settings": {}, "configured_fields": [], "issues": []}},
               "profiles": {"status": "unverified", "runtime_availability": "not_checked"},
               "issues": []}
@@ -367,8 +371,8 @@ def check(workspace: Path) -> dict:
                 result["migration_required"] = {
                     "status": "required", "from_state_format_version": 2,
                     "to_state_format_version": 3,
-                    "reason": "Specification settings remain in format-2 state; no agent-owned settings fallback is active"}
-                result["agent_configurations"]["specification-manager"] = {
+                    "reason": "Specification settings remain in format-2 state; no role-owned settings fallback is active"}
+                result["role_configurations"]["specification-manager"] = {
                     "status": "migration_required", "settings": {}, "configured_fields": [], "issues": []}
                 issues.append({"code": "migration_required", "path": STATE,
                                "message": "Explicitly migrate format-2 specification settings to Specification-manager configuration"})
@@ -388,25 +392,33 @@ def check(workspace: Path) -> dict:
         issues.append({'code': 'layout_migration', 'message': str(exc)})
     result["state_status"] = result["environment"]
 
+    # Role readiness is isolated so migration and core Activity administration remain usable.
+    result["role_context"] = role_status(workspace)
+    issues.extend(result["role_context"]["issues"])
     # The workspace catalogue is optional and independent of core validity.
-    local = catalogue(workspace, ".hai_env")
+    local = (catalogue(workspace, ".hai_env") if result["role_context"]["status"] == "ready"
+             else {"status": result["role_context"]["status"], "entries": [], "issues": []})
     result["catalogues"]["workspace"] = local["status"]
-    result["agents"].extend(local["entries"])
+    result["roles"].extend(local["entries"])
     issues.extend(local["issues"])
 
     if (result["environment"] == "valid"
-            and result.get("state_format_version") == 3):
-        specification = specification_configuration(workspace, result["agents"])
-        result["agent_configurations"]["specification-manager"] = specification
+            and result.get("state_format_version") == 3
+            and result["role_context"]["status"] == "ready"):
+        specification = specification_configuration(workspace, result["roles"])
+        result["role_configurations"]["specification-manager"] = specification
         issues.extend(specification["issues"])
+
+    if result["role_context"]["status"] != "ready":
+        result["role_configurations"]["specification-manager"]["status"] = result["role_context"]["status"]
 
     try:
         path = safe_path(workspace, PROFILES)
-        config_root = safe_path(workspace, ".hai_env/config/agents")
+        config_root = safe_path(workspace, ".hai_env/config/roles")
         if any(overlaps(candidate, root) for candidate in
                (workspace / PROFILES, path)
-               for root in (workspace / ".hai_env/config/agents", config_root)):
-            raise Invalid("Model profiles overlap agent configuration storage")
+               for root in (workspace / ".hai_env/config/roles", config_root)):
+            raise Invalid("Model profiles overlap role configuration storage")
         if any(overlaps(candidate, feature_path)
                for candidate in (workspace / PROFILES, path)
                for feature_pair in locations.values() for feature_path in feature_pair):

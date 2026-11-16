@@ -110,12 +110,13 @@ def migrate(root, base, ident, provenance, stamp, apply, summary=None, allow_clo
                         raise SafetyError('Legacy agent invocations must be a directory')
                     for invocation in sorted(child.iterdir()):
                         metadata = read_json(checked_path(root, base + '/' + source + '/' + invocation.name + '/invocation.json', allow_missing=False))
-                        agent = metadata.get('agent')
+                        agent = metadata.get('role') if metadata.get('invocation_format_version') == 2 else metadata.get('agent')
                         try:
                             canonical_id = str(uuid.UUID(invocation.name)) == invocation.name
                         except ValueError:
                             canonical_id = False
-                        if (not invocation.is_dir() or not canonical_id or metadata.get('invocation_format_version') != 1
+                        if (not invocation.is_dir() or not canonical_id or type(metadata.get('invocation_format_version')) is not int
+                                or metadata['invocation_format_version'] not in (1, 2)
                                 or metadata.get('activity_id') != ident or metadata.get('invocation_id') != invocation.name
                                 or not isinstance(agent, str) or not ROLE.fullmatch(agent) or len(agent) > 64):
                             raise SafetyError('Invalid invocation identity; preserve it for explicit inspection')

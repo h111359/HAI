@@ -1,4 +1,4 @@
-"""Read-only validation and loading for agent-owned workspace configuration."""
+"""Read-only validation and loading for role-owned workspace configuration."""
 from __future__ import annotations
 
 import argparse
@@ -10,6 +10,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from environment_paths import STATE, PROFILES, INSTRUCTIONS, LEGACY, legacy_entries
 from path_contract import relative_parts
+from role_state import status as role_status
 
 
 class ConfigurationError(ValueError):
@@ -19,7 +20,7 @@ class ConfigurationError(ValueError):
 _NAME = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z")
 _SETTING = re.compile(r"[a-z][a-z0-9]*(?:_[a-z0-9]+)*(?:\.[a-z][a-z0-9]*(?:_[a-z0-9]+)*)*\Z")
 _CONTRACT_KEYS = {
-    "contract_format_version", "agent", "current_config_format_version",
+    "contract_format_version", "role", "current_config_format_version",
     "supported_config_format_versions", "settings",
 }
 
@@ -53,17 +54,17 @@ def load_json(path):
     return _load_json(Path(path))
 
 
-def load_contract(path, expected_agent):
-    """Load and validate one agent's configuration contract."""
+def load_contract(path, expected_role):
+    """Load and validate one role's configuration contract."""
     path = Path(path)
     contract = _load_json(path)
     if not isinstance(contract, dict) or set(contract) != _CONTRACT_KEYS:
-        raise ConfigurationError("Contract must contain exactly the required format, agent, version, and settings fields")
+        raise ConfigurationError("Contract must contain exactly the required format, role, version, and settings fields")
     contract_version = contract["contract_format_version"]
-    if type(contract_version) is not int or contract_version not in {1, 2}:
-        raise ConfigurationError("contract_format_version must be a supported integer version (1 or 2)")
-    if contract["agent"] != expected_agent or not isinstance(expected_agent, str) or not _NAME.fullmatch(expected_agent):
-        raise ConfigurationError("Contract agent must match the expected canonical agent name")
+    if type(contract_version) is not int or contract_version != 3:
+        raise ConfigurationError("contract_format_version must be a supported integer version (3)")
+    if contract["role"] != expected_role or not isinstance(expected_role, str) or not _NAME.fullmatch(expected_role):
+        raise ConfigurationError("Contract role must match the expected canonical role name")
     current = contract["current_config_format_version"]
     supported = contract["supported_config_format_versions"]
     if (type(current) is not int or current <= 0 or not isinstance(supported, list)
@@ -85,7 +86,7 @@ def load_contract(path, expected_agent):
             raise ConfigurationError(f"Setting {name} must declare exactly type and default")
         if declaration["type"] == "boolean":
             valid_default = type(declaration["default"]) is bool
-        elif contract_version == 2 and declaration["type"] == "workspace-relative-directory":
+        elif contract_version == 3 and declaration["type"] == "workspace-relative-directory":
             valid_default = isinstance(declaration["default"], str) and bool(declaration["default"].strip())
         else:
             raise ConfigurationError(f"Unsupported setting type for {name}: {declaration['type']!r}")
@@ -118,15 +119,18 @@ def _safe_path(workspace: Path, relative: str) -> Path:
         raise ConfigurationError(f"Unreadable, dangling, or invalid path {relative}: {exc}") from exc
 
 
-def configuration_path(workspace, agent):
-    """Return a contained, nonaliasing path safe for one agent's configuration."""
-    if not isinstance(agent, str) or not _NAME.fullmatch(agent) or len(agent) > 64:
-        raise ConfigurationError("Agent name is not canonical")
+def configuration_path(workspace, role):
+    """Return a contained, nonaliasing path safe for one role's configuration."""
+    if not isinstance(role, str) or not _NAME.fullmatch(role) or len(role) > 64:
+        raise ConfigurationError("Role name is not canonical")
     workspace = Path(workspace).resolve(strict=True)
     if not workspace.is_dir():
         raise ConfigurationError("Workspace must be an existing directory")
-    target = _safe_path(workspace, f".hai_env/config/agents/{agent}.json")
-    _validate_configuration_target(workspace, agent, target)
+    current = role_status(workspace)
+    if current["status"] != "ready":
+        raise ConfigurationError("Role naming migration must be completed before accessing role configuration")
+    target = _safe_path(workspace, f".hai_env/config/roles/{role}.json")
+    _validate_configuration_target(workspace, role, target)
     return target
 
 
@@ -144,7 +148,7 @@ def workspace_directory_path(workspace, value, reserved_paths=(), *,
     target = _safe_path(workspace, value)
     target_lexical = workspace / value
     reserved = [".hai", ".git", STATE, INSTRUCTIONS,
-                PROFILES, ".hai_env/agents", ".hai_env/config", ".hai_env/workflows",
+                PROFILES, ".hai_env/roles", ".hai_env/agents", "hai_agents_library", "hai_roles_library", ".hai_env/config", ".hai_env/workflows",
                 ".hai_env/workflow-runs", *LEGACY.values()]
     reserved.extend(_configured_reserved_paths(
         workspace, include_specification=not ignore_legacy_specification))
@@ -215,7 +219,7 @@ def _effective_settings(contract, raw, workspace=None):
 def _configured_reserved_paths(workspace, include_specification=True):
     """Return fixed and configured core paths without following optional content."""
     reserved = [".hai", ".git", STATE, INSTRUCTIONS,
-                PROFILES, ".hai_env/agents", ".hai_env/workflows", ".hai_env/workflow-runs", *LEGACY.values()]
+                PROFILES, ".hai_env/roles", ".hai_env/agents", "hai_agents_library", "hai_roles_library", ".hai_env/workflows", ".hai_env/workflow-runs", *LEGACY.values()]
     try:
         state_path = _safe_path(workspace, STATE)
     except ConfigurationError:
@@ -243,49 +247,49 @@ def _configured_reserved_paths(workspace, include_specification=True):
     return reserved
 
 
-def _validate_configuration_target(workspace, agent, target):
-    config_relative = f".hai_env/config/agents/{agent}.json"
+def _validate_configuration_target(workspace, role, target):
+    config_relative = f".hai_env/config/roles/{role}.json"
     target_lexical = workspace / config_relative
     for relative in _configured_reserved_paths(workspace):
         try:
             reserved = _safe_path(workspace, relative)
         except ConfigurationError:
             # An invalid unrelated state path does not suppress diagnostics for
-            # this agent's isolated file.
+            # this role's isolated file.
             continue
         if _overlaps(target, reserved) or _overlaps(target_lexical, workspace / relative):
-            raise ConfigurationError(f"Agent configuration overlaps reserved path {relative}")
-    siblings = workspace / ".hai_env/config/agents"
+            raise ConfigurationError(f"Role configuration overlaps reserved path {relative}")
+    siblings = workspace / ".hai_env/config/roles"
     if siblings.exists():
         if not siblings.is_dir():
-            raise ConfigurationError("Agent configuration directory must be a directory")
+            raise ConfigurationError("Role configuration directory must be a directory")
         for sibling in siblings.iterdir():
-            if sibling.name == f"{agent}.json":
+            if sibling.name == f"{role}.json":
                 continue
             if _overlaps(target, sibling.resolve()) or _overlaps(target_lexical, sibling):
-                raise ConfigurationError(f"Agent configuration aliases another agent configuration: {sibling.name}")
+                raise ConfigurationError(f"Role configuration aliases another role configuration: {sibling.name}")
     if target.exists() and not target.is_file():
-        raise ConfigurationError("Agent configuration must target a regular file")
+        raise ConfigurationError("Role configuration must target a regular file")
 
 
-def read_configuration(workspace, agent, contract):
-    """Return effective settings and isolated diagnostics for one named agent.
+def read_configuration(workspace, role, contract):
+    """Return effective settings and isolated diagnostics for one named role.
 
     Missing configuration files and declared leaves use contract defaults. Existing
     malformed values are errors and never fall back to defaults. Unknown values are
     ignored for contracts with declared settings; an empty contract rejects a
-    nonempty settings override so settings-free agents cannot activate one.
+    nonempty settings override so settings-free roles cannot activate one.
     """
     workspace = Path(workspace).resolve(strict=True)
-    config_relative = f".hai_env/config/agents/{agent}.json"
+    config_relative = f".hai_env/config/roles/{role}.json"
     result = {"status": "unverified", "path": config_relative, "settings": {},
               "configured_fields": [], "issues": []}
     try:
-        if not _NAME.fullmatch(agent):
-            raise ConfigurationError("Agent name is not canonical")
-        if not isinstance(contract, dict) or contract.get("agent") != agent:
-            raise ConfigurationError("Validated contract does not belong to the requested agent")
-        target = configuration_path(workspace, agent)
+        if not _NAME.fullmatch(role):
+            raise ConfigurationError("Role name is not canonical")
+        if not isinstance(contract, dict) or contract.get("role") != role:
+            raise ConfigurationError("Validated contract does not belong to the requested role")
+        target = configuration_path(workspace, role)
         if not target.exists():
             result["status"] = "defaulted"
             result["settings"] = _effective_settings(contract, {}, workspace)[0]
@@ -297,40 +301,40 @@ def read_configuration(workspace, agent, contract):
             raise ConfigurationError("Configuration requires a supported config_format_version and settings object")
         raw = data["settings"]
         if not contract["settings"] and raw:
-            raise ConfigurationError("This agent declares no settings; nonempty overrides are invalid")
+            raise ConfigurationError("This role declares no settings; nonempty overrides are invalid")
         effective, configured = _effective_settings(contract, raw, workspace)
         result.update(status="configured", settings=effective, configured_fields=configured)
         return result
     except (ConfigurationError, OSError, UnicodeError, RuntimeError) as exc:
         result["status"] = "invalid" if isinstance(exc, ConfigurationError) else "unverified"
         result["issues"].append({"code": "configuration", "path": config_relative,
-                                 "agent": agent, "message": str(exc)})
+                                 "role": role, "message": str(exc)})
         return result
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--workspace", type=Path, default=Path.cwd())
-    parser.add_argument("--agent", required=True)
+    parser.add_argument("--role", required=True)
     parser.add_argument("--contract", required=True,
-                        help="Workspace-relative contract.json for this one agent")
+                        help="Workspace-relative contract.json for this one role")
     args = parser.parse_args()
     try:
         workspace = args.workspace.resolve(strict=True)
-        if not workspace.is_dir() or not _NAME.fullmatch(args.agent):
-            raise ConfigurationError("Workspace must be a directory and agent must have a canonical name")
+        if not workspace.is_dir() or not _NAME.fullmatch(args.role):
+            raise ConfigurationError("Workspace must be a directory and role must have a canonical name")
         contract_path = _safe_path(workspace, args.contract)
-        expected = f"{args.agent}/configuration/contract.json"
-        origins = (".hai", ".hai_env")
+        expected = f"{args.role}/configuration/contract.json"
+        origins = (".hai_env",)
         origin = next((item for item in origins
-                       if args.contract == f"{item}/agents/{expected}"), None)
+                       if args.contract == f"{item}/roles/{expected}"), None)
         if origin is None or contract_path.name != "contract.json":
-            raise ConfigurationError("Contract must use the canonical selected-agent configuration/contract.json path")
-        package_path = _safe_path(workspace, f"{origin}/agents/{args.agent}")
+            raise ConfigurationError("Contract must use the canonical selected-role configuration/contract.json path")
+        package_path = _safe_path(workspace, f"{origin}/roles/{args.role}")
         if not contract_path.is_relative_to(package_path):
-            raise ConfigurationError("Resolved contract must remain inside the selected agent package")
-        contract = load_contract(contract_path, args.agent)
-        result = read_configuration(workspace, args.agent, contract)
+            raise ConfigurationError("Resolved contract must remain inside the selected role package")
+        contract = load_contract(contract_path, args.role)
+        result = read_configuration(workspace, args.role, contract)
         result["ok"] = result["status"] in {"defaulted", "configured"}
         code = 0 if result["ok"] else 1
     except (ConfigurationError, OSError, RuntimeError) as exc:

@@ -12,7 +12,7 @@ MANIFEST = '.hai_env/config/layout-migration.json'
 
 def _inspect(root):
     # Import through environment so standalone/CLI entry points share validators.
-    from .environment import startup, agent_tools
+    from .environment import startup, role_tools
     marker = checked_path(root, MANIFEST)
     if marker.exists() and read_json(marker).get('status') != 'completed':
         raise SafetyError('Incomplete layout migration; inspect layout-migration.json and recovery copies. Explicit recovery is required.')
@@ -39,7 +39,7 @@ def _inspect(root):
         if new == INSTRUCTIONS:
             content.decode('utf-8-sig')  # Empty is valid; preserve bytes exactly.
         elif new == PROFILES:
-            agent_tools.read_profiles(source)
+            role_tools.read_profiles(source)
         else:
             state = read_json(source)
             startup.state_context(root, state,
@@ -50,7 +50,8 @@ def _inspect(root):
     # Backup all files before any source is removed; retire state last.
     entries.sort(key=lambda entry: entry['destination'] == STATE)
     dependencies = {}
-    for relative in ('.hai/templates/state.json', '.hai_env/config/agents/specification-manager.json'):
+    for relative in ('.hai/templates/state.json', '.hai_env/config/roles/specification-manager.json',
+                     '.hai_env/config/agents/specification-manager.json'):
         dependencies[relative] = fingerprint(checked_path(root, relative))
     return entries, dependencies
 

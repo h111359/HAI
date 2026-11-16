@@ -13,7 +13,7 @@ The document starts with `---` frontmatter, one H1 title and these H2 sections i
 order: Purpose, Inputs, Outcomes, Steps. Required metadata is exactly:
 
 ```yaml
-workflow_format: 1
+workflow_format: 2
 name: change-assessment
 revision: 1
 entry: assess
@@ -30,8 +30,8 @@ version, run-state format and the run's optimistic change counter.
 Purpose is nonempty prose. Workflow Inputs is one table with columns Name, Location,
 Format, Expectation. All declared initial inputs are required. Outcomes is one table
 with columns Name, Meaning. Each H3 under Steps is its unique step ID. Each step
-has exactly these H4 sections: Agent, Instruction, Inputs, Outputs, Results.
-Agent contains one canonical role name. Instruction contains nonempty Markdown
+has exactly these H4 sections: Role, Instruction, Inputs, Outputs, Results.
+Role contains one canonical role name. Instruction contains nonempty Markdown
 without fake structural headings; it may reference relevant role-owned procedures.
 
 | Section | Exact table columns |
@@ -110,3 +110,8 @@ as participant readiness, semantic acceptance or successful execution.
 - [Run convention](workflow-run_conv.md) — execution records and limits.
 - [Workflow tools](../tools/workflows/README.md) — actual API, diagnostics and limits.
 - [Artifact placement](artifact-placement_conv.md) and [workspace boundary](workspace-boundary_conv.md) — destinations and authority.
+
+Workflow format 1 uses an Agent section and is read only for retained run records.
+Reusable format-1 definitions require explicit role migration before validation
+or a new run. Migration increments the definition revision and leaves pinned
+historical definitions and event hashes unchanged.

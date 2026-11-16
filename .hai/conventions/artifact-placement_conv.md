@@ -63,5 +63,5 @@ verify source/destination contents, and report partial moves without automatic r
 
 - [Activity convention](activity_conv.md) — Activity record and supporting-material ownership.
 - [Workspace write boundary](workspace-boundary_conv.md) — file destinations and outside-write permission.
-- [Agent convention](agent_conv.md) — shared execution and reusable package review.
+- [Role convention](role_conv.md) — shared execution and reusable package review.
 - [Tooling convention](tooling_conv.md) — reusable tools versus per-run outputs.

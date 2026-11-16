@@ -2,9 +2,9 @@
 
 ## Definition
 
-A [term:Procedure] is an agent-owned workflow that turns supplied inputs into
+A [term:Procedure] is a role-owned workflow that turns supplied inputs into
 observable outputs through explicit actions and conditional branches, within the
-agent's responsibilities and the user's agreed task and permission.
+role's responsibilities and the user's agreed task and permission.
 
 ## Purpose
 
@@ -18,19 +18,19 @@ an outcome. A procedure is a human-readable contract, not an execution engine.
 
 A trigger identifies when a procedure is applicable. It is neither permission to
 act nor priority or execution order; dependencies must be stated explicitly.
-Executing a procedure keeps the same agent identity and does not create another
+Executing a procedure keeps the same role identity and does not create another
 agent invocation, delegation, or registration.
 
-An agent with multiple procedures keeps each in a separate owned file and selects
-them through its `SKILL.md` index. An agent with one procedure may keep it inline
+A role with multiple procedures keeps each in a separate owned file and selects
+them through its `ROLE.md` index. A role with one procedure may keep it inline
 or use the same indexed-file form. The canonical trigger occurs at that selection
 point. A short description of one or two sentences explains the procedure's
 specific purpose and intended result rather than repeating its trigger.
 
 ### Entry conditions, obligations, and actions
 
-Prerequisites are conditions required before execution. Shared rules in `SKILL.md`
-apply to all the agent's procedures; local rules describe only requirements,
+Prerequisites are conditions required before execution. Shared rules in `ROLE.md`
+apply to all the role's procedures; local rules describe only requirements,
 prohibitions, or choices specific to one procedure. A local rule cannot override a shared rule, grant extra permission, or
 substitute for another owner's contract. Applicability and exceptions belong to
 the rule that declares them; locality and file order do not establish precedence.
@@ -58,7 +58,7 @@ Steps are ordered actions and explicit branches. Information is supplied before
 an action consumes it; absence, conflict, and failure branches are stated where
 they affect dependent actions. Ongoing obligations, entry conditions, and concept
 explanations are not numbered as steps. Concepts explain meaning and rationale;
-conventions define reusable formats and contracts rather than agent workflows.
+conventions define reusable formats and contracts rather tha role workflows.
 
 ### Inputs, outputs, and named references
 
@@ -73,8 +73,8 @@ and unavailable results through observable completion evidence.
 own tables. `[term:Procedure]` identifies a declared concept source rather than a
 supplied value. These namespaces distinguish meanings for human readers: they
 are literal named references, not a template language or automatic substitution.
-Agent-level concept mappings are available to its procedures; procedure-local
-additions do not redefine inherited terms. There are no agent-global input/output
+Role-level concept mappings are available to its procedures; procedure-local
+additions do not redefine inherited terms. There are no role-global input/output
 parameters. A call to another procedure explicitly binds source values/evidence
 to the destination's input names; identical names alone imply no passing or
 inheritance. The notation convention defines the exact spelling and declarations.
@@ -91,7 +91,7 @@ objective. Those remain semantic review and execution responsibilities.
 
 ## References
 
-- [Agent concept](agent.md): role identity, ownership, registration, and delegation.
+- [Role concept](role.md): role identity, ownership, registration, and delegation.
 - [Procedure convention](../conventions/procedure_conv.md): exact external/inline structure and supported authoring subset.
 - [Reference notation](../conventions/reference-notation_conv.md): literal namespaces, declarations, local scope, and explicit passing.
 - [Instruction writing](../conventions/instruction-writing_conv.md): strict rule vocabulary and clear wording without changing meaning.

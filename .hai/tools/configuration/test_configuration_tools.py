@@ -1,4 +1,4 @@
-"""Isolated tests for read-only agent configuration loading."""
+"""Isolated tests for read-only role configuration loading."""
 from __future__ import annotations
 
 import json
@@ -20,7 +20,7 @@ class ConfigurationTests(unittest.TestCase):
         self.root.joinpath(".hai_env/config").mkdir(parents=True)
         self.root.joinpath(".hai_env/config/agent_instructions.md").write_text("", encoding="utf-8")
         self.contract = {
-            "contract_format_version": 1, "agent": "git-manager",
+            "contract_format_version": 3, "role": "git-manager",
             "current_config_format_version": 1, "supported_config_format_versions": [1],
             "settings": {
                 "git.enabled": {"type": "boolean", "default": False},
@@ -28,13 +28,13 @@ class ConfigurationTests(unittest.TestCase):
                 "github.enabled": {"type": "boolean", "default": False},
             },
         }
-        self.contract_path = self.root / ".hai_env/agents/git-manager/configuration/contract.json"
+        self.contract_path = self.root / ".hai_env/roles/git-manager/configuration/contract.json"
         self.contract_path.parent.mkdir(parents=True)
         self.contract_path.write_text(json.dumps(self.contract), encoding="utf-8")
         self.loaded = config.load_contract(self.contract_path, "git-manager")
 
     def config_path(self):
-        return self.root / ".hai_env/config/agents/git-manager.json"
+        return self.root / ".hai_env/config/roles/git-manager.json"
 
     def result(self):
         return config.read_configuration(self.root, "git-manager", self.loaded)
@@ -93,21 +93,42 @@ class ConfigurationTests(unittest.TestCase):
                 path.write_text(text, encoding="utf-8")
                 self.assertEqual(self.result()["status"], "invalid")
 
-    def test_settings_free_agent_rejects_nonempty_override(self):
-        contract = {**self.contract, "agent": "advisor", "settings": {}}
+    def test_settings_free_role_rejects_nonempty_override(self):
+        contract = {**self.contract, "role": "advisor", "settings": {}}
         path = self.root / "advisor-contract.json"
         path.write_text(json.dumps(contract), encoding="utf-8")
         loaded = config.load_contract(path, "advisor")
         self.assertEqual(config.read_configuration(self.root, "advisor", loaded)["status"], "defaulted")
-        override = self.root / ".hai_env/config/agents/advisor.json"
+        override = self.root / ".hai_env/config/roles/advisor.json"
         override.parent.mkdir(parents=True)
         override.write_text('{"config_format_version":1,"settings":{"future":{"enabled":true}}}', encoding="utf-8")
         self.assertEqual(config.read_configuration(self.root, "advisor", loaded)["status"], "invalid")
 
+    def test_role_contract_rejects_legacy_identity_and_versions(self):
+        for version in (1, 2, True, 4):
+            with self.subTest(version=version):
+                self.contract_path.write_text(json.dumps({**self.contract, "contract_format_version": version}), encoding="utf-8")
+                with self.assertRaises(config.ConfigurationError):
+                    config.load_contract(self.contract_path, "git-manager")
+        legacy = dict(self.contract)
+        legacy["agent"] = legacy.pop("role")
+        self.contract_path.write_text(json.dumps(legacy), encoding="utf-8")
+        with self.assertRaises(config.ConfigurationError):
+            config.load_contract(self.contract_path, "git-manager")
+
+    def test_legacy_settings_cannot_silently_use_new_defaults(self):
+        legacy = self.root / ".hai_env/config/agents/git-manager.json"
+        legacy.parent.mkdir(parents=True)
+        legacy.write_text('{"config_format_version":1,"settings":{"git":{"enabled":true}}}', encoding="utf-8")
+        result = self.result()
+        self.assertEqual(result["status"], "invalid")
+        self.assertEqual(result["settings"], {})
+        self.assertFalse(self.config_path().exists())
+
     def test_contract_rejects_schema_and_identity_errors(self):
         for invalid in (
             {**self.contract, "extra": True},
-            {**self.contract, "agent": "other"},
+            {**self.contract, "role": "other"},
             {**self.contract, "settings": {"git": {"type": "boolean", "default": False},
                                             "git.enabled": {"type": "boolean", "default": False}}},
             {**self.contract, "settings": {"git.enabled": {"type": "boolean", "default": 0}}},
@@ -118,15 +139,15 @@ class ConfigurationTests(unittest.TestCase):
                 with self.assertRaises(config.ConfigurationError):
                     config.load_contract(self.contract_path, "git-manager")
 
-    def test_contract_v2_directory_setting_is_validated_even_when_disabled(self):
+    def test_contract_v3_directory_setting_is_validated_even_when_disabled(self):
         contract = {
-            "contract_format_version": 2, "agent": "specification-manager",
+            "contract_format_version": 3, "role": "specification-manager",
             "current_config_format_version": 1, "supported_config_format_versions": [1],
             "settings": {"enabled": {"type": "boolean", "default": False},
                          "location": {"type": "workspace-relative-directory",
                                       "default": ".hai_env/specifications"}},
         }
-        path = self.root / ".hai_env/agents/specification-manager/configuration/contract.json"
+        path = self.root / ".hai_env/roles/specification-manager/configuration/contract.json"
         path.parent.mkdir(parents=True)
         path.write_text(json.dumps(contract), encoding="utf-8")
         loaded = config.load_contract(path, "specification-manager")
@@ -134,7 +155,7 @@ class ConfigurationTests(unittest.TestCase):
         self.assertEqual(result["status"], "defaulted")
         self.assertEqual(result["settings"], {"enabled": False, "location": ".hai_env/specifications"})
 
-        override = self.root / ".hai_env/config/agents/specification-manager.json"
+        override = self.root / ".hai_env/config/roles/specification-manager.json"
         override.parent.mkdir(parents=True)
         override.write_text(json.dumps({"config_format_version": 1, "settings": {
             "enabled": False, "location": "workspace-specifications"}}), encoding="utf-8")
@@ -178,7 +199,7 @@ class ConfigurationTests(unittest.TestCase):
         path.symlink_to(self.root / "saved-configs")
         self.assertEqual(self.result()["status"], "invalid")
 
-    def test_alias_with_other_agent_configuration_is_rejected(self):
+    def test_alias_with_other_role_configuration_is_rejected(self):
         path = self.config_path()
         path.parent.mkdir(parents=True)
         path.write_text('{"config_format_version":1,"settings":{}}', encoding="utf-8")
@@ -221,8 +242,8 @@ class ConfigurationTests(unittest.TestCase):
     def test_cli_checks_one_canonical_contract_and_configuration(self):
         script = Path(config.__file__).resolve()
         proc = subprocess.run([sys.executable, "-I", "-S", "-B", str(script),
-                               "--workspace", str(self.root), "--agent", "git-manager",
-                               "--contract", ".hai_env/agents/git-manager/configuration/contract.json"],
+                               "--workspace", str(self.root), "--role", "git-manager",
+                               "--contract", ".hai_env/roles/git-manager/configuration/contract.json"],
                               cwd=self.root, capture_output=True, text=True, encoding="utf-8")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         result = json.loads(proc.stdout)

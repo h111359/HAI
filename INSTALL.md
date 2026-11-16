@@ -8,7 +8,7 @@ HAI requires Python 3.11 or later and a host that can read workspace instruction
 
 Before replacing an existing framework, preserve the workspace's `.hai_env/`, configured Activity and specification data, and product files. A framework upgrade does not itself migrate state, records or transcripts. Current state format is 3; supported format 2 is read-only migration context. Preserve invalid, unsupported or conflicting state and use only an explicitly authorized migration after reviewing its inputs and backup/partial-result behavior. See the [state convention](.hai/conventions/state_conv.md) and [Activity migration notes](release-notes/activity-migration.md). Preserve Activity IDs, human inputs, revisions and transcript provenance through an upgrade.
 
-Optional workspace extensions are separate complete packages under `.hai_env/agents/`, with explicit entries in its catalogue. Golden source packages in `hai_agents_library/agents/` are data; they do not execute from the source library. Installation, replacement, registration and execution are separate actions. Preserve local modifications and external settings at `.hai_env/config/agents/`, review replacement differences, and do not infer enabled capabilities or permission from a package being present. Core startup and administration require no optional extension or model profile. See [agent configuration](.hai/conventions/agent-configuration_conv.md).
+Optional workspace extensions are separate complete packages under `.hai_env/roles/`, with explicit entries in its catalogue. Golden source packages in `hai_roles_library/roles/` are data; they do not execute from the source library. Installation, replacement, registration and execution are separate actions. Preserve local modifications and external settings at `.hai_env/config/roles/`, review replacement differences, and do not infer enabled capabilities or permission from a package being present. Core startup and administration require no optional extension or model profile. See [role configuration](.hai/conventions/role-configuration_conv.md).
 
 ## Upgrading the environment layout in 0.4.0
 
@@ -48,7 +48,9 @@ temporary files and tool effects. Requested outputs retain their canonical
 destinations; task scratch, run results and review evidence stay with their owning
 Activity/invocation unless a governing contract designates otherwise.
 
-The core ZIP does not install optional agents. To obtain updated optional packages,
-use a checkout of the exact release source and its `hai_agents_library/agents/`
+The core ZIP does not install optional roles. To obtain updated optional packages,
+use a checkout of the exact release source and its `hai_roles_library/roles/`
 packages, then follow runtime preview/apply installation and registration. Preserve
 external settings and review existing local differences before replacement.
+
+Existing projects with HAI agent packages require the explicit [role migration](.hai/procedures/migrate-roles.md) after updating the core. HAI roles use ROLE.md; actual skills keep SKILL.md. The migration preserves customized installed packages separately from library sources and keeps historical Activity records unchanged.

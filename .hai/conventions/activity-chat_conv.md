@@ -54,7 +54,7 @@ version-1 record bytes may precede new typed records in a migrated file.
 Author and provenance are attribution supplied by the caller, not authenticated
 identity or proof of assignment. The host supplies each assigned agent with the
 stable Activity ID, workspace root and its own author name. Core chat does not
-require a particular optional agent package, catalogue membership or model profile.
+require a particular optional role package, catalogue membership or model profile.
 
 ## Operations and append preservation
 
@@ -107,4 +107,4 @@ no chat remain valid without migration.
 
 - [Runtime commands](../tools/runtime/README.md) — invocation and JSON requests.
 - [Activity convention](activity_conv.md) — identity, context and archival.
-- [Agent convention](agent_conv.md) — shared participation and host assignment.
+- [Role convention](role_conv.md) — shared participation and host assignment.

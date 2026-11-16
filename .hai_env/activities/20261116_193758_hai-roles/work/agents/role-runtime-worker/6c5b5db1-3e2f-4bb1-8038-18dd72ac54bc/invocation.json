@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 1,
+  "activity_id": "f38af1fa-ee1b-4308-913a-8b38224c044d",
+  "invocation_id": "6c5b5db1-3e2f-4bb1-8038-18dd72ac54bc",
+  "agent": "role-runtime-worker",
+  "created_at": "2026-11-16T08:35:18Z",
+  "provenance": {
+    "source": "human approved implementation and reviewer agents",
+    "reason": "allocate bounded parallel rename work and independent review before actual dispatch"
+  }
+}

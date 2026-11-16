@@ -1,0 +1,96 @@
+# Role-package verification
+
+Windows Python3.14; PYTHONUTF8=1; all temporary fixtures inside the allocated Activity work area.
+Initial failures are retained separately; confirmed baseline fixture assumptions were corrected.
+
+.hai/tools/roles
+exit=0
+----------------------------------------------------------------------
+Ran 81 tests in 8.025s
+
+OK (skipped=6)
+
+.hai_env/roles/backlog-manager/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 12 tests in 2.669s
+
+OK (skipped=1)
+
+.hai_env/roles/business-analyst/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 24 tests in 5.220s
+
+OK (skipped=1)
+
+.hai_env/roles/git-manager/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 31 tests in 3.519s
+
+OK (skipped=3)
+
+.hai_env/roles/software-developer/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 21 tests in 0.621s
+
+OK (skipped=1)
+
+.hai_env/roles/solution-architect/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 14 tests in 0.300s
+
+OK (skipped=1)
+
+.hai_env/roles/specification-manager/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 52 tests in 9.431s
+
+OK (skipped=5)
+
+hai_roles_library/roles/backlog-manager/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 12 tests in 2.774s
+
+OK (skipped=1)
+
+hai_roles_library/roles/business-analyst/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 24 tests in 5.386s
+
+OK (skipped=1)
+
+hai_roles_library/roles/git-manager/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 31 tests in 3.609s
+
+OK (skipped=3)
+
+hai_roles_library/roles/software-developer/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 21 tests in 0.561s
+
+OK (skipped=1)
+
+hai_roles_library/roles/solution-architect/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 14 tests in 0.301s
+
+OK (skipped=1)
+
+hai_roles_library/roles/specification-manager/scripts
+exit=0
+----------------------------------------------------------------------
+Ran 52 tests in 8.948s
+
+OK (skipped=5)
+

@@ -190,7 +190,7 @@ class ActivityLayoutTests(unittest.TestCase):
         self.assertFalse(self.call('work-cleanup', **{**request, 'paths': ['system']})['ok'])
         result = self.call('work-cleanup', **request)
         self.assertTrue(result['ok'], result); self.assertFalse(work.exists())
-        allocated = self.call('invocation-allocate', agent='reviewer')
+        allocated = self.call('invocation-allocate', role='reviewer')
         self.assertTrue(allocated['ok'], allocated)
         relative = allocated['result']['activity_relative_path']
         before = self.snapshot()

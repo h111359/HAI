@@ -7,7 +7,7 @@ import re
 import stat
 import uuid
 
-from agent_tools import Invalid, load_json
+from role_tools import Invalid, load_json
 from startup_check import safe_path
 from path_contract import is_link_or_reparse
 from activity_layout import version as layout_version, artifact, BUCKETS

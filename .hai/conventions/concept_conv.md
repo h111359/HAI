@@ -45,7 +45,7 @@ External term references identify their canonical concept sources in References.
 Ordinary Markdown links, code fields, and regex brackets retain their syntax.
 The concept template remains unchanged; existing Explanation sections and useful
 subsections are permitted. Concepts explain meaning and rationale, not executable
-workflows. Shared behavioral obligations belong to the owning agent's `SKILL.md`;
+workflows. Shared behavioral obligations belong to the owning agent's `ROLE.md`;
 procedure-specific obligations and ordered steps belong to its procedure files.
 Data formats/contracts belong to conventions. See the
 [Procedure concept](../concepts/procedure.md) for the distinction between

@@ -1,0 +1,22 @@
+{
+  "usage_format_version": 2,
+  "activity_id": "f38af1fa-ee1b-4308-913a-8b38224c044d",
+  "updated_at": "2026-11-16T19:37:58Z",
+  "provenance": {
+    "source": "human: OK, close this activity and commit",
+    "reason": "close completed HAI role implementation and create its local commit with the disclosed chronicle gap"
+  },
+  "sources": [],
+  "pricing": null,
+  "reported_spend": null,
+  "summary": {
+    "coverage": "unavailable",
+    "tokens": null,
+    "by_model": {},
+    "estimated_credits": null,
+    "reported_credits": null,
+    "reported_spend_current": false,
+    "missing_rate_models": []
+  },
+  "markdown_sha256": "5d3677817b504998858751bd8bc7b15a436e0c582660c14cfae79cfba35d38df"
+}

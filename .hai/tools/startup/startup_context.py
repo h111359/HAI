@@ -8,7 +8,7 @@ import sys
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'activities'))
-from startup_check import (Invalid, check, safe_path, load_agent_contract,
+from startup_check import (Invalid, check, safe_path, load_role_contract,
                            read_configuration, ConfigurationError)
 from discovery import discover
 

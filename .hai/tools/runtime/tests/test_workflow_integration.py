@@ -58,7 +58,7 @@ class WorkflowIntegrationTests(unittest.TestCase):
     def test_workflow_roots_cannot_be_configured_as_activity_store(self):
         state_path = self.root / '.hai_env/config/state.json'
         state = json.loads(state_path.read_text(encoding='utf-8'))
-        for path in ('.hai_env/workflows', '.hai_env/workflows/activities',
+        for path in ('.hai_env/roles', '.hai_env/roles/activities', 'hai_roles_library', 'hai_agents_library', '.hai_env/workflows', '.hai_env/workflows/activities',
                      '.hai_env/workflow-runs', '.hai_env/workflow-runs/activities'):
             state['activities']['location'] = path
             state_path.write_text(json.dumps(state), encoding='utf-8')

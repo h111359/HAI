@@ -39,30 +39,30 @@ class StartupTests(unittest.TestCase):
         self.write(".hai_env/config/state.json", json.dumps(self.state))
 
     def table(self, origin, entries, newline="\n"):
-        rows = ["# Catalogue", "", "| Agent | Selection guide | Definition |", "| --- | --- | --- |"]
+        rows = ["# Catalogue", "", "| Role | Selection guide | Definition |", "| --- | --- | --- |"]
         for name, guide, link in entries:
-            label = "knowledge.md" if link.endswith("knowledge.md") else "SKILL.md"
+            label = "knowledge.md" if link.endswith("knowledge.md") else "ROLE.md"
             rows.append(f"| `{name}` | {guide} | [{label}]({link}) |")
-        return self.write(f"{origin}/agents/catalogue.md", newline.join(rows) + newline)
+        return self.write(f"{origin}/roles/catalogue.md", newline.join(rows) + newline)
 
     def profiles(self, text=None):
         return self.write(".hai_env/config/model_profiles.json", text or json.dumps({
             "format_version": 1, "models": {"light": "one", "standard": "two", "advanced": "three"}}))
 
     def register_specification_manager(self, settings=None, contract=None):
-        self.write(".hai_env/agents/specification-manager/SKILL.md", "Not parsed during startup.")
+        self.write(".hai_env/roles/specification-manager/ROLE.md", "Not parsed during startup.")
         contract = contract or {
-            "contract_format_version": 2, "agent": "specification-manager",
+            "contract_format_version": 3, "role": "specification-manager",
             "current_config_format_version": 1, "supported_config_format_versions": [1],
             "settings": {"enabled": {"type": "boolean", "default": False},
                          "location": {"type": "workspace-relative-directory",
                                       "default": ".hai_env/specifications"}},
         }
-        self.write(".hai_env/agents/specification-manager/configuration/contract.json", json.dumps(contract))
+        self.write(".hai_env/roles/specification-manager/configuration/contract.json", json.dumps(contract))
         self.table(".hai_env", [("specification-manager", "Manage durable specifications.",
-                                  "specification-manager/SKILL.md")])
+                                  "specification-manager/ROLE.md")])
         if settings is not None:
-            self.write(".hai_env/config/agents/specification-manager.json", json.dumps({
+            self.write(".hai_env/config/roles/specification-manager.json", json.dumps({
                 "config_format_version": 1, "settings": settings}))
 
     def snapshot(self):
@@ -80,13 +80,13 @@ class StartupTests(unittest.TestCase):
         self.assertEqual(result["state_format_version"], 3)
         self.assertEqual(result["activities"], {"location": ".hai_env/activities", "available": False, "target_type": "directory"})
         self.assertEqual(set(result["features"]), {"chronicles"})
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "unavailable")
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "unavailable")
         self.assertEqual(result["features"]["chronicles"],
                          {"enabled": False, "record_every_prompts": 5})
         self.assertNotIn("integrations", result)
         self.assertEqual(result["profiles"]["status"], "absent")
         self.assertEqual(result["catalogues"]["workspace"], "absent")
-        self.assertEqual([a["name"] for a in result["agents"]], [])
+        self.assertEqual([a["name"] for a in result["roles"]], [])
         self.assertEqual(before, self.snapshot())
 
     def test_registered_specification_defaults_and_configured_values_are_bounded(self):
@@ -94,7 +94,7 @@ class StartupTests(unittest.TestCase):
         before = self.snapshot()
         result = startup.check(self.root)
         self.assertTrue(result["ok"], result)
-        status = result["agent_configurations"]["specification-manager"]
+        status = result["role_configurations"]["specification-manager"]
         self.assertEqual(status["status"], "defaulted")
         self.assertEqual(status["settings"], {"enabled": False, "location": ".hai_env/specifications"})
         self.assertEqual(before, self.snapshot())
@@ -103,23 +103,23 @@ class StartupTests(unittest.TestCase):
         (self.root / "docs/specs").mkdir(parents=True)
         result = startup.check(self.root)
         self.assertEqual(result["environment"], "valid")
-        self.assertTrue(result["agent_configurations"]["specification-manager"]["settings"]["enabled"])
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["settings"]["location"], "docs/specs")
+        self.assertTrue(result["role_configurations"]["specification-manager"]["settings"]["enabled"])
+        self.assertEqual(result["role_configurations"]["specification-manager"]["settings"]["location"], "docs/specs")
 
     def test_invalid_spec_configuration_is_isolated_and_has_no_active_values(self):
         self.register_specification_manager(settings={"enabled": "true", "location": ".hai_env/specifications"})
         result = startup.check(self.root)
         self.assertEqual(result["environment"], "valid")
         self.assertEqual(result["state_status"], "valid")
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["settings"], {})
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
+        self.assertEqual(result["role_configurations"]["specification-manager"]["settings"], {})
         self.assertTrue(result["ok"])
 
     def test_core_startup_without_optional_extension_or_executable(self):
         self.state.pop("integrations", None)
         self.save_state()
-        self.assertFalse((self.root / ".hai/agents/git-manager").exists())
-        self.assertFalse((self.root / ".hai_env/agents/git-manager").exists())
+        self.assertFalse((self.root / ".hai/roles/git-manager").exists())
+        self.assertFalse((self.root / ".hai_env/roles/git-manager").exists())
         before = self.snapshot()
         with patch.dict(os.environ, {"PATH": ""}), patch.object(
                 subprocess, "Popen", side_effect=AssertionError("No external process is needed")):
@@ -162,16 +162,16 @@ class StartupTests(unittest.TestCase):
                 self.assertTrue(startup.check(self.root)["ok"])
 
     def test_optional_workspace_extension_requires_catalogue_registration(self):
-        self.write('.hai_env/agents/git-manager/SKILL.md', 'Not parsed during startup.')
+        self.write('.hai_env/roles/git-manager/ROLE.md', 'Not parsed during startup.')
         before = startup.check(self.root)
-        self.assertEqual([agent['name'] for agent in before['agents']], [])
+        self.assertEqual([role['name'] for role in before['roles']], [])
         self.assertEqual(before['catalogues']['workspace'], 'absent')
-        self.table('.hai_env', [('git-manager', 'Operate the optional extension.', 'git-manager/SKILL.md')])
+        self.table('.hai_env', [('git-manager', 'Operate the optional extension.', 'git-manager/ROLE.md')])
         result = startup.check(self.root)
         self.assertTrue(result['ok'], result)
-        entry = next(agent for agent in result['agents'] if agent['name'] == 'git-manager')
+        entry = next(role for role in result['roles'] if role['name'] == 'git-manager')
         self.assertEqual(entry['origin'], '.hai_env')
-        self.assertEqual(entry['definition'], '.hai_env/agents/git-manager/SKILL.md')
+        self.assertEqual(entry['definition'], '.hai_env/roles/git-manager/ROLE.md')
         self.assertNotIn('integrations', result)
 
     def test_unknown_extension_data_does_not_mask_invalid_core(self):
@@ -208,6 +208,27 @@ class StartupTests(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertEqual(before, self.snapshot())
 
+    def test_parallel_legacy_skill_entry_is_not_offered_for_selection(self):
+        self.register_specification_manager()
+        self.write(".hai_env/roles/specification-manager/SKILL.md", "Legacy entry")
+        before = self.snapshot()
+        result = startup.check(self.root)
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["roles"], [])
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "unavailable")
+        self.assertEqual(result["catalogues"]["workspace"], "partial")
+        self.assertEqual(self.snapshot(), before)
+
+    def test_role_migration_is_isolated_from_core_administration(self):
+        (self.root / ".hai_env/agents").mkdir(parents=True)
+        result = startup.check(self.root)
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["environment"], "valid")
+        self.assertEqual(result["role_context"]["status"], "migration_required")
+        self.assertEqual(result["roles"], [])
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "migration_required")
+        self.assertIsNotNone(result["agent_instructions"])
+
     def test_absent_container_is_not_created(self):
         (self.root / ".hai_env/config/state.json").unlink()
         (self.root / startup.INSTRUCTIONS).unlink()
@@ -228,7 +249,7 @@ class StartupTests(unittest.TestCase):
         cases = [{}, [], {**self.state, "state_format_version": True},
                  {**self.state, "state_format_version": 0},
                  {**self.state, "state_format_version": 99},
-                 {**self.state, "compatible_version": 1}, {**self.state, "agents": {}},
+                 {**self.state, "compatible_version": 1}, {**self.state, "roles": {}},
                  {**self.state, "current_request": None}, {**self.state, "current_activity": "x"}, {**self.state, "requests": {}},
                  {**self.state, "features": {**self.state["features"], "requests": {"enabled": False, "location": ".hai_env/requests"}}}]
         for value in cases:
@@ -242,7 +263,7 @@ class StartupTests(unittest.TestCase):
 
     def test_contract_is_installed_authority_and_contract_errors_fail_core_state(self):
         # A target workspace copy cannot override the contract shipped with this helper.
-        self.write(".hai/agents/environment-manager/contract.json",
+        self.write(".hai/roles/environment-manager/contract.json",
                    json.dumps({"current_state_format_version": 99,
                                "supported_state_format_versions": [99]}))
         self.assertEqual(startup.check(self.root)["environment"], "valid")
@@ -300,19 +321,19 @@ class StartupTests(unittest.TestCase):
     def test_disabled_paths_still_reject_unsafe_reserved_and_collisions(self):
         for location in ("/tmp", "C:/data", "\\\\server\\share", "../escape", "data\\activities", ".",
                          " ", ".git/data", ".hai/data", ".hai_env", ".hai_env/config/state.json",
-                         ".hai_env/agents/x", "CON", "data. "):
+                         ".hai_env/roles/x", "CON", "data. "):
             with self.subTest(location=location):
                 self.register_specification_manager(settings={"enabled": False, "location": location})
                 result = startup.check(self.root)
                 self.assertEqual(result["environment"], "valid")
-                self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
+                self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
 
     def test_types_container_state_and_features(self):
         self.register_specification_manager()
         self.write(".hai_env/specifications", "wrong type")
         result = startup.check(self.root)
         self.assertEqual(result["environment"], "valid")
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
         (self.root / ".hai_env/specifications").unlink()
         (self.root / ".hai_env/config/state.json").unlink()
         (self.root / ".hai_env/config/state.json").mkdir()
@@ -339,7 +360,7 @@ class StartupTests(unittest.TestCase):
         self.assertEqual(result["instructions_status"], "missing")
         self.assertIsNone(result["agent_instructions"])
         self.assertIn("agent_instructions", [i["code"] for i in result["issues"]])
-        self.assertEqual(result["agents"], [])
+        self.assertEqual(result["roles"], [])
         self.assertEqual(before, self.snapshot())
 
     def test_wrong_type_invalid_utf8_and_unreadable_instructions_fail(self):
@@ -388,7 +409,7 @@ class StartupTests(unittest.TestCase):
         self.assertEqual(result["activities"]["available"], True)
         self.assertTrue(result["features"]["chronicles"]["enabled"])
         self.assertEqual(result["migration_required"]["status"], "required")
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "migration_required")
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "migration_required")
         self.assertNotIn("specification", result["features"])
         self.assertEqual(before, self.snapshot())
         self.state["features"]["chronicles"]["location"] = ".hai_env/chronicles"
@@ -483,10 +504,10 @@ class StartupTests(unittest.TestCase):
                 self.register_specification_manager(settings={"enabled": False, "location": location})
                 result = startup.check(self.root)
                 self.assertEqual(result["state_status"], "valid")
-                self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
+                self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
 
-    def test_core_destinations_cannot_overlap_agent_configuration_storage(self):
-        for location in (".hai_env/config", ".hai_env/config/agents"):
+    def test_core_destinations_cannot_overlap_role_configuration_storage(self):
+        for location in (".hai_env/config", ".hai_env/config/roles"):
             with self.subTest(location=location):
                 self.state["activities"] = {"location": location}
                 self.save_state()
@@ -498,7 +519,7 @@ class StartupTests(unittest.TestCase):
         self.register_specification_manager(settings={"enabled": False, "location": ".hai_env/config"})
         result = startup.check(self.root)
         self.assertEqual(result["state_status"], "valid")
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
         self.register_specification_manager(settings={"enabled": False, "location": ".hai_env/specifications"})
         config_root = self.root / ".hai_env/config"
         config_root.mkdir(parents=True, exist_ok=True)
@@ -523,39 +544,39 @@ class StartupTests(unittest.TestCase):
         self.assertTrue(result["ok"], result)
 
     def test_catalogue_bad_rows_keep_independent_entries_and_decode_guides(self):
-        self.write(".hai_env/agents/good/SKILL.md", "No YAML loaded")
-        self.table(".hai_env", [("good", "Call: A &amp; B &#124; C &#92; D.", "good/SKILL.md"),
-                                ("missing", "Call missing.", "missing/SKILL.md"),
-                                ("leader", "Conflict.", "leader/SKILL.md"),
+        self.write(".hai_env/roles/good/ROLE.md", "No YAML loaded")
+        self.table(".hai_env", [("good", "Call: A &amp; B &#124; C &#92; D.", "good/ROLE.md"),
+                                ("missing", "Call missing.", "missing/ROLE.md"),
+                                ("leader", "Conflict.", "leader/ROLE.md"),
                                 ("legacy", "Legacy.", "legacy/knowledge.md")], "\r\n")
         result = startup.check(self.root)
         self.assertEqual(result["catalogues"]["workspace"], "partial")
-        self.assertEqual([a["name"] for a in result["agents"]], ["good"])
-        self.assertEqual(result["agents"][0]["selection_guide"], "Call: A & B | C \\ D.")
+        self.assertEqual([a["name"] for a in result["roles"]], ["good"])
+        self.assertEqual(result["roles"][0]["selection_guide"], "Call: A & B | C \\ D.")
         self.assertEqual(len(result["issues"]), 3)
 
     def test_duplicate_names_exclude_all_rows_including_case_conflicts(self):
-        self.write(".hai_env/agents/good/SKILL.md", "content")
-        self.table(".hai_env", [("good", "One.", "good/SKILL.md"),
-                                ("Good", "Two.", "Good/SKILL.md")])
+        self.write(".hai_env/roles/good/ROLE.md", "content")
+        self.table(".hai_env", [("good", "One.", "good/ROLE.md"),
+                                ("Good", "Two.", "Good/ROLE.md")])
         result = startup.check(self.root)
-        self.assertEqual([a["name"] for a in result["agents"]], [])
+        self.assertEqual([a["name"] for a in result["roles"]], [])
         self.assertEqual(len(result["issues"]), 2)
 
     def test_malformed_whole_catalogue_and_isolated_row(self):
-        self.write(".hai_env/agents/good/SKILL.md", "content")
-        path = self.table(".hai_env", [("good", "Call.", "good/SKILL.md")])
+        self.write(".hai_env/roles/good/ROLE.md", "content")
+        path = self.table(".hai_env", [("good", "Call.", "good/ROLE.md")])
         path.write_text(path.read_text(encoding='utf-8') + "| malformed |\n", encoding="utf-8")
         result = startup.check(self.root)
         self.assertEqual(result["catalogues"]["workspace"], "partial")
-        self.assertEqual([a["name"] for a in result["agents"]], ["good"])
+        self.assertEqual([a["name"] for a in result["roles"]], ["good"])
         path.write_text("| Bad | Header |\n| --- | --- |\n", encoding="utf-8")
         result = startup.check(self.root)
         self.assertEqual(result["environment"], "valid")
         self.assertEqual(result["catalogues"]["workspace"], "invalid")
 
     def test_no_framework_registry_dependency(self):
-        self.write(".hai/agents/catalogue.md", "malformed")
+        self.write(".hai/roles/catalogue.md", "malformed")
         self.assertEqual(startup.check(self.root)["catalogues"]["workspace"], "absent")
         self.assertTrue(startup.check(self.root)["ok"])
 
@@ -569,12 +590,12 @@ class StartupTests(unittest.TestCase):
 
     def test_invalid_core_still_reports_workspace_catalogue_and_instructions(self):
         self.write(".hai_env/config/state.json", "bad JSON")
-        self.write(".hai_env/agents/catalogue.md", "malformed")
+        self.write(".hai_env/roles/catalogue.md", "malformed")
         result = startup.check(self.root)
         self.assertEqual(result["catalogues"]["workspace"], "invalid")
         self.assertEqual([i["code"] for i in result["issues"]], ["state", "catalogue"])
         self.assertEqual(result["instructions_status"], "loaded")
-        self.assertFalse(result["agents"])
+        self.assertFalse(result["roles"])
 
     def test_profiles_schema_duplicates_and_overlap_are_isolated(self):
         self.profiles()
@@ -647,7 +668,7 @@ class StartupTests(unittest.TestCase):
         self.register_specification_manager(settings={"enabled": False, "location": "dangling/specs"})
         result = startup.check(self.root)
         self.assertEqual(result["environment"], "valid")
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
 
     def test_escaping_feature_link_and_safe_alias_collision(self):
         with tempfile.TemporaryDirectory(prefix="hai_outside_") as outside:
@@ -655,7 +676,7 @@ class StartupTests(unittest.TestCase):
             self.register_specification_manager(settings={"enabled": False, "location": "escape/missing"})
             result = startup.check(self.root)
             self.assertEqual(result["environment"], "valid")
-            self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
+            self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
             link.unlink()
         (self.root / "shared").mkdir()
         self.make_link("alias", self.root / "shared", True)
@@ -664,16 +685,16 @@ class StartupTests(unittest.TestCase):
         self.register_specification_manager(settings={"enabled": False, "location": "alias/specs/nested"})
         result = startup.check(self.root)
         self.assertEqual(result["environment"], "valid")
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
 
     def test_escaping_catalogue_reference_is_excluded(self):
         with tempfile.TemporaryDirectory(prefix="hai_definition_") as outside:
-            target = Path(outside) / "SKILL.md"
+            target = Path(outside) / "ROLE.md"
             target.write_text("outside", encoding="utf-8")
-            self.make_link(".hai_env/agents/escape/SKILL.md", target)
-            self.table(".hai_env", [("escape", "Call.", "escape/SKILL.md")])
+            self.make_link(".hai_env/roles/escape/ROLE.md", target)
+            self.table(".hai_env", [("escape", "Call.", "escape/ROLE.md")])
             result = startup.check(self.root)
-            self.assertEqual([a["name"] for a in result["agents"]], [])
+            self.assertEqual([a["name"] for a in result["roles"]], [])
             self.assertEqual(result["catalogues"]["workspace"], "partial")
 
     @unittest.skipUnless(os.name == "nt", "Windows junction behavior")
@@ -687,7 +708,7 @@ class StartupTests(unittest.TestCase):
             self.register_specification_manager(settings={"enabled": False, "location": "junction/not-created"})
             result = startup.check(self.root)
             self.assertEqual(result["environment"], "valid")
-            self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], "invalid")
+            self.assertEqual(result["role_configurations"]["specification-manager"]["status"], "invalid")
 
     @unittest.skipUnless(os.name == "nt", "Windows junction behavior")
     def test_windows_bad_profile_junction_does_not_suppress_instructions(self):
@@ -717,7 +738,7 @@ class StartupTests(unittest.TestCase):
         self.register_specification_manager(settings={"enabled": False, "location": "feature"})
         result = startup.check(self.root)
         expected = "invalid" if (self.root / "feature").exists() else "configured"
-        self.assertEqual(result["agent_configurations"]["specification-manager"]["status"], expected)
+        self.assertEqual(result["role_configurations"]["specification-manager"]["status"], expected)
 
     def test_cli_isolated_read_only_and_exit_codes(self):
         before = self.snapshot()

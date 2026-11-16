@@ -10,7 +10,7 @@ TOOLS = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(TOOLS))
 from activity_layout import artifact
 from runtime import chronicles, invocations, usage, workflows
-from runtime.storage import fingerprint
+from runtime.storage import SafetyError, fingerprint
 from run_tests import test_work_path
 
 
@@ -42,7 +42,7 @@ class LayoutServiceTests(unittest.TestCase):
         self.assertEqual(result['checkpoint_path'], self.base + '/system/usage.json')
         self.assertTrue(usage.read(self.root, self.base, self.aid)['available'])
         self.assertFalse((self.directory / 'usage.json').exists())
-        request = {'agent': 'software-developer', 'provenance': self.prov}
+        request = {'role': 'software-developer', 'provenance': self.prov}
         allocated = invocations.prepare(self.root, self.base, self.aid, request, self.stamp)
         self.assertIn('/work/agents/software-developer/', allocated['path'])
         self.assertFalse((self.root / allocated['path']).exists())
@@ -51,8 +51,27 @@ class LayoutServiceTests(unittest.TestCase):
         executor = {'handle': 'actual-fixture-handle', 'mode': 'spawned', 'invocation_id': allocated['invocation_id'],
             'writers_ended': True, 'evidence': 'Fixture host observed stopped worker'}
         self.assertEqual(workflows._verified_executor(self.root, {'path': self.base, 'activity_id': self.aid},
-            {'agent': 'software-developer'}, executor), executor)
+            {'role': 'software-developer'}, executor), executor)
         self.assertFalse((self.directory / 'files').exists())
+
+    def test_executor_understands_only_supported_invocation_identity_formats(self):
+        allocated = invocations.prepare(self.root, self.base, self.aid,
+            {'role': 'software-developer', 'provenance': self.prov}, self.stamp)
+        allocated, _ = invocations.allocate(self.root, self.base, allocated, self.state_fingerprint())
+        path = self.root / allocated['metadata_path']
+        metadata = json.loads(path.read_bytes())
+        executor = {'handle': 'fixture-handle', 'mode': 'spawned', 'invocation_id': allocated['invocation_id'],
+                    'writers_ended': True, 'evidence': 'Observed fixture stopped'}
+        step = {'role': 'software-developer'}
+        context = {'path': self.base, 'activity_id': self.aid}
+        legacy = {**metadata, 'invocation_format_version': 1, 'agent': metadata['role']}
+        del legacy['role']
+        path.write_text(json.dumps(legacy), encoding='utf-8')
+        self.assertEqual(workflows._verified_executor(self.root, context, step, executor), executor)
+        for invalid in (True, 3, None):
+            path.write_text(json.dumps({**legacy, 'invocation_format_version': invalid}), encoding='utf-8')
+            with self.assertRaises(SafetyError):
+                workflows._verified_executor(self.root, context, step, executor)
 
     def test_v2_recording_preserves_logical_hash_keys_and_readable_segment_paths(self):
         source = self.root / 'source.jsonl'

@@ -11,7 +11,7 @@ from .workflow_artifacts import mkdirs
 from .storage import SafetyError, checked_path, fingerprint, read_json, write_bytes, write_json, lock
 
 _TOOLS = Path(__file__).resolve().parents[1]
-for _part in ('agents', 'startup', 'activities'):
+for _part in ('roles', 'startup', 'activities'):
     sys.path.insert(0, str(_TOOLS / _part))
 from discovery import discover, _validate_state, STEPS, STEP_VALUES
 
@@ -41,7 +41,7 @@ def store_path(root):
     location = state.get('activities', {}).get('location')
     path = checked_path(root, location)
     if path.exists() and not path.is_dir(): raise SafetyError('Activity store is not a directory')
-    for reserved in ('.hai', '.git', '.hai_env/agents', '.hai_env/config', '.hai_env/workflows',
+    for reserved in ('.hai', '.git', '.hai_env/roles', '.hai_env/agents', 'hai_roles_library', 'hai_agents_library', '.hai_env/config', '.hai_env/workflows',
                      '.hai_env/workflow-runs', STATE, INSTRUCTIONS, PROFILES, *LEGACY.values()):
         candidate, protected = (location.casefold(), reserved.casefold()) if os.name == 'nt' else (location, reserved)
         if candidate == protected or candidate.startswith(protected + '/') or protected.startswith(candidate + '/'):
@@ -111,7 +111,7 @@ def handle(operation, workspace, request, apply):
         fields['chat-post'] = {'activity_id', 'author', 'text', 'role', 'message_type', 'source_message_id', 'delivery_status', 'provenance'}
         fields['migrate-layout'] = {'activity_id', 'summary', 'allow_closed', 'provenance'}
         fields['work-cleanup'] = {'activity_id', 'paths', 'writers_ended', 'evidence_retained', 'provenance'}
-        fields['invocation-allocate'] = {'activity_id', 'agent', 'provenance'}
+        fields['invocation-allocate'] = {'activity_id', 'role', 'provenance'}
         fields['usage-read'] = {'activity_id'}
         fields['usage-update'] = {'activity_id', 'sources', 'pricing', 'reported_spend', 'provenance'}
         if not isinstance(request,dict) or (op in fields and set(request) - fields[op]): raise ValueError('Unknown or invalid request fields')

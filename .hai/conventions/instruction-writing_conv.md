@@ -5,7 +5,7 @@
 This convention defines plain wording for HAI definitions and the vocabulary for
 shared and procedure-local Rules. It does not grant permission, select an agent,
 or define an author's execution workflow. Concepts explain meaning and rationale;
-agent instructions own behavior. The [Procedure concept](../concepts/procedure.md)
+role instructions own behavior. The [Procedure concept](../concepts/procedure.md)
 explains the difference between rules, entry conditions, and steps.
 
 ## Rule vocabulary
@@ -72,11 +72,11 @@ unresolved policy question rather than permission to invent a stricter rule.
 Shared tools check the documented Markdown structure and selected word forms.
 They do not prove that an actor is clear, a condition is complete, a permission is
 valid, or a revision preserves meaning. Keyword presence alone proves none of
-these. Authoring and review procedures belong to an installed registered agent-definition-manager; its absence is an optional-owner dependency, not a core startup failure.
+these. Authoring and review procedures belong to an installed registered role-definition-manager; its absence is an optional-owner dependency, not a core startup failure.
 
 ## References
 
-- [Agent convention](agent_conv.md): role structure and shared rule scope.
+- [Role convention](role_conv.md): role structure and shared rule scope.
 - [Procedure convention](procedure_conv.md): procedure-local Rules structure.
 - [Procedure concept](../concepts/procedure.md): meaning, scope, and rationale.
-- [Agent tools](../tools/agents/README.md): exact supported checks and their limits.
+- [Role tools](../tools/roles/README.md): exact supported checks and their limits.

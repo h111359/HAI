@@ -29,7 +29,7 @@ breaks. A namespace does not rename the underlying concept.
 Each input or output table's first cell declares its reference, for example
 `[input:task]`. Uses elsewhere in that procedure resolve only to its own tables.
 An external procedure file is one scope; the single inline procedure is another.
-Main agent rules and procedure indexes have no input/output scope.
+Main role rules and procedure indexes have no input/output scope.
 
 A procedure call explicitly identifies the source value or evidence and the
 destination procedure's input name. Use a plain code name such as `task` for a
@@ -45,7 +45,7 @@ Markdown link, for example:
 
 The concept link must resolve to an actual readable `concepts/` Markdown file
 inside the workspace. Fragments may identify a section. Declare a term once per
-References section. Agent-level mappings apply to that agent's procedures;
+References section. Role-level mappings apply to that role's procedures;
 procedure-local additions are allowed. A procedure must not remap an inherited
 name to another source. Identical repeated mappings are permitted but unnecessary.
 
@@ -55,7 +55,7 @@ External terms identify their canonical concept sources in References.
 
 ## Verification boundary
 
-The shared agent tools check local parameter declarations/uses and explicit term
+The shared role tools check local parameter declarations/uses and explicit term
 mapping paths in their documented Markdown subset. They do not prove that prose
 uses a concept correctly, that a mapped source defines the intended meaning, or
 that a value passed to a procedure satisfies its semantic requirements. Those

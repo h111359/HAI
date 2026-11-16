@@ -12,7 +12,7 @@ from path_contract import relative_parts, is_link_or_reparse
 NAMES = re.compile(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z')
 META = {'workflow_format', 'name', 'revision', 'entry', 'max_step_attempts', 'max_run_attempts'}
 SECTIONS = ['Purpose', 'Inputs', 'Outcomes', 'Steps']
-STEP_SECTIONS = ['Agent', 'Instruction', 'Inputs', 'Outputs', 'Results']
+STEP_SECTIONS = ['Role', 'Instruction', 'Inputs', 'Outputs', 'Results']
 
 
 class DefinitionError(ValueError):
@@ -202,7 +202,7 @@ def _validate_graph(definition):
         raise DefinitionError(f'Steps: no possible terminal path from {sorted(set(steps) - can_end)}')
 
 
-def parse_definition(raw, source='<definition>'):
+def parse_definition(raw, source='<definition>', *, allow_legacy=False):
     """Return JSON-serializable contract data or raise DefinitionError. No I/O."""
     try:
         if isinstance(raw, str):
@@ -240,8 +240,12 @@ def parse_definition(raw, source='<definition>'):
                 metadata[key] = int(value)
         if set(metadata) != META:
             raise DefinitionError(f'frontmatter: missing keys {sorted(META - set(metadata))}')
-        if metadata['workflow_format'] != 1:
+        if metadata['workflow_format'] not in (1, 2):
             raise DefinitionError('workflow_format: unsupported version')
+        if metadata['workflow_format'] == 1 and not allow_legacy:
+            raise DefinitionError('Legacy workflow_format 1 requires explicit role migration')
+        role_section = 'Agent' if metadata['workflow_format'] == 1 else 'Role'
+        step_sections_contract = [role_section, *STEP_SECTIONS[1:]]
         body = [(i + 1, line) for i, line in enumerate(lines) if i > end]
         while body and not body[0][1].strip():
             body.pop(0)
@@ -270,8 +274,8 @@ def parse_definition(raw, source='<definition>'):
         steps = {}
         for sid, (step_lines, number) in step_sections.items():
             identifier(sid, f'Steps line {number}')
-            pieces = _sections(step_lines, 4, f'step {sid}', STEP_SECTIONS)
-            agent = identifier(_text(pieces['Agent'][0]), f'step {sid}/Agent')
+            pieces = _sections(step_lines, 4, f'step {sid}', step_sections_contract)
+            role = identifier(_text(pieces[role_section][0]), f'step {sid}/{role_section}')
             instruction = _text(pieces['Instruction'][0])
             if not instruction:
                 raise DefinitionError(f'step {sid}/Instruction: nonempty instruction required')
@@ -302,7 +306,7 @@ def parse_definition(raw, source='<definition>'):
                     identifier(name, row['_where'] + '/Outputs')
                 row['outputs'] = names
                 _reference(row['next'], ('step', 'end'), row['_where'] + '/Next')
-            steps[sid] = {'id': sid, 'agent': agent, 'instruction': instruction, 'inputs': inp, 'outputs': outputs, 'results': results}
+            steps[sid] = {'id': sid, 'role': role, 'instruction': instruction, 'inputs': inp, 'outputs': outputs, 'results': results}
         definition = {**metadata, 'title': title, 'purpose': purpose, 'inputs': inputs,
                       'outcomes': outcomes, 'steps': steps, 'sha256': hashlib.sha256(raw).hexdigest()}
         _validate_graph(definition)

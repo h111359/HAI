@@ -8,7 +8,7 @@ from .storage import SafetyError, checked_path, read_json, _pairs
 
 GROUPS = {'startup':'startup', 'environment':'environment', 'profiles':'environment',
           'configuration':'environment', 'activities':'activities', 'activity':'activities',
-          'packages':'packages', 'agents':'packages', 'recording':'recording', 'host':'host',
+          'packages':'packages', 'roles':'packages', 'recording':'recording', 'host':'host',
           'workflow':'workflows'}
 
 def main(argv=None):
@@ -51,7 +51,8 @@ def main(argv=None):
             except SafetyError as exc:
                 raise ValueError(f'Invalid request: {exc}') from exc
             if not isinstance(request, dict): raise ValueError('Request must be a JSON object')
-        if args.apply and args.group in ('activity', 'activities', 'packages', 'agents'):
+        if (args.apply and args.group in ('activity', 'activities', 'packages', 'roles')
+                and not (args.group in ('packages', 'roles') and args.action == 'migrate')):
             from .startup import require_mutation_context
             require_mutation_context(workspace)
         module = importlib.import_module('.' + GROUPS[args.group], __package__)

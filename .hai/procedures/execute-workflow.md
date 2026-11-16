@@ -46,7 +46,7 @@ separate; optional missing dependencies block only affected execution.
    definition and initial artifact bytes, not permission for all possible effects.
 3. Preview/prepare the next step using the current run revision, actual [input:runtime]
    capability evidence, authority reference and prerequisite assessment. Read the
-   selected installed agent's instructions/configuration; check required tools and
+   selected installed role's instructions/configuration; check required tools and
    operation-specific conditions. Missing configuration never becomes permission to
    enable an integration. Specification updates need the owner's enabled setting.
 4. For direct role work, retain the actual executor identity. For a separate spawn,
@@ -85,5 +85,5 @@ separate; optional missing dependencies block only affected execution.
 - [Workflow convention](../conventions/workflow_conv.md) — definition and file contracts — required.
 - [Run convention](../conventions/workflow-run_conv.md) — ownership, state and recovery — required.
 - [Runtime commands](../tools/runtime/README.md) — actual request shapes — required before operations.
-- [Agent convention](../conventions/agent_conv.md) and [invocation convention](../conventions/agent-invocation_conv.md) — execution mode and handoff — required before role work.
+- [Role convention](../conventions/role_conv.md) and [invocation convention](../conventions/agent-invocation_conv.md) — execution mode and handoff — required before role work.
 - [Artifact placement](../conventions/artifact-placement_conv.md) and [workspace boundary](../conventions/workspace-boundary_conv.md) — ownership/permission — required.

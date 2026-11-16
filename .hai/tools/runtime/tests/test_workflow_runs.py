@@ -15,7 +15,7 @@ from runtime import activities, workflows
 from runtime.storage import SafetyError
 
 DEFINITION = '''---
-workflow_format: 1
+workflow_format: 2
 name: sample
 revision: 1
 entry: first
@@ -39,7 +39,7 @@ Exercise explicit handoffs and return paths.
 
 ## Steps
 ### first
-#### Agent
+#### Role
 worker
 #### Instruction
 Read request and produce the chosen evidence.
@@ -58,7 +58,7 @@ Read request and produce the chosen evidence.
 | supplied | Binary evidence exists. | output | step:second |
 
 ### second
-#### Agent
+#### Role
 worker
 #### Instruction
 Check input and finish or return explicit questions.
@@ -99,11 +99,11 @@ class WorkflowRunTests(unittest.TestCase):
         self.activity = self.root / result['result']['path']
         self.defdir = self.root / '.hai_env/workflows'; self.defdir.mkdir()
         self.defpath = self.defdir / 'sample.md'; self.defpath.write_text(DEFINITION, encoding='utf-8')
-        package = self.root / '.hai_env/agents/worker'
+        package = self.root / '.hai_env/roles/worker'
         (package / 'configuration').mkdir(parents=True); (package / 'procedures').mkdir()
-        (package / 'configuration/contract.json').write_text(json.dumps({'contract_format_version': 1,
-            'agent': 'worker', 'current_config_format_version': 1, 'supported_config_format_versions': [1], 'settings': {}}), encoding='utf-8')
-        (package / 'SKILL.md').write_text('''---
+        (package / 'configuration/contract.json').write_text(json.dumps({'contract_format_version': 3,
+            'role': 'worker', 'current_config_format_version': 1, 'supported_config_format_versions': [1], 'settings': {}}), encoding='utf-8')
+        (package / 'ROLE.md').write_text('''---
 name: worker
 description: "Perform fixture work."
 metadata:
@@ -144,7 +144,7 @@ None.
 ## References
 None.
 ''', encoding='utf-8')
-        (self.root / '.hai_env/agents/catalogue.md').write_text('# Agents\n\n| Agent | Selection guide | Definition |\n| --- | --- | --- |\n| `worker` | Perform fixture work. | [SKILL.md](worker/SKILL.md) |\n', encoding='utf-8')
+        (self.root / '.hai_env/roles/catalogue.md').write_text('# Roles\n\n| Role | Selection guide | Definition |\n| --- | --- | --- |\n| `worker` | Perform fixture work. | [ROLE.md](worker/ROLE.md) |\n', encoding='utf-8')
         (self.root / '.hai_env/config/model_profiles.json').write_text(json.dumps({'format_version': 1,
             'models': dict.fromkeys(['light', 'standard', 'advanced'], 'fixture-model')}), encoding='utf-8')
         self.ready = {'runtime': {'models': {'fixture-model': ['high']}}, 'authority': 'explicit fixture user request',
@@ -395,7 +395,7 @@ None.
 
     def test_role_drift_after_prepare_blocks_dispatch_and_retry_refreshes(self):
         self.start(); self.prepare()
-        role = self.root / '.hai_env/agents/worker/SKILL.md'
+        role = self.root / '.hai_env/roles/worker/ROLE.md'
         role.write_text(role.read_text().replace('Execute the supplied assignment.', 'Execute the reviewed assignment.'), encoding='utf-8')
         state = self.show()
         r = self.mutation('record-execution', step_id='first', attempt_id=state['current_attempt'],
@@ -411,22 +411,22 @@ None.
 
     def test_running_role_drift_rejects_completion_but_stopped_evidence_is_retained(self):
         self.start(); self.prepare(); self.running(); self.output('output.bin')
-        role = self.root / '.hai_env/agents/worker/SKILL.md'
+        role = self.root / '.hai_env/roles/worker/ROLE.md'
         role.write_text(role.read_text().replace('Execute the supplied assignment.', 'Execute the reviewed assignment.'), encoding='utf-8')
         r = self.finish('supplied'); self.assertFalse(r['ok'], r)
         self.assertEqual(self.show()['status'], 'blocked'); self.assertTrue(self.show()['executor']['writers_ended'])
         self.assertEqual(self.show()['accepted'], {})
 
     def test_role_registration_models_and_disabled_settings_are_checked(self):
-        self.start(); missing = self.root / '.hai_env/agents/catalogue.md'; original = missing.read_bytes(); missing.unlink()
+        self.start(); missing = self.root / '.hai_env/roles/catalogue.md'; original = missing.read_bytes(); missing.unlink()
         self.assertFalse(self.mutation('prepare-step', **self.ready)['ok']); missing.write_bytes(original)
         wrong = {**self.ready, 'runtime': {'models': {'other': ['high']}}}
         self.assertFalse(self.mutation('prepare-step', **wrong)['ok'])
-        contract = self.root / '.hai_env/agents/worker/configuration/contract.json'
+        contract = self.root / '.hai_env/roles/worker/configuration/contract.json'
         data = json.loads(contract.read_text())
         data['settings'] = {'enabled': {'type': 'boolean', 'default': True}}
         contract.write_text(json.dumps(data), encoding='utf-8')
-        settings = self.root / '.hai_env/config/agents'; settings.mkdir()
+        settings = self.root / '.hai_env/config/roles'; settings.mkdir()
         override = settings / 'worker.json'
         override.write_text(json.dumps({'config_format_version': 1, 'settings': {'enabled': False}}), encoding='utf-8')
         before = self.snapshot(); disabled = self.mutation('prepare-step', **self.ready)

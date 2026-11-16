@@ -1,15 +1,16 @@
-"""Explicit environment, profile and installed-agent configuration operations."""
+"""Explicit environment, profile and installed-role configuration operations."""
 import copy
 import sys
 from pathlib import Path
 from environment_paths import STATE, PROFILES, INSTRUCTIONS, legacy_entries
 from .storage import SafetyError, checked_path, read_json, fingerprint, write_bytes, write_json, lock
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'startup'))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'agents'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'roles'))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'configuration'))
 import startup_check as startup
-import agent_tools
+import role_tools
 import configuration_tools as config
+from role_state import require_ready
 
 def provenance(request):
     value = request.get('provenance')
@@ -94,7 +95,7 @@ def handle(operation, workspace, request, apply):
                 raise SafetyError('Invalid chronicle enablement revision')
             new_chronicles['enablement_revision'] = revision + 1
         startup.state_context(workspace, candidate, template, contract)
-        owner = startup.check(workspace)['agent_configurations']['specification-manager']
+        owner = startup.check(workspace)['role_configurations']['specification-manager']
         if owner.get('status') in ('configured', 'defaulted'):
             location = owner.get('settings', {}).get('location')
             if location and startup.overlaps(startup.safe_path(workspace, location), startup.safe_path(workspace, candidate['activities']['location'])):
@@ -108,14 +109,14 @@ def handle(operation, workspace, request, apply):
         if action in ('check', 'read'):
             if request or apply: raise ValueError('Profiles check takes no request or apply')
             if not path.exists(): return outcome({'status':'absent'}, [], False)
-            fingerprint(path); data = agent_tools.read_profiles(path)
+            fingerprint(path); data = role_tools.read_profiles(path)
             return outcome({'status':'valid', 'profiles':data, 'runtime_availability':'not_checked'}, [], False)
         if action != 'configure': raise ValueError('Unsupported profiles operation')
         provenance(request)
         if set(request) != {'provenance', 'changes'} or not isinstance(request['changes'], dict) or not request['changes'] or not set(request['changes']) <= {'light','standard','advanced'}:
             raise ValueError('Profiles changes must name light, standard, or advanced')
         before = fingerprint(path); data = read_json(path) if before else {'format_version':1, 'models':{}}
-        if before: agent_tools.read_profiles(path)
+        if before: role_tools.read_profiles(path)
         candidate = copy.deepcopy(data); candidate['models'].update(request['changes'])
         if type(candidate.get('format_version')) is not int or candidate['format_version'] != 1 or any(not isinstance(candidate['models'].get(k), str) or not candidate['models'][k].strip() for k in ('light','standard','advanced')):
             raise ValueError('Profiles require nonblank light, standard and advanced model IDs')
@@ -124,21 +125,22 @@ def handle(operation, workspace, request, apply):
             with lock(workspace): write_json(workspace, rel, candidate, before)
         return outcome({'profiles':candidate, 'planned_files':plan}, plan, apply)
     if group == 'configuration':
-        agent = request.get('agent')
-        if not isinstance(agent, str) or not agent_tools.NAMES.fullmatch(agent): raise ValueError('A canonical agent name is required')
-        contract_rel = f'.hai_env/agents/{agent}/configuration/contract.json'
+        require_ready(workspace)
+        role = request.get('role')
+        if not isinstance(role, str) or not role_tools.NAMES.fullmatch(role): raise ValueError('A canonical role name is required')
+        contract_rel = f'.hai_env/roles/{role}/configuration/contract.json'
         contract_path = checked_path(workspace, contract_rel, allow_missing=False); contract_fp = fingerprint(contract_path)
-        contract = config.load_contract(contract_path, agent)
-        current = config.read_configuration(workspace, agent, contract)
+        contract = config.load_contract(contract_path, role)
+        current = config.read_configuration(workspace, role, contract)
         if action == 'read':
-            if set(request) != {'agent'} or apply: raise ValueError('Configuration read accepts agent only')
+            if set(request) != {'role'} or apply: raise ValueError('Configuration read accepts role only')
             return {'ok':current['status'] in ('configured','defaulted'), 'status':current['status'], 'result':current, 'changed_files':[], 'issues':current['issues']}
         if action != 'update': raise ValueError('Unsupported configuration operation')
         provenance(request)
-        if set(request) != {'agent','provenance','changes'} or not isinstance(request['changes'], dict) or not request['changes']:
+        if set(request) != {'role','provenance','changes'} or not isinstance(request['changes'], dict) or not request['changes']:
             raise ValueError('Configuration update requires named changes')
         if current['status'] not in ('defaulted','configured'): raise SafetyError('Current configuration is invalid')
-        rel = f'.hai_env/config/agents/{agent}.json'; target = checked_path(workspace, rel); before = fingerprint(target)
+        rel = f'.hai_env/config/roles/{role}.json'; target = checked_path(workspace, rel); before = fingerprint(target)
         document = read_json(target) if before else {'config_format_version': contract['current_config_format_version'], 'settings': {}}
         settings = document['settings']
         for name, value in request['changes'].items():
@@ -157,13 +159,14 @@ def handle(operation, workspace, request, apply):
                 with lock(workspace):
                     if fingerprint(contract_path) != contract_fp: raise SafetyError('Contract changed')
                     _parents(workspace, rel, changed)
-                    config.configuration_path(workspace, agent)
+                    config.configuration_path(workspace, role)
                     write_json(workspace, rel, document, before); changed.append(rel)
             except Exception as exc:
                 changed.extend(getattr(exc, 'changed_files', []))
                 return {'ok':False,'status':'partial' if changed else 'blocked','result':{'planned_files':plan},'changed_files':changed,'issues':[{'code':'write','message':str(exc)}]}
         return outcome({'settings':settings,'planned_files':plan}, changed if apply else plan, apply)
     if group == 'environment' and action == 'migrate-specification':
+        require_ready(workspace)
         provenance(request)
         if set(request) != {'provenance'}: raise ValueError('Migration accepts provenance only')
         import migrate_specification_configuration as migration

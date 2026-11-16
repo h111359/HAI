@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 1,
+  "activity_id": "f38af1fa-ee1b-4308-913a-8b38224c044d",
+  "invocation_id": "d534b249-232c-45ec-925b-ac6c56895607",
+  "agent": "role-migration-worker",
+  "created_at": "2026-11-16T08:35:19Z",
+  "provenance": {
+    "source": "human approved implementation and reviewer agents",
+    "reason": "allocate bounded parallel rename work and independent review before actual dispatch"
+  }
+}

@@ -38,7 +38,7 @@ class InvocationTests(unittest.TestCase):
 
     def allocate(self, apply=True, **extra):
         return activities.handle('invocation-allocate', self.root, {
-            'activity_id': self.ident, 'agent': 'quality-assurance',
+            'activity_id': self.ident, 'role': 'quality-assurance',
             'provenance': self.prov, **extra}, apply)
 
     def close(self):
@@ -69,14 +69,14 @@ class InvocationTests(unittest.TestCase):
             self.assertEqual(json.loads((self.root / allocation['metadata_path']).read_text(encoding='utf-8')), allocation['metadata'])
             self.assertEqual(path, self.base / allocation['activity_relative_path'])
             self.assertEqual(allocation['metadata']['activity_id'], self.ident)
-            self.assertEqual(allocation['metadata']['agent'], 'quality-assurance')
+            self.assertEqual(allocation['metadata']['role'], 'quality-assurance')
             self.assertEqual(allocation['metadata']['provenance'], self.prov)
             (path / 'sentinel.txt').write_text(allocation['invocation_id'], encoding='utf-8')
         self.assertEqual((self.root / a['path'] / 'sentinel.txt').read_text(encoding='utf-8'), a['invocation_id'])
         self.assertEqual((self.root / '.hai_env/config/state.json').read_bytes(), state)
 
     def test_no_destination_or_caller_identity_override(self):
-        for kw in [{'agent': '../agent'}, {'agent': ''}, {'agent': 'A' * 65},
+        for kw in [{'role': '../agent'}, {'role': ''}, {'role': 'A' * 65},
                    {'path': 'elsewhere'}, {'invocation_id': str(uuid.uuid4())},
                    {'provenance': {'source': 'fixture'}}]:
             self.assertFalse(self.allocate(**kw)['ok'])
@@ -196,7 +196,7 @@ class InvocationTests(unittest.TestCase):
         self.assertNotEqual(a['invocation_id'], b['invocation_id'])
         self.assertEqual(b['metadata']['activity_id'], self.ident)
         self.assertFalse(activities.handle('invocation-allocate', self.root, {
-            'activity_id': old_id, 'agent': 'quality-assurance', 'provenance': self.prov}, True)['ok'])
+            'activity_id': old_id, 'role': 'quality-assurance', 'provenance': self.prov}, True)['ok'])
         self.assertEqual((archived / 'notes.md').read_text(encoding='utf-8'), 'retained work')
 
     def test_custom_store_and_missing_mandatory_instructions(self):
@@ -214,7 +214,7 @@ class InvocationTests(unittest.TestCase):
 
     def test_cli_preview_and_applied_result(self):
         request = self.root / 'request.json'
-        request.write_text(json.dumps({'activity_id': self.ident, 'agent': 'quality-assurance', 'provenance': self.prov}), encoding='utf-8')
+        request.write_text(json.dumps({'activity_id': self.ident, 'role': 'quality-assurance', 'provenance': self.prov}), encoding='utf-8')
         args = [sys.executable, '-B', str(TOOLS / 'hai.py'), 'activity', 'invocation-allocate',
                 '--workspace', str(self.root), '--request', str(request)]
         preview = subprocess.run(args, capture_output=True, text=True)

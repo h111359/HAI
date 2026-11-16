@@ -106,4 +106,4 @@ future results. Optional workflow absence must not block ordinary HAI startup/wo
 - [Definition convention](workflow_conv.md) — inputs, outputs and result contracts.
 - [Execute workflow](../procedures/execute-workflow.md) — host procedure and authority.
 - [Runtime commands](../tools/runtime/README.md) — actual accepted request fields.
-- [Agent convention](agent_conv.md) — execution mode and independent review.
+- [Role convention](role_conv.md) — execution mode and independent review.

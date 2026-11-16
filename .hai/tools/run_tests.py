@@ -8,7 +8,7 @@ import sys
 
 from runtime.storage import SafetyError, checked_path, read_json
 
-SUITES = ('runtime/tests', 'startup', 'activities', 'chronicles', 'configuration', 'agents', 'workflows/tests')
+SUITES = ('runtime/tests', 'startup', 'activities', 'chronicles', 'configuration', 'roles', 'workflows/tests')
 
 
 def test_work_path(root, relative):
@@ -30,7 +30,7 @@ def test_work_path(root, relative):
     invocation_v2 = (len(tail) >= 6 and tail[1:3] == ['work', 'agents']
                      and tail[5] == 'test-work')
     if parts[:len(store)] != store or not (owned or invocation or owned_v2 or invocation_v2):
-        raise SafetyError('work-dir must be inside an Activity work/test-work or work/agents/<agent>/<id>/test-work area (legacy files areas remain supported) under the configured store')
+        raise SafetyError('work-dir must be inside an Activity work/test-work or work/agents/<role>/<id>/test-work area (legacy files areas remain supported) under the configured store')
     return work
 
 

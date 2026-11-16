@@ -11,9 +11,9 @@ import unittest
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(ROOT/'.hai/tools/agents'))
+sys.path.insert(0, str(ROOT/'.hai/tools/roles'))
 sys.path.insert(0, str(ROOT/'.hai/tools/startup'))
-from agent_tools import audit, read_definition, validate
+from role_tools import audit, read_definition, validate
 import startup_check
 
 
@@ -31,12 +31,12 @@ def copy_core(target):
 
 
 def catalogue(root, origin, names):
-    rows = ['# Test catalogue', '', '| Agent | Selection guide | Definition |', '| --- | --- | --- |']
+    rows = ['# Test catalogue', '', '| Role | Selection guide | Definition |', '| --- | --- | --- |']
     for name in names:
-        definition = read_definition(root/origin/'agents'/name/'SKILL.md', workspace=root)
+        definition = read_definition(root/origin/'roles'/name/'ROLE.md', workspace=root)
         text = definition['description'].replace('&', '&amp;').replace('\\', '&#92;').replace('|', '&#124;')
-        rows.append(f'| `{name}` | {text} | [SKILL.md]({name}/SKILL.md) |')
-    path = root/origin/'agents/catalogue.md'
+        rows.append(f'| `{name}` | {text} | [ROLE.md]({name}/ROLE.md) |')
+    path = root/origin/'roles/catalogue.md'
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text('\n'.join(rows)+'\n', encoding='utf-8')
 
@@ -68,8 +68,8 @@ class CoreIsolationTests(unittest.TestCase):
             self.assertTrue(result['ok'], result)
             self.assertEqual(result['environment'], 'valid')
             self.assertTrue(result['features']['chronicles']['enabled'])
-            self.assertEqual(result['agents'], [])
-            self.assertFalse((env/'agents/codex-chronicle-manager').exists())
+            self.assertEqual(result['roles'], [])
+            self.assertFalse((env/'roles/codex-chronicle-manager').exists())
             self.assertEqual(snapshot(stage), before)
 
     def test_bootstrap_and_recording_have_separate_owners_and_prerequisites(self):
@@ -87,17 +87,17 @@ class CoreIsolationTests(unittest.TestCase):
                 self.assertNotRegex(text, r'(?i)activity-manager')
 
 
-@unittest.skipUnless((ROOT/'hai_agents_library/agents').is_dir(), 'repository source-package fixtures unavailable in core-only distribution')
+@unittest.skipUnless((ROOT/'hai_roles_library/roles').is_dir(), 'repository source-package fixtures unavailable in core-only distribution')
 class SourceStagingTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.temp = tempfile.TemporaryDirectory(prefix='hai-role-migration-')
         cls.stage = Path(cls.temp.name).resolve()
         copy_core(cls.stage)
-        source = ROOT/'hai_agents_library/agents'
+        source = ROOT/'hai_roles_library/roles'
         cls.source_before = snapshot(source)
-        shutil.copytree(source, cls.stage/'.hai_env/agents', ignore=shutil.ignore_patterns('__pycache__'))
-        names = sorted(path.name for path in (cls.stage/'.hai_env/agents').iterdir() if path.is_dir())
+        shutil.copytree(source, cls.stage/'.hai_env/roles', ignore=shutil.ignore_patterns('__pycache__'))
+        names = sorted(path.name for path in (cls.stage/'.hai_env/roles').iterdir() if path.is_dir())
         catalogue(cls.stage, '.hai_env', names)
 
     @classmethod
@@ -105,19 +105,19 @@ class SourceStagingTests(unittest.TestCase):
         cls.temp.cleanup()
 
     def test_complete_staged_packages_validate_and_audit_with_library_absent(self):
-        self.assertFalse((self.stage/'hai_agents_library').exists())
+        self.assertFalse((self.stage/'hai_roles_library').exists())
         result = audit(self.stage)
         self.assertTrue(result['ok'], result)
-        self.assertTrue(set(NAMES).issubset({agent['name'] for agent in result['agents']}))
+        self.assertTrue(set(NAMES).issubset({agent['name'] for agent in result['roles']}))
         for name in NAMES:
             self.assertFalse((self.stage/'.hai/agents'/name).exists())
-            self.assertTrue(validate(self.stage, f'.hai_env/agents/{name}/SKILL.md')['ok'])
-        self.assertEqual(snapshot(ROOT/'hai_agents_library/agents'), self.source_before)
+            self.assertTrue(validate(self.stage, f'.hai_env/roles/{name}/ROLE.md')['ok'])
+        self.assertEqual(snapshot(ROOT/'hai_roles_library/roles'), self.source_before)
 
     def test_portable_supporting_links_resolve_after_complete_installation(self):
         missing = []
         # Source-package fixture syntax is literal only inside fenced examples.
-        for base in (self.stage/'.hai', self.stage/'.hai_env/agents'):
+        for base in (self.stage/'.hai', self.stage/'.hai_env/roles'):
             for path in base.rglob('*.md'):
                 text = re.sub(r'```.*?```', '', path.read_text(encoding='utf-8'), flags=re.S)
                 for target in re.findall(r'\[[^\]\n]+\]\(([^)\s]+)\)', text):
@@ -130,11 +130,11 @@ class SourceStagingTests(unittest.TestCase):
 
     def test_domain_owners_return_record_evidence_and_preserve_specialist_ownership(self):
         for name in NAMES[:4]:
-            skill = (self.stage/f'.hai_env/agents/{name}/SKILL.md').read_text(encoding='utf-8')
+            skill = (self.stage/f'.hai_env/roles/{name}/ROLE.md').read_text(encoding='utf-8')
             self.assertIn('MUST NOT invoke or coordinate other agents', skill)
             self.assertIn('rather than mutate Activity records', skill)
-        package = self.stage/'.hai_env/agents/software-developer'
-        skill = (package/'SKILL.md').read_text(encoding='utf-8')
+        package = self.stage/'.hai_env/roles/software-developer'
+        skill = (package/'ROLE.md').read_text(encoding='utf-8')
         procedure_paths = re.findall(r'\]\((procedures/[^)]+\.md)\)', skill)
         self.assertTrue(procedure_paths, 'developer must index its execution procedures')
         developer = '\n'.join((package/path).read_text(encoding='utf-8') for path in procedure_paths)

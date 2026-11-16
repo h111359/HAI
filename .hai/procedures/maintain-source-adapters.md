@@ -75,5 +75,5 @@ recording health and mandatory recording obligations remain separate.
 - [Source convention](../conventions/codex-source_conv.md) — representation and exact text — required.
 - [Chronicles](../conventions/chronicles_conv.md) — policy, attribution and retained evidence — required.
 - [Tooling](../conventions/tooling_conv.md) — implementation and bounded tests — required before code changes.
-- [Agent convention](../conventions/agent_conv.md) — independent review and invocation allocation — required before delegation.
+- [Role convention](../conventions/role_conv.md) — independent review and invocation allocation — required before delegation.
 - [Runtime commands](../tools/runtime/README.md) — discovery, synchronization and verification — required before operations.

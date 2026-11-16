@@ -4,7 +4,7 @@
 
 HAI work stays inside the validated current workspace by default. This principle
 applies in every HAI workspace to the host coordinator, assigned agents, framework
-automation and agent-owned tools. Filesystem access and user authorization are
+automation and role-owned tools. Filesystem access and user authorization are
 separate: a writable location does not grant permission to use it.
 
 ## Rules
@@ -32,5 +32,5 @@ Existing files outside the workspace do not become authorized cleanup targets.
 ## References
 
 - [Startup](../start.md) — host entry and application of the principle.
-- [Agent convention](agent_conv.md) — role execution and delegated assignments.
+- [Role convention](role_conv.md) — role execution and delegated assignments.
 - [Tooling convention](tooling_conv.md) — tool preparation and fixture placement.

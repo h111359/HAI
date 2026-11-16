@@ -16,14 +16,14 @@ def step(name='inspect', *, inputs=None, outputs=None, results=None, agent='not-
     results = results if results is not None else [('assessed', 'The assessment covers the request.', 'report', 'end:assessed')]
     def table(headers, rows):
         return '| ' + ' | '.join(headers) + ' |\n| ' + ' | '.join(['---'] * len(headers)) + ' |\n' + ''.join('| ' + ' | '.join(row) + ' |\n' for row in rows)
-    return (f'### {name}\n\n#### Agent\n\n{agent}\n\n#### Instruction\n\nInspect the input and record actual findings.\n\n#### Inputs\n\n'
+    return (f'### {name}\n\n#### Role\n\n{agent}\n\n#### Instruction\n\nInspect the input and record actual findings.\n\n#### Inputs\n\n'
             + table(['Name', 'Source', 'Required', 'Format', 'Expectation'], inputs)
             + '\n#### Outputs\n\n' + table(['Name', 'Location', 'Format', 'Expectation'], outputs)
             + '\n#### Results\n\n' + table(['Name', 'When', 'Outputs', 'Next'], results))
 
 
 def workflow(*steps, outcomes=('assessed',)):
-    return ('---\nworkflow_format: 1\nname: sample\nrevision: 1\nentry: inspect\nmax_step_attempts: 3\nmax_run_attempts: 12\n---\n'
+    return ('---\nworkflow_format: 2\nname: sample\nrevision: 1\nentry: inspect\nmax_step_attempts: 3\nmax_run_attempts: 12\n---\n'
             '# Example assessment\n\n## Purpose\n\nAssess a supplied request.\n\n## Inputs\n\n'
             '| Name | Location | Format | Expectation |\n| --- | --- | --- | --- |\n'
             '| request | activity:input.md | markdown | Actual supplied request. |\n\n## Outcomes\n\n'
@@ -39,7 +39,7 @@ class DefinitionTests(unittest.TestCase):
 
     def test_contract_is_structural_not_role_readiness(self):
         parsed = parse_definition(workflow())
-        self.assertEqual(parsed['steps']['inspect']['agent'], 'not-installed-role')
+        self.assertEqual(parsed['steps']['inspect']['role'], 'not-installed-role')
         self.assertTrue(parsed['steps']['inspect']['inputs']['request']['required'])
         self.assertEqual(parsed['steps']['inspect']['results']['assessed']['outputs'], ['report'])
         self.assertEqual(parsed['inputs']['request']['location'], 'activity:input.md')
@@ -66,7 +66,7 @@ class DefinitionTests(unittest.TestCase):
         for old, new, error in [('entry: inspect\n', '', 'missing keys'),
                                 ('entry: inspect', 'entry: inspect\nentry: inspect', 'duplicate key'),
                                 ('entry: inspect', 'entry: inspect\nother: value', 'unknown'),
-                                ('workflow_format: 1', 'workflow_format: 2', 'unsupported version'),
+                                ('workflow_format: 2', 'workflow_format: 99', 'unsupported version'),
                                 ('revision: 1', 'revision: 0', 'positive'),
                                 ('name: sample', 'name: "sample"', 'bare scalar'),
                                 ('name: sample', 'name: Sample', 'bare scalar'),
@@ -192,6 +192,15 @@ class DefinitionTests(unittest.TestCase):
             try: os.link(path, linked)
             except (OSError, NotImplementedError): self.skipTest('hardlink creation unavailable')
             with self.assertRaises(DefinitionError): load_definition(path)
+
+    def test_legacy_role_label_is_only_readable_for_historical_runs(self):
+        raw = workflow().replace('workflow_format: 2', 'workflow_format: 1').replace('#### Role', '#### Agent').encode()
+        with self.assertRaisesRegex(DefinitionError, 'explicit role migration'):
+            parse_definition(raw)
+        parsed = parse_definition(raw, allow_legacy=True)
+        self.assertEqual(parsed['workflow_format'], 1)
+        self.assertEqual(parsed['steps']['inspect']['role'], 'not-installed-role')
+        self.assertEqual(parsed['sha256'], hashlib.sha256(raw).hexdigest())
 
 
 if __name__ == '__main__':

@@ -18,13 +18,33 @@ folder, never loose in the Activity root. Prefer in-memory/standard-input calls.
 - `environment configure`: `changes` maps explicit dotted names to values. Supported names are `activities.location`, `features.chronicles.enabled`, `features.chronicles.record_every_prompts`, and `features.chronicles.mode` (`best_effort` by default, or `required`); changing a location does not move content.
 - `environment migrate-specification`: provenance only; previews or executes the scoped format-2 migration using its existing backup and candidate safeguards.
 - `profiles check` reads optional profiles. `profiles configure` takes `changes` naming `light`, `standard`, or `advanced`; all three model IDs must be present after the update. This does not establish host model availability.
-- `configuration read` takes `agent`. `configuration update` takes `agent`, provenance and `changes` keyed by names declared in that installed agent's contract.
+- `configuration read` takes `role`. `configuration update` takes `role`, provenance and `changes` keyed by names declared in that installed role's contract.
 
 For example, save `{"provenance":{"source":"user request","reason":"adjust cadence"},"changes":{"features.chronicles.record_every_prompts":10}}` in a workspace JSON file, then run `python -B .hai/tools/hai.py environment configure --request change.json --workspace .` to preview. Add `--apply` to write.
 
 Workflow modules provide Activity, package, recording and host operations. A host capability check reports availability; the runtime does not install dependencies or download packages implicitly.
 
-## Agent workflow commands
+## Role packages and migration
+
+`roles` is the package command group; `packages` remains its neutral equivalent.
+Use `roles audit`, `roles validate`, `roles install`, `roles register` and `roles resolve` with the package operation contracts below.
+The former agents command group is not an alias.
+
+`roles migrate` previews the explicit name migration; its request contains
+provenance. Apply requires the current expected_snapshot plus writers_ended:true.
+It converts legacy package roots, ROLE.md entries, role contracts and reusable
+workflow definitions, while retaining originals under the current Activity history
+and a status marker at .hai_env/config/role-migration.json. Source and installed
+packages are converted independently; historical runs/manifests and saved values
+retain their bytes. Mixed or partial layouts require explicit reconciliation.
+See [migration procedure](../../procedures/migrate-roles.md).
+
+Startup reports role_context independently of core validity. Legacy names block
+role-dependent work but allow independent core administration. New contracts use
+contract_format_version 3, reusable workflows workflow_format 2, and invocation
+manifests version 2; these are separate formats, not a release version.
+
+## Workflow commands
 
 Use `python -B .hai/tools/hai.py workflow <operation> --workspace .` with a
 workspace-contained `--request PATH`. Definitions follow the
@@ -71,10 +91,10 @@ Readiness fields are `runtime`, `authority`, and `prerequisite_assessment`:
 ```
 
 The host supplies actual supported model/effort combinations. The runtime resolves
-the installed agent's model class through current profiles and checks registration,
-configuration and the requested capability. A disabled agent-owned feature blocks
+the installed role's model class through current profiles and checks registration,
+configuration and the requested capability. A disabled role-owned feature blocks
 execution; workflow commands do not enable it. Host evidence covers prerequisites
-that code cannot infer from arbitrary agent instructions.
+that code cannot infer from arbitrary role instructions.
 
 An `assessment` uses the same `accepted`, `author`, `evidence` structure. Its evidence
 must explain why actual outputs meet this result's condition and expectations.
@@ -182,7 +202,7 @@ Requests are JSON objects. All applied Activity and package mutations require va
 
 - `activity discover` takes `{}`. `activity show` takes `activity_id`.
 - `activity usage-update` takes `activity_id`, provenance and optional `sources`, `pricing` and `reported_spend`. It previews by default; `--apply` refreshes assigned source ranges into Activity-local `usage.json` and `usage.md`. `activity usage-read` takes only `activity_id` and reads a retained snapshot, including archives. Closure automatically refreshes usage before lifecycle writes; unknown data is unavailable/stale, never fabricated zero. See [source attribution, counters and estimates](../../conventions/activity-usage_conv.md).
-- `activity invocation-allocate` takes `activity_id`, `agent` and provenance. Preview creates nothing (`allocated: false`); `--apply` exclusively creates `work/agents/<agent>/<uuid>/invocation.json` in layout 2 (legacy Activities keep files/agent-invocations/<uuid>/invocation.json) below the current Activity and returns its existing folder (`allocated: true`), stable IDs, Activity-relative suffix and metadata. Closed/stale IDs, collisions and unsafe paths are rejected. Partial results retain and name changed paths. See [allocation and actual host handoff](../../conventions/agent-invocation_conv.md); the runtime does not spawn agents.
+- `activity invocation-allocate` takes `activity_id`, `role` and provenance. Preview creates nothing (`allocated: false`); `--apply` exclusively creates `work/agents/<role>/<uuid>/invocation.json` in layout 2 (legacy Activities keep files/agent-invocations/<uuid>/invocation.json) below the current Activity and returns its existing folder (`allocated: true`), stable IDs, Activity-relative suffix and metadata. Closed/stale IDs, collisions and unsafe paths are rejected. Partial results retain and name changed paths. See [allocation and actual host handoff](../../conventions/agent-invocation_conv.md); the runtime does not spawn agents.
 - `activity chat-read` takes `activity_id`, optional nonnegative integer `after_sequence` (default `0`) and optional integer `limit` (`1..1000`, default `100`). Returns a page with `messages`, `total_messages`, `next_after_sequence` and `has_more`; reads closed Activities too. Omit `--apply` for reads. `activity chat-post` takes `activity_id`, `author`, `text` and provenance. It previews by default; `--apply` appends to the current Activity's `chat.jsonl` under the runtime lock. No edit/delete action exists. See [chat format and participation](../../conventions/activity-chat_conv.md), including attribution and filesystem-access limits.
 - `activity create` takes `initial_input` and provenance. `activity record` takes `activity_id`, optional `steps` mapping step names to statuses, optional `implementation_start` Boolean, optional `artifacts` array of `{name, text, reason}`, optional `input_append`, `log`, and provenance. `activity close` takes `activity_id`, `outcome`, `archive_label`, `outcome_text`, `recording` with `status` and `details`, and provenance. It also accepts `recording_requirement` with Boolean `enabled` and `mandatory`, and a `recording_proof` gate request. Verified closure additionally supplies `recording_paths` with `sources` mapping source IDs to workspace-relative files and `artifacts` mapping artifact IDs to files inside the Activity; their hashes must match the gate evidence. `activity supplement` takes `activity_id`, `text`, and provenance. When chronicles are enabled, closure attempts synchronization through completed saved exchanges. Required mode and independent mandatory obligations retain recording gates; best-effort source interruptions detected before writes become explicit unavailable coverage. Integrity and partial-write failures still block closure. Explicit compatible proof remains supported. Disabled/no-obligation closure requires no transcript. These operations preserve partial results on failure.
 - `packages validate` takes `definition`; `packages resolve` takes `definition` and `runtime`, a capability snapshot shaped as `{"models":{"model-id":["high"]}}`. `packages audit` takes `{}`. `packages install` takes workspace-relative `source`, `name`, provenance, and optional Boolean `replace` and `register`. Replacement additionally requires the exact `reviewed_differences` list returned by a preview; the previous package is retained as a backup. Registration may require a separate reconciliation after replacement. `packages register` takes `name` and provenance. Remote acquisition is unsupported. Safe no-overwrite package and Activity moves require an available native atomic rename primitive. Implementations cover Linux, Windows and macOS; only Linux has been tested here.
@@ -215,7 +235,7 @@ Save a workspace-contained JSON request, for example `invocation-request.json`:
 ```json
 {
   "activity_id": "<current stable Activity UUID>",
-  "agent": "software-developer",
+  "role": "software-developer",
   "provenance": {"source": "authorized host assignment", "reason": "allocate before a new spawn"}
 }
 ```
@@ -374,7 +394,7 @@ mapping and rechecks freshness. Unknown formats remain visible interruptions.
 
 ## Core chronicles
 
-Chronicles are core framework functionality, independent of optional agents or model
+Chronicles are core framework functionality, independent of optional roles or model
 profiles. Supply explicit Activity-attributed sources in a workspace JSON request:
 
 ```json
