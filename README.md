@@ -61,15 +61,15 @@ continuity; work resumes after a selection or accompanying concrete task. A new
 chat alone does not create or close an Activity. The host coordinates work and uses the Python runtime for supported environment and Activity operations. Core provides source-backed recording; optional extensions provide domain instructions.
 
 The first immutable packaged prototype is **0.1.0**, which uses state format **1**.
-Its [release notes](release-notes/0.1.0.md) and [preserved manifest](https://github.com/h111359/haide/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/release-notes/0.1.0-manifest.json)
+Its [release notes](release-notes/0.1.0.md) and [preserved manifest](https://github.com/h111359/HAI/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/release-notes/0.1.0-manifest.json)
 describe that historical bundle. The [0.2.0 notes](release-notes/0.2.0.md) and
-[preserved manifest](https://github.com/h111359/haide/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/.hai/release-0.2.0.json) retain that release’s historical
-compatibility targets. The published [0.3.0 release](https://github.com/h111359/haide/releases/tag/v0.3.0)
+[preserved manifest](https://github.com/h111359/HAI/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/.hai/release-0.2.0.json) retain that release’s historical
+compatibility targets. The published [0.3.0 release](https://github.com/h111359/HAI/releases/tag/v0.3.0)
 and its [historical notes](release-notes/0.3.0.md) retain their original guarantees.
 The [0.4.0 candidate notes](release-notes/0.4.0.md) and
 [current manifest](.hai/release-0.4.0.json) describe the selected candidate. Exact
 source and package verification are recorded separately. Actual publication status
-and downloadable assets are tracked on [GitHub Releases](https://github.com/h111359/haide/releases). See [installation and upgrade instructions](INSTALL.md) and
+and downloadable assets are tracked on [GitHub Releases](https://github.com/h111359/HAI/releases). See [installation and upgrade instructions](INSTALL.md) and
 [Activity migration notes](release-notes/activity-migration.md).
 
 - `.hai/` contains the Python runtime, shared concepts, conventions and tools.

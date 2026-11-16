@@ -9,7 +9,7 @@ describe the recorded candidate, not current runtime routing.
 This document describes the [0.2.0 candidate](0.2.0.md) compatibility boundaries.
 The human selected this version for release preparation; these notes do not
 identify a published release or certify every consumer migration. The published
-[0.1.0 notes](0.1.0.md) and [historical manifest](https://github.com/h111359/haide/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/release-notes/0.1.0-manifest.json) retain their
+[0.1.0 notes](0.1.0.md) and [historical manifest](https://github.com/h111359/HAI/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/release-notes/0.1.0-manifest.json) retain their
 original state-format and specification targets.
 
 ## Breaking changes
@@ -39,7 +39,7 @@ original state-format and specification targets.
 | Specification compatibility | `1` | `1` |
 
 The historical state declaration was owned by Environment-manager and is
-preserved in the [0.2.0 manifest](https://github.com/h111359/haide/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/.hai/release-0.2.0.json); the current runtime
+preserved in the [0.2.0 manifest](https://github.com/h111359/HAI/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/.hai/release-0.2.0.json); the current runtime
 declaration is [state.json](../.hai/contracts/state.json). The historical
 specification declaration is owned by
 the optional installed Specification-manager package (`.hai_env/agents/specification-manager/contract.json` when installed).
@@ -106,7 +106,7 @@ The skipped tests do not establish cross-platform verification. These source and
 workspace checks are separate from exact-release-source and package validation;
 the published 0.1.0 test counts describe that historical release only.
 
-The [preserved 0.2.0 manifest](https://github.com/h111359/haide/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/.hai/release-0.2.0.json) records the selected
+The [preserved 0.2.0 manifest](https://github.com/h111359/HAI/blob/c2a1e9246f21bc1f0ac30abc105fbc17757a6cb6/.hai/release-0.2.0.json) records the selected
 candidate's targets. The historical 0.1.0 manifest remains outside `.hai/` without
 changing its bytes. Exact committed-source and package verification remain
 separate release-preparation steps, with results recorded outside these source
