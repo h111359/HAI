@@ -1,4 +1,4 @@
-"""Stage the ownership split without installing, registering or reading user records."""
+"""Verify the ownership split in isolated core and real installed-distribution fixtures."""
 from __future__ import annotations
 
 import json
@@ -87,37 +87,62 @@ class CoreIsolationTests(unittest.TestCase):
                 self.assertNotRegex(text, r'(?i)activity-manager')
 
 
-@unittest.skipUnless((ROOT/'hai_roles_library/roles').is_dir(), 'repository source-package fixtures unavailable in core-only distribution')
+@unittest.skipUnless((ROOT/'roles').is_dir(), 'repository source-package fixtures unavailable in core-only distribution')
 class SourceStagingTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.temp = tempfile.TemporaryDirectory(prefix='hai-role-migration-')
         cls.stage = Path(cls.temp.name).resolve()
         copy_core(cls.stage)
-        source = ROOT/'hai_roles_library/roles'
+        from runtime import environment, packages, skills as runtime_skills
+        source = ROOT/'roles'
         cls.source_before = snapshot(source)
-        shutil.copytree(source, cls.stage/'.hai_env/roles', ignore=shutil.ignore_patterns('__pycache__'))
-        names = sorted(path.name for path in (cls.stage/'.hai_env/roles').iterdir() if path.is_dir())
+        shutil.copytree(source, cls.stage/'roles', ignore=shutil.ignore_patterns('__pycache__'))
+        shutil.copytree(ROOT/'skills', cls.stage/'skills', ignore=shutil.ignore_patterns('__pycache__'))
+        provenance = {'source': 'isolated complete distribution fixture', 'reason': 'verify real source-to-installed portability'}
+        initialized = environment.handle('environment/initialize', cls.stage, {'provenance': provenance}, True)
+        if not initialized['ok']:
+            raise AssertionError(initialized)
+        for package in sorted((cls.stage/'skills').iterdir()):
+            if not package.is_dir():
+                continue
+            installed = runtime_skills.handle('install', cls.stage, {'source': 'skills/' + package.name,
+                'name': package.name, 'provenance': provenance}, True)
+            if not installed['ok']:
+                raise AssertionError(installed)
+        names = sorted(path.name for path in (cls.stage/'roles').iterdir() if path.is_dir())
+        for name in names:
+            installed = packages.handle('install', cls.stage, {'source': 'roles/' + name,
+                'name': name, 'provenance': provenance}, True)
+            if not installed['ok']:
+                raise AssertionError(installed)
         catalogue(cls.stage, '.hai_env', names)
+        # Verify installed resources after the source collections are unavailable.
+        for collection in ('roles', 'skills'):
+            target = (cls.stage / collection).resolve(strict=True)
+            if target.parent != cls.stage.resolve(strict=True):
+                raise AssertionError('Fixture cleanup target escaped its workspace')
+            shutil.rmtree(target)
 
     @classmethod
     def tearDownClass(cls):
         cls.temp.cleanup()
 
     def test_complete_staged_packages_validate_and_audit_with_library_absent(self):
-        self.assertFalse((self.stage/'hai_roles_library').exists())
+        self.assertFalse((self.stage/'roles').exists())
+        self.assertFalse((self.stage/'skills').exists())
         result = audit(self.stage)
         self.assertTrue(result['ok'], result)
         self.assertTrue(set(NAMES).issubset({agent['name'] for agent in result['roles']}))
         for name in NAMES:
             self.assertFalse((self.stage/'.hai/agents'/name).exists())
             self.assertTrue(validate(self.stage, f'.hai_env/roles/{name}/ROLE.md')['ok'])
-        self.assertEqual(snapshot(ROOT/'hai_roles_library/roles'), self.source_before)
+        self.assertEqual(snapshot(ROOT/'roles'), self.source_before)
 
     def test_portable_supporting_links_resolve_after_complete_installation(self):
         missing = []
         # Source-package fixture syntax is literal only inside fenced examples.
-        for base in (self.stage/'.hai', self.stage/'.hai_env/roles'):
+        for base in (self.stage/'.hai', self.stage/'.hai_env/roles', self.stage/'.hai_env/skills'):
             for path in base.rglob('*.md'):
                 text = re.sub(r'```.*?```', '', path.read_text(encoding='utf-8'), flags=re.S)
                 for target in re.findall(r'\[[^\]\n]+\]\(([^)\s]+)\)', text):
@@ -133,10 +158,10 @@ class SourceStagingTests(unittest.TestCase):
             skill = (self.stage/f'.hai_env/roles/{name}/ROLE.md').read_text(encoding='utf-8')
             self.assertIn('MUST NOT invoke or coordinate other agents', skill)
             self.assertIn('rather than mutate Activity records', skill)
-        package = self.stage/'.hai_env/roles/software-developer'
-        skill = (package/'ROLE.md').read_text(encoding='utf-8')
+        package = self.stage/'.hai_env/skills/software-implementation'
+        skill = (package/'SKILL.md').read_text(encoding='utf-8')
         procedure_paths = re.findall(r'\]\((procedures/[^)]+\.md)\)', skill)
-        self.assertTrue(procedure_paths, 'developer must index its execution procedures')
+        self.assertTrue(procedure_paths, 'implementation skill must retain its reusable execution methods')
         developer = '\n'.join((package/path).read_text(encoding='utf-8') for path in procedure_paths)
         self.assertRegex(developer, r'original (?:Activity |runtime )?implementation-start (?:marker|evidence)')
         self.assertTrue((self.stage/'.hai/tools/hai.py').is_file())

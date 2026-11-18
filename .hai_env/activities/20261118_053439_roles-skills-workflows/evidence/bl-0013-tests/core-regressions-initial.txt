@@ -1,0 +1,81 @@
+...............................s.........................s....F.......................s.............s.........s............................................................s.......................s.........................s.............s...............................................F.s.
+======================================================================
+FAIL: test_failed_qa_missing_changed_and_unaccepted_inputs_block (test_configurable_workflows.ConfigurableWorkflowTests.test_failed_qa_missing_changed_and_unaccepted_inputs_block)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai\tools\runtime\tests\test_configurable_workflows.py", line 216, in test_failed_qa_missing_changed_and_unaccepted_inputs_block
+    with self.assertRaisesRegex(SafetyError, 'superseded'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: SafetyError not raised
+
+======================================================================
+FAIL: test_real_package_install_and_registration (test_workflows.WorkflowTests.test_real_package_install_and_registration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai\tools\runtime\tests\test_workflows.py", line 102, in test_real_package_install_and_registration
+    shutil.copytree(source_repo / '.hai_env/skills', self.root / '.hai_env/skills')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : {'ok': False, 'status': 'blocked', 'operation': 'install', 'result': {}, 'changed_files': [], 'issues': ["Unavailable required skill software-implementation: [{'code': 'skill', 'message': 'Missing path: skills/software-implementation/SKILL.md'}]"]}
+
+----------------------------------------------------------------------
+Ran 287 tests in 375.579s
+
+FAILED (failures=2, skipped=10)
+{"suite": "runtime/tests", "exit_code": 1}
+..............s.sss...ss........................................s..s
+----------------------------------------------------------------------
+Ran 68 tests in 20.716s
+
+OK (skipped=8)
+{"suite": "startup", "exit_code": 0}
+...............F
+======================================================================
+FAIL: test_portable_supporting_links_resolve_after_complete_installation (test_role_migration.SourceStagingTests.test_portable_supporting_links_resolve_after_complete_installation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai\tools\activities\test_role_migration.py", line 131, in test_portable_supporting_links_resolve_after_complete_installation
+    self.assertEqual(missing, [])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+AssertionError: Lists differ: ['.hai_env\\roles\\README.md -> ../.hai/co[17878 chars].md'] != []
+
+First list contains 170 additional elements.
+First extra element 0:
+'.hai_env\\roles\\README.md -> ../.hai/conventions/role_conv.md'
+
+Diff is 19412 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 16 tests in 1.529s
+
+FAILED (failures=1)
+{"suite": "activities", "exit_code": 1}
+............s....
+----------------------------------------------------------------------
+Ran 17 tests in 0.281s
+
+OK (skipped=1)
+{"suite": "chronicles", "exit_code": 0}
+ss......s......
+----------------------------------------------------------------------
+Ran 15 tests in 1.094s
+
+OK (skipped=3)
+{"suite": "configuration", "exit_code": 0}
+...........s...s........s....................s......s.......................s....
+----------------------------------------------------------------------
+Ran 81 tests in 8.336s
+
+OK (skipped=6)
+{"suite": "roles", "exit_code": 0}
+......s.........
+----------------------------------------------------------------------
+Ran 16 tests in 2.241s
+
+OK (skipped=1)
+{"suite": "skills", "exit_code": 0}
+...............s........
+----------------------------------------------------------------------
+Ran 24 tests in 0.042s
+
+OK (skipped=1)
+{"suite": "workflows/tests", "exit_code": 0}

@@ -29,7 +29,7 @@ breaks. A namespace does not rename the underlying concept.
 Each input or output table's first cell declares its reference, for example
 `[input:task]`. Uses elsewhere in that procedure resolve only to its own tables.
 An external procedure file is one scope; the single inline procedure is another.
-Main role rules and procedure indexes have no input/output scope.
+Shared role/skill rules and procedure indexes have no procedure-local input/output scope.
 
 A procedure call explicitly identifies the source value or evidence and the
 destination procedure's input name. Use a plain code name such as `task` for a
@@ -45,7 +45,7 @@ Markdown link, for example:
 
 The concept link must resolve to an actual readable `concepts/` Markdown file
 inside the workspace. Fragments may identify a section. Declare a term once per
-References section. Role-level mappings apply to that role's procedures;
+References section. Mappings declared by a procedure's owning package apply to its procedures;
 procedure-local additions are allowed. A procedure must not remap an inherited
 name to another source. Identical repeated mappings are permitted but unnecessary.
 
@@ -60,3 +60,14 @@ mapping paths in their documented Markdown subset. They do not prove that prose
 uses a concept correctly, that a mapped source defines the intended meaning, or
 that a value passed to a procedure satisfies its semantic requirements. Those
 checks remain part of authoring and execution review.
+
+## Skills and role-local procedures
+
+Reusable task methods belong in skills. A skill may contain procedures, scripts,
+templates, task knowledge and conventions without adopting the ROLE.md format.
+The structured procedure contract applies to HAI procedure resources that declare
+that contract; it does not force every external SKILL.md into a role template.
+A role may retain genuinely role-specific procedures and helpers. Applicable role,
+skill and workspace rules all remain in force; referencing a skill does not copy
+its implementation or grant authority. Inputs/outputs retain explicit local
+bindings, and shared conventions have one owner rather than competing copies.

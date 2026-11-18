@@ -1,7 +1,7 @@
 ---
-workflow_format: 2
+workflow_format: 3
 name: workflow
-revision: 2
+revision: 3
 entry: assess
 max_step_attempts: 2
 max_run_attempts: 2
@@ -12,6 +12,12 @@ max_run_attempts: 2
 
 Produce a bounded assessment before implementation. Copy this template to a named
 workflow and change its name, instructions and artifact contracts to the actual task.
+
+## Locations
+
+| Name | Purpose | Contents |
+| --- | --- | --- |
+| assessments | Human-selected destination for assessment handoffs. | Per-run step execution evidence; no automatic publication. |
 
 ## Inputs
 
@@ -52,10 +58,10 @@ unknowns and recommended next decisions. Do not implement or invent approval.
 
 | Name | Location | Format | Expectation |
 | --- | --- | --- | --- |
-| assessment | attempt:assessment.md | markdown | Evidence-based findings, scope and unresolved decisions. |
+| assessment | configured:assessments/assess-{execution}-assessment.md | markdown | Evidence-based findings, scope and unresolved decisions. |
 
 #### Results
 
-| Name | When | Outputs | Next |
-| --- | --- | --- | --- |
-| assessed | Assessment covers the requested scope and identifies unresolved decisions without claiming implementation. | assessment | end:assessed |
+| Name | When | Outputs | Next | Gate |
+| --- | --- | --- | --- | --- |
+| assessed | Assessment covers the requested scope and identifies unresolved decisions without claiming implementation. | assessment | end:assessed | none |

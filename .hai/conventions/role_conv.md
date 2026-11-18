@@ -4,7 +4,7 @@
 
 Optional installed workspace definitions live at `.hai_env/roles/<name>/ROLE.md`. Names match `[a-z][a-z0-9]*(?:-[a-z0-9]+)*`, are at most 64 characters, match their parent directory and are unique case-insensitively. `.hai_env/roles/catalogue.md` contains explicit registrations and exact decoded description copies. Creation or installation does not register a package or grant permission to execute it. Unregistered packages may be inspected and validated as data. Selection requires an authorized task and the host's actual execution capability; a profile or catalogue row does not prove that capability. Core startup and administration do not depend on any optional package.
 
-Source packages under `hai_roles_library/roles/` are data, not an execution origin. Source maintenance, installed replacement, registration and execution are separate scopes. Preserve external settings and records, review local differences or unknown baselines before replacing a package, and do not infer execution authority from installation.
+Source packages under `roles/` are data, not an execution origin. Source maintenance, installed replacement, registration and execution are separate scopes. Preserve external settings and records, review local differences or unknown baselines before replacing a package, and do not infer execution authority from installation.
 
 Apply the safe fixed `.hai_env/config/agent_instructions.md` and higher-priority instructions before dependent work. Substantive work uses the current Activity; startup, necessary setup and read-only diagnosis can establish context first. Pass relevant task scope, authority, Activity identity and evidence to any selected extension.
 
@@ -105,15 +105,14 @@ Spawned specialists MUST declare both HAI extension keys under `metadata`:
 `xhigh`, `max`, or `ultra`). Quote metadata values as strings. Concrete model IDs belong only in local model profiles, never role declarations.
 
 There is no role H1 title, Selection guide body section, embedded Definitions,
-or role-level Inputs/Outputs section. Include exactly these six H2 headings once
-each and in order:
+or role-level Inputs/Outputs section. Include Purpose, Scope, Out of Scope, Rules and References once in order. Skills is optional before References, after any optional Procedures section. Retain Procedures only for genuinely role-local methods; reusable methods belong in referenced skills:
 
 ```markdown
 ---
 name: example-specialist
 description: "Call to perform a specific task and return its verified result."
 metadata:
-  hai-configuration-contract: "configuration/contract.json"
+  hai-skills: "example-capability"
   hai-model-class: "standard"
   hai-reasoning-effort: "high"
 ---
@@ -130,10 +129,8 @@ metadata:
 ## Rules
 - **Agreed scope.** The example-specialist MUST keep its work within the user's agreed task scope.
 
-## Procedures
-| Procedure | Trigger | File |
-| --- | --- | --- |
-| Perform work | The caller requests the supported work. | [Perform work](procedures/perform-work.md) |
+## Skills
+- [Example capability](../../skills/example-capability/SKILL.md) - reusable method.
 
 ## References
 [Owned configuration contract](configuration/contract.json) — required for configuration and dependent work.
@@ -155,7 +152,7 @@ Rule wording follows [instruction-writing_conv.md](instruction-writing_conv.md):
 explicit `MUST`, `MUST NOT`, or `MAY`, a clear actor/action/object and relevant
 conditions, short readable titles, and preserved existing meaning. That convention
 is the single source for writing style in shared and local Rules; it does not
-change the existing six role sections or grant permission to act.
+grant permission to act or impose methods in a job description.
 
 Procedures follow [procedure_conv.md](procedure_conv.md). Multiple procedures live
 in separate role-owned files, indexed with the exact Procedure/Trigger/File
@@ -184,14 +181,13 @@ before reads and writes.
 
 ## Role-owned configuration
 
-Every optional role declares string metadata
-`hai-configuration-contract: "configuration/contract.json"` and ships the matching
+Only roles owning actual settings declare string metadata
+`hai-configuration-contract: "configuration/contract.json"` and the matching
 package-local contract under [role-configuration_conv.md](role-configuration_conv.md).
-Roles with no customizable settings declare an empty settings map. Keep all six
-ROLE.md headings; do not add a configuration body section or concrete model mappings.
+Settings-free roles omit both; legacy empty contracts remain valid when declared. Do not add a configuration body section or concrete model mappings.
 Creation, update, validation, registration and installation check this characteristic.
 
-Before dependent execution, validate the selected installed contract and read that
+For a declared settings owner, before dependent execution validate the installed contract and read that
 role's fixed workspace configuration with the shared read-only
 [configuration helper](../tools/configuration/README.md). Retain its path, status,
 known effective values, configured fields and issues in the handoff. Missing files
@@ -216,8 +212,7 @@ For an optional extension, use its declared model and effort only if supported b
 
 ## Supporting resources
 
-A role's `ROLE.md` is its canonical role entry point: identity, purpose, scope,
-exclusions, shared rules, procedure selection, and references. Its linked
+A role's `ROLE.md` is its canonical job description: identity, purpose, scope, exclusions, responsibility/conduct, skill references and optional genuinely local procedure selection. Its linked
 `procedures/` files own their execution steps, procedure-specific rules, and local input/output contracts;
 a single procedure may remain inline. This deliberately separates procedure files
 from shared role rules without moving execution behavior into conventions. Concepts
@@ -236,8 +231,7 @@ Optional supporting folders are `procedures/`, `concepts/`, `conventions/`, and
 `scripts/` for owned helpers and usage documentation. Other justified resources,
 including existing `templates/`, remain permitted. Create no unused scaffold.
 Framework-wide concepts and conventions retain their canonical framework location.
-Role-owned domain knowledge remains in its package as a single authority, with
-shared readers linking to it. Scripts follow [tooling_conv.md](tooling_conv.md).
+Reusable task knowledge belongs in coherent skills; genuinely role-specific knowledge may remain in its package as a single authority, with shared readers linking to it. Scripts follow [tooling_conv.md](tooling_conv.md).
 
 ## Registration and verification
 
@@ -260,7 +254,7 @@ Explicit registration is separate from package installation, authoring and execu
 
 ## Roles, AI agents and skills
 
-A HAI role is an instruction package with a ROLE.md entry point. An AI agent is
+A HAI role is a job description with a ROLE.md entry point. Skills own reusable methods and may be used directly or through several roles. Workflows assign roles and expected results; the role chooses suitable available skills. Declare quoted comma-separated `metadata.hai-skills` and matching Skills links. Missing methods are reported dependencies. Source and installed skill roots remain separate; runtime never falls back to source. An AI agent is
 the executing tool or a separate running worker. A role may be followed directly
 or assigned to an AI agent under the execution policy above. Actual reusable
 skills use SKILL.md and remain distinct from HAI roles. Native .agents/ and

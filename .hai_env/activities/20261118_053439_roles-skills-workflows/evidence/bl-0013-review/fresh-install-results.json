@@ -1,0 +1,70 @@
+{
+  "scenario": "fresh actual role and settings-owner skill bootstrap with source absent",
+  "passed": true,
+  "operations": [
+    {
+      "operation": "skills install",
+      "name": "quality-verification",
+      "ok": true,
+      "status": "ok",
+      "issues": []
+    },
+    {
+      "operation": "skills install",
+      "name": "backlog-management",
+      "ok": true,
+      "status": "ok",
+      "issues": []
+    },
+    {
+      "operation": "roles install",
+      "name": "quality-assurance",
+      "ok": true,
+      "status": "ok",
+      "issues": []
+    },
+    {
+      "operation": "roles install",
+      "name": "backlog-manager",
+      "ok": true,
+      "status": "ok",
+      "issues": []
+    }
+  ],
+  "before_owner_resolution": {
+    "ok": false,
+    "status": "blocked",
+    "operation": "resolve",
+    "result": {},
+    "changed_files": [],
+    "issues": [
+      "Missing path: .hai_env/roles/backlog-manager/configuration/contract.json"
+    ]
+  },
+  "owner_default_settings": {
+    "status": "defaulted",
+    "path": ".hai_env/config/roles/backlog-manager.json",
+    "settings": {
+      "location": "backlog"
+    },
+    "configured_fields": [],
+    "issues": []
+  },
+  "chosen_setting_bytes_preserved": true,
+  "final_chosen_settings": {
+    "status": "configured",
+    "path": ".hai_env/config/roles/backlog-manager.json",
+    "settings": {
+      "location": "queues/backlog"
+    },
+    "configured_fields": [
+      "location"
+    ],
+    "issues": []
+  },
+  "source_bytes_unchanged": true,
+  "source_collections_removed": true,
+  "installed_local_links_checked": 64,
+  "broken_installed_links": [],
+  "fenced_example_preserved": true
+}

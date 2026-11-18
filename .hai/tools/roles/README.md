@@ -50,15 +50,15 @@ python -B .hai/tools/roles/test_role_tools.py
 Use `--workspace /path/to/workspace` before the command when running elsewhere.
 The audit reads the optional workspace catalogue, its referenced definitions, and optional model profiles. This full authoring/migration audit is not ordinary startup discovery.
 It checks YAML (including duplicate keys and string metadata), names, specialist
-execution labels, required configuration metadata and matching package-contained
-`configuration/contract.json` (including explicit no-settings contracts), the six ordered role headings, procedure contracts, absence of role H1 titles, canonical
+execution labels, optional configuration metadata and matching package-contained
+`configuration/contract.json` when the role owns settings, the required responsibility headings and optional Skills/Procedures, procedure contracts, absence of role H1 titles, canonical
 links, catalogue description equality, collisions, path containment, legacy links,
 and the profile schema. Missing workspace catalogue/profiles are valid and stay
 absent. Legacy rows and conflicts are reported with names and never removed;
 valid independent registrations remain in the result.
 
-Every installed role definition requires
-`metadata.hai-configuration-contract: "configuration/contract.json"`. The auditor
+Only an actual settings owner requires
+`metadata.hai-configuration-contract: "configuration/contract.json"`; settings-free roles omit the contract and its metadata. Legacy declared empty contracts remain supported. The auditor
 uses the configuration helper installed beside itself to validate strict contract
 data, identity, versions, and defaults for Boolean or workspace-directory settings. It rejects escaping contract aliases
 and multiply-linked contract files. It does not load workspace override files,
@@ -70,7 +70,7 @@ role's saved values. Source packages are validated in disposable installed layou
 `ROLE.md`, including an unregistered installed package, a source-library package,
 or a newly authored source package. This is data inspection; it reads neither
 catalogue, model profiles, nor core environment state. It requires no initialized
-environment. Paths must use `/` separators and resolve within the explicit workspace. The command checks frontmatter, name, metadata, six role headings,
+environment. Paths must use `/` separators and resolve within the explicit workspace. The command checks frontmatter, name, metadata, required responsibility headings and optional Skills/Procedures,
 including agreement between the selected path's name and the resolved definition,
 and conflicting legacy definition files using the same definition validator as
 `audit`. It follows the selected role's indexed procedures and declared concept
@@ -85,8 +85,7 @@ owns runtime selection. These shared commands do not perform either role's mutat
 
 ## Procedure and reference validation
 
-The supported role format has exactly Purpose, Scope, Out of Scope, Rules,
-Procedures, References as H2 headings. Rules use '-' bullets beginning with unique
+The supported role format has Purpose, Scope, Out of Scope, Rules and References as H2 headings, with optional Procedures then Skills before References. Rules use '-' bullets beginning with unique
 bold readable titles; terminal periods/colons and case are ignored for duplicate
 checks within that Rules section. Optional H3 subject groups do not establish
 precedence. Numbered rule IDs such as R01 are rejected. `None` or `None.` alone
@@ -208,7 +207,7 @@ symlink checks may skip when unavailable; report those separately from passing t
 
 ## Library-source verification
 
-The optional `hai_roles_library` is not an execution origin. Pure `validate` and
+The root `roles/` source collection is not an execution origin. The former `hai_roles_library/roles/` layout is only a legacy migration bridge. Pure `validate` and
 `read_definition(path, workspace)` inspect contained source packages as data;
 `resolve` accepts only `.hai_env/roles/<name>/ROLE.md`. `audit` reads only the
 workspace runtime catalogue. When package references depend on installed peers,
@@ -225,3 +224,9 @@ legacy roots exist. Pure definition validation remains available for staged new
 packages. The runtime exposes `roles` and neutral `packages` commands; the former
 `agents` command is rejected. Run `roles migrate` explicitly, inspect its preview,
 and apply the exact inspected snapshot after other writers have ended.
+
+## Reusable skill dependencies
+
+Roles are job descriptions and reference reusable methods with quoted comma-separated metadata `hai-skills` plus a Skills section. Pure root `roles/` inspection validates root `skills/`; installed role inspection uses `.hai_env/skills/` only. `roles skills` returns available installed method paths without selecting a model; missing methods block dependent work. `roles resolve` retains exact host model/effort checks and includes resolved skill paths. A workflow names roles and results; the role selects suitable skills. See [skill tools](../skills/README.md) and [explicit capability migration](../../procedures/migrate-capabilities.md).
+
+The role installer preserves raw source bytes and rebases actual Markdown links outside code fences and matching-backtick inline code spans to the final installed location, mapping known source role/skill peers to their installed owners. Preview differences compare relocated candidate content. Staging uses final logical path resolution for local procedures and shared concepts, then verifies candidate hashes and installed dependencies before publication. It reports absent recognized peer references without claiming operation readiness. Chosen-setting compatibility and source/destination/settings fingerprints are checked again before replacing a package.

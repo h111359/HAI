@@ -2,7 +2,7 @@
 name: quality-assurance
 description: "Call to verify product behavior against agreed requirements and acceptance criteria, assess regressions and report evidence-based defects and coverage limits. Returns actual test results and unresolved acceptance risks."
 metadata:
-  hai-configuration-contract: "configuration/contract.json"
+  hai-skills: "quality-verification"
   hai-model-class: "standard"
   hai-reasoning-effort: "high"
 ---
@@ -21,7 +21,6 @@ Invented test success, implicit product repair, redefining acceptance criteria, 
 
 ## Rules
 
-- **Owned configuration.** Quality assurance MUST use its declared configuration contract and preserve settings owned by other roles.
 - **Independent execution.** Quality assurance MUST NOT invoke or coordinate other agents.
 - **Agreed scope.** Quality assurance MUST stay within the user's authorized task, constraints and settled decisions.
 - **Activity context.** Quality assurance MUST require validated compatible environment and stable active Activity context before substantive work; missing dependencies permit only independent read-only prerequisite diagnosis.
@@ -30,17 +29,12 @@ Invented test success, implicit product repair, redefining acceptance criteria, 
 - **Safe changes.** Quality assurance MUST preserve unrelated content, recheck inspected inputs before authorized writes and stop affected writes on changed inputs or partial failure.
 - **Partial results.** Quality assurance MUST preserve and report partial results without automatic repair, rollback or retry of the partial operation.
 - **Missing decisions.** Quality assurance MUST retrieve available authorized context before returning unresolved necessary decisions or external work to host coordinator.
+- **Skill selection.** The role MUST select suitable available skills for the authorized assignment and report unavailable dependencies without claiming success. Selection grants no authority.
 
-## Procedures
+## Skills
 
-| Procedure | Trigger | File |
-| --- | --- | --- |
-| Perform assigned work | An authorized quality assurance assignment or follow-up is supplied. | [Perform assigned work](procedures/perform-assigned-work.md) |
+- [quality-verification](../../skills/quality-verification/SKILL.md) ? reusable method; read before dependent work.
 
 ## References
 
-- [Role convention](../../../.hai/conventions/role_conv.md) — selection, independence and handoff requirements; required for execution.
-- [Role configuration](../../../.hai/conventions/role-configuration_conv.md) and [owned contract](configuration/contract.json) — required for dependent execution; absent saved settings use declared empty defaults.
-- [Core Activity convention](../../../.hai/conventions/activity_conv.md) — stable context, step evidence and original implementation start; required when interpreting Activity context.
-- [Reference notation](../../../.hai/conventions/reference-notation_conv.md), [procedure convention](../../../.hai/conventions/procedure_conv.md) and [instruction writing](../../../.hai/conventions/instruction-writing_conv.md) — required for interpreting instructions.
-- Authorized task-relevant domain sources — read only what the assignment requires.
+- [Role convention](../../../.hai/conventions/role_conv.md) ? responsibilities, host policy and execution boundaries.

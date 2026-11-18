@@ -1,0 +1,28 @@
+{
+  "startup_ok": true,
+  "roles": 11,
+  "installed_skills": 11,
+  "workflow_install_preview": {
+    "definition": "software-development",
+    "questions": [
+      {
+        "name": "handoffs",
+        "purpose": "Retain reviewable step evidence and exact downstream handoffs.",
+        "contents": "Per-run folders containing every step execution report, requirements, design, approval, QA and defects."
+      },
+      {
+        "name": "completion",
+        "purpose": "Retain the final completion receipt for review.",
+        "contents": "Per-run completion evidence referencing canonical backlog/product changes and actual human acceptance."
+      }
+    ],
+    "ready": false,
+    "missing_locations": [
+      "handoffs",
+      "completion"
+    ],
+    "starts_run": false
+  },
+  "historical_workflow_readable": true,
+  "checks": "527 core sweep with one invalid fixture corrected and focused6 passing; helper308/24skips; independent GO"
+}

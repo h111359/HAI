@@ -2,7 +2,7 @@
 name: workflow-definition-manager
 description: "Call to create, maintain, validate or audit single-file workspace workflow definitions. Returns scoped definition changes, structural and semantic findings, verification evidence and unresolved decisions; does not execute workflows."
 metadata:
-  hai-configuration-contract: "configuration/contract.json"
+  hai-skills: "workflow-authoring"
   hai-model-class: "standard"
   hai-reasoning-effort: "high"
 ---
@@ -27,18 +27,12 @@ and unrequested repair, migration, deletion or publication.
 
 ## Rules
 
-- **Owned configuration:** Workflow-definition-manager MUST load its declared
-  configuration contract and shared fixed instructions before dependent work.
-- **Format authority:** Workflow-definition-manager MUST follow the shared workflow
-  convention rather than maintain a second incompatible interpretation.
 - **Requested changes:** Workflow-definition-manager MUST limit writes to the user's
   requested definitions and necessary Activity-owned revision evidence.
 - **Read-only checks:** Workflow-definition-manager MUST NOT repair files while
   validating or auditing; it MUST return proposed repairs separately.
 - **No execution:** Workflow-definition-manager MUST NOT invoke participants or
   execute, advance, resume or cancel a target workflow.
-- **Explicit contracts:** Workflow-definition-manager MUST specify each step's role,
-  instruction, required inputs, output locations, authored expectations and result paths.
 - **Semantic findings:** Workflow-definition-manager MUST distinguish format checks
   from assessments of meaning and from current execution readiness.
 - **Role boundaries:** Workflow-definition-manager MUST preserve participant rules,
@@ -51,22 +45,12 @@ and unrequested repair, migration, deletion or publication.
   installed/source packages, settings and managed run records.
 - **Partial operations:** Workflow-definition-manager MUST preserve and report partial
   writes and changed-input conflicts rather than blindly retry, clean up or roll back.
+- **Skill selection.** The role MUST select suitable available skills for the authorized assignment and report unavailable dependencies without claiming success. Selection grants no authority.
 
-## Procedures
+## Skills
 
-| Procedure | Trigger | File |
-| --- | --- | --- |
-| Establish scope | Before authoring, updating or checking workflow definitions. | [Establish scope](procedures/establish-scope.md) |
-| Create workflow | A new workflow definition is requested. | [Create workflow](procedures/create-workflow.md) |
-| Update workflow | Changes to an identified workflow definition are requested. | [Update workflow](procedures/update-workflow.md) |
-| Validate workflow | A selected definition or bounded collection needs validation or audit. | [Validate workflow](procedures/validate-workflow.md) |
+- [workflow-authoring](../../skills/workflow-authoring/SKILL.md) ? reusable method; read before dependent work.
 
 ## References
 
-- [Configuration contract](configuration/contract.json) and [configuration convention](../../../.hai/conventions/role-configuration_conv.md) — effective empty settings and ownership — required.
-- [Workflow convention](../../../.hai/conventions/workflow_conv.md) — canonical file format — required.
-- [Workflow concept](../../../.hai/concepts/workflow.md) — roles, steps and runs — required.
-- [Workflow tools](../../../.hai/tools/workflows/README.md) and [runtime](../../../.hai/tools/runtime/README.md) — actual validation operations — required before tool use.
-- [Role convention](../../../.hai/conventions/role_conv.md) and [procedure convention](../../../.hai/conventions/procedure_conv.md) — role boundaries and file conventions — required.
-- [Artifact placement](../../../.hai/conventions/artifact-placement_conv.md) and [workspace boundary](../../../.hai/conventions/workspace-boundary_conv.md) — destinations and authority — required before writes.
-- [Instruction writing](../../../.hai/conventions/instruction-writing_conv.md) — explicit readable rules — required when authoring.
+- [Role convention](../../../.hai/conventions/role_conv.md) ? responsibilities, host policy and execution boundaries.

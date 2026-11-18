@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "f14d66cb-bf54-4aa3-bb47-b49fb4bceb7d",
+  "invocation_id": "4e268d3d-fda9-4fb4-8cb2-ea12405f0dcb",
+  "role": "business-analyst",
+  "created_at": "2026-11-17T20:15:41Z",
+  "provenance": {
+    "source": "human: Restart the business analyst as an independent agent and let it check again the US",
+    "reason": "allocate fresh independent Business-analyst review of BL-0013 without implementation"
+  }
+}

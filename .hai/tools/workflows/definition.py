@@ -1,4 +1,4 @@
-"""Parse the version-1 workflow Markdown contract without executing its content."""
+"""Parse versioned workflow Markdown contracts without executing their content."""
 from __future__ import annotations
 
 import hashlib
@@ -45,7 +45,13 @@ def _reference(value, prefixes, where, *, output=False):
     prefix, suffix = value.split(':', 1)
     if prefix not in prefixes:
         raise DefinitionError(f'{where}: unsupported reference prefix {prefix!r}')
-    if prefix in ('workflow', 'incoming', 'step', 'end'):
+    if prefix == 'accepted':
+        parts = suffix.split('/')
+        if len(parts) != 3:
+            raise DefinitionError(f'{where}: accepted source requires step/result/output')
+        for part in parts:
+            identifier(part, where)
+    elif prefix in ('workflow', 'incoming', 'feedback', 'step', 'end'):
         identifier(suffix, where)
     else:
         artifact_path(suffix, output=output, where=where)
@@ -153,6 +159,16 @@ def _validate_graph(definition):
                     raise DefinitionError(f'step {sid}/Inputs/{name}: unknown workflow input {source!r}')
                 if inp['format'] != definition['inputs'][source]['format']:
                     raise DefinitionError(f'step {sid}/Inputs/{name}: Format differs from workflow input {source!r}')
+            elif kind == 'accepted':
+                parts = source.split('/')
+                producer = steps.get(parts[0])
+                result = producer and producer['results'].get(parts[1])
+                if not result or parts[2] not in result['outputs']:
+                    raise DefinitionError(f'step {sid}/Inputs/{name}: unknown accepted step/result/output')
+                if inp['format'] != producer['outputs'][parts[2]]['format']:
+                    raise DefinitionError(f'step {sid}/Inputs/{name}: Format differs from accepted output')
+                if sid == entry and inp['required']:
+                    raise DefinitionError(f'step {sid}/Inputs/{name}: entry cannot require accepted output')
             elif sid == entry and inp['required']:
                 raise DefinitionError(f'step {sid}/Inputs/{name}: entry cannot require an incoming artifact')
         used = set()
@@ -172,7 +188,7 @@ def _validate_graph(definition):
                 raise DefinitionError(f'{where}: unknown target step {target!r}')
             edges[sid].add(target)
             for local, inp in steps[target]['inputs'].items():
-                if not inp['source'].startswith('incoming:'):
+                if not inp['source'].startswith(('incoming:', 'feedback:')):
                     continue
                 output_name = inp['source'].split(':', 1)[1]
                 if output_name not in row['outputs']:
@@ -240,7 +256,7 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
                 metadata[key] = int(value)
         if set(metadata) != META:
             raise DefinitionError(f'frontmatter: missing keys {sorted(META - set(metadata))}')
-        if metadata['workflow_format'] not in (1, 2):
+        if metadata['workflow_format'] not in (1, 2, 3):
             raise DefinitionError('workflow_format: unsupported version')
         if metadata['workflow_format'] == 1 and not allow_legacy:
             raise DefinitionError('Legacy workflow_format 1 requires explicit role migration')
@@ -255,7 +271,11 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
         headings = _masked_headings(body, source)
         if any(level == 1 for _, level, _ in headings):
             raise DefinitionError('expected exactly one H1 title')
-        sections = _sections(body, 2, source, SECTIONS)
+        version3 = metadata['workflow_format'] == 3
+        sections = _sections(body, 2, source, ['Purpose', 'Locations', *SECTIONS[1:]] if version3 else SECTIONS)
+        locations = _named(_table(sections['Locations'], ['Name', 'Purpose', 'Contents'], 'Locations')) if version3 else None
+        if version3 and not locations:
+            raise DefinitionError('Locations: at least one configured output base is required')
         purpose = _text(sections['Purpose'][0])
         if not purpose:
             raise DefinitionError('Purpose: nonempty explanation required')
@@ -281,24 +301,38 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
                 raise DefinitionError(f'step {sid}/Instruction: nonempty instruction required')
             inp = _named(_table(pieces['Inputs'], ['Name', 'Source', 'Required', 'Format', 'Expectation'], f'step {sid}/Inputs'))
             for row in inp.values():
-                _reference(row['source'], ('workflow', 'incoming'), row['_where'] + '/Source')
+                _reference(row['source'], ('workflow', 'incoming', 'feedback', 'accepted') if version3 else ('workflow', 'incoming'), row['_where'] + '/Source')
                 if row['required'] not in ('yes', 'no'):
                     raise DefinitionError(f'{row["_where"]}/Required: expected yes or no')
                 row['required'] = row['required'] == 'yes'
             outputs = _named(_table(pieces['Outputs'], ['Name', 'Location', 'Format', 'Expectation'], f'step {sid}/Outputs'))
             if not outputs:
                 raise DefinitionError(f'step {sid}/Outputs: at least one output is required')
-            locations = []
+            output_paths = []
             for row in outputs.values():
-                _, location = _reference(row['location'], ('attempt',), row['_where'] + '/Location', output=True)
+                if version3:
+                    prefix, _, tail = row['location'].partition(':')
+                    key, _, pattern = tail.partition('/')
+                    if prefix != 'configured' or key not in locations:
+                        raise DefinitionError(f'{row["_where"]}/Location: expected configured:location/pattern')
+                    if not pattern.startswith(sid + '-{execution}-') or pattern.count('{execution}') != 1 or '/' in pattern:
+                        raise DefinitionError(f'{row["_where"]}/Location: filename must be step-{{execution}}-filename')
+                    artifact_path(pattern.replace('{execution}', '001'), output=True, where=row['_where'])
+                    if '{' in pattern.replace('{execution}', '') or '}' in pattern.replace('{execution}', ''):
+                        raise DefinitionError('unsupported output pattern token')
+                    location = key + '/' + pattern
+                else:
+                    _, location = _reference(row['location'], ('attempt',), row['_where'] + '/Location', output=True)
                 lower = location.casefold()
-                if any(lower == prior or lower.startswith(prior + '/') or prior.startswith(lower + '/') for prior in locations):
+                if any(lower == prior or lower.startswith(prior + '/') or prior.startswith(lower + '/') for prior in output_paths):
                     raise DefinitionError(f'{row["_where"]}/Location: duplicate, case-alias or overlapping output path')
-                locations.append(lower)
-            results = _named(_table(pieces['Results'], ['Name', 'When', 'Outputs', 'Next'], f'step {sid}/Results'))
+                output_paths.append(lower)
+            results = _named(_table(pieces['Results'], ['Name', 'When', 'Outputs', 'Next', *(['Gate'] if version3 else [])], f'step {sid}/Results'))
             if not results:
                 raise DefinitionError(f'step {sid}/Results: at least one named result is required')
             for row in results.values():
+                if version3 and row['gate'] not in ('none', 'human'):
+                    raise DefinitionError('Results/Gate: expected none or human')
                 names = [name.strip() for name in row['outputs'].split(',')]
                 if not names or len(names) != len(set(names)):
                     raise DefinitionError(f'{row["_where"]}/Outputs: expected distinct output names')
@@ -309,9 +343,17 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
             steps[sid] = {'id': sid, 'role': role, 'instruction': instruction, 'inputs': inp, 'outputs': outputs, 'results': results}
         definition = {**metadata, 'title': title, 'purpose': purpose, 'inputs': inputs,
                       'outcomes': outcomes, 'steps': steps, 'sha256': hashlib.sha256(raw).hexdigest()}
+        if version3:
+            definition['locations'] = locations
+            used_locations = {out['location'].split(':', 1)[1].split('/')[0] for step in steps.values() for out in step['outputs'].values()}
+            if used_locations != set(locations):
+                raise DefinitionError('Locations: every location must be used by an output')
         _validate_graph(definition)
         for rows in [inputs, outcomes, *[s[k] for s in steps.values() for k in ('inputs', 'outputs', 'results')]]:
             for row in rows.values():
+                row.pop('_where', None)
+        if locations:
+            for row in locations.values():
                 row.pop('_where', None)
         return definition
     except (UnicodeError, ValueError) as exc:

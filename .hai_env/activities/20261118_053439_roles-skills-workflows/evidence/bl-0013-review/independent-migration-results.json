@@ -1,0 +1,29 @@
+[
+  {
+    "scenario": "marker-changed-after-original-backup",
+    "passed": true,
+    "status": "partial",
+    "issues": [
+      "Inspected input changed: .hai_env/config/capability-migration-v1.json"
+    ],
+    "original_preserved": true
+  },
+  {
+    "scenario": "staged-candidate-changed-after-original-backup",
+    "passed": true,
+    "status": "partial",
+    "issues": [
+      "Staged candidate changed before publication"
+    ],
+    "original_preserved": true
+  },
+  {
+    "scenario": "unsafe-candidate-parent-traversal",
+    "passed": true,
+    "status": "blocked",
+    "issues": [
+      "Path contains unsafe or noncanonical components: '.hai_env/activities/00000000_000000_active/work/../work/agents/fixture/id/candidates'"
+    ],
+    "original_preserved": true
+  }
+]

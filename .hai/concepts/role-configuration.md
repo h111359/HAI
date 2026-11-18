@@ -3,8 +3,7 @@
 ## Definition
 
 Role configuration is a role's declared, versioned set of installation-specific
-settings. Every role has a configuration contract, including an explicit empty
-contract when it has no customizable settings. A workspace file is needed only
+settings. Only an actual settings owner needs a configuration contract; a settings-free role omits it. Legacy declared empty contracts remain valid. A workspace file is needed only
 when values are saved; its absence has the contract's declared meaning.
 
 ## Purpose
@@ -44,3 +43,5 @@ claims and does not override fixed instructions or reusable role rules.
 - [Role configuration convention](../conventions/role-configuration_conv.md): representation, safe paths and validation.
 - [Role concept](role.md): ownership, selection and source boundaries.
 - [Environment](environment.md): shared setup and continuity.
+
+Direct skills may use an installed service owner contract and its existing saved settings without selecting the owner role. Settings stay once at their existing owner path; no skill-specific duplicate is created.

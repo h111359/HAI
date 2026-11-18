@@ -52,8 +52,7 @@ the migration preserves and converts them independently.
    It retains original roots under the current Activity history/role-migration/ (or the layout-1 files area).
    It records status, mappings and hashes in .hai_env/config/role-migration.json.
    The lock coordinates runtime writes; it does not stop external processes.
-4. Inspect actual changed_files and the migration marker. A completed migration
-   uses .hai_env/roles/, .hai_env/config/roles/, hai_roles_library/roles/ and
+4. Inspect actual changed_files and the migration marker. This legacy naming migration uses .hai_env/roles/, .hai_env/config/roles/, the intermediate hai_roles_library/roles/ bridge and
    ROLE.md package entries. The definition manager is role-definition-manager.
    Source/installed local differences remain independent. Settings values and
    model profiles retain their original bytes and meaning.
@@ -87,3 +86,5 @@ There is no automatic rollback or recovery command.
 - [Role convention](../conventions/role_conv.md): definitions and execution.
 - [Role configuration](../conventions/role-configuration_conv.md): contracts and saved values.
 - [Runtime commands](../tools/runtime/README.md): operation requests.
+
+After this legacy naming bridge completes, explicitly review and run [capability migration](migrate-capabilities.md) to reach flat root roles/ and extracted skills/. Naming migration does not silently extract methods, merge installed customizations or rewrite its historical marker.

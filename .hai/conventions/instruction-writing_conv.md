@@ -80,3 +80,14 @@ these. Authoring and review procedures belong to an installed registered role-de
 - [Procedure convention](procedure_conv.md): procedure-local Rules structure.
 - [Procedure concept](../concepts/procedure.md): meaning, scope, and rationale.
 - [Role tools](../tools/roles/README.md): exact supported checks and their limits.
+
+## Skills and role-local procedures
+
+Reusable task methods belong in skills. A skill may contain procedures, scripts,
+templates, task knowledge and conventions without adopting the ROLE.md format.
+The structured procedure contract applies to HAI procedure resources that declare
+that contract; it does not force every external SKILL.md into a role template.
+A role may retain genuinely role-specific procedures and helpers. Applicable role,
+skill and workspace rules all remain in force; referencing a skill does not copy
+its implementation or grant authority. Inputs/outputs retain explicit local
+bindings, and shared conventions have one owner rather than competing copies.

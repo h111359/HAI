@@ -14,13 +14,16 @@ handoff. Workflows remain optional; ordinary tasks and role procedures still wor
 
 ## Explanation
 
-A definition in `.hai_env/workflows/<name>.md` is discoverable by its presence;
+A reusable source in `workflows/<name>.md` is installed with explicit environment
+locations into `.hai_env/workflows/<name>.md`. An installed definition is discoverable by its presence;
 there is no separate workflow catalogue. Discovery is not execution authority.
 The host checks the definition and current prerequisites, then coordinates actual
 work. Core tools persist assignments and accept supported result evidence; they
 do not invoke models or independently assess business quality.
 
-A step names a role and contains its assignment. The selected role's procedures,
+A step names a role and its expected result. The assigned role chooses suitable
+available skills; no workflow skill binding prescribes that choice. Missing suitable
+skills block the affected assignment. A step contains its process assignment. The selected role's procedures,
 configuration and authority still apply. The host decides direct execution or
 separate invocation under the shared agent policy; a step is not inherently a spawn.
 
@@ -36,6 +39,23 @@ artifacts separate. The containing Activity provides ownership without another
 Activity-ID folder. A finished run never automatically closes the Activity.
 Runs archive and export with their Activity. Durable references use the stable
 Activity and run IDs, resolving the current or archived Activity path.
+
+Workflow format 3 separates authored filename patterns from human-chosen
+workspace-relative destination bases in `.hai_env/config/workflows/<name>.json`.
+Installation explains each location and waits for actual choices; missing/unsafe
+configuration blocks that workflow without blocking core startup. Each run uses a
+UUID subfolder below its configured bases. Every intermediate name contains the
+step and runtime-assigned per-step execution number. Accepted copies, immutable
+initial snapshots and input lineage remain authoritative inside the Activity.
+Canonical product files keep their existing ownership and publication authority.
+
+An authored `accepted:step/result/output` source binds a named accepted result,
+including earlier approved requirements/design on a partial QA return. Superseded
+required ancestors and changed/missing handoff files block acceptance. A human
+checkpoint references an actual received typed human instruction and checkpoint-bound
+host semantic attestation. Runtime validates recorded attribution and identities;
+it does not independently authenticate the human. QA pass and human acceptance
+remain distinct.
 
 The definition manager authors and reviews processes. The shared workflow convention
 is the format authority, core tools check structure, and the host assesses actual

@@ -9,3 +9,10 @@ Activities retain stable identity and work continuity across chats; record opera
 Chronicles are optional exact-source transcript segments stored per Activity. Settings and a prompt threshold express a recording choice, not proof of source coverage. Core records explicit assigned sources; enabled recording attempts synchronization and fresh evidence before closure. Required-mode or independently mandatory recording requires success; default best-effort source interruptions remain visible without stopping independent ordinary work. Pending or missing required source blocks closure. Disabled or unavailable optional features do not invalidate core startup, and configuration changes do not delete existing content.
 
 Optional workspace role packages and their catalogue live under `.hai_env/roles/`; their package-owned settings live separately under `.hai_env/config/roles/`. Core initialization and administration require no agent or model profile. Installing, registering and using an optional extension are distinct operations and require the appropriate scope and actual host support. See [role concept](role.md) and [role configuration](role-configuration.md).
+
+Installed skills live separately in .hai_env/skills/ and may be used directly
+within the user task scope or selected by a role. The roles/skills/workflows source
+collections do not execute as an installed environment. Workflow location choices
+are stored separately under .hai_env/config/workflows/; reusable definitions keep
+the artifact names and contracts, while each environment chooses safe output bases.
+Accepted workflow evidence and source lineage remain with the owning Activity.

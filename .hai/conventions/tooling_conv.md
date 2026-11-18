@@ -80,3 +80,14 @@ the product's runtime.
 - Verify changes on each target OS when available. Report which systems
   and Python versions were actually tested, and any skipped checks;
   portability intent alone does not establish verification on all systems.
+
+## Skills and role-local procedures
+
+Reusable task methods belong in skills. A skill may contain procedures, scripts,
+templates, task knowledge and conventions without adopting the ROLE.md format.
+The structured procedure contract applies to HAI procedure resources that declare
+that contract; it does not force every external SKILL.md into a role template.
+A role may retain genuinely role-specific procedures and helpers. Applicable role,
+skill and workspace rules all remain in force; referencing a skill does not copy
+its implementation or grant authority. Inputs/outputs retain explicit local
+bindings, and shared conventions have one owner rather than competing copies.

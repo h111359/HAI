@@ -4,7 +4,7 @@ from runtime.storage import SafetyError, checked_path, read_json
 
 MARKER = ".hai_env/config/role-migration.json"
 LEGACY_ROOTS = (".hai_env/agents", ".hai_env/config/agents", "hai_agents_library", ".hai/agents")
-ROLE_ROOTS = (".hai_env/roles", ".hai_env/config/roles", "hai_roles_library")
+ROLE_ROOTS = (".hai_env/roles", ".hai_env/config/roles", "hai_roles_library", "roles")
 
 
 def status(workspace):
@@ -25,6 +25,11 @@ def status(workspace):
                 if not path.is_dir():
                     raise SafetyError(f"Role root must be a directory: {relative}")
                 canonical.append(relative)
+        capability = checked_path(root, '.hai_env/config/capability-migration-v1.json')
+        if capability.exists():
+            cap = read_json(capability)
+            if not isinstance(cap,dict) or cap.get('migration_format_version')!=1 or cap.get('status')!='complete':
+                raise SafetyError('Incomplete capability migration; inspect retained marker and backups before explicit recovery')
         marker = checked_path(root, MARKER)
         if marker.exists():
             data = read_json(marker)

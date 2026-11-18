@@ -217,7 +217,7 @@ def _plan(root):
 def _validate_stage(candidate, plan):
     from roles.role_tools import read_definition, audit
     from workflows.definition import parse_definition
-    for origin in ('.hai_env/roles', 'hai_roles_library/roles'):
+    for origin in ('.hai_env/roles', 'hai_roles_library/roles', 'roles'):
         folder = candidate / origin
         if not folder.exists():
             continue

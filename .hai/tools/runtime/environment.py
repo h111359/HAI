@@ -129,6 +129,16 @@ def handle(operation, workspace, request, apply):
         role = request.get('role')
         if not isinstance(role, str) or not role_tools.NAMES.fullmatch(role): raise ValueError('A canonical role name is required')
         contract_rel = f'.hai_env/roles/{role}/configuration/contract.json'
+        if not checked_path(workspace,contract_rel).exists():
+            definition_path=checked_path(workspace,f'.hai_env/roles/{role}/ROLE.md',allow_missing=False)
+            definition=definition_path.read_text(encoding='utf-8-sig').split('---',2)
+            if len(definition)!=3 or definition[0].strip(): raise SafetyError('Cannot establish settings ownership from definition')
+            fields=role_tools.parse_frontmatter(definition[1].lstrip('\n'))
+            if fields.get('metadata',{}).get('hai-configuration-contract'): raise SafetyError('Declared owner configuration contract is missing')
+            existing=checked_path(workspace,f'.hai_env/config/roles/{role}.json')
+            if existing.exists(): raise SafetyError('Saved settings have no declared owner contract; preserve them and resolve ownership explicitly')
+            if action!='read' or apply or set(request)!={'role'}: raise ValueError('This role owns no configurable settings')
+            return {'ok':True,'status':'not_required','result':{'role':role,'settings':{},'path':None,'issues':[]},'changed_files':[],'issues':[]}
         contract_path = checked_path(workspace, contract_rel, allow_missing=False); contract_fp = fingerprint(contract_path)
         contract = config.load_contract(contract_path, role)
         current = config.read_configuration(workspace, role, contract)

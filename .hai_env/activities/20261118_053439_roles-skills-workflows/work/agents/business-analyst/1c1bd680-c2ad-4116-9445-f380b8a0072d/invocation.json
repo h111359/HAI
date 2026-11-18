@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "f14d66cb-bf54-4aa3-bb47-b49fb4bceb7d",
+  "invocation_id": "1c1bd680-c2ad-4116-9445-f380b8a0072d",
+  "role": "business-analyst",
+  "created_at": "2026-11-17T20:51:22Z",
+  "provenance": {
+    "source": "human request to fix the story after independent review",
+    "reason": "fresh independent check of the applied correction, without implementation"
+  }
+}

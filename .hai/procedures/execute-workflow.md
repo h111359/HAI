@@ -41,7 +41,12 @@ separate; optional missing dependencies block only affected execution.
    for explicit discovery and `workflow validate` for structural evidence; ask the
    definition manager for scoped semantic review when needed. Do not change workflow
    files merely to display a menu. A malformed file is not absence of the whole feature.
-2. Preview `workflow start` with the Activity ID and selected definition. Inspect
+2. For an uninstalled format-3 source, preview `workflow install` without locations,
+   present each returned purpose/contents question and obtain actual human-chosen
+   workspace-relative bases. Apply with those values and provenance; never invent
+   live choices. Compatible updates require the inspected installed hash and retain
+   chosen values. Missing/unsafe settings block that workflow only.
+   Preview `workflow start` with the Activity ID and selected definition. Inspect
    initial files, task authority and missing prerequisites. Applying start pins the
    definition and initial artifact bytes, not permission for all possible effects.
 3. Preview/prepare the next step using the current run revision, actual [input:runtime]
@@ -51,15 +56,20 @@ separate; optional missing dependencies block only affected execution.
    enable an integration. Specification updates need the owner's enabled setting.
 4. For direct role work, retain the actual executor identity. For a separate spawn,
    obtain an applied Activity invocation allocation, supply its manifest/folder plus
-   Activity/run/step/attempt IDs, instruction, exact input paths and output destinations,
+   Activity/run/step/attempt IDs, instruction, exact input paths and resolved output destinations,
    and record the returned host handle. Supply Activity chat operations and boundary
    authority. Record running only after launch is observed; failed launches remain
    attempts. Never describe a direct role switch as a separate agent invocation.
 5. Obtain the agent's one proposed result. Inspect its required files/directories,
    unchanged inputs, current product checks and authored result/format expectations.
    Resolve conflicting criteria rather than choosing the first matching row. Submit
-   complete-step with actual host assessment; rejection does not dispatch the next
-   step. A crash without required failure evidence remains an interruption.
+   complete-step with actual host assessment. For a human-gated result, present
+   current required inputs, wait for the actual human response, capture it verbatim
+   as a typed received instruction and supply its message ID/hash plus host semantic
+   attestation bound to assignment checkpoint_sha256. Natural approval is sufficient
+   in context; do not fabricate a message or treat QA pass as human acceptance.
+   Stale scope/design/QA lineage requires fresh work/approval. Rejection does not
+   dispatch the next step. A crash without required failure evidence remains an interruption.
 6. After acceptance, show the selected next action and refresh its prerequisites
    before dispatch. An explicit return creates a new attempt. Reaching a limit
    blocks rather than silently extending it. Finishing records the declared outcome
@@ -74,6 +84,11 @@ separate; optional missing dependencies block only affected execution.
    the Activity-local run folders in any requested export or retention review.
    Resolve paths by stable Activity/run IDs after archival; runs move with the owner.
 
+Configured format-3 outputs use the assigned workspace-relative path; internal input
+paths resolve under the stable Activity/run identity. Do not guess the latest filename.
+The final Backlog-manager step needs actual backlog-owner authority and supporting
+QA/human acceptance before updating canonical completion.
+
 ## Outputs
 
 | Output | Meaning | Completion criteria |
@@ -82,8 +97,8 @@ separate; optional missing dependencies block only affected execution.
 
 ## References
 
-- [Workflow convention](../conventions/workflow_conv.md) — definition and file contracts — required.
-- [Run convention](../conventions/workflow-run_conv.md) — ownership, state and recovery — required.
-- [Runtime commands](../tools/runtime/README.md) — actual request shapes — required before operations.
-- [Role convention](../conventions/role_conv.md) and [invocation convention](../conventions/agent-invocation_conv.md) — execution mode and handoff — required before role work.
-- [Artifact placement](../conventions/artifact-placement_conv.md) and [workspace boundary](../conventions/workspace-boundary_conv.md) — ownership/permission — required.
+- [Workflow convention](../conventions/workflow_conv.md) â€” definition and file contracts â€” required.
+- [Run convention](../conventions/workflow-run_conv.md) â€” ownership, state and recovery â€” required.
+- [Runtime commands](../tools/runtime/README.md) â€” actual request shapes â€” required before operations.
+- [Role convention](../conventions/role_conv.md) and [invocation convention](../conventions/agent-invocation_conv.md) â€” execution mode and handoff â€” required before role work.
+- [Artifact placement](../conventions/artifact-placement_conv.md) and [workspace boundary](../conventions/workspace-boundary_conv.md) â€” ownership/permission â€” required.

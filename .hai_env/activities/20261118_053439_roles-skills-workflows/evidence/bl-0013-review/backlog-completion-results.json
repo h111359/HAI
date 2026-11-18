@@ -1,0 +1,228 @@
+{
+  "scenario": "actual isolated backlog completion and evidence receipt",
+  "execution": "generic reviewer follows installed backlog-management method in assigned Backlog-manager fixture context; no model launch or live backlog mutation",
+  "passed": true,
+  "method": ".hai_env/skills/backlog-management/SKILL.md",
+  "method_sha256": "bfcb5f605863a8ce60663c79c2124202c2d48f2e7290657418861c5831d9808a",
+  "before_audit": {
+    "ok": true,
+    "scope": "read_only_backlog_structure_and_catalogue",
+    "issues": [],
+    "items": [
+      {
+        "id": "BL-0001",
+        "title": "Verified fixture delivery",
+        "status": "pending",
+        "file": "new/BL-0001.md",
+        "unknown_fields": []
+      }
+    ],
+    "configuration_status": "defaulted",
+    "location": "backlog",
+    "counts": {
+      "cancelled": 0,
+      "completed": 0,
+      "pending": 1,
+      "rejected": 0
+    }
+  },
+  "after_audit": {
+    "ok": true,
+    "scope": "read_only_backlog_structure_and_catalogue",
+    "issues": [],
+    "items": [
+      {
+        "id": "BL-0001",
+        "title": "Verified fixture delivery",
+        "status": "completed",
+        "file": "closed/BL-0001.md",
+        "unknown_fields": []
+      }
+    ],
+    "configuration_status": "defaulted",
+    "location": "backlog",
+    "counts": {
+      "cancelled": 0,
+      "completed": 1,
+      "pending": 0,
+      "rejected": 0
+    }
+  },
+  "receipt": {
+    "backlog_item": "backlog/closed/BL-0001.md",
+    "status": "completed",
+    "activity_id": "cd45f351-13d6-4704-8975-36ed5e900448",
+    "run_id": "9dc18840-ca10-4640-bd99-06676e60a9e3",
+    "qa": {
+      "acceptance_key": "verify/attempt-0001",
+      "path": ".hai_env/activities/00000000_000000_active/workflow-runs/9dc18840-ca10-4640-bd99-06676e60a9e3/attempts/verify/attempt-0001/accepted/verify-001-verification-report.md",
+      "sha256": "7ff782ceeee860141f32e36d869cdff7853424a87380f8c6e0bebd44f6024f0a"
+    },
+    "human_acceptance": {
+      "acceptance_key": "accept-result/attempt-0001",
+      "path": ".hai_env/activities/00000000_000000_active/workflow-runs/9dc18840-ca10-4640-bd99-06676e60a9e3/attempts/accept-result/attempt-0001/accepted/accept-result-001-human-acceptance.md",
+      "sha256": "3a4e49ff576732b30c05b09b4ae9eaa6ff9f1e2a75615630d9dc80fa9914fe2a",
+      "message_id": "e57b1193-9db9-464d-8ea9-ed9f48928872",
+      "message_sha256": "730d60f0cc5e99995e9542f1f917eefd0095ee69db22ae4fe4942f18b66d78f2"
+    },
+    "product": {
+      "path": "product/result.txt",
+      "sha256": "dca8353709291c15b03a1edc1941e5e9d6879edad1b210ef709861b4deef683f"
+    },
+    "authority": "Explicit isolated fixture owner authorizes backlog completion after actual fixture human acceptance",
+    "checks": "Both authored fixture acceptance criteria verified; Activity lifecycle remains active."
+  },
+  "completion_acceptance": {
+    "result_format": 2,
+    "activity_id": "cd45f351-13d6-4704-8975-36ed5e900448",
+    "run_id": "9dc18840-ca10-4640-bd99-06676e60a9e3",
+    "step_id": "complete",
+    "attempt_id": "attempt-0001",
+    "result": "completed",
+    "inputs": {
+      "work-item": {
+        "artifact": {
+          "bytes": 112,
+          "kind": "file",
+          "sha256": "5b72ca1052176ee45b079f6eebbbb4194d7e4f68370eea0fd2039b4085ac5c34"
+        },
+        "configured_path": "delivery/handoffs/9dc18840-ca10-4640-bd99-06676e60a9e3/prepare-001-work-item.md",
+        "expectation": "Selected canonical backlog path, scope, constraints and authority references.",
+        "format": "markdown",
+        "path": "attempts/prepare/attempt-0001/accepted/prepare-001-work-item.md",
+        "acceptance_key": "prepare/attempt-0001",
+        "producer_step": "prepare",
+        "producer_result": "prepared",
+        "output_name": "work-item",
+        "source": "accepted:prepare/prepared/work-item"
+      },
+      "requirements": {
+        "artifact": {
+          "bytes": 119,
+          "kind": "file",
+          "sha256": "14b51fedf572c533330a59160dc05b777f0d1abd7a67250bfd58fcf9765055dc"
+        },
+        "configured_path": "delivery/handoffs/9dc18840-ca10-4640-bd99-06676e60a9e3/clarify-001-requirements.md",
+        "expectation": "Current requirements, acceptance criteria, actual decisions and readiness evidence.",
+        "format": "markdown",
+        "path": "attempts/clarify/attempt-0001/accepted/clarify-001-requirements.md",
+        "acceptance_key": "clarify/attempt-0001",
+        "producer_step": "clarify",
+        "producer_result": "refined",
+        "output_name": "requirements",
+        "source": "accepted:clarify/refined/requirements"
+      },
+      "design": {
+        "artifact": {
+          "bytes": 109,
+          "kind": "file",
+          "sha256": "1d9e0b200f0a541a846a80c02fc7414593ccc9465d10399f8e8e8aaa7c3eda25"
+        },
+        "configured_path": "delivery/handoffs/9dc18840-ca10-4640-bd99-06676e60a9e3/design-001-solution-design.md",
+        "expectation": "Solution, changed paths, tradeoffs, test guidance and scope/requirements identities.",
+        "format": "markdown",
+        "path": "attempts/design/attempt-0001/accepted/design-001-solution-design.md",
+        "acceptance_key": "design/attempt-0001",
+        "producer_step": "design",
+        "producer_result": "designed",
+        "output_name": "design",
+        "source": "accepted:design/designed/design"
+      },
+      "design-approval": {
+        "artifact": {
+          "bytes": 76,
+          "kind": "file",
+          "sha256": "a2f09d62470af0e52a475d856689ed4896eb57a50053804bc1ccdd129a80436e"
+        },
+        "configured_path": "delivery/handoffs/9dc18840-ca10-4640-bd99-06676e60a9e3/approve-design-001-design-approval.md",
+        "expectation": "Current requirement/design identities, actual human message reference and approval or requested changes.",
+        "format": "markdown",
+        "path": "attempts/approve-design/attempt-0001/accepted/approve-design-001-design-approval.md",
+        "acceptance_key": "approve-design/attempt-0001",
+        "producer_step": "approve-design",
+        "producer_result": "approved",
+        "output_name": "approval",
+        "source": "accepted:approve-design/approved/approval"
+      },
+      "implementation": {
+        "artifact": {
+          "bytes": 84,
+          "kind": "file",
+          "sha256": "3292bc7397488d155c3aa351eb98d6801d2beccad6e790741a1751dab9636eb2"
+        },
+        "configured_path": "delivery/handoffs/9dc18840-ca10-4640-bd99-06676e60a9e3/implement-001-implementation-report.md",
+        "expectation": "Canonical changes, checks, result/limitations, approved input identities and addressed defects.",
+        "format": "markdown",
+        "path": "attempts/implement/attempt-0001/accepted/implement-001-implementation-report.md",
+        "acceptance_key": "implement/attempt-0001",
+        "producer_step": "implement",
+        "producer_result": "implemented",
+        "output_name": "implementation",
+        "source": "accepted:implement/implemented/implementation"
+      },
+      "qa-pass": {
+        "artifact": {
+          "bytes": 192,
+          "kind": "file",
+          "sha256": "7ff782ceeee860141f32e36d869cdff7853424a87380f8c6e0bebd44f6024f0a"
+        },
+        "configured_path": "delivery/handoffs/9dc18840-ca10-4640-bd99-06676e60a9e3/verify-001-verification-report.md",
+        "expectation": "Actual acceptance checks, outcomes and limitations tied to current implementation.",
+        "format": "markdown",
+        "path": "attempts/verify/attempt-0001/accepted/verify-001-verification-report.md",
+        "acceptance_key": "verify/attempt-0001",
+        "producer_step": "verify",
+        "producer_result": "passed",
+        "output_name": "verification",
+        "source": "accepted:verify/passed/verification"
+      },
+      "human-acceptance": {
+        "artifact": {
+          "bytes": 111,
+          "kind": "file",
+          "sha256": "3a4e49ff576732b30c05b09b4ae9eaa6ff9f1e2a75615630d9dc80fa9914fe2a"
+        },
+        "configured_path": "delivery/handoffs/9dc18840-ca10-4640-bd99-06676e60a9e3/accept-result-001-human-acceptance.md",
+        "expectation": "Current QA/implementation identities and actual human acceptance/decline reference.",
+        "format": "markdown",
+        "path": "attempts/accept-result/attempt-0001/accepted/accept-result-001-human-acceptance.md",
+        "acceptance_key": "accept-result/attempt-0001",
+        "producer_step": "accept-result",
+        "producer_result": "accepted",
+        "output_name": "acceptance",
+        "source": "accepted:accept-result/accepted/acceptance"
+      }
+    },
+    "outputs": {
+      "completion": {
+        "path": "attempts/complete/attempt-0001/accepted/complete-001-completion-record.md",
+        "configured_path": "delivery/completed/9dc18840-ca10-4640-bd99-06676e60a9e3/complete-001-completion-record.md",
+        "artifact": {
+          "kind": "file",
+          "sha256": "de4d970bc29009b03af1d663b0252e2ee906f6a16af16a7759a62a5c420dbcb6",
+          "bytes": 1411
+        },
+        "format": "markdown",
+        "expectation": "Final per-run receipt: canonical backlog update, product outputs, QA and actual human acceptance; Activity stays open."
+      }
+    },
+    "assessment": {
+      "accepted": true,
+      "author": "fixture host",
+      "evidence": "Actual fixture output checked against declared expectation"
+    },
+    "executor": {
+      "handle": "fixture-live-handle",
+      "mode": "direct",
+      "writers_ended": true,
+      "evidence": "Observed fixture worker"
+    },
+    "accepted_at": "2026-11-18T04:58:22Z",
+    "next": "end:delivered",
+    "human_approval": null,
+    "human_approval_request": null,
+    "execution_number": 1
+  },
+  "outcome": "delivered",
+  "activity_lifecycle": "active"
+}

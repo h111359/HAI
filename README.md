@@ -4,8 +4,9 @@ HAI helps you organize work with AI across projects and business activities.
 It gives AI clear instructions for planning, carrying out tasks and checking
 results, while keeping your work and decisions organized.
 
-A **HAI role** provides instructions and tools for a responsibility, such as
-business analysis or review. Your **AI agent** performs the work using those roles.
+A **HAI role** defines a responsibility, such as business analysis or review.
+A **skill** provides a reusable method, such as writing requirements. A **workflow**
+sets the steps and handoffs between roles. Your **AI agent** carries out the work.
 
 ## What can it do?
 
@@ -38,7 +39,7 @@ The core uses Python's standard library, so no extra Python packages are require
 
 5. Describe what you want to do. You can also ask **"Help with HAI"**.
 
-HAI roles are optional and installed separately. For setup details and upgrades,
+Roles, skills and workflows are optional and installed separately. For setup details and upgrades,
 see [the installation guide](INSTALL.md).
 
 HAI is available under the [MIT license](LICENSE).

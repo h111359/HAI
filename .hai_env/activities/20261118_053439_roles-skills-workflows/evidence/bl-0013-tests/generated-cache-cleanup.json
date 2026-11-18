@@ -1,0 +1,63 @@
+{
+  "files": [
+    {
+      "path": ".hai/tools/__pycache__/environment_paths.cpython-314.pyc",
+      "sha256": "a6fb642461900b25086f92fca5fde4b53a9f93fb4a8aacc61e09fd82b33b501a",
+      "purpose": "generated verification import cache; absent from initial baseline",
+      "action": "remove only this disposable generated file"
+    },
+    {
+      "path": ".hai/tools/__pycache__/path_contract.cpython-314.pyc",
+      "sha256": "6baebfada5be0078ed9823993a6b03c57f1b046d986d5206f73e1555a87888f9",
+      "purpose": "generated verification import cache; absent from initial baseline",
+      "action": "remove only this disposable generated file"
+    },
+    {
+      "path": ".hai/tools/__pycache__/role_state.cpython-314.pyc",
+      "sha256": "cc2b0dd29e7a0f69ae59439c3031f0ead844f98a84ddad61da9de5103720abab",
+      "purpose": "generated verification import cache; absent from initial baseline",
+      "action": "remove only this disposable generated file"
+    },
+    {
+      "path": ".hai/tools/runtime/__pycache__/storage.cpython-314.pyc",
+      "sha256": "ff985a63711bed70f4aba6bfd7f3ef543edc9d923e5cf035a8a0516d6f19db64",
+      "purpose": "generated verification import cache; absent from initial baseline",
+      "action": "remove only this disposable generated file"
+    },
+    {
+      "path": ".hai/tools/runtime/__pycache__/__init__.cpython-314.pyc",
+      "sha256": "f9cb57ac4cae19398a549beacf084f35e8a4bf64cbc7e5dfbeb8d9d74d486f1f",
+      "purpose": "generated verification import cache; absent from initial baseline",
+      "action": "remove only this disposable generated file"
+    }
+  ],
+  "source_files_changed": false,
+  "correction": "Reviewer corrected initial baseline attribution after deletion: these five files were preexisting. Restoring only byte-identical matches against recorded precleanup hashes.",
+  "restoration": [
+    {
+      "path": ".hai/tools/__pycache__/environment_paths.cpython-314.pyc",
+      "matches_precleanup": true,
+      "generated_sha256": "a6fb642461900b25086f92fca5fde4b53a9f93fb4a8aacc61e09fd82b33b501a"
+    },
+    {
+      "path": ".hai/tools/__pycache__/path_contract.cpython-314.pyc",
+      "matches_precleanup": true,
+      "generated_sha256": "6baebfada5be0078ed9823993a6b03c57f1b046d986d5206f73e1555a87888f9"
+    },
+    {
+      "path": ".hai/tools/__pycache__/role_state.cpython-314.pyc",
+      "matches_precleanup": true,
+      "generated_sha256": "cc2b0dd29e7a0f69ae59439c3031f0ead844f98a84ddad61da9de5103720abab"
+    },
+    {
+      "path": ".hai/tools/runtime/__pycache__/storage.cpython-314.pyc",
+      "matches_precleanup": true,
+      "generated_sha256": "ff985a63711bed70f4aba6bfd7f3ef543edc9d923e5cf035a8a0516d6f19db64"
+    },
+    {
+      "path": ".hai/tools/runtime/__pycache__/__init__.cpython-314.pyc",
+      "matches_precleanup": true,
+      "generated_sha256": "f9cb57ac4cae19398a549beacf084f35e8a4bf64cbc7e5dfbeb8d9d74d486f1f"
+    }
+  ]
+}

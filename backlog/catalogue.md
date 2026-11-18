@@ -23,3 +23,4 @@ unspecified; each item contains its complete supplied requirements and attributi
 | BL-0010 | Separate working folder for each sub-agent invocation | completed | [BL-0010](closed/BL-0010.md) |
 | BL-0011 | Business analyst clarification and requirements readiness | completed | [BL-0011](closed/BL-0011.md) |
 | BL-0012 | Consolidate HAI environment configuration files | completed | [BL-0012](closed/BL-0012.md) |
+| BL-0013 | Separate roles, skills and configurable workflows | pending | [BL-0013](new/BL-0013.md) |

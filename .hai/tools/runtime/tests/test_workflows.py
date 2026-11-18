@@ -90,14 +90,17 @@ class WorkflowTests(unittest.TestCase):
 
     def test_real_package_install_and_registration(self):
         source_repo = TOOLS.parent.parent
-        optional_package = source_repo / '.hai_env/roles/software-developer'
+        optional_package = source_repo / 'roles/software-developer'
         if not optional_package.exists() and not optional_package.is_symlink():
             self.skipTest('optional Software-developer integration unavailable in core-only distribution')
         shutil.copytree(source_repo / '.hai', self.root / '.hai', dirs_exist_ok=True)
-        source = self.root / 'sources/roles/software-developer'
+        source = self.root / 'roles/software-developer'
         source.parent.mkdir(parents=True)
         shutil.copytree(optional_package, source)
-        req = {'source':'sources/roles/software-developer', 'name':'software-developer', 'provenance':self.prov, 'register':True}
+        # Source inspection and installed execution resolve independent skill collections.
+        shutil.copytree(source_repo / 'skills', self.root / 'skills')
+        shutil.copytree(source_repo / '.hai_env/skills', self.root / '.hai_env/skills')
+        req = {'source':'roles/software-developer', 'name':'software-developer', 'provenance':self.prov, 'register':True}
         result = packages.handle('install',self.root,req,True)
         self.assertTrue(result['ok'],result)
         self.assertTrue((self.root / '.hai_env/roles/software-developer/ROLE.md').is_file())

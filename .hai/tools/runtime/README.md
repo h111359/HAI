@@ -41,111 +41,150 @@ See [migration procedure](../../procedures/migrate-roles.md).
 
 Startup reports role_context independently of core validity. Legacy names block
 role-dependent work but allow independent core administration. New contracts use
-contract_format_version 3, reusable workflows workflow_format 2, and invocation
+contract_format_version 3, new configurable workflows workflow_format 3, and invocation
 manifests version 2; these are separate formats, not a release version.
+
+## Skills and role composition
+
+`skills validate` takes definition, a contained SKILL.md path. Native skills keep
+free-form task instructions; HAI does not impose ROLE.md headings, role model
+metadata or empty configuration contracts on them. `skills list` inspects installed
+skills; `skills resolve` takes name and resolves only .hai_env/skills/<name>/SKILL.md.
+It reports missing capabilities without falling back to root source collections.
+
+`skills install` takes source, name and provenance, with optional replace and an
+exact reviewed_differences list for a replacement. Preview is read-only; apply
+stages/validates the complete local package, rechecks inputs and preserves the old
+installed package. Installing a skill does not invoke it or authorize task effects.
+
+Roles declare available skills through metadata.hai-skills. Their definitions keep
+responsibilities, limits and any genuinely role-specific resources. Procedures and
+configuration contracts are optional when unnecessary; owner settings still have
+one authoritative contract/location. Direct skill use does not adopt its former
+role, and workflow assignments leave skill selection to the assigned role.
+
+`skills migrate` is the explicit candidate-based package migration for existing
+source/installed role snapshots. Inspect the preview and exact candidate/target
+identities, supply its expected preview and ended-writer evidence for apply, and
+retain the Activity-owned recovery copies and migration marker. Partial or
+incompatible states require inspected recovery rather than automatic merging.
+See the [skill tools](../skills/README.md) for supported validation and boundaries.
 
 ## Workflow commands
 
-Use `python -B .hai/tools/hai.py workflow <operation> --workspace .` with a
-workspace-contained `--request PATH`. Definitions follow the
-[workflow convention](../../conventions/workflow_conv.md); the runtime uses no
-third-party YAML dependency. A valid definition describes possible work; it does
-not prove that the requested work is authorized or its agents are available.
+Use `<absolute-python> -B .hai/tools/hai.py workflow <operation> --workspace .`
+with `--request-stdin` or a workspace-contained request. Preview is the default;
+`--apply` performs mutations under the runtime lock. Pure definition validation
+requires no optional role, skill, model or output configuration. A valid file does
+not authorize execution or prove semantic quality.
 
-Read commands take these fields and never create storage:
-
-| Operation | Request fields | Result |
+| Operation | Request fields | Behavior |
 | --- | --- | --- |
-| `list` | None | Markdown definitions present in `.hai_env/workflows/`, including per-file validation issues. No catalogue exists. |
-| `validate` | `definition` | Structural checks of an explicit workspace-relative Markdown path, including templates outside the collection. Meaning and execution readiness remain unchecked. |
-| `show` | `activity_id`, `run_id` | Retained state and whether its projection needs rebuilding; closed Activities remain readable. |
+| `list` | None | Installed Markdown definitions in .hai_env/workflows, with per-file structural issues; no run starts. |
+| `validate` | `definition` | Validate selected workspace-relative source/template/installed file structurally. |
+| `install` | `definition`, optional `locations`, `expected_installed_sha256`, `provenance` | Format-3 installation preview returns each location purpose/contents; apply requires actual human choices. Reuse/update preserves selected bases. |
+| `show` | `activity_id`, `run_id` | Inspect verified retained evidence, including closed Activities; never repair storage. |
+| `start` | `activity_id`, `definition`, `provenance` | Pin installed definition and immutable initial snapshots. Format 3 requires valid separate settings and reserves the Activity slot from start; no worker launches. |
+| `prepare-step` | Common fields and readiness below | Check exact accepted inputs, safe destinations and limits; allocate one numbered assignment. Replay does not allocate again. |
+| `record-execution` | Common, `step_id`, `attempt_id`, `status`, `executor`, `details` | Record observed running/waiting/blocked work; does not start it. |
+| `complete-step` | Common, `step_id`, `attempt_id`, `result`, `assessment`, `executor`, optional `human_approval` | Validate selected result, inputs, outputs and ended writers; stage accepted copies and record one transition, or preserve rejection/partial evidence. |
+| `pause`, `cancel` | Common, `executor` when present | Require actual writer status; cancellation does not undo product effects. |
+| `resume` | Common, readiness | Recheck a paused never-started assignment; started work needs effect reconciliation. |
+| `retry-step` | Common, `step_id`, `attempt_id`, `executor`, `effect_resolution`, readiness | Reconcile actual stopped attempt effects and allocate a fresh bounded execution. |
 
-Mutations preview by default; `--apply` performs them under the core runtime lock.
-All require provenance and the current owning `activity_id`. All except `start`
-also require `run_id` and integer `expected_revision` from the last `show`.
-The revision counts saved run transitions, rather than definition versions.
+Common run-mutation fields are `activity_id`, `run_id`, integer
+`expected_revision` from show, and provenance with nonblank source/reason. Install
+is environment configuration, so takes no Activity ID. Only the sole current
+owning Activity can mutate runs. Read operations reject --apply.
 
-| Operation | Additional fields | Behavior |
-| --- | --- | --- |
-| `start` | `definition` | Requires a registered `.hai_env/workflows/<name>.md`; pins exact definition and initial input snapshots in a new run UUID directory. |
-| `prepare-step` | Readiness fields below | Checks role, prerequisites, input hashes and limits; reserves the Activity execution slot and creates one assignment. Repeating a prepared assignment does not allocate another attempt. |
-| `record-execution` | `step_id`, `attempt_id`, `status`, `executor`, `details` | Records observed `running`, `waiting` or `blocked` execution; details must explain the actual condition. It does not launch an agent. |
-| `complete-step` | `step_id`, `attempt_id`, `result`, `assessment`, `executor` | Accepts one authored result after checking required artifacts, consumed inputs and ended writers. Invalid evidence blocks transition and retains rejection evidence. |
-| `pause` | `executor` when an executor exists | Requires stopped writers; retains attempt history. |
-| `cancel` | `executor` when an executor exists | Records cancellation, or `cancelling` while writers remain. It does not undo product effects. |
-| `resume` | Readiness fields below | Rechecks an unstarted prepared assignment; previously started work needs explicit effect reconciliation through retry. |
-| `retry-step` | `step_id`, `attempt_id`, `executor`, `effect_resolution`, readiness fields | Requires a stopped unfinished attempt and an explanation of actual effects; allocates a new attempt within the pinned limits. |
-
-Readiness fields are `runtime`, `authority`, and `prerequisite_assessment`:
+For installation, first preview `{"definition":"workflows/software-development.md"}`.
+Present returned questions to the human. Apply with their actual choices:
 
 ```json
 {
-  "runtime": {"models": {"<actually available model>": ["high"]}},
-  "authority": "Reference to the actual authorized assignment",
-  "prerequisite_assessment": {
-    "accepted": true,
-    "author": "Actual coordinating host identity",
-    "evidence": "Observed tools, scope and operation prerequisites checked"
-  }
+  "definition": "workflows/software-development.md",
+  "locations": {"handoffs": "<human-chosen-base>", "completion": "<human-chosen-base>"},
+  "provenance": {"source": "actual human location choices", "reason": "authorized installation"}
 }
 ```
 
-The host supplies actual supported model/effort combinations. The runtime resolves
-the installed role's model class through current profiles and checks registration,
-configuration and the requested capability. A disabled role-owned feature blocks
-execution; workflow commands do not enable it. Host evidence covers prerequisites
-that code cannot infer from arbitrary role instructions.
+Placeholders above are not defaults. Locations are workspace-root-relative bases;
+outputs add a run UUID directory and authored step/execution filename. Identical
+shared bases are allowed; nested/case-aliased/protected/escaping or linked bases
+block. A safe dedicated .hai_env/workflow-outputs base can be chosen; config,
+installed collections, source roots and Activity storage cannot be outputs.
+Settings live once in `.hai_env/config/workflows/<name>.json`, separate from the
+reusable definition. A compatible definition update requires inspected
+`expected_installed_sha256`, preserves chosen values and saves exact predecessor
+bytes. Changed location contracts or partial installations stop without repair.
+Installation starts no run. Missing/unsafe settings block the workflow, not core startup.
 
-An `assessment` uses the same `accepted`, `author`, `evidence` structure. Its evidence
-must explain why actual outputs meet this result's condition and expectations.
-File extensions, content formats and directory contents are author-defined; the
-runtime checks safe paths and byte/manifest integrity rather than interpreting
-arbitrary formats or selecting a result on the author's behalf.
+Readiness contains actual `runtime` model/effort support, an `authority` reference,
+and `prerequisite_assessment` with `accepted: true`, `author`, `evidence`. Runtime
+checks registered role, its available skill dependencies, optional owned configuration
+contract and model profile; missing capability blocks affected assignment. Roles
+choose skills. Workflow selection grants no further permission or automatic spawn.
+An output `assessment` has the same accepted/author/evidence fields; the host
+substantantiates the authored result condition and actual artifact quality.
 
-An `executor` describes an actual host execution:
+An executor names its actual host `handle`, `mode` direct/spawned, Boolean
+`writers_ended` and `evidence`. Spawned mode also requires an existing allocated
+`invocation_id` for the owning Activity/role. Complete requires observed ended
+writers. Host statements are not independently authenticated or an OS sandbox.
+
+Format-3 assignments expose `execution_number`, exact output `path`, input retained
+`path` relative to the Activity run, `configured_path`, producing `acceptance_key`,
+`producer_step`, `producer_result`, `output_name` and content evidence. Initial
+inputs are pinned snapshots. Required accepted sources use step/result/output;
+`feedback:<output>` is explicitly historical immediate predecessor feedback:
+its identity/content subtree is retained while separately declared accepted
+requirements/design/approval continue to enforce live freshness. Never guess input
+paths from filenames. Superseded, unaccepted, missing or changed required handoffs block.
+
+Human-gated results require a real typed received human instruction after checkpoint
+preparation and a host semantic attestation bound to the assignment. Natural human
+approval in the presented context is sufficient; the human need not echo a token.
+`human_approval` has exactly:
 
 ```json
 {
-  "handle": "<actual host execution handle>",
-  "mode": "spawned",
-  "invocation_id": "<allocated Activity invocation UUID>",
-  "writers_ended": false,
-  "evidence": "Observed launch or termination evidence"
+  "message_id": "<actual recorded received human instruction UUID>",
+  "message_sha256": "<SHA-256 of canonical complete message JSON>",
+  "checkpoint_sha256": "<assignment checkpoint_sha256>",
+  "accepted": true,
+  "author": "<actual host identity>",
+  "evidence": "<observed approval in this checkpoint context>"
 }
 ```
 
-Spawned executions require an existing allocation for the owning Activity and
-assigned role. Direct execution uses `mode: "direct"` without an invocation ID.
-Completion requires `writers_ended: true` from actual observation. The runtime
-does not authenticate supplied host statements or provide OS-level isolation.
+Canonical message JSON uses ensure_ascii=true, sorted keys and compact comma/colon
+separators, UTF-8, without newline (workflow_lineage.canonical). Runtime retains
+exact message/hash and verifies typed role, received delivery, sequence and challenge.
+An arbitrary approval evidence string or agent coordination record is insufficient.
+This verifies host-attributed records and semantic attestation, not independent
+human authentication. Source-backed recording validation remains its own contract.
+Material scope/design changes invalidate stale approval. QA pass and human acceptance
+are distinct required sources before Backlog-manager completion; updating the
+canonical backlog still requires its owner's actual authority.
 
-Read the returned `assignment` before dispatch. Its `inputs` reference frozen paths
-relative to the run directory; absent optional inputs are null. Output locations
-starting `attempt:` resolve below `attempts/<step>/<attempt>/`. Scratch belongs in
-the invocation's allocated folder. The host must preserve core-owned assignment,
-result, rejection, state and event files.
+Runs retain definition, pinned configuration, initial snapshots, assignments,
+accepted copies, input lineage, events and state below the owning Activity's
+workflow-runs/<run-uuid>/. Configured handoffs are checked before dependent work;
+internal accepted bytes/hashes remain authoritative and inspectable after archival
+even when configured copies are unavailable. Product outputs retain their existing
+owners; no stable-name overwrite/publication or Activity closure is automatic.
 
-`complete-step` checks a previously accepted identical label/assessment before
-the revision guard, making acknowledgement replay safe when retained artifacts
-still match. A different report conflicts. Later steps consume the immediately
-preceding accepted result; a return to an earlier step creates a fresh attempt.
-
-Runs live at `<activity>/workflow-runs/<run-id>/`, retaining
-`definition.md`, `inputs/`, `attempts/`, `events.jsonl` and `state.json`.
-Events contain committed transitions; a matching stale state projection can be
-recovered without repeating agent work. Conflicting or partial evidence is
-preserved and blocks dependent work pending inspection. Inspect actual product
-effects before retrying after interruption. Run completion does not close the
-Activity; Activity closure checks unfinished runs and writers first.
-Archival moves runs with their containing Activity, so exporting the Activity
-includes them. Resolve stable Activity/run IDs to the current or archived owner
-path; do not retain an active-folder path as identity. Runtime reads honor a
-configured Activity store. Legacy external run evidence blocks dependent work
-until explicit relocation; it is never silently used as a fallback.
-When versioning run evidence, preserve exact bytes: the repository's
-`.gitattributes` uses `**/workflow-runs/** -text` to prevent Git line-ending
-conversion of hashed snapshots, records and outputs. Apply equivalent attributes
-in another repository before committing its run evidence.
+Format-1/2 historical definitions and run-format-1 evidence retain their original
+interpretation and bytes. Format 3 creates run-format 2 and assignment-format 3;
+new semantics never reinterpret an older run. Initial/accepted snapshots and event
+hashes are immutable. Conflicting/truncated/uncommitted staging blocks and reports
+retained changed paths without automatic rollback or repair. Identical accepted
+completion replay returns the recorded result before the stale revision guard;
+conflicting result/assessment/approval does not advance again. Per-step and run
+limits remain pinned and retries never overwrite earlier accepted attempts.
+Use `**/workflow-runs/** -text` when versioning evidence to prevent line-ending
+conversion. Resolve archived evidence using stable Activity/run IDs, not cached
+active-folder absolute paths. Optional workflow absence does not block ordinary work.
 
 ## Activity layout and conversation
 

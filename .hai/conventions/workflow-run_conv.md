@@ -33,7 +33,9 @@ publication. Direct role execution and actual separate invocations remain distin
 
 The host MUST obtain a normal Activity invocation allocation before each separate
 spawn and pass both invocation and workflow run/step/attempt identities. Agent
-scratch stays with that invocation; declared outputs go to the attempt. Runtime
+scratch stays with that invocation; format-2 outputs go to the attempt and
+format-3 outputs go to resolved configured run destinations with accepted copies
+retained in the Activity attempt. Runtime
 state/events/assignment/result records remain core-owned. Activity chat is shared
 communication, not accepted workflow state or execution permission.
 
@@ -44,7 +46,9 @@ cancelled and finished progress. These administrative labels do not limit author
 result/outcome names. Prepared/running/waiting or an unfinished blocked/cancelling
 attempt holds the Activity's one workflow execution slot. Preparation reserves that
 slot before launch, so another run cannot start writing in the gap before launch
-confirmation. Multiple ready, safely paused and finished runs may coexist.
+confirmation. Historical format-2 runs allow multiple ready runs. Format-3 runs
+reserve the slot from start, including ready status; safely paused and finished
+runs may coexist.
 
 Waits retain actual questions/answers. Invalid outputs block transition; the same
 unaccepted attempt can correct its outputs before acceptance. Missing authority,
@@ -92,6 +96,30 @@ input, role, configuration and capability checks can invalidate continuation, ev
 when the run's definition is unchanged. A changed reusable definition affects new
 runs; existing runs keep their snapshots. Unsupported formats require explicit
 compatibility work rather than silent conversion.
+
+## Configured handoffs and accepted copies
+
+Workflow format 3 creates workflow_run_format 2 and assignment_format 3 records;
+format-1/2 historical definitions and workflow_run_format 1 retain their existing
+interpretation and exact bytes. New semantics are never inferred for an old run.
+The definition and chosen environment configuration are pinned for the new run.
+
+Assignments give each output's exact workspace-relative path under its configured
+base/run UUID and execution number. Inputs retain their internal Activity-relative
+path, artifact hash/manifest, producing acceptance key, step, result, output name
+and configured handoff path. Required external handoff existence/content is checked
+before dependent work and acceptance. Initial inputs are immutable internal snapshots.
+Completion stages exact accepted copies under attempts/<step>/<attempt>/accepted/
+before recording the acceptance event; a failure reports retained changed paths.
+Uncommitted staging is preserved and blocks further use without automatic repair.
+Existing conflicting outputs are never silently overwritten for a new attempt.
+
+Accepted internal copies and their lineage are authoritative. Read/show and archival
+integrity inspect internal retained bytes without depending on an active Activity
+absolute path or continued availability of configured copies. Mutations still check
+required configured handoffs. Archival keeps all accepted evidence with its Activity.
+Reports name actual canonical product changes; configured handoff storage does not
+transfer ownership or authorize publication or backlog status changes.
 
 ## Completion and recording
 

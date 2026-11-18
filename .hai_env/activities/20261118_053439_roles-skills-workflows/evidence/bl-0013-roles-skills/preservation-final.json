@@ -1,0 +1,258 @@
+{
+  "original_file_count": 275,
+  "all_exact_originals_retained": true,
+  "source_container_retired": true,
+  "flat_source_roles": 10,
+  "all_existing_native_skill_bytes_preserved": true,
+  "native_skill_files": 3,
+  "chosen_settings_preserved": {
+    ".hai_env/config/roles/git-manager.json": true,
+    ".hai_env/config/roles/specification-manager.json": true
+  },
+  "all_chosen_settings_preserved": true,
+  "validations": [
+    {
+      "definition": "roles/backlog-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/business-analyst/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/git-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/quality-assurance/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/release-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/role-definition-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/software-developer/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/solution-architect/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/specification-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "roles/workflow-definition-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/backlog-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/business-analyst/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/git-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/hai-framework-advisor/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/quality-assurance/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/release-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/role-definition-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/software-developer/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/solution-architect/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/specification-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/roles/workflow-definition-manager/ROLE.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/backlog-management/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/crete-design-package/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/git-operations/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/quality-verification/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/release-management/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/requirements-analysis/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/role-authoring/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/software-implementation/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/solution-design/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/specification-management/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": "skills/workflow-authoring/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/backlog-management/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/framework-advice/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/git-operations/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/quality-verification/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/release-management/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/requirements-analysis/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/role-authoring/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/software-implementation/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/solution-design/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/specification-management/SKILL.md",
+      "ok": true,
+      "issues": []
+    },
+    {
+      "definition": ".hai_env/skills/workflow-authoring/SKILL.md",
+      "ok": true,
+      "issues": []
+    }
+  ],
+  "all_43_packages_validate": true,
+  "direct_settings_owner_resolution": [
+    {
+      "skill": "git-operations",
+      "ok": true,
+      "owner": "git-manager",
+      "configuration_status": "configured",
+      "issues": []
+    },
+    {
+      "skill": "specification-management",
+      "ok": true,
+      "owner": "specification-manager",
+      "configuration_status": "configured",
+      "issues": []
+    },
+    {
+      "skill": "backlog-management",
+      "ok": true,
+      "owner": "backlog-manager",
+      "configuration_status": "defaulted",
+      "issues": []
+    }
+  ],
+  "migration_marker_status": "complete",
+  "history_originals": ".hai_env/activities/00000000_000000_active/history/bl-0013-roles-skills-before",
+  "canonical_migration_backups": ".hai_env/activities/00000000_000000_active/history/capability-migration-v1",
+  "capability_inventory": ".hai_env\\activities\\00000000_000000_active\\work\\agents\\role-skill-implementation\\32e04a82-8240-4bb5-9007-aee1f540e2ec\\capability-inventory.json"
+}

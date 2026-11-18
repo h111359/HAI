@@ -1,0 +1,660 @@
+{
+  "captured_at": "2026-11-17T21:02:59.926199+00:00",
+  "files": [
+    {
+      "path": ".hai/concepts/activity-lifecycle.md",
+      "sha256": "9182b9ee0b0af1be779745133cf608eb0f48cabbbdd234ba1ac152fa40a767a7",
+      "bytes": 467
+    },
+    {
+      "path": ".hai/concepts/activity-store.md",
+      "sha256": "efc8fd7373c6b82208647a60163a755d0c2553ca1dfbca9a5b655cab8fa37e33",
+      "bytes": 540
+    },
+    {
+      "path": ".hai/concepts/activity.md",
+      "sha256": "e6676d0c35eeca299354b42f441279cbcb45be9296c127091047b6ce2edbdba5",
+      "bytes": 3405
+    },
+    {
+      "path": ".hai/concepts/durable-session-source.md",
+      "sha256": "704904b851ac5f8fd17bace566d68ce26b8c65693cce84cc8f62431849c806ea",
+      "bytes": 504
+    },
+    {
+      "path": ".hai/concepts/environment.md",
+      "sha256": "9414e19424dcc9d982770d804383ca2385aabfe41150d39cb1036d2f48ac7b47",
+      "bytes": 2361
+    },
+    {
+      "path": ".hai/concepts/hai.md",
+      "sha256": "3cb82c1a8c9329f2e732113db5a04961a85098afc0d74f9339ba83f2842fa32a",
+      "bytes": 1697
+    },
+    {
+      "path": ".hai/concepts/implementation-start.md",
+      "sha256": "238d5bca68598baae7f80f5da21bc51ce63172c762f6dc4581311a6ffcd7ba05",
+      "bytes": 592
+    },
+    {
+      "path": ".hai/concepts/procedure.md",
+      "sha256": "9125b5ba7d9597d8f128c4a80cb4b0a78751a140d670bb914cd23342e7d829ca",
+      "bytes": 5745
+    },
+    {
+      "path": ".hai/concepts/role-configuration.md",
+      "sha256": "fac8ef0ceb0a9f865e3412983dafa941ce798eb011a99cef1ecd71d5b7a31793",
+      "bytes": 2442
+    },
+    {
+      "path": ".hai/concepts/role.md",
+      "sha256": "d2a52f34a40eee89fdeec2a7a5e5379e9b1cfe14dc786873fe75072b57defaa4",
+      "bytes": 1806
+    },
+    {
+      "path": ".hai/concepts/source-coverage.md",
+      "sha256": "a606ad832bda72c3bb12403285cfe8508c4b88bb4d9e3446c15fc6ad598e01e1",
+      "bytes": 1983
+    },
+    {
+      "path": ".hai/concepts/transcript-segment.md",
+      "sha256": "92f83d9016c1faf155453211f980840d869df25d51e6d37b1b77efd14e347709",
+      "bytes": 678
+    },
+    {
+      "path": ".hai/concepts/workflow.md",
+      "sha256": "07f5565b68ec1d53fb60394944268ff5fd8d20a267ab94ea004f58d53fd29e44",
+      "bytes": 2777
+    },
+    {
+      "path": ".hai/contracts/state.json",
+      "sha256": "5acb6b779a9c4da3411de4e7a407e529385daf18927c47b4841684cbf4a0f378",
+      "bytes": 89
+    },
+    {
+      "path": ".hai/conventions/activity-chat_conv.md",
+      "sha256": "e317d7cd4d50ccb15b025386cca924cc0493ca8dd91b47cd0b605fe734f89ba5",
+      "bytes": 7027
+    },
+    {
+      "path": ".hai/conventions/activity-usage_conv.md",
+      "sha256": "51ffc89f1f58aacc4124a66bb7ee7ef2dc4d02fce8e0303c3498e8531662044a",
+      "bytes": 8398
+    },
+    {
+      "path": ".hai/conventions/activity_conv.md",
+      "sha256": "1ce35679c33a5544558521e788a3dc86d11c9b5cc45416027d0576d275a6f29e",
+      "bytes": 9673
+    },
+    {
+      "path": ".hai/conventions/agent-invocation_conv.md",
+      "sha256": "e329fb8f0fcba01fbdf38ab01eb371b598decd8d95456fa458b63a5b8b8f7ce3",
+      "bytes": 6592
+    },
+    {
+      "path": ".hai/conventions/artifact-placement_conv.md",
+      "sha256": "ece9961f64d6bbacb8c8dc7043635d44c598ebfc6f2f1bfc8001648f50c862ae",
+      "bytes": 6240
+    },
+    {
+      "path": ".hai/conventions/chronicles_conv.md",
+      "sha256": "2ef3d96976cb3ad98d717f64681e32399d711883382935ba0717ea507dad7ac6",
+      "bytes": 10194
+    },
+    {
+      "path": ".hai/conventions/codex-source_conv.md",
+      "sha256": "bfc5f6cce99a32238ee7ff0acd7abab938a611ce2cff565296dd8deab61e9119",
+      "bytes": 7520
+    },
+    {
+      "path": ".hai/conventions/concept_conv.md",
+      "sha256": "6057528ffc6d115e0af43849f458f599f841d2568d4892b95e5a9da491e9bcfe",
+      "bytes": 1781
+    },
+    {
+      "path": ".hai/conventions/framework-layout_conv.md",
+      "sha256": "c0af1c3e7014ef831930235d1c05c34845893d252e6add24bf045e6d8b17a8ac",
+      "bytes": 3194
+    },
+    {
+      "path": ".hai/conventions/instruction-writing_conv.md",
+      "sha256": "1bfee50f55502b6c64a6a380ebef691ded6c243707442bdcb86364b5739bffe3",
+      "bytes": 4752
+    },
+    {
+      "path": ".hai/conventions/model-profiles_conv.md",
+      "sha256": "f0749f3cbe9785222441b7c38b64e6a67857bbf8ef1b885cf6847c9618fd8759",
+      "bytes": 893
+    },
+    {
+      "path": ".hai/conventions/procedure_conv.md",
+      "sha256": "d3cdba15ca5d2ad8ad6da6e5f0f571de6ed5c719683914db112263bae8373f1c",
+      "bytes": 6013
+    },
+    {
+      "path": ".hai/conventions/recording-evidence_conv.md",
+      "sha256": "f31c4976de14287ed890c7ada45272dcb1b572381371e0489fbe2e80083ce7cc",
+      "bytes": 4812
+    },
+    {
+      "path": ".hai/conventions/reference-notation_conv.md",
+      "sha256": "a43dad45b85a7f336d39f46533cd203e887eb011785d44c600124e13f132611f",
+      "bytes": 3127
+    },
+    {
+      "path": ".hai/conventions/role-configuration_conv.md",
+      "sha256": "7c000ea8f24db4a8f8299f2d8eaa6c42b9b5c950da49d7a631f831457ee8dfbf",
+      "bytes": 8068
+    },
+    {
+      "path": ".hai/conventions/role_conv.md",
+      "sha256": "3d73c64eabde79c8af08475e7af4366ca5789890eafdc31edba87603a51a87f5",
+      "bytes": 20416
+    },
+    {
+      "path": ".hai/conventions/state_conv.md",
+      "sha256": "83177e0017ec513994b8706666f4c94688a47c969bfe76b6c796f58a7ee984cb",
+      "bytes": 18404
+    },
+    {
+      "path": ".hai/conventions/tooling_conv.md",
+      "sha256": "e198db75b3f7ede9a3d52d1a614d245d8abcd5d14c26eaa7ca66c3a02bec0477",
+      "bytes": 5146
+    },
+    {
+      "path": ".hai/conventions/transcript-segment_conv.md",
+      "sha256": "cc2eaf3be48ac8e3c07d91ef4eadfa9a666e76a29b0639e2ff8f903b270175b0",
+      "bytes": 11028
+    },
+    {
+      "path": ".hai/conventions/workflow-run_conv.md",
+      "sha256": "37bf53b6b2b7b4f22431149e7b3f601c639d2d3010bb9ab1ed9b2105fe86f7f3",
+      "bytes": 6747
+    },
+    {
+      "path": ".hai/conventions/workflow_conv.md",
+      "sha256": "d8e3d4a74943afc5321f4e164f5e1d10670c7cc6299d1e2447ed96de1b5006d3",
+      "bytes": 6674
+    },
+    {
+      "path": ".hai/conventions/workspace-boundary_conv.md",
+      "sha256": "8641aa6cd73dc292ef134a56d31f7aaf9337001064da1f52f2b50c91a5e9d729",
+      "bytes": 3206
+    },
+    {
+      "path": ".hai/procedures/establish-recording-source.md",
+      "sha256": "aeb47a5c4c3d99a36c593a52dbd5cfccd1286e405a6a6a3733cdfd09db2cf7ae",
+      "bytes": 5106
+    },
+    {
+      "path": ".hai/procedures/execute-workflow.md",
+      "sha256": "667141c7c7940af88155f630117451b317fadd1f7b950af21d409598dec725e5",
+      "bytes": 6335
+    },
+    {
+      "path": ".hai/procedures/maintain-source-adapters.md",
+      "sha256": "83c15bd651b287835377c8a5551834baf33281869e0c3be7d061df22e495cbd6",
+      "bytes": 5167
+    },
+    {
+      "path": ".hai/procedures/mandatory-pre-delivery-recording.md",
+      "sha256": "b12fe2b87b8f285407b71fe552976b13903dda658ca5f75905615ac5a2d0e8cf",
+      "bytes": 1993
+    },
+    {
+      "path": ".hai/procedures/migrate-environment-layout.md",
+      "sha256": "d0c029d1df402f70e549affa04f4d5aa5a726515edab9fca1961ae72ef10a9c8",
+      "bytes": 3573
+    },
+    {
+      "path": ".hai/procedures/migrate-roles.md",
+      "sha256": "6f691250adccb59cda11dff3a9c976e0ba400b002ed631661d5fcacde7bf29ca",
+      "bytes": 5095
+    },
+    {
+      "path": ".hai/procedures/present-startup-guide.md",
+      "sha256": "2baa4e212fc35b87948e6f3b3acdeb9c03b3b4fb85cc2c12a52c7a41ae6c6447",
+      "bytes": 10545
+    },
+    {
+      "path": ".hai/procedures/synchronize-chronicles.md",
+      "sha256": "ba13317779f0dacfc05b14e0e682021a2d9ee90ea599c10b2f2d1a72165a064f",
+      "bytes": 3628
+    },
+    {
+      "path": ".hai/procedures/verify-chronicles.md",
+      "sha256": "b4d2bebfb24f110f05820febec99dd54221e05ae8f6ac0109a0ed8c11d36969a",
+      "bytes": 1805
+    },
+    {
+      "path": ".hai/release-0.4.0.json",
+      "sha256": "9d8133cec593b24bc20cbbceb6f3da58f5c55e17bd504b363037101c60a79a4e",
+      "bytes": 205
+    },
+    {
+      "path": ".hai/start.md",
+      "sha256": "aed91936aa5619d2ef6fef33212149caae6f2d6ff8278b0aa89b11506c5b1b4f",
+      "bytes": 9952
+    },
+    {
+      "path": ".hai/templates/state.json",
+      "sha256": "39debe0496de6d0ce8ec71ed4bf74f9db44b7451700b02541137d1c2f942039f",
+      "bytes": 178
+    },
+    {
+      "path": ".hai/templates/workflow.md",
+      "sha256": "19c7c9618d82dbfb70b1fe950a01fbe16155db06e0412ce016c228f1f1fc3474",
+      "bytes": 1669
+    },
+    {
+      "path": ".hai/tools/__pycache__/environment_paths.cpython-314.pyc",
+      "sha256": "a6fb642461900b25086f92fca5fde4b53a9f93fb4a8aacc61e09fd82b33b501a",
+      "bytes": 1366
+    },
+    {
+      "path": ".hai/tools/__pycache__/path_contract.cpython-314.pyc",
+      "sha256": "6baebfada5be0078ed9823993a6b03c57f1b046d986d5206f73e1555a87888f9",
+      "bytes": 4897
+    },
+    {
+      "path": ".hai/tools/__pycache__/role_state.cpython-314.pyc",
+      "sha256": "312c9aa095aeea9ee034b62e26b229306f4c82971fecd5a6011aba831a31903e",
+      "bytes": 3532
+    },
+    {
+      "path": ".hai/tools/activities/discovery.py",
+      "sha256": "89aeb01e6202bc4e7bf73ed6015d12dd8cfccaed0ac231b1f446c248daf7c9cc",
+      "bytes": 11296
+    },
+    {
+      "path": ".hai/tools/activities/README.md",
+      "sha256": "03fc2a4d0f5bec41ef5ec20a0fa0cfe32ee80c29b3007a07609d7a119a15feb4",
+      "bytes": 2695
+    },
+    {
+      "path": ".hai/tools/activities/recording_gate.py",
+      "sha256": "aea88cdc119b91c627210c2582580038ca2267c9de391808c1c50ce6d8184ed7",
+      "bytes": 6676
+    },
+    {
+      "path": ".hai/tools/activities/test_recording_gate.py",
+      "sha256": "19c2f858a428cd735549a1511d29946cea31d33a708e67e912427ea170a31f14",
+      "bytes": 6117
+    },
+    {
+      "path": ".hai/tools/activities/test_role_migration.py",
+      "sha256": "b26002ed852f0b0f38459d7c97d0da9b3ca65c2e41d739e366fb07fcd6755223",
+      "bytes": 7430
+    },
+    {
+      "path": ".hai/tools/activity_layout.py",
+      "sha256": "ecc021625d293ae45758db9c1e79352e6542afb6e19f8863f9d7e072e55888cd",
+      "bytes": 2620
+    },
+    {
+      "path": ".hai/tools/chronicles/adapters.py",
+      "sha256": "7c6bf417742ddf8650be8742a63f4f2c86a0a7bd680302d8e71a283d95fc4389",
+      "bytes": 3253
+    },
+    {
+      "path": ".hai/tools/chronicles/read_codex_source.py",
+      "sha256": "edd5b80aac0e8394aa62249a8ffdbffb853eccd32adc4f5a8de5d6ba9166c12a",
+      "bytes": 9249
+    },
+    {
+      "path": ".hai/tools/chronicles/README.md",
+      "sha256": "f8cf46d683de540e4c21d669af55c519cf81efbdbf66e76179fdc47f2129eb4e",
+      "bytes": 3894
+    },
+    {
+      "path": ".hai/tools/chronicles/test_read_codex_source.py",
+      "sha256": "6144c6673bda7ea9bbe91e26315a9c28a7887a5e786561b8d455918ad6224ebb",
+      "bytes": 15384
+    },
+    {
+      "path": ".hai/tools/configuration/configuration_tools.py",
+      "sha256": "86ae87123cd64db1bea3aedde12e917831fcfc218f8470e1007405b24522c1af",
+      "bytes": 17063
+    },
+    {
+      "path": ".hai/tools/configuration/README.md",
+      "sha256": "3beb5cd13b9673c7b59fd651d55a5ca4fc95b2e071f52a823da33c0c891709f9",
+      "bytes": 3868
+    },
+    {
+      "path": ".hai/tools/configuration/test_configuration_tools.py",
+      "sha256": "3f6eac717d7bdb812306179d30018b72f4d7f0405e08cc244953d0874d2e175b",
+      "bytes": 13334
+    },
+    {
+      "path": ".hai/tools/environment_paths.py",
+      "sha256": "b388a9c6c9d690f74c9423f5a7e9f963cf644fc0011b3c2e305a3cc896c633ab",
+      "bytes": 740
+    },
+    {
+      "path": ".hai/tools/hai.py",
+      "sha256": "ca86222460cf867dbae2d9eb3a9d66319ccbf2aa5b203b92554d0be1908f3e50",
+      "bytes": 188
+    },
+    {
+      "path": ".hai/tools/path_contract.py",
+      "sha256": "906a0528f003c39bc2cda0d6b6d7c08b2eb5b8d9d94ebb4204a97a310061a620",
+      "bytes": 2613
+    },
+    {
+      "path": ".hai/tools/role_state.py",
+      "sha256": "a63ab2f86ae53d40cffcb5cea5eb961fd9dfad77de7e7a232bda4b55c7db2c38",
+      "bytes": 2583
+    },
+    {
+      "path": ".hai/tools/role_upgrade.py",
+      "sha256": "1b92250d08fe5cbf331b567f298a82ce8d2e7dfe792af58164aecf091790dad1",
+      "bytes": 6957
+    },
+    {
+      "path": ".hai/tools/roles/README.md",
+      "sha256": "8d0114d7085fb525c6a564ca1c14371a8887b70245a3bc8b5eb38a979decc1f7",
+      "bytes": 15303
+    },
+    {
+      "path": ".hai/tools/roles/role_tools.py",
+      "sha256": "d2a58cf690ef2eaa82daa4faf2994dad86f8b72563d10e13196b49ed12d22340",
+      "bytes": 39596
+    },
+    {
+      "path": ".hai/tools/roles/test_role_state.py",
+      "sha256": "88f314d2f465d01e15df9f3cd7c637a923d1614382224fbfaccbd1cb8ce74594",
+      "bytes": 2683
+    },
+    {
+      "path": ".hai/tools/roles/test_role_tools.py",
+      "sha256": "db5df992cade8c5f67da12164c923a4cf32b377f1b9405e462bdfac05a166d98",
+      "bytes": 56550
+    },
+    {
+      "path": ".hai/tools/run_tests.py",
+      "sha256": "a5f30286c706aeee861ee5619b82923c9fa4cdc53416b827bd6349f30c8a3ae4",
+      "bytes": 2933
+    },
+    {
+      "path": ".hai/tools/runtime/__init__.py",
+      "sha256": "ed7bf24bea84ac5412a8358f0964bd4f9de0ecc68d6eb7fa839fb48012edbcf7",
+      "bytes": 28
+    },
+    {
+      "path": ".hai/tools/runtime/__pycache__/__init__.cpython-314.pyc",
+      "sha256": "f9cb57ac4cae19398a549beacf084f35e8a4bf64cbc7e5dfbeb8d9d74d486f1f",
+      "bytes": 197
+    },
+    {
+      "path": ".hai/tools/runtime/__pycache__/storage.cpython-314.pyc",
+      "sha256": "ff985a63711bed70f4aba6bfd7f3ef543edc9d923e5cf035a8a0516d6f19db64",
+      "bytes": 9415
+    },
+    {
+      "path": ".hai/tools/runtime/activities.py",
+      "sha256": "4fe9f77f6eae238d48be0345127a8e4c4dbb9f5124be08bae51062a15d4d435a",
+      "bytes": 31051
+    },
+    {
+      "path": ".hai/tools/runtime/activity_documents.py",
+      "sha256": "06d424125c01a46354d4e1708e0a2e42d3b797a6399017d7374c71ea809ab5b8",
+      "bytes": 1755
+    },
+    {
+      "path": ".hai/tools/runtime/activity_migration.py",
+      "sha256": "f1a9c5d611b2c65acbd3347332858ebd82cd2c5e638fc0a46ca1250cd0b2d101",
+      "bytes": 15569
+    },
+    {
+      "path": ".hai/tools/runtime/activity_work.py",
+      "sha256": "9dc34a32e69f0faa12ecdc3b387ac6aaefd392992fdf62ae975ac777a844a1e9",
+      "bytes": 2670
+    },
+    {
+      "path": ".hai/tools/runtime/chat.py",
+      "sha256": "a8ad255cd9cd422d20a1f07d39f0dca22c674e85761e32003cb52610d379fae6",
+      "bytes": 11368
+    },
+    {
+      "path": ".hai/tools/runtime/chronicles.py",
+      "sha256": "964acca469e761b16ce59db7ac8fed329346f9ab728eed62845752c7985c980f",
+      "bytes": 32402
+    },
+    {
+      "path": ".hai/tools/runtime/cli.py",
+      "sha256": "f6c46bf3864f51277a7a6887c6e9f2a0e71e9a48bfc82521dac71f019c3d80b4",
+      "bytes": 4552
+    },
+    {
+      "path": ".hai/tools/runtime/environment.py",
+      "sha256": "1015d5dea18a65a7bb241ddf924e42fac93aada5b9ada3dee499726e47139c59",
+      "bytes": 12488
+    },
+    {
+      "path": ".hai/tools/runtime/host.py",
+      "sha256": "8d92a86c73f31c7b4d8a5896738bd21b40dada68db77b14e92beda7dfa4286a2",
+      "bytes": 1384
+    },
+    {
+      "path": ".hai/tools/runtime/invocations.py",
+      "sha256": "3aeb00f39ac04a7c28bcd26c5f3dcb9c2dbea4d61af521327047e9e9c05dd8d7",
+      "bytes": 3951
+    },
+    {
+      "path": ".hai/tools/runtime/layout_migration.py",
+      "sha256": "bea509fe3e4491d2d19e314ddd991c569e99d821a6723597b259ba1a470adb9b",
+      "bytes": 7370
+    },
+    {
+      "path": ".hai/tools/runtime/packages.py",
+      "sha256": "11912e55a66c4dbdf8b1b8b080ef091e9850a8b733d408394255979b6a86a1ec",
+      "bytes": 10576
+    },
+    {
+      "path": ".hai/tools/runtime/PORTABILITY.md",
+      "sha256": "802fb8c4f678d1cef62611e3d20a5b20ee0954126be91dd6ac52211cf1b2df91",
+      "bytes": 5463
+    },
+    {
+      "path": ".hai/tools/runtime/README.md",
+      "sha256": "440c2e25ecc45b3ff38148fd04ca0c934308fb743ea9e484d2c94cd97c930bcf",
+      "bytes": 33580
+    },
+    {
+      "path": ".hai/tools/runtime/recording.py",
+      "sha256": "f16c48485f36da303fbba5de149c159989f3aae1360708815dfdd90436a8a3e8",
+      "bytes": 8074
+    },
+    {
+      "path": ".hai/tools/runtime/recording_policy.py",
+      "sha256": "8bef2e4452819128c1875562f16dc224a79ef9ec84d5bfc27032e374ac52b054",
+      "bytes": 872
+    },
+    {
+      "path": ".hai/tools/runtime/role_migration.py",
+      "sha256": "ed87e0986b8f07b40c637e6673e9ee553036f16628aa553ea2300eb5f416a0e4",
+      "bytes": 22527
+    },
+    {
+      "path": ".hai/tools/runtime/source_continuity.py",
+      "sha256": "d32232cae04add3dfa87b2f378a7c67602d8792f07f4c420276001decbabed1b",
+      "bytes": 4534
+    },
+    {
+      "path": ".hai/tools/runtime/source_discovery.py",
+      "sha256": "e84d6619b660c301f8358a3f8d335938be13c59bb5360b40e9eee33e267ab8c7",
+      "bytes": 9479
+    },
+    {
+      "path": ".hai/tools/runtime/startup.py",
+      "sha256": "a3ba8cbbc1726bad50fd11964030048159e48426f51eafa4608d38a274a578ee",
+      "bytes": 1550
+    },
+    {
+      "path": ".hai/tools/runtime/storage.py",
+      "sha256": "e3d6697cceb74136640e30a62a186b724387e6d0e7a592e41da2bc062faced23",
+      "bytes": 4789
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_activity_layout.py",
+      "sha256": "5abd307429de3af53eda896b8131d73a5119ae3a547e10111c742f714de48ab3",
+      "bytes": 12116
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_activity_layout_services.py",
+      "sha256": "25c9b43dc4d357a9c8a1a97dc451319513cc909f67e3e89f5c87ab41d138a3cb",
+      "bytes": 7524
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_activity_migration.py",
+      "sha256": "b885ec85743a0e8d440f7adffdeb5fa910c43b7981e937920e38c8307b57b3f2",
+      "bytes": 14379
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_chat.py",
+      "sha256": "de4379344cce1029fbfaec4294fab2f3e8215f24af6e48f6619933a3512735ff",
+      "bytes": 13690
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_chronicles.py",
+      "sha256": "292381fa431a7825dc983f4affc8906104c1d4433a153c01cfa4b14b84dea012",
+      "bytes": 20457
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_conversation.py",
+      "sha256": "d751a4ec614f9894c2eb7bb516fe7a134c1f46ee69f9b43290c6a07b7920a7b2",
+      "bytes": 5315
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_invocations.py",
+      "sha256": "f3d4703134fd83ec0c3730714dadb9713aa98a7683bdddda4811b7c904944a49",
+      "bytes": 12779
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "sha256": "7402b624918d2a919b67c17b3a54caa580fd9b757ec0070fef082765b17b4597",
+      "bytes": 13627
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_portability.py",
+      "sha256": "42b63ded81ad4d8b998b36056bf876cff08d099a4bf7777cdc79cc3b8da1b1f8",
+      "bytes": 11087
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_recording_policy.py",
+      "sha256": "f8f45135be7e157eeab433d3e65f0d755af06c0692486ce680d25ac58fe4631c",
+      "bytes": 6365
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_role_migration.py",
+      "sha256": "d168aa5c9ab31d99901bdd822c5458695ebf41ab57e0aa446b6179ce3ce07764",
+      "bytes": 20085
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_source_continuity.py",
+      "sha256": "0627c2e7e7bf582528c9c2ec9de6c37a0b316dafb0dd7ab124dc9e7437045a91",
+      "bytes": 9718
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_source_discovery.py",
+      "sha256": "a1daa46a89c79e362447fc079c4f0dabc8f645568ea5c1cec0af2bcde407818e",
+      "bytes": 17632
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_test_runner.py",
+      "sha256": "35422d7e219e79021278b7771eb9ba1a352368e9cc715e0157c1b181a1cb7a6f",
+      "bytes": 3123
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_usage.py",
+      "sha256": "3ed0ad44b48630c62348d4575dd8925d6bf90cc379da7958ce9500390b5cf0b9",
+      "bytes": 16499
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "sha256": "d0f969b5ec97e05e3ea060bd6289d9f31ca9e11b305c4f8c311c2f564629e468",
+      "bytes": 7894
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "sha256": "0387deed5ce4357613069f6d03b1fdfcef6f29fe4232b795648f31c70e1e980a",
+      "bytes": 30611
+    },
+    {
+      "path": ".hai/tools/runtime/tests/test_workflows.py",
+      "sha256": "8e7285f7f49f09f1a70a38b4ca0d6eb139177d3f1b9c14939e5e124d91676e0e",
+      "bytes": 9360
+    },
+    {
+      "path": ".hai/tools/runtime/usage.py",
+      "sha256": "35178e3eff7432181b260eb5d27c1493dc24e9891b8aa81507b3b0324d634afc",
+      "bytes": 23425
+    },
+    {
+      "path": ".hai/tools/runtime/workflow_artifacts.py",
+      "sha256": "d62c6154a1f705501e1a0f27b70b11ea815893394ff5dcb8def51c8b4ce52c7b",
+      "bytes": 3894
+    },
+    {
+      "path": ".hai/tools/runtime/workflows.py",
+      "sha256": "dea567a01944783b05c08954a0f95f0979e9eae943dd0975325d9517bc25aa24",
+      "bytes": 38744
+    },
+    {
+      "path": ".hai/tools/startup/migrate_specification_configuration.py",
+      "sha256": "4fbc3c491860d29f1cf47fda06b6b10a0ca9dc4822ae9175267070893dc3a8f2",
+      "bytes": 13508
+    },
+    {
+      "path": ".hai/tools/startup/README.md",
+      "sha256": "f0cf4eab7e2f8f789c0ac10e09b729bb742dffbaece6d056b114169ceaa40fd8",
+      "bytes": 12329
+    },
+    {
+      "path": ".hai/tools/startup/startup_check.py",
+      "sha256": "e23c57b09cb0481fa116208925a1ca609ec011674697803bb548fb92a88c3aa8",
+      "bytes": 25954
+    },
+    {
+      "path": ".hai/tools/startup/startup_context.py",
+      "sha256": "19d37fcb7304456906bd6176bb90878f11a67cbdef86727b796936c8185df4df",
+      "bytes": 1618
+    },
+    {
+      "path": ".hai/tools/startup/test_migrate_specification_configuration.py",
+      "sha256": "16590bd40c5639c58e9ba21fce6104692a2d5a4a9004d6843176de511953e4c5",
+      "bytes": 8074
+    },
+    {
+      "path": ".hai/tools/startup/test_startup_check.py",
+      "sha256": "b5c3b64f11f88453f9deba86e8e75a48a88387d1d2cff40295b7bbe83aa5848a",
+      "bytes": 43285
+    },
+    {
+      "path": ".hai/tools/startup/test_startup_context.py",
+      "sha256": "8a2fd3680b381d6ab68cb5ffc848349e4604be00e33c72b548b8ced8007f5d00",
+      "bytes": 8101
+    },
+    {
+      "path": ".hai/tools/workflows/__init__.py",
+      "sha256": "20d1768c21685b49bf125d2dcc712b45f43e4737360b2ed57d555e66a5fd1695",
+      "bytes": 67
+    },
+    {
+      "path": ".hai/tools/workflows/definition.py",
+      "sha256": "0fc8f07b0a0b1c1291b77b592d1450e4d6b077a7511eb3e58d8eba32e3f1c868",
+      "bytes": 18470
+    },
+    {
+      "path": ".hai/tools/workflows/README.md",
+      "sha256": "0ba9e738c5d5f62ec8c6a3b824c38f465ee919d9bb4efda846a44a212c778ab5",
+      "bytes": 4663
+    },
+    {
+      "path": ".hai/tools/workflows/tests/test_definition.py",
+      "sha256": "47f8b0fa0a24f43a491f003abb1edce3ae733b7cfa234bd0e64b1c334f021d03",
+      "bytes": 15255
+    }
+  ]
+}

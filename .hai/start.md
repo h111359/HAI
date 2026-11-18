@@ -75,3 +75,13 @@ Before role-dependent work, inspect startup role_context. Legacy agent roots or
 a partial role-migration marker require [explicit role migration](procedures/migrate-roles.md);
 startup never renames packages or substitutes defaults. Historical Activity records
 remain readable. Core startup and administration may continue independently.
+
+Skills may be requested directly without selecting a HAI role. Load the installed
+SKILL.md and its task-relevant resources, validate dependencies and owned service
+settings, and preserve the current task authority. When following a role, load its
+responsibilities and select from its available skills; a workflow assignment does
+not bind a skill or grant additional permissions. Reusable source collections in
+roles/, skills/ and workflows/ are inspected as data, never an installed fallback.
+For an unavailable suitable skill, report the dependency rather than inventing
+capability or a successful result. Existing Activity, invocation, recording and
+artifact rules apply equally to direct skill execution.

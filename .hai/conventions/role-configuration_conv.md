@@ -2,10 +2,10 @@
 
 ## Declaration and ownership
 
-Every installed HAI role declares the quoted string metadata
+An installed HAI role that owns actual settings declares the quoted string metadata
 `hai-configuration-contract: "configuration/contract.json"` in `ROLE.md` and
-ships that package-local JSON file. Roles with no local settings declare an empty settings object. The host
-coordinator is not a built-in role package. The six required ROLE.md sections
+ships that package-local JSON file. Settings-free roles may omit the contract and its metadata; legacy declared empty contracts remain supported. The host
+coordinator is not a built-in role package. The required responsibility sections and optional Skills/Procedures sections
 and specialist execution metadata are defined by the role convention.
 
 The installed registered role owns its supported settings, validation, requested
@@ -50,8 +50,7 @@ no hardlink alias. Source
 contracts are reviewed as package data and validated in a disposable installed
 layout. Runtime never loads the library as a fallback.
 
-A role without customizable settings declares `settings: {}`. It needs no
-workspace configuration file. A saved empty settings object is valid; nonempty
+A role without customizable settings needs no contract or saved file. A legacy declared `settings: {}` contract remains valid. A saved empty settings object is valid; nonempty
 settings are invalid for this contract. Do not invent settings merely to populate
 an otherwise empty declaration.
 
@@ -150,3 +149,5 @@ is not a new capability choice or proof of live readiness.
 - [State](state_conv.md): retained core/feature contract and safe paths.
 - [Role format](role_conv.md): identity, authoring and source-package ownership.
 - [Configuration tools](../tools/configuration/README.md): read-only validation API and limits.
+
+Direct skills may use an installed service owner contract and its existing saved settings without selecting the owner role. Settings stay once at their existing owner path; no skill-specific duplicate is created.

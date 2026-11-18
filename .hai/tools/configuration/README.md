@@ -25,7 +25,7 @@ Contract format 3 declares a matching `role` name, current and supported positiv
 configuration versions, and a `settings` object. It supports Boolean leaves and
 `workspace-relative-directory` leaves with string defaults. Legacy contract
 formats 1 and 2 require the explicit role migration. Each dotted setting name declares exactly a `type`
-and compatible `default`. A settings-free role uses an empty object. Saved files use a
+and compatible `default`. A settings-free role needs no contract or saved file; legacy declared empty contracts remain supported. Saved files use a
 `config_format_version` and nested `settings` object. Missing files and missing
 declared leaves use contract defaults. A present malformed file, unsupported
 version, wrong container, or wrong type is reported as invalid and never silently
@@ -61,3 +61,7 @@ open role definitions. It checks only the registered Specification-manager
 contract and configuration; other configuration checks belong to the selected role.
 Legacy or incomplete role migration blocks live configuration access so old saved
 settings cannot silently become new defaults.
+
+Direct skills can consume an actual installed service-owner contract and the same saved settings through skills resolve, without selecting the owner role or duplicating configuration.
+
+Core `configuration read` reports `not_required` for a settings-free installed role, without creating a contract or saved file. Existing saved values without a declared owner contract block the affected operation for explicit ownership resolution. Package replacement validates chosen values against the candidate owner contract and blocks an update that would orphan or invalidate them.

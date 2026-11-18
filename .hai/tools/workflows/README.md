@@ -1,12 +1,12 @@
 # Workflow definition validation
 
-Requires Python 3.11+ and the standard library. This module parses version-1
+Requires Python 3.11+ and the standard library. This module parses versioned (2/3, historical 1)
 single-file workflow definitions; it does not run instructions, invoke agents,
 inspect product artifacts, evaluate result conditions or write execution records.
 
 The runtime exposes these checks through `hai.py workflow validate` and uses the
 same contract before starting a run. Pure structural validation does not require
-the optional definition-manager agent or prove role/configuration/tool readiness.
+the optional workflow authoring skill/role or prove role/configuration/tool readiness.
 
 ## Python API
 
@@ -32,7 +32,7 @@ The result contains:
 - `title`, `purpose`, and exact-byte `sha256`.
 - `inputs`, a map from name to `name`, `location`, `format`, `expectation`.
 - `outcomes`, a map from name to `name`, `meaning`.
-- `steps`, a map from step ID to `id`, `agent`, `instruction`, `inputs`, `outputs`,
+- `steps`, a map from step ID to `id`, `role`, `instruction`, `inputs`, `outputs`,
   `results`. Step inputs contain `name`, `source`, Boolean `required`, `format`,
   `expectation`; outputs contain `name`, `location`, `format`, `expectation`;
   results contain `name`, `when`, a list `outputs`, and the literal `next` reference.
@@ -67,6 +67,17 @@ as explicit workspace artifact inputs. The runtime separately resolves paths,
 checks actual containment, owning Activity, aliases, files/directories, snapshots
 and evidence stability. A valid contract is not proof that artifacts exist or meet
 their written expectations.
+
+## Configurable installation and execution
+
+Format 3 adds Locations, configured filename patterns, result-specific accepted
+sources and human result gates. `runtime/workflow_config.py` owns explicit
+installation/settings and `runtime/workflow_lineage.py` validates accepted sources
+and checkpoint-bound host attestations. Reusable source workflows/ stays separate
+from installed .hai_env/workflows/ and config/workflows settings. See the shared
+[format convention](../../conventions/workflow_conv.md),
+[installation procedure](../../procedures/install-workflow.md) and runtime workflow
+commands for exact request shapes. Structural parsing requires no role or skill.
 
 ## Checks
 

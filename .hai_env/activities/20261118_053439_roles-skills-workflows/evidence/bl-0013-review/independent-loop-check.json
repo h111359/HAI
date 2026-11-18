@@ -1,0 +1,6 @@
+[
+  {
+    "scenario": "scope-return",
+    "exception": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\n  File \"C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\runtime\\tests\\test_configurable_workflows.py\", line 84, in accepted\n    assignment = self.begin()\n  File \"C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\runtime\\tests\\test_configurable_workflows.py\", line 62, in begin\n    self.assignment = self.prepare()['result']['assignment']\n                      ~~~~~~~~~~~~^^\n  File \"C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\runtime\\tests\\test_workflow_runs.py\", line 182, in prepare\n    self.assertTrue(r['ok'], r)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\unittest\\case.py\", line 762, in assertTrue\n    raise self.failureException(msg)\nAssertionError: False is not true : {'ok': False, 'status': 'blocked', 'operation': 'prepare-step', 'result': {}, 'changed_files': [], 'issues': ['Required input is superseded: design/attempt-0001']}\n"
+  }
+]

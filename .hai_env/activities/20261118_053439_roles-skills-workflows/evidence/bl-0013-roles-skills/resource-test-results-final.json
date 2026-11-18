@@ -1,0 +1,62 @@
+[
+  {
+    "package": "skills/backlog-management",
+    "exit_code": 0,
+    "output": ".......s....\n----------------------------------------------------------------------\nRan 12 tests in 4.351s\n\nOK (skipped=1)\n"
+  },
+  {
+    "package": "skills/requirements-analysis",
+    "exit_code": 0,
+    "output": "....................s...\n----------------------------------------------------------------------\nRan 24 tests in 6.643s\n\nOK (skipped=1)\n"
+  },
+  {
+    "package": "skills/git-operations",
+    "exit_code": 0,
+    "output": ".........s..........s..s.......\n----------------------------------------------------------------------\nRan 31 tests in 5.400s\n\nOK (skipped=3)\n"
+  },
+  {
+    "package": "skills/software-implementation",
+    "exit_code": 0,
+    "output": "..............s......\n----------------------------------------------------------------------\nRan 21 tests in 0.673s\n\nOK (skipped=1)\n"
+  },
+  {
+    "package": "skills/solution-design",
+    "exit_code": 0,
+    "output": "...s..........\n----------------------------------------------------------------------\nRan 14 tests in 0.416s\n\nOK (skipped=1)\n"
+  },
+  {
+    "package": "skills/specification-management",
+    "exit_code": 0,
+    "output": "........s........................s........s....s...s\n----------------------------------------------------------------------\nRan 52 tests in 11.842s\n\nOK (skipped=5)\n"
+  },
+  {
+    "package": ".hai_env/skills/backlog-management",
+    "exit_code": 0,
+    "output": ".......s....\n----------------------------------------------------------------------\nRan 12 tests in 4.307s\n\nOK (skipped=1)\n"
+  },
+  {
+    "package": ".hai_env/skills/requirements-analysis",
+    "exit_code": 0,
+    "output": "....................s...\n----------------------------------------------------------------------\nRan 24 tests in 6.719s\n\nOK (skipped=1)\n"
+  },
+  {
+    "package": ".hai_env/skills/git-operations",
+    "exit_code": 0,
+    "output": ".........s..........s..s.......\n----------------------------------------------------------------------\nRan 31 tests in 11.222s\n\nOK (skipped=3)\n"
+  },
+  {
+    "package": ".hai_env/skills/software-implementation",
+    "exit_code": 0,
+    "output": "..............s......\n----------------------------------------------------------------------\nRan 21 tests in 0.735s\n\nOK (skipped=1)\n"
+  },
+  {
+    "package": ".hai_env/skills/solution-design",
+    "exit_code": 0,
+    "output": "...s..........\n----------------------------------------------------------------------\nRan 14 tests in 0.417s\n\nOK (skipped=1)\n"
+  },
+  {
+    "package": ".hai_env/skills/specification-management",
+    "exit_code": 0,
+    "output": "........s........................s........s....s...s\n----------------------------------------------------------------------\nRan 52 tests in 13.942s\n\nOK (skipped=5)\n"
+  }
+]

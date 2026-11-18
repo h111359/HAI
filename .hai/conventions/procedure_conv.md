@@ -2,13 +2,16 @@
 
 ## Ownership and selection
 
-A procedure belongs to its role. Executing it does not select, register, or
-delegate to another role. Shared role rules remain in `ROLE.md` and always apply.
+A reusable procedure normally belongs to a skill. A role may own a genuinely
+role-specific procedure. Executing a procedure does not select, register or invoke
+another role or executor. Applicable skill rules, any selected role constraints
+and workspace rules remain in force. Direct skill use requires no role adoption.
 The selected procedure supplies a short description, inputs, prerequisites,
 procedure-specific rules, execution steps, outputs, and references. The
 [Procedure concept](../concepts/procedure.md) explains these distinctions.
 
-Multiple procedures use a single index in the role's Procedures section:
+For resources using this structured HAI procedure contract, the owning skill or
+role may provide this procedure index:
 
 ```markdown
 | Procedure | Trigger | File |
@@ -20,8 +23,8 @@ Procedure names and resolved files are unique within the index. Every trigger is
 nonblank and canonical in that index, not repeated in its external file. A trigger
 identifies applicability, never permission, priority, or automatic execution.
 File links are exactly `procedures/<lower-case-kebab-name>.md`, relative to
-`ROLE.md`, and must resolve to readable regular files inside the same role
-package and workspace. Reject escaping links, traversal, queries, fragments,
+the owning SKILL.md or ROLE.md, and must resolve to readable regular files inside
+the same owning package and workspace. Reject escaping links, traversal, queries, fragments,
 alternate separators, and duplicate resolved files.
 
 ## External file
@@ -98,7 +101,7 @@ term mappings, and explicit passing between procedures.
 
 ## Single inline procedure
 
-A role with one procedure may instead place it inline under Procedures. Use
+A structured owner with one procedure may place it inline under Procedures. Use
 `### <name>`, one nonblank `Trigger: ...` line, and the seven sections above as H4
 headings. The inline trigger is canonical beside that procedure. Do not combine
 an inline procedure with an external index or inline several procedures. A single
@@ -120,3 +123,14 @@ and a `None.` marker combined with other Rules content are invalid. Structural
 checks do not prove that local rules are specific, nonduplicative, or consistent.
 Literal inline-code words and fenced examples are excluded from modal checks,
 not from the human's responsibility to interpret their meaning correctly.
+
+## Skills and role-local procedures
+
+Reusable task methods belong in skills. A skill may contain procedures, scripts,
+templates, task knowledge and conventions without adopting the ROLE.md format.
+The structured procedure contract applies to HAI procedure resources that declare
+that contract; it does not force every external SKILL.md into a role template.
+A role may retain genuinely role-specific procedures and helpers. Applicable role,
+skill and workspace rules all remain in force; referencing a skill does not copy
+its implementation or grant authority. Inputs/outputs retain explicit local
+bindings, and shared conventions have one owner rather than competing copies.

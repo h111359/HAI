@@ -1,16 +1,13 @@
-# Optional workspace roles
+# Role
 
-An optional workspace role is a reusable set of domain instructions and supporting resources. A registered installed role package is discoverable in `.hai_env/roles/catalogue.md`; `hai_roles_library/roles/` contains source packages, not an execution origin. Installing, registering, selecting and authorizing work are separate decisions.
+A role is a job description: responsibilities, scope, professional perspective, expected quality, decision limits and handoff obligations. An AI agent is the executing tool or running worker that follows an assignment. Selecting a role does not launch an agent or grant authority.
 
-HAI core is a Python runtime, independent of role packages. The host coordinator interprets the user request and decides whether an available extension is appropriate under the host's actual capabilities and permissions. A definition or model profile does not prove that the host can invoke an agent. Core initialization, environment operations and Activity administration do not require optional extensions. The [role convention](../conventions/role_conv.md) describes the compatibility format for installed packages.
+Roles reference reusable [skills](skill.md), which own task methods, procedures, knowledge, scripts and templates. Several roles may reuse a skill, and a person or host may use a skill directly within actual task authority. A role may retain genuinely role-specific conduct or resources needed across its skills; it does not copy each skill implementation.
 
-Each extension may declare its own settings contract and domain knowledge; saved settings remain outside the package and are preserved on replacement. Activity context, source provenance, actual results and unresolved dependencies remain relevant to extensions using those facilities. See [role configuration](role-configuration.md) and [Activity](activity.md).
+[Workflows](workflow.md) assign roles and expected results with dependencies and accepted inputs. The assigned role chooses suitable available skills; a workflow does not bind a skill. Missing capabilities are dependencies, not successful assignments. [Activities](activity.md) own actual work and retained run evidence; reusable definitions contain no execution status.
 
-A role definition and a separate sub-agent invocation are distinct. In direct
-execution the host follows the role's instructions itself; a spawned sub-agent is
-a separate host execution instance with its own invocation identity. Independent
-review separates the reviewer from the implementation author. The shared
-[execution policy](../conventions/role_conv.md#role-execution-and-delegation)
-defines mode selection and reporting; the
-[invocation convention](../conventions/agent-invocation_conv.md) owns working
-folders and launch handoff.
+Root `roles/<name>/ROLE.md` packages are reusable sources. Installed `.hai_env/roles/<name>/ROLE.md` packages and their explicit catalogue are separate snapshots. Installation, registration, selection and authorization are distinct. Runtime skill lookup uses only installed `.hai_env/skills/`, without source fallback. Model and permission rules remain with the host and shared core.
+
+Settings remain with their actual capability, service or role owner and are stored once. Settings-free roles need no configuration contract. A direct skill may read an installed owner's validated settings without selecting that role. See [role configuration](role-configuration.md), [role convention](../conventions/role_conv.md) and [skill convention](../conventions/skill_conv.md).
+
+A direct role invocation and a spawned sub-agent are distinct execution modes. Apply the shared [execution policy](../conventions/role_conv.md#role-execution-and-delegation), model/capability prerequisites and [invocation convention](../conventions/agent-invocation_conv.md). Core initialization and Activity administration require no optional role.

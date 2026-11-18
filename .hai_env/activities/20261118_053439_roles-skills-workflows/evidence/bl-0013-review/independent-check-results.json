@@ -1,0 +1,34 @@
+{
+  "source": "Observed independent_checks.py execution plus separately corrected numeric fixture execution; semantic scenarios not rerun unnecessarily. Initial synthetic numeric fixture lacked required attempt_id and was corrected; no product defect claimed.",
+  "checks": [
+    {
+      "scenario": "material scope return and renewed approval",
+      "passed": true,
+      "observed_seconds": 53.714,
+      "details": "Actual QA defect then implementation scope change; fresh clarify2/design2/approval2; implementation execution3 with defects null; QA pass, actual fixture typed human acceptance and Backlog-manager completion; Activity active."
+    },
+    {
+      "scenario": "dedicated environment output roots and protected overlap",
+      "passed": true,
+      "observed_seconds": 0.397,
+      "details": "Dedicated .hai_env/workflow-outputs bases accepted; twelve operational/source/ancestor/escape locations blocked; no run started."
+    },
+    {
+      "scenario": "partial installation preserves definition and refuses automatic retry",
+      "passed": true,
+      "observed_seconds": 0.553,
+      "details": "Injected configuration write failure after definition publication returns partial; start and ordinary reinstall block; exact definition retained."
+    },
+    {
+      "scenario": "partial second output copy preserves evidence and blocks replay",
+      "passed": true,
+      "observed_seconds": 14.891,
+      "details": "Injected second QA accepted-copy failure preserves first copy and configured outputs; events unchanged; show and completion replay block uncommitted staging."
+    },
+    {
+      "scenario": "numeric accepted execution after canonical serialization",
+      "passed": true,
+      "actual_key": "x/attempt-10000"
+    }
+  ]
+}

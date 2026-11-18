@@ -8,7 +8,7 @@ import sys
 
 from runtime.storage import SafetyError, checked_path, read_json
 
-SUITES = ('runtime/tests', 'startup', 'activities', 'chronicles', 'configuration', 'roles', 'workflows/tests')
+SUITES = ('runtime/tests', 'startup', 'activities', 'chronicles', 'configuration', 'roles', 'skills', 'workflows/tests')
 
 
 def test_work_path(root, relative):

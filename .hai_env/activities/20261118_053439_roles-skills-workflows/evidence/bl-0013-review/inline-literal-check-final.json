@@ -1,0 +1,6 @@
+{
+  "scenario": "native inline/fenced examples remain literal during actual installation",
+  "passed": true,
+  "source_and_installed_bytes_identical": true,
+  "status": "ok"
+}

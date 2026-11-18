@@ -1,0 +1,101 @@
+{
+  "checked_at_utc": "2026-11-18T05:21:10.201976+00:00",
+  "baseline_files": 1732,
+  "retained_exact": 1732,
+  "missing_or_changed_originals": [],
+  "current_markdown_files": 300,
+  "local_links_checked": 1414,
+  "broken_links": [],
+  "unexpected_generated_caches": [],
+  "core_baseline_changed_paths": [
+    ".hai/concepts/environment.md",
+    ".hai/concepts/procedure.md",
+    ".hai/concepts/role-configuration.md",
+    ".hai/concepts/role.md",
+    ".hai/concepts/workflow.md",
+    ".hai/conventions/framework-layout_conv.md",
+    ".hai/conventions/instruction-writing_conv.md",
+    ".hai/conventions/procedure_conv.md",
+    ".hai/conventions/reference-notation_conv.md",
+    ".hai/conventions/role-configuration_conv.md",
+    ".hai/conventions/role_conv.md",
+    ".hai/conventions/tooling_conv.md",
+    ".hai/conventions/workflow-run_conv.md",
+    ".hai/conventions/workflow_conv.md",
+    ".hai/procedures/execute-workflow.md",
+    ".hai/procedures/migrate-roles.md",
+    ".hai/start.md",
+    ".hai/templates/workflow.md",
+    ".hai/tools/__pycache__/role_state.cpython-314.pyc",
+    ".hai/tools/activities/test_role_migration.py",
+    ".hai/tools/configuration/configuration_tools.py",
+    ".hai/tools/configuration/README.md",
+    ".hai/tools/role_state.py",
+    ".hai/tools/roles/README.md",
+    ".hai/tools/roles/role_tools.py",
+    ".hai/tools/run_tests.py",
+    ".hai/tools/runtime/activities.py",
+    ".hai/tools/runtime/cli.py",
+    ".hai/tools/runtime/environment.py",
+    ".hai/tools/runtime/packages.py",
+    ".hai/tools/runtime/README.md",
+    ".hai/tools/runtime/role_migration.py",
+    ".hai/tools/runtime/tests/test_workflow_integration.py",
+    ".hai/tools/runtime/tests/test_workflows.py",
+    ".hai/tools/runtime/workflows.py",
+    ".hai/tools/startup/startup_check.py",
+    ".hai/tools/workflows/definition.py",
+    ".hai/tools/workflows/README.md"
+  ],
+  "delivery_hashes": {
+    "README.md": "6846254a5b4bf704bedb6bc09e9a1b9cddbfd841e5071a851e2dc6fd3dac0adb",
+    "INSTALL.md": "1a2f0395d2280853b66f0565ace2dd1f75b5cf6fc0e1060b13e29e26c075b677",
+    "workflows/software-development.md": "fa41bf368afcc76424661f6d6ef948e391a661cebde4cc9c9a9bddf2d5bf5ba3",
+    ".hai/tools/runtime/package_content.py": "36ef3e680b1712eeb1b608015a242707659dd0ef8d5262ee6bb18e80fe7ab32a",
+    ".hai/tools/runtime/workflow_lineage.py": "ae67ce305f9ac16178d0e2e5df8eb550df153b811619bfc0a15664bb5009b7c8",
+    ".hai/tools/runtime/capability_migration.py": "deb6d4c408445b72d9482f59b5c2d824e1f74a26b331bc308233a1411da36e97"
+  },
+  "preexisting_generated_cache_comparison": [
+    {
+      "path": ".hai/tools/__pycache__/environment_paths.cpython-314.pyc",
+      "initial_sha256": "a6fb642461900b25086f92fca5fde4b53a9f93fb4a8aacc61e09fd82b33b501a",
+      "precleanup_sha256": "a6fb642461900b25086f92fca5fde4b53a9f93fb4a8aacc61e09fd82b33b501a",
+      "restored_sha256": "a6fb642461900b25086f92fca5fde4b53a9f93fb4a8aacc61e09fd82b33b501a",
+      "matches_precleanup": true,
+      "matches_initial": true
+    },
+    {
+      "path": ".hai/tools/__pycache__/path_contract.cpython-314.pyc",
+      "initial_sha256": "6baebfada5be0078ed9823993a6b03c57f1b046d986d5206f73e1555a87888f9",
+      "precleanup_sha256": "6baebfada5be0078ed9823993a6b03c57f1b046d986d5206f73e1555a87888f9",
+      "restored_sha256": "6baebfada5be0078ed9823993a6b03c57f1b046d986d5206f73e1555a87888f9",
+      "matches_precleanup": true,
+      "matches_initial": true
+    },
+    {
+      "path": ".hai/tools/__pycache__/role_state.cpython-314.pyc",
+      "initial_sha256": "312c9aa095aeea9ee034b62e26b229306f4c82971fecd5a6011aba831a31903e",
+      "precleanup_sha256": "cc2b0dd29e7a0f69ae59439c3031f0ead844f98a84ddad61da9de5103720abab",
+      "restored_sha256": "cc2b0dd29e7a0f69ae59439c3031f0ead844f98a84ddad61da9de5103720abab",
+      "matches_precleanup": true,
+      "matches_initial": false
+    },
+    {
+      "path": ".hai/tools/runtime/__pycache__/storage.cpython-314.pyc",
+      "initial_sha256": "ff985a63711bed70f4aba6bfd7f3ef543edc9d923e5cf035a8a0516d6f19db64",
+      "precleanup_sha256": "ff985a63711bed70f4aba6bfd7f3ef543edc9d923e5cf035a8a0516d6f19db64",
+      "restored_sha256": "ff985a63711bed70f4aba6bfd7f3ef543edc9d923e5cf035a8a0516d6f19db64",
+      "matches_precleanup": true,
+      "matches_initial": true
+    },
+    {
+      "path": ".hai/tools/runtime/__pycache__/__init__.cpython-314.pyc",
+      "initial_sha256": "f9cb57ac4cae19398a549beacf084f35e8a4bf64cbc7e5dfbeb8d9d74d486f1f",
+      "precleanup_sha256": "f9cb57ac4cae19398a549beacf084f35e8a4bf64cbc7e5dfbeb8d9d74d486f1f",
+      "restored_sha256": "f9cb57ac4cae19398a549beacf084f35e8a4bf64cbc7e5dfbeb8d9d74d486f1f",
+      "matches_precleanup": true,
+      "matches_initial": true
+    }
+  ],
+  "cache_scan_correction": "Reviewer wrongly classified all current caches without subtracting initial core baseline, leading root to remove five preexisting derivative files. Root regenerated in allocated scratch and restored only exact precleanup-byte matches. Independent readback confirms all five exact precleanup hashes. Four equal initial hashes; role_state cache had already changed with source maintenance before cleanup and is restored to that exact observed precleanup state. No source file changed during removal/restoration."
+}

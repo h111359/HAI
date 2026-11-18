@@ -9,11 +9,12 @@ import sys
 import uuid
 from .storage import SafetyError, checked_path, fingerprint, write_bytes, lock
 from .activities import envelope, provenance, rename_exclusive, rename_preflight
+from . import package_content
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'roles'))
 import role_tools as roles
 from role_state import require_ready
 
-def snapshot(root, relative):
+def snapshot(root, relative, entry="ROLE.md"):
     base = checked_path(root, relative, allow_missing=False)
     if not base.is_dir(): raise SafetyError('package source must be a directory')
     result = {}
@@ -23,7 +24,7 @@ def snapshot(root, relative):
             mode = p.lstat().st_mode
             if not (stat.S_ISDIR(mode) or stat.S_ISREG(mode)): raise SafetyError('package contains nonregular entry')
             if stat.S_ISREG(mode): result[p.relative_to(base).as_posix()] = fingerprint(p)
-    if 'ROLE.md' not in result: raise SafetyError('package lacks ROLE.md')
+    if entry not in result: raise SafetyError('package lacks ' + entry)
     return result
 
 def handle(operation, workspace, request, apply, _locked=False):
@@ -32,7 +33,7 @@ def handle(operation, workspace, request, apply, _locked=False):
         from .role_migration import handle as migrate
         return migrate(root, request, apply)
     try:
-        fields = {'validate':{'definition'}, 'audit':set(), 'resolve':{'definition','runtime'}, 'install':{'source','name','replace','register','reviewed_differences','provenance'}, 'register':{'name','provenance'}}
+        fields = {'validate':{'definition'}, 'audit':set(), 'resolve':{'definition','runtime'}, 'skills':{'definition'}, 'install':{'source','name','replace','register','reviewed_differences','provenance'}, 'register':{'name','provenance'}}
         if not isinstance(request,dict) or (op in fields and set(request) - fields[op]): raise ValueError('Unknown or invalid request fields')
         def run():
             if op != 'validate': require_ready(root)
@@ -45,6 +46,13 @@ def handle(operation, workspace, request, apply, _locked=False):
             if op == 'audit':
                 result = roles.audit(root)
                 return envelope(operation, 'ok' if result['ok'] else 'blocked', result, issues=result.get('issues'))
+            if op == 'skills':
+                definition=request.get('definition')
+                if not isinstance(definition,str) or not re.fullmatch(r'\.hai_env/roles/[^/]+/ROLE\.md',definition): raise ValueError('Select an installed role definition')
+                fields=roles.read_definition(checked_path(root,definition,allow_missing=False),root)
+                sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'skills'))
+                import skill_tools
+                return envelope(operation,result={'role':fields['name'],'skills':skill_tools.dependencies(root,root/definition,fields),'authority':'unchanged'})
             if op == 'resolve':
                 result = roles.resolve(root, request.get('definition'), request.get('runtime'))
                 return envelope(operation, 'ok' if result['ok'] else 'blocked', result, issues=result.get('issues'))
@@ -86,17 +94,30 @@ def handle(operation, workspace, request, apply, _locked=False):
             if src.name != name: raise ValueError('source folder name must equal package name')
             if src == target or src in target.parents or target in src.parents: raise SafetyError('source and installed paths must be distinct')
             files = snapshot(root,source)
+            candidate,relocated,unresolved=package_content.prepare(root,source,dest,files)
             if (src / 'knowledge.md').exists() or (src / 'knowledge.md').is_symlink(): raise SafetyError('conflicting legacy knowledge.md')
-            fields = roles.read_definition(src / 'ROLE.md',root)
+            fields = roles.read_definition(src / 'ROLE.md',root,check_dependencies=False)
             if fields['name'] != name: raise SafetyError('package identity mismatch')
+            sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'skills'))
+            import skill_tools
+            skill_tools.dependencies(root, target / 'ROLE.md', fields)
+            saved=checked_path(root,f'.hai_env/config/roles/{name}.json')
+            saved_fp=fingerprint(saved)
+            if saved.exists():
+                if 'hai-configuration-contract' not in fields.get('metadata',{}): raise SafetyError('Installed chosen settings require a compatible declared owner contract; replacement is blocked')
+                sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'configuration'))
+                import configuration_tools as config
+                contract=config.load_contract(src/'configuration/contract.json',name)
+                compatible=config.read_configuration(root,name,contract)
+                if compatible['status'] not in ('configured','defaulted'): raise SafetyError('Chosen settings are incompatible with candidate: '+str(compatible['issues']))
             replace = request.get('replace',False); register = request.get('register',False)
             if type(replace) is not bool or type(register) is not bool: raise ValueError('replace and register must be booleans')
             previous = snapshot(root,dest) if target.exists() else None
             differences = sorted(set(files) | set(previous or {}))
-            differences = [x for x in differences if x not in files or x not in (previous or {}) or files[x][-1] != previous[x][-1]]
+            differences = [x for x in differences if x not in candidate or x not in (previous or {}) or package_content.hashes(candidate)[x] != previous[x][-1]]
             if previous is not None and not replace: raise SafetyError('installed package exists; replacement not authorized')
             if previous is not None and request.get('reviewed_differences') != differences: raise SafetyError('replacement requires exact reviewed_differences')
-            result = {'source':source,'destination':dest,'differences':differences,'registration_requested':register}
+            result = {'source':source,'destination':dest,'differences':differences,'registration_requested':register,'relocated_files':relocated,'unresolved_references':unresolved,'execution_readiness':'not_checked'}
             if not apply: return envelope(operation,'planned',result)
             if snapshot(root,source) != files or (previous is not None and snapshot(root,dest) != previous): raise SafetyError('package changed since inspection')
             rename_preflight()
@@ -107,7 +128,15 @@ def handle(operation, workspace, request, apply, _locked=False):
             stagepath = checked_path(root,stage + '/' + name)
             shutil.copytree(src,stagepath,symlinks=False); changed.append(stage + '/' + name)
             if snapshot(root,source) != files or {k:v[-1] for k,v in snapshot(root,stage + '/' + name).items()} != {k:v[-1] for k,v in files.items()}: raise SafetyError('source or staging changed during copy')
-            roles.read_definition(stagepath / 'ROLE.md', root)
+            for filename,data in candidate.items():
+                staged_file=checked_path(root,stage+'/'+request['name']+'/'+filename,allow_missing=False)
+                if staged_file.read_bytes()!=data: staged_file.write_bytes(data)
+            if {k:v[-1] for k,v in snapshot(root,stage+'/'+request['name']).items()}!=package_content.hashes(candidate): raise SafetyError('Transformed stage differs from reviewed candidate')
+            package_content.validate(root,dest,candidate)
+            roles.read_definition(stagepath / 'ROLE.md', root,check_dependencies=False,logical_package=target)
+            if snapshot(root,source)!=files or (snapshot(root,dest) if target.exists() else None)!=previous: raise SafetyError('Source or destination changed during staging')
+            skill_tools.dependencies(root,target/'ROLE.md',fields)
+            if fingerprint(saved)!=saved_fp: raise SafetyError('Chosen settings changed during package staging')
             if previous is not None:
                 backup = '.hai_env/roles/.hai-backup-' + uuid.uuid4().hex
                 rename_exclusive(target,checked_path(root,backup)); changed.append(backup); result['backup'] = backup

@@ -1,0 +1,22 @@
+{
+  "usage_format_version": 2,
+  "activity_id": "f14d66cb-bf54-4aa3-bb47-b49fb4bceb7d",
+  "updated_at": "2026-11-18T05:34:39Z",
+  "provenance": {
+    "source": "human: Close the activity and make a commit",
+    "reason": "archive completed BL-0013 implementation and create the requested local commit"
+  },
+  "sources": [],
+  "pricing": null,
+  "reported_spend": null,
+  "summary": {
+    "coverage": "unavailable",
+    "tokens": null,
+    "by_model": {},
+    "estimated_credits": null,
+    "reported_credits": null,
+    "reported_spend_current": false,
+    "missing_rate_models": []
+  },
+  "markdown_sha256": "20820227c2def8bc22602ad18ecc34a05a1828a2653db457c06021735090ae1b"
+}

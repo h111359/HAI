@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "f14d66cb-bf54-4aa3-bb47-b49fb4bceb7d",
+  "invocation_id": "32e04a82-8240-4bb5-9007-aee1f540e2ec",
+  "role": "role-skill-implementation",
+  "created_at": "2026-11-17T20:59:21Z",
+  "provenance": {
+    "source": "human instruction: Implement BL-0013 diligently across the HAI framework and whole workspace",
+    "reason": "bounded implementation assignments and independent design/final verification"
+  }
+}

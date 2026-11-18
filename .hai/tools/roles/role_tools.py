@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from contextvars import ContextVar
 import html
 import importlib.util
 import json
@@ -26,6 +27,7 @@ TERM_REFERENCE = re.compile(r"\[term:([^\[\]:\r\n]+)\]")
 NAMED_REFERENCE = re.compile(r"\[(term|input|output):([^\]\r\n]*)\]")
 EXTENSIONS = {"hai-model-class", "hai-reasoning-effort"}
 CONFIGURATION_CONTRACT = "configuration/contract.json"
+REFERENCE_VIEW = ContextVar("hai_role_reference_view", default=None)
 
 
 class Invalid(ValueError):
@@ -330,7 +332,11 @@ def reference_path(source, href, workspace, concepts=False, package=None):
             or ":" in relative or "?" in relative or ("#" in href and not fragment)):
         raise Invalid(f"Unsafe reference path: {href!r}")
     try:
-        target = (source.parent / relative).resolve()
+        view = REFERENCE_VIEW.get()
+        logical_source = source
+        if view and source.resolve().is_relative_to(view[0]): logical_source = view[1] / source.resolve().relative_to(view[0])
+        target = (logical_source.parent / relative).resolve()
+        if view and target.is_relative_to(view[1]): target = view[0] / target.relative_to(view[1])
         if not target.is_relative_to(workspace) or not target.is_file():
             raise Invalid(f"Missing or escaping reference: {href}")
         if package is not None and not target.is_relative_to(package):
@@ -388,7 +394,7 @@ def check_reference_spelling(text):
 def rule_wording(text):
     """Check explicit modal spelling, not whether a sentence has that meaning."""
     prose = re.sub(r"(?<!`)(`+)(?!`)(.*?)\1(?!`)", " ", text, flags=re.S)
-    if re.search(r"\b(?:should|shall)\b|\bought\s+to\b|\bmustn['’]t\b", prose, re.I):
+    if re.search(r"\b(?:should|shall)\b|\bought\s+to\b|\bmustn['â€™]t\b", prose, re.I):
         raise Invalid("Rule wording permits MUST, MUST NOT, and MAY, not SHOULD/SHALL or obligation aliases")
     if re.search(r"\bMAY\s+NOT\b", prose):
         raise Invalid("Use MUST NOT for prohibition or a positive MAY permission, not MAY NOT")
@@ -480,10 +486,17 @@ def definition_body(text, path, workspace):
     check_reference_spelling(body)
     if re.search(r"^# ", body, re.M):
         raise Invalid("Role body must not contain an H1 title")
-    parts = sections(body, 2, HEADINGS)
+    declared = re.findall(r"^## (.+)$", body, re.M)
+    expected = [x for x in HEADINGS if x != "Procedures" or "Procedures" in declared]
+    if "Skills" in declared: expected.insert(expected.index("References"), "Skills")
+    parts = sections(body, 2, expected)
     mappings = term_mappings(parts["References"], path, workspace)
     rule_contract(parts["Rules"])
-    procedures = parts["Procedures"]
+    procedures = parts.get("Procedures")
+    if procedures is None:
+        if LOCAL_REFERENCE.search(body): raise Invalid("Input/output references must be local to a procedure")
+        check_terms(body, mappings)
+        return
     if re.search(r"^### ", procedures, re.M):
         names = re.findall(r"^### (.+)$", procedures, re.M)
         if len(names) != 1:
@@ -530,8 +543,11 @@ def definition_body(text, path, workspace):
 
 def configuration_contract(path, workspace, metadata, name):
     """Validate package data using the helper installed beside this auditor."""
+    if "hai-configuration-contract" not in metadata:
+        if (path.parent / CONFIGURATION_CONTRACT).exists(): raise Invalid("Undeclared role configuration contract")
+        return
     if metadata.get("hai-configuration-contract") != CONFIGURATION_CONTRACT:
-        raise Invalid("Every role requires hai-configuration-contract: configuration/contract.json")
+        raise Invalid("Declared role contract must use configuration/contract.json")
     package = path.parent.resolve()
     contract_path = (package / CONFIGURATION_CONTRACT).resolve()
     if not contract_path.is_relative_to(package) or not contract_path.is_relative_to(workspace):
@@ -548,12 +564,12 @@ def configuration_contract(path, workspace, metadata, name):
         raise Invalid(f"Invalid configuration contract: {exc}") from exc
 
 
-def read_definition(path, workspace=None):
+def read_definition(path, workspace=None, *, check_dependencies=True, logical_package=None):
     # CLI callers pass the original validated workspace explicitly, even when the
     # canonical definition path resolves through a contained alias. Direct library
     # use without it assumes a canonical resolved origin/roles/name/ROLE.md path.
     path = Path(path)
-    workspace = Path(workspace).resolve() if workspace is not None else path.parents[3]
+    workspace = Path(workspace).resolve() if workspace is not None else next((p for p in path.resolve().parents if (p / ".hai").is_dir()), path.parents[3])
     if path.name != "ROLE.md":
         raise Invalid("A HAI role entry must be named ROLE.md")
     if path.with_name("SKILL.md").exists() or path.with_name("SKILL.md").is_symlink():
@@ -596,7 +612,13 @@ def read_definition(path, workspace=None):
             or metadata.get("hai-reasoning-effort") not in EFFORTS):
         raise Invalid("Specialist requires valid hai-model-class and hai-reasoning-effort metadata")
     configuration_contract(path, workspace, metadata, name)
-    definition_body("\n".join(lines[end + 1:]), path, workspace)
+    token = REFERENCE_VIEW.set((path.parent.resolve(), Path(logical_package))) if logical_package is not None else None
+    try: definition_body("\n".join(lines[end + 1:]), path, workspace)
+    finally:
+        if token is not None: REFERENCE_VIEW.reset(token)
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "skills"))
+    import skill_tools
+    if check_dependencies: skill_tools.dependencies(workspace, path, fields)
     return fields
 
 
@@ -639,15 +661,19 @@ def resolve(workspace, definition, runtime):
     context = role_status(workspace)
     if context["status"] != "ready":
         raise Invalid("Role naming migration must be completed before resolving a role")
-    path = contained(workspace, definition)
+    from runtime.storage import checked_path, SafetyError
+    try: path = checked_path(workspace, definition, allow_missing=False)
+    except SafetyError as exc: raise Invalid(str(exc)) from exc
     if not re.fullmatch(r"\.hai_env/roles/[^/]+/ROLE\.md", definition):
         raise Invalid("Definition must use a canonical HAI role path")
     if path.with_name("knowledge.md").exists():
         raise Invalid("Both legacy and current definitions exist; explicit conflict resolution required")
     fields = read_definition(path, workspace)
     metadata = fields["metadata"]
+    import skill_tools
+    selected_skills = skill_tools.dependencies(workspace, path, fields)
     request = {"role": fields["name"], "model_class": metadata["hai-model-class"],
-               "reasoning_effort": metadata["hai-reasoning-effort"]}
+               "reasoning_effort": metadata["hai-reasoning-effort"], "skills": selected_skills}
     try:
         profiles = read_profiles(contained(workspace, PROFILES))
         request["model"] = profiles["models"][request["model_class"]]

@@ -1,0 +1,10 @@
+{
+  "ok": false,
+  "status": "blocked",
+  "operation": "install",
+  "result": {},
+  "changed_files": [],
+  "issues": [
+    "Missing package-local reference: SKILL.md -> new/example.md"
+  ]
+}

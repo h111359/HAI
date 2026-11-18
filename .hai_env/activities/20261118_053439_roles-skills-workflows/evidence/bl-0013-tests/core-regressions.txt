@@ -1,0 +1,57 @@
+...............................s.........................s............................s.............s.........s............................................................s.......................s.........................s.............s...............................................F.s.
+======================================================================
+FAIL: test_real_package_install_and_registration (test_workflows.WorkflowTests.test_real_package_install_and_registration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hmhri\Desktop\repos\HAI\.hai\tools\runtime\tests\test_workflows.py", line 105, in test_real_package_install_and_registration
+    self.assertTrue(result['ok'],result)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : {'ok': False, 'status': 'blocked', 'operation': 'install', 'result': {}, 'changed_files': [], 'issues': ['Missing package/core reference: ROLE.md -> ../../../sources/skills/requirements-analysis/conventions/framework-protection.md']}
+
+----------------------------------------------------------------------
+Ran 287 tests in 366.621s
+
+FAILED (failures=1, skipped=10)
+{"suite": "runtime/tests", "exit_code": 1}
+..............s.sss...ss........................................s..s
+----------------------------------------------------------------------
+Ran 68 tests in 19.229s
+
+OK (skipped=8)
+{"suite": "startup", "exit_code": 0}
+................
+----------------------------------------------------------------------
+Ran 16 tests in 5.480s
+
+OK
+{"suite": "activities", "exit_code": 0}
+............s....
+----------------------------------------------------------------------
+Ran 17 tests in 0.241s
+
+OK (skipped=1)
+{"suite": "chronicles", "exit_code": 0}
+ss......s......
+----------------------------------------------------------------------
+Ran 15 tests in 6.715s
+
+OK (skipped=3)
+{"suite": "configuration", "exit_code": 0}
+...........s...s........s....................s......s.......................s....
+----------------------------------------------------------------------
+Ran 81 tests in 8.212s
+
+OK (skipped=6)
+{"suite": "roles", "exit_code": 0}
+......s............
+----------------------------------------------------------------------
+Ran 19 tests in 9.655s
+
+OK (skipped=1)
+{"suite": "skills", "exit_code": 0}
+...............s........
+----------------------------------------------------------------------
+Ran 24 tests in 0.047s
+
+OK (skipped=1)
+{"suite": "workflows/tests", "exit_code": 0}

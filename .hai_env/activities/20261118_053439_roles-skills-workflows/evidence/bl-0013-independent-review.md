@@ -1,0 +1,84 @@
+﻿# Independent Business-analyst review of BL-0013
+
+Assessor: independent business-analyst invocation `4e268d3d-fda9-4fb4-8cb2-ea12405f0dcb`; Activity `f14d66cb-bf54-4aa3-bb47-b49fb4bceb7d`; 2026-11-17. Item revision: updated 2026-11-17T19:33:02Z; SHA-256 `E659145AB288B1FB3E6C7B014D75EE6C1ADDABF357C0EB41CD471F610842E10D`. Line references below refer to that revision.
+
+**Readiness: FAIL.** Failed mandatory checks: R4.2, R4.3, R6.3, R7.2, R7.4, R7.5, R8.3. No exemption applies: this is a broad behavior-changing request, not pure maintenance or a single reversible urgent defect. Hold downstream technical analysis, implementation planning and implementation pending correction and reassessment. These are predominantly story-quality and contract-resolution blockers; they do not automatically require another human question. No implementation authority is conveyed.
+
+## Source and authority
+
+Read complete current item, exact predecessor `backlog/history/BL-0013/20261117_193302-01.md`, Activity `results/decisions.md` and `results/role-skill-discussion.md`, and runtime chat sequences 1–18, `has_more: false`. Runtime `show` confirms the supplied Activity UUID, active layout 2, with implementation not started. Invocation manifest matches Activity, invocation and business-analyst role. Mandatory instructions file is readable and empty. Installed role contract valid; configuration helper returned `defaulted`, `.hai_env/config/roles/business-analyst.json`, settings `{}`, configured fields `[]`, issues `[]`. Current workflow concept, workflow definition and run conventions and artifact placement were consulted. No primary supplemental context registry was supplied; no external registry entries inferred. Context is sufficient for the findings, subject to ledger/protection evidence limitations below.
+
+Chat sequence 6 authorizes capturing a backlog item and expresses future work; 8 requests clarification; 18 requests this independent review. Chat 10–14 are actual Q001–Q005 human replies. Chat 15 is a **prepared** assistant naming proposal, not proof of delivery; chat 16 is the actual human continuation “ok, continue” attributed to that proposal in the ledger. The human's original Q001 already specifies separate run folders and distinguishes loop intermediates; the continuation supports the contextual naming direction, but the precise reach of assent is limited by prepared-only delivery evidence. Do not treat assistant recommendations or an assistant prepared reply as independent human authorization.
+
+The full ledger appears at `results/decisions.md`, whereas the installed clarification convention says `decisions.md` directly at the Activity root. Layout-2 runtime and the host have used the results path; this review did not repair it or assert that either path should be moved. Ask the host to establish the supported canonical location and verify actual saved-event/readback history before further dependent questions or proposal; a present readable event alone does not establish that the original persistence handshake was verified. Q001 revision supersedes its prior event with just “ok, continue”; retain and interpret the earlier actual answer and contextual proposal, never discard it. Other Q002–Q005 answers are separately recorded with host-assigned receipt identities; no source identity is invented.
+
+## Source classification
+
+### Confirmed human requirements
+
+Human chat 6 requests concepts, root flat `roles/`, reuse `skills/`, extraction of skills from roles, root `workflows/` with the five named roles, environment-configured workspace-relative output locations, installation questions and workflow-defined intermediate/final names. Chat 10–14 settle separate run folders and loop distinction, direct skill use within authority, role-selected skills, human gates before implementation and completion, and return to Backlog-manager after QA and acceptance without automatic Activity closure. The contextual continuation supports the proposed step/execution numbering direction with the delivery caveat above. The current request authorizes review, not implementation.
+
+### Assistant-added scope and assumptions
+
+The detailed responsibility table and ownership principles derive from the discussion/proposals; the human requested those principles be reflected but did not separately approve every detailed sentence. In particular, lines 43–50 (role-specific resources and coherent extraction), 92–96 (migration and preservation), 125–139 (full graph, stale approval and bounded returns), 143–155 (per-step counters and exact accepted paths) and 172–176 (stable publication model) include elaborations. Some are necessary interpretations of existing safety/operational conventions, not independent human promises. Line 89 explicitly calls the file name proposed. Item lines 252–253 correctly do not invent an urgency. Do not label all specifics as separately accepted human decisions.
+
+### Open consequential human choices
+
+None established that must be asked now. No need to repeat Q001–Q005. The user requested the full umbrella; decomposition preserving the outcome and order can be proposed internally. If decomposition requires dropping an outcome, changing an agreed approval point, or choosing a materially different treatment of existing user data, obtain the actual decision through the host’s durable dialogue process. The host should first resolve the separate ledger/readback evidence dependency; do not present a new question until its exact saved block is verified.
+
+### Internal delivery decisions
+
+Choose concrete skill boundaries and discovery/loading, role-specific resources, installed format, counter syntax, exact result graph, handoff binding mechanism, migration approach and publication mechanics subject to the outcomes and current authority (lines 209–212, 228–241). Product owners can resolve the workflow storage compatibility without asking the human to design internals, provided the accepted distinct outcomes and existing retention obligations are preserved. Acceptance criteria must state those observable obligations before readiness passes.
+
+## Findings and proposed corrections for the host
+
+1. **Unresolved ownership/storage conflict (lines 143–155, 178–181, 190–203, 231–235; AC5–AC9).** Existing `.hai/conventions/workflow_conv.md` requires declared outputs at `attempt:path` and `incoming:name` from the immediately preceding accepted result; `.hai/conventions/workflow-run_conv.md` owns attempts, pinned snapshots and accepted evidence under the Activity and archives them. The story requires every configured base to receive a separate run folder, including intermediate handoffs and final outputs, with exact accepted predecessor paths, but also preserves Activity-owned records. It never says whether external configured handoffs are authoritative, mirrors or merely destinations, or how they remain retained with the Activity. “Design must explain” defers a conflict while AC8 tests runtime records only, not the accepted intermediate evidence. **Proposed correction:** state observable outcomes for Activity-owned accepted attempt evidence and workspace-configured artifacts: accepted handoff identity, provenance and integrity must survive later attempts and Activity archival; configured destinations must not change product artifact ownership or allow one run to overwrite another. Permit a reviewed compatible implementation to decide storage/copy/identity mechanics; explicitly distinguish run evidence, handoffs and canonical product outputs. Update AC5/8/9 to exercise two runs, a repeated step, archive/retention, and unsafe/missing paths.
+
+2. **Loop handoffs are under-specified (lines 125–132, 150–152, 168–170, 201–203).** Current incoming contract only carries outputs of the immediately preceding accepted result and requires every predecessor to provide mandatory incoming values; the story promises accepted paths for every downstream input including rework, without stating what happens to other required inputs when only some steps repeat. The illustrated example tests one updated requirements input, not a QA-to-development return needing an approved design and current requirements plus defect evidence. **Proposed correction:** require each re-entry to receive all its declared required inputs from explicitly identified accepted sources, including unchanged earlier inputs and the newly accepted output; reject missing, changed or unaccepted inputs and preserve their lineage. Test a partial return and an absent or stale input. The author can select the mechanism.
+
+3. **Skill selection contradiction and portability (lines 51–55, 83–87, 209–211, 279, 288).** Line 52 says the workflow references reusable methods, while 54–55 and Q003 say the role selects skills without workflow binding; “reference” can imply a prescribed skill. AC3 says users can invoke skills directly but does not test that extracted skills work outside their former role or that role-selected skills are actually available after migration. **Proposed correction:** replace the workflow method-reference sentence with “workflow states the assignment and outcome without prescribing a skill; the assigned role selects a suitable available skill,” and add observable direct-use and two-role reuse examples in a representative migrated capability, within actual permissions. Identify unavailable skill as an explicit stoppage, not authority to invent or silently substitute. Skill inventory and loading are delivery decisions.
+
+4. **Scope is an umbrella without iteration boundaries (lines 15–18, 64–96, 183–207, 262–264).** A framework-wide relocation, extraction, compatibility migration, configuration/runtime behavior and a process are independently substantial; the item itself declines to claim an iteration-sized scope, and does not identify bounded subrequests. **Proposed correction:** retain BL-0013 as parent and identify independently reviewable bounded child outcomes and dependencies, with acceptance for each and an integration outcome. Do not drop requested scope or assign an invented priority. Reassess each child before its technical planning.
+
+5. **Acceptance is insufficiently objective and complete (lines 277–290).** AC1 “explain”, AC3 “coherent”, AC7 “consistently”, AC9 “preserve” and “relevant checks”, and AC10 “resolves” lack an explicit review inventory or test conditions; AC3 does not establish extraction coverage, AC4 does not verify result-specific routing/rework and all declared inputs, AC6–9 do not establish configuration reuse/update, preservation and isolation through actual examples, and AC12–13 do not state negative transitions for unapproved or failed QA. **Proposed correction:** make the expected evidence observable: inventoried role capabilities with documented disposition; representative direct/reused skills; graph review for each role/result/input/output, branch and bounded rework; sample installations with different locations, missing/unsafe paths and update/reuse; accepted-input lineage across partial loop; separate run isolation and retained attempts; QA failure and absent/stale human approvals blocking progress; exact completion evidence and Activity remaining open. A responsible human/host judges semantic quality and actual approval; validators/file presence alone cannot prove either. Keep exact filenames/thresholds appropriate to each resulting child outcome.
+
+6. **Assumptions and prerequisites (lines 95–96, 231–241, 255–264).** Existing installed customizations/settings and product files must remain usable while their formats and owner boundaries may change; the story lists migration but records no consequence if preservation is infeasible. Record the premise that changes remain within authorized workspace and preserve pre-existing evidence/configuration, the impact of incompatibility (block affected upgrade and report), and that any incompatible or destructive migration requires a separately authorized decision. This is a known constraint, not a new request to redesign everything.
+
+## Mandatory readiness assessment
+
+All evidence references are to current item unless stated. Pass means adequate for that check only, not acceptance of implementation.
+
+| ID | Result | Evidence and reason |
+|---|---|---|
+| R1.1 | Pass | Lines 15–18 state goal and outputs to a new colleague. |
+| R1.2 | Pass | Lines 266–271 tie tasks to one role/skill/workflow separation and portable process outcome, although delivery needs decomposition. |
+| R1.3 | Pass | Lines 183–207 describe installed configuration, location selection and handoffs. |
+| R1.4 | Pass | Lines 249–251 and 266–271 identify duplication and unpredictable handoffs. |
+| R2.1 | Pass | Lines 249–251 name operators, authors and maintainers. |
+| R2.2 | Pass | Lines 249–251 and 268–271 describe their need for predictable handoffs and ownership. |
+| R2.3 | Pass | Same lines identify additional affected authors and maintainers. |
+| R3.1 | Pass | Lines 268–271 identify method reuse and portability. |
+| R3.2 | Pass | Lines 252–253 provide human-selected work as rationale and explicitly record no urgency. |
+| R3.3 | Pass | Lines 83–96 and current workflow conventions establish changes to existing capabilities, not a duplicate unexplained feature. |
+| R4.1 | Pass | Lines 64–96, 98–139 and 183–207 name bounded outputs and behaviors at umbrella level. |
+| R4.2 | Fail | Lines 262–264 explicitly defer identifying manageable increments; substantial independently bounded work is not decomposed. |
+| R4.3 | Fail | Lines 51–55 imply both workflow method reference and role-selected unbound skills; configured outputs vs existing attempt ownership lacks resolved contract. |
+| R4.4 | Pass | Lines 183–207 predominantly prescribe observable outcomes and respect free format/mechanism (209–212); human-selected source locations and run isolation are legitimate constraints. |
+| R5.1 | Pass | Lines 255–258 expressly exclude GUI and remote publication. |
+| R5.2 | Pass | Those lines name concrete exclusions including cross-workspace paths and automatic Activity closure. |
+| R6.1 | Pass | Lines 194–196 and 255–260 record workspace-relative and safety limits. |
+| R6.2 | Pass | Lines 40–41, 95–96, 134–139 and 259–260 record permissions, approval and preservation obligations. |
+| R6.3 | Fail | Lines 231–241 defer migration and ownership but do not document consequences if preservation/interoperability assumptions fail. |
+| R6.4 | Pass | Section 6 lines 247–264 separates participants, exclusions and constraints from deliverables, despite further clarification needed. |
+| R7.1 | Pass | Lines 273–290 provide thirteen stated future acceptance criteria. |
+| R7.2 | Fail | AC1, AC3, AC7, AC9–10 use qualitative or undefined completeness terms without deterministic evidence (finding 5). |
+| R7.3 | Pass | In principle conditions can be met within stated future framework scope and constraints; no infeasibility established. This does not resolve current contract ambiguities. |
+| R7.4 | Fail | “coherent”, “consistently”, “relevant checks”, and “preserve” lack observable measures/coverage (lines 279, 283, 285). |
+| R7.5 | Fail | No complete acceptance for all result-specific input locations, rework lineage, role selection availability and retained accepted attempt evidence (findings 1–3 and 5). |
+| R8.1 | Pass | Lines 29–35 and 178–181 retain roles, agents, runs and Activity framing; compare `.hai/concepts/workflow.md`. |
+| R8.2 | Pass | Lines 125–139, 178–181 and 255–260 cite compatible single-Activity, bounded-loop, authority and preservation constraints; existing contracts are referenced conceptually. |
+| R8.3 | Fail | Existing attempt-only output, immediate predecessor handoff and archival rules conflict or lack a resolved relationship to configured destinations and loop inputs (findings 1–2). |
+
+## Execution evidence and limits
+
+Read-only inspection only of product, backlog, definitions and Activity state; no implementation, backlog or definition edits. Runtime chat-read completed through sequence 18; a first chat-post using unsupported `finding` type returned `input_error` with no changes. A corrected supported `coordination` entry succeeded at sequence 19. No test suite or readiness helper was run; the gate above is a manual semantic assessment. An unrelated broad `rg` diagnostic produced missing-path errors for two guessed state paths; actual `show` succeeded. No full initial protected-path snapshot was supplied or captured, so no all-path before/after protection pass is claimed; this invocation only writes this review and runtime coordination messages. Host must reconcile protected changes and writers before affected finalization. The invocation is still writing when this report is produced; final ended-writer status belongs to the host after the agent exits. No usage source or billable usage was provided; no usage attribution is claimed.
