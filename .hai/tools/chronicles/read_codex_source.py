@@ -40,17 +40,33 @@ def timestamp(value):
         return False
 
 
-def read_source(path, representation, expected_session=None):
-    """Return supported completed text; any interpretation issue prevents ok=true."""
+def reviewed_metadata(kind, payload):
+    """Known non-conversation envelopes; unfamiliar shapes remain visible gaps."""
+    if kind == 'token_usage_record':
+        ids = {'thread_id', 'turn_id', 'session_id', 'root_turn_id', 'response_id'}
+        counters = {'usage', 'turn_token_usage', 'thread_token_usage'}
+        return (set(payload) == ids | counters
+                and all(isinstance(payload[k], str) for k in ids)
+                and all(isinstance(payload[k], dict) for k in counters))
+    if kind == 'inter_agent_communication_metadata':
+        return set(payload) == {'trigger_turn'} and type(payload['trigger_turn']) is bool
+    if kind == 'world_state':
+        return (set(payload) == {'full', 'state'} and type(payload['full']) is bool
+                and isinstance(payload['state'], dict))
+    return False
+
+
+def read_source(path, representation, expected_session=None, *, allow_partial=False):
+    """Read exact text; opt-in partial mode retains unsupported-record gaps."""
     if representation == 'auto':
         # Select one representation, never concatenate duplicate views of a turn.
-        events = read_source(path, 'event_msg', expected_session)
-        if not events['ok'] or events['messages']:
+        events = read_source(path, 'event_msg', expected_session, allow_partial=allow_partial)
+        if not events['usable'] or events['messages'] or events['gaps']:
             return events
-        return read_source(path, 'response_item', expected_session)
+        return read_source(path, 'response_item', expected_session, allow_partial=allow_partial)
     result = {"ok": False, "source_session_id": None, "original_started_at": None,
               "representation": representation, "source_sha256": None, "messages": [], "issues": [],
-              "adapters": []}
+              "adapters": [], "usable": False, "complete": False, "gaps": []}
     if representation not in {"event_msg", "response_item"}:
         result["issues"].append("an explicit supported representation is required")
         return result
@@ -77,13 +93,17 @@ def read_source(path, representation, expected_session=None):
         if not line.strip():
             result["issues"].append(f"source_position {position}: blank JSONL record")
             break
+        recoverable = False
         try:
             record = json.loads(line, object_pairs_hook=unique_pairs,
                                 parse_constant=lambda value: (_ for _ in ()).throw(ValueError(f"invalid constant: {value}")))
-            if not isinstance(record, dict) or not isinstance(record.get("payload"), dict):
-                raise ValueError("record and payload must be objects")
-            payload = record["payload"]
+            if not isinstance(record, dict):
+                raise ValueError("record must be an object")
             kind = record.get("type")
+            recoverable = kind != 'session_meta'
+            if not isinstance(record.get("payload"), dict):
+                raise ValueError("record payload must be an object")
+            payload = record["payload"]
             if not nonblank(kind):
                 raise ValueError("record type discriminator is missing or invalid")
             if kind == "session_meta":
@@ -97,7 +117,10 @@ def read_source(path, representation, expected_session=None):
                 result["source_session_id"], result["original_started_at"] = identity, started
                 continue
             if kind != representation:
+                if kind not in ('event_msg', 'response_item', 'turn_context', 'compacted') and not reviewed_metadata(kind, payload):
+                    raise ValueError('unsupported record type: ' + kind)
                 continue
+            recoverable = True
             if not nonblank(payload.get("type")):
                 raise ValueError("selected representation payload type discriminator is missing or invalid")
             if representation == "event_msg":
@@ -158,6 +181,9 @@ def read_source(path, representation, expected_session=None):
                 message['turn_id'] = record['payload']['turn_id']
             result["messages"].append(message)
         except (TypeError, ValueError) as error:
+            if allow_partial and recoverable:
+                result['gaps'].append({'source_position': position, 'reason': str(error)})
+                continue
             result["issues"].append(f"source_position {position}: {error}")
             break
     if result["source_session_id"] is None:
@@ -166,7 +192,9 @@ def read_source(path, representation, expected_session=None):
         result["issues"].append("source session does not match the assigned session")
     for message in result["messages"]:
         message["source_session_id"] = result["source_session_id"]
-    result["ok"] = not result["issues"]
+    result["usable"] = not result["issues"]
+    result["complete"] = result["usable"] and not result["gaps"]
+    result["ok"] = result["complete"]
     return result
 
 
@@ -175,10 +203,11 @@ def main():
     parser.add_argument("source", type=Path)
     parser.add_argument("--representation", default='auto', choices=["auto", "event_msg", "response_item"])
     parser.add_argument("--expected-session")
+    parser.add_argument("--allow-partial", action="store_true", help="Retain supported messages and report unsupported-record gaps")
     args = parser.parse_args()
-    result = read_source(args.source, args.representation, args.expected_session)
+    result = read_source(args.source, args.representation, args.expected_session, allow_partial=args.allow_partial)
     print(json.dumps(result, ensure_ascii=True, indent=2))
-    return 0 if result["ok"] else 1
+    return 0 if result["usable"] else 1
 
 
 if __name__ == "__main__":

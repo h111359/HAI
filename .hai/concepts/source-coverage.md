@@ -20,7 +20,8 @@ Enabled intervals distinguish eligible source from off-period messages. Disablin
 preserves existing gaps and files; it does not itself authorize historical backfill.
 Successful source verification is a closure prerequisite in required mode or when
 independently mandatory. Best-effort closure attempts verification and may retain
-an explicit unavailable outcome for source interruptions; it never labels a gap verified. Disabled/no-obligation closure has no transcript
+a `recorded_with_gaps` outcome for safely stored partial coverage or an explicit
+unavailable outcome for source interruptions; it never labels a gap verified. Disabled/no-obligation closure has no transcript
 prerequisite, while existing gaps remain part of the historical recording status.
 
 A closure cutoff includes completed saved source through the user's closure
@@ -38,3 +39,14 @@ None
 
 - [term:Transcript segment] → [Transcript segment](transcript-segment.md) — assigned range.
 - [term:Durable session source] → [Durable session source](durable-session-source.md) — authoritative completed text.
+
+## Recognized messages and unknown-record gaps
+
+An unsupported source record does not invalidate recognized messages around it.
+HAI retains those messages and the exact unknown position as partial coverage,
+with a warning. Stored messages and complete coverage are separate facts.
+
+Verified ranges must exclude unknown positions. A later supported message or
+updated scheduling cursor does not resolve an earlier gap. Reviewed adapter
+support may resolve it using the same source evidence and continuity checks.
+Unknown content never becomes an invented prompt or outcome.

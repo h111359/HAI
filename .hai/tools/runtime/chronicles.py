@@ -52,6 +52,50 @@ def assignment(root, value):
     return b
 
 
+def includes(b, position):
+    return (position >= b['start_position']
+            and (b['end_position'] is None or position <= b['end_position'])
+            and any(position >= interval['start']['source_position']
+                    and (interval['end'] is None or position <= interval['end']['source_position'])
+                    for interval in b['enabled_intervals']))
+
+
+def validate_gaps(gaps, b):
+    if not isinstance(gaps, list):
+        raise SafetyError('Invalid chronicle coverage gaps')
+    previous = -1
+    for gap in gaps:
+        if (not isinstance(gap, dict) or set(gap) != {'source_position', 'reason'}
+                or type(gap['source_position']) is not int
+                or gap['source_position'] <= previous or not includes(b, gap['source_position'])
+                or not isinstance(gap['reason'], str) or not gap['reason'].strip()):
+            raise SafetyError('Invalid chronicle coverage gap')
+        previous = gap['source_position']
+    return gaps
+
+
+def coverage_ranges(session, messages, gaps):
+    """Known-message spans never cross an uninterpreted source position."""
+    ranges, group = [], []
+    positions = [g['source_position'] for g in gaps]
+    for message in messages:
+        position = message['source_position']
+        if group and any(group[-1]['source_position'] < g < position for g in positions):
+            ranges.append({'start': occurrence(session, group[0]['source_position']),
+                           'end': occurrence(session, group[-1]['source_position'])})
+            group = []
+        group.append(message)
+    if group:
+        ranges.append({'start': occurrence(session, group[0]['source_position']),
+                       'end': occurrence(session, group[-1]['source_position'])})
+    return ranges
+
+
+def coverage_warnings(entries):
+    return [dict(gap, source_session_id=entry['binding']['session_id'])
+            for entry in entries for gap in entry.get('gaps', [])]
+
+
 def load(root, base, ident, *, metadata_only=False):
     ledger = checked_path(root, artifact(root, base, 'chronicles/core.json'))
     fp = fingerprint(ledger)
@@ -72,11 +116,13 @@ def load(root, base, ident, *, metadata_only=False):
         raise SafetyError('Invalid chronicle core sources/artifacts')
     seen = set()
     for entry in data['sources']:
-        if not isinstance(entry, dict) or set(entry) - {'binding', 'prefix_bytes', 'prefix_sha256', 'segment_path', 'original_started_at', 'closure_binding', 'message_index'} or not {'binding', 'prefix_bytes', 'prefix_sha256', 'segment_path', 'original_started_at', 'closure_binding'} <= set(entry):
+        if not isinstance(entry, dict) or set(entry) - {'binding', 'prefix_bytes', 'prefix_sha256', 'segment_path', 'original_started_at', 'closure_binding', 'message_index', 'gaps'} or not {'binding', 'prefix_bytes', 'prefix_sha256', 'segment_path', 'original_started_at', 'closure_binding'} <= set(entry):
             raise SafetyError('Invalid chronicle core source')
+        if entry.get('gaps') and 'message_index' not in entry:
+            raise SafetyError('Partial chronicle source needs a retained message index')
         if 'message_index' in entry:
             index = entry['message_index']
-            if not isinstance(index, list) or not index:
+            if not isinstance(index, list) or (not index and not entry.get('gaps')):
                 raise SafetyError('Invalid recorded message index')
             last_position = -1
             for message in index:
@@ -94,6 +140,9 @@ def load(root, base, ident, *, metadata_only=False):
             raise SafetyError('Invalid/duplicate chronicle binding')
         if not isinstance(entry['prefix_sha256'], str) or not re.fullmatch('[a-f0-9]{64}', entry['prefix_sha256']):
             raise SafetyError('Invalid source prefix fingerprint')
+        validate_gaps(entry.get('gaps', []), b)
+        if {g['source_position'] for g in entry.get('gaps', [])} & {m['source_position'] for m in entry.get('message_index', [])}:
+            raise SafetyError('Coverage gap overlaps a retained message')
         seen.add(b['session_id'])
         if entry['closure_binding'] is not None:
             assignment(root, entry['closure_binding'])
@@ -117,7 +166,7 @@ def load(root, base, ident, *, metadata_only=False):
     for entry in data['sources']:
         if 'message_index' in entry:
             target = checked_path(root, base + '/' + entry['segment_path'], allow_missing=False)
-            if target.read_bytes() != render(ident, entry['binding'], entry['original_started_at'], entry['message_index']):
+            if target.read_bytes() != render(ident, entry['binding'], entry['original_started_at'], entry['message_index'], entry.get('gaps', [])):
                 raise SafetyError('Recorded message index differs from retained transcript')
     checkpoint = read_json(checked_path(root, artifact(root, base, 'chronicles/checkpoint.json'), allow_missing=False))
     if not isinstance(checkpoint, dict) or type(checkpoint.get('checkpoint_format_version')) is not int or checkpoint['checkpoint_format_version'] != 1 or checkpoint.get('activity_id') != ident:
@@ -131,6 +180,9 @@ def load(root, base, ident, *, metadata_only=False):
         b = entry['binding']
         if not isinstance(source, dict) or source.get('source_session_id') != b['session_id'] or source.get('durable_path') != b['path'] or source.get('enabled_intervals') != b['enabled_intervals']:
             raise SafetyError('Checkpoint source assignment differs from ledger')
+        if (source.get('gaps', []) != entry.get('gaps', [])
+                or source.get('retained_source_complete') is not (not bool(entry.get('gaps')))):
+            raise SafetyError('Checkpoint coverage gaps differ from ledger')
         ranges = source.get('assigned_ranges')
         if not isinstance(ranges, list) or len(ranges) != 1:
             raise SafetyError('Invalid checkpoint source range')
@@ -145,7 +197,11 @@ def load(root, base, ident, *, metadata_only=False):
             positions.append(point['source_position'])
         if not b['start_position'] <= positions[0] <= positions[1] or (b['end_position'] is not None and positions[1] > b['end_position']):
             raise SafetyError('Checkpoint range escapes assignment')
-    expected_verified = [{'range': s['assigned_ranges'][0], 'segment_path': e['segment_path'], 'verified_at': data['updated_at']} for s, e in zip(recorded, data['sources'])]
+    expected_verified = [
+        {'range': span, 'segment_path': e['segment_path'], 'verified_at': data['updated_at']}
+        for s, e in zip(recorded, data['sources'])
+        for span in (coverage_ranges(e['binding']['session_id'], e['message_index'], e.get('gaps', []))
+                     if e.get('gaps') else s['assigned_ranges'])]
     if checkpoint.get('verified_ranges') != expected_verified:
         raise SafetyError('Checkpoint coverage differs from ledger')
     return data, fp
@@ -172,15 +228,17 @@ def read_assigned(b, previous=None, *, root=None, base=None):
     before = fingerprint(path)
     raw = path.read_bytes()
     rewritten = previous and (relocated or len(raw) < previous['prefix_bytes'] or digest(raw[:previous['prefix_bytes']]) != previous['prefix_sha256'])
-    extracted = read_source(path, b['representation'], b['session_id'])
+    extracted = read_source(path, b['representation'], b['session_id'], allow_partial=True)
     if ((extracted['source_session_id'] is not None and extracted['source_session_id'] != b['session_id'])
             or any('conflicting original session identity or start time' in issue for issue in extracted['issues'])):
         raise SafetyError('Chronicle original source identity changed')
     if previous and extracted['original_started_at'] is not None and previous['original_started_at'] != extracted['original_started_at']:
         raise SafetyError('Chronicle original source identity changed')
-    if not extracted['ok'] or fingerprint(path) != before or extracted['source_sha256'] != digest(raw):
+    if not extracted['usable'] or fingerprint(path) != before or extracted['source_sha256'] != digest(raw):
         raise RecordingInterruption('Chronicle source unavailable/incomplete/changed: ' + str(extracted['issues']))
     if rewritten:
+        if previous.get('gaps'):
+            raise RecordingInterruption('Source rewrite with retained coverage gaps requires explicit reconciliation')
         if root is None or base is None:
             raise SafetyError('Previously observed chronicle source changed or was truncated; reconciliation context required')
         from .source_continuity import rebase
@@ -194,15 +252,24 @@ def read_assigned(b, previous=None, *, root=None, base=None):
                                      'previous_prefix_sha256': previous['prefix_sha256'], 'source_sha256': digest(raw),
                                      'proof': 'unique exact recorded messages in unchanged order'}
     messages = [m for m in extracted['messages'] if m['source_position'] >= b['start_position'] and (b['end_position'] is None or m['source_position'] <= b['end_position']) and any(m['source_position'] >= interval['start']['source_position'] and (interval['end'] is None or m['source_position'] <= interval['end']['source_position']) for interval in b['enabled_intervals'])]
-    if not messages:
+    gaps = [g for g in extracted['gaps'] if includes(b, g['source_position'])]
+    extracted['gaps'] = gaps
+    if previous and not rewritten and 'message_index' in previous:
+        # A new unsupported shape cannot erase previously retained exact chat.
+        from .source_continuity import snapshot
+        current = {m['source_position']: m for m in snapshot(messages)}
+        if any(current.get(m['source_position']) != m for m in previous['message_index']):
+            raise SafetyError('Previously recorded messages changed or disappeared')
+    if not messages and not gaps:
         raise RecordingInterruption('No completed eligible source in assigned chronicle range')
     return raw, extracted, messages
 
 
-def assert_fresh(b, raw, messages):
+def assert_fresh(b, raw, messages, gaps=None):
     # Appended tool/progress records are harmless; new eligible exchanges are not.
-    newer, _, current = read_assigned(b)
-    if len(newer) < len(raw) or newer[:len(raw)] != raw or current != messages:
+    newer, extracted, current = read_assigned(b)
+    if (len(newer) < len(raw) or newer[:len(raw)] != raw or current != messages
+            or extracted['gaps'] != (gaps or [])):
         raise SafetyError('Chronicle source gained eligible text or changed; refresh required')
 
 
@@ -261,10 +328,12 @@ def check_overlaps(root, base, entries):
                     raise SafetyError('Chronicle assignment overlaps another Activity; finalize prior boundary explicitly')
 
 
-def render(ident, b, started, messages):
+def render(ident, b, started, messages, gaps=None):
     metadata = {'source_session_id': b['session_id'], 'durable_path': b['path'], 'original_started_at': started, 'activity_id': ident,
                 'representation': b['representation'], 'assigned_start': b['start_position'], 'assigned_end': b['end_position'],
-                'last_verified_source_position': messages[-1]['source_position'], 'enabled_intervals': b['enabled_intervals']}
+                'last_verified_source_position': messages[-1]['source_position'] if messages else None, 'enabled_intervals': b['enabled_intervals']}
+    if gaps:
+        metadata.update(coverage='partial', gaps=gaps)
     text = '# Activity transcript\n\n## Source:\n\n' + json.dumps(metadata, ensure_ascii=True, indent=2) + '\n\n'
     for message in messages:
         text += ('## Prompt:\n\n' if message['role'] == 'user' else '## Outcome:\n\n') + message['text'] + '\n\n'
@@ -331,10 +400,17 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
             old_positions = {m['source_position'] for m in prior_messages if m['source_position'] < observed_lines}
             if not old_positions <= {m['source_position'] for m in messages}:
                 raise SafetyError('Updated intervals would remove previously recorded exchanges')
+            if any(not includes(b, g['source_position']) for g in prior.get('gaps', [])):
+                raise SafetyError('Updated intervals would remove previously recorded coverage gaps')
+        gaps = extracted['gaps']
+        if previous and previous.get('gaps') and any(g not in gaps for g in previous['gaps']):
+            reconciliations.append({'kind': 'coverage_update', 'binding': b,
+                                    'previous_gaps': previous['gaps'], 'gaps': gaps,
+                                    'proof': 'retained source prefix and every retained message are unchanged; reviewed interpretation now resolves prior gaps'})
         closure_binding = entry.get('closure_binding')
         if finalize and b['end_position'] is None:
             closure_binding = json.loads(json.dumps(b))
-            b['end_position'] = messages[-1]['source_position']
+            b['end_position'] = max([m['source_position'] for m in messages] + [g['source_position'] for g in gaps])
             b['enabled_intervals'] = [dict(i, end=occurrence(b['session_id'], min(i['end']['source_position'], b['end_position']) if i['end'] else b['end_position'])) for i in b['enabled_intervals'] if i['start']['source_position'] <= b['end_position']]
         segment = entry.get('segment_path')
         if segment is None:
@@ -346,13 +422,19 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
                     break
                 n += 1
             taken.add(segment)
-        outputs[segment] = render(ident, b, extracted['original_started_at'], messages)
+        outputs[segment] = render(ident, b, extracted['original_started_at'], messages, gaps)
         from .source_continuity import snapshot
-        new_entries.append({'binding': b, 'prefix_bytes': len(raw), 'prefix_sha256': digest(raw), 'segment_path': segment, 'original_started_at': extracted['original_started_at'], 'closure_binding': closure_binding, 'message_index': snapshot(messages)})
-        observations.append((b, raw, messages))
-        r = {'start': occurrence(b['session_id'], messages[0]['source_position']), 'end': occurrence(b['session_id'], messages[-1]['source_position'])}
-        sources.append({'source_session_id': b['session_id'], 'durable_path': b['path'], 'original_started_at': extracted['original_started_at'], 'assigned_ranges': [r], 'enabled_intervals': b['enabled_intervals'], 'retained_source_complete': True})
-        verified.append({'range': r, 'segment_path': segment, 'verified_at': time})
+        new_entry = {'binding': b, 'prefix_bytes': len(raw), 'prefix_sha256': digest(raw), 'segment_path': segment, 'original_started_at': extracted['original_started_at'], 'closure_binding': closure_binding, 'message_index': snapshot(messages)}
+        if gaps: new_entry['gaps'] = gaps
+        new_entries.append(new_entry)
+        observations.append((b, raw, messages, gaps))
+        positions = [m['source_position'] for m in messages] + [g['source_position'] for g in gaps]
+        r = {'start': occurrence(b['session_id'], min(positions)), 'end': occurrence(b['session_id'], max(positions))}
+        source = {'source_session_id': b['session_id'], 'durable_path': b['path'], 'original_started_at': extracted['original_started_at'], 'assigned_ranges': [r], 'enabled_intervals': b['enabled_intervals'], 'retained_source_complete': not bool(gaps)}
+        if gaps: source['gaps'] = gaps
+        sources.append(source)
+        for span in coverage_ranges(b['session_id'], messages, gaps):
+            verified.append({'range': span, 'segment_path': segment, 'verified_at': time})
         users = [m for m in messages if m['role'] == 'user']
         if users: cursors[b['session_id']] = occurrence(b['session_id'], users[-1]['source_position'])
     check_overlaps(root, base, [e['binding'] for e in new_entries])
@@ -362,8 +444,10 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
         for relative in ['chronicles/core.json', 'chronicles/checkpoint.json'] + [e['segment_path'] for e in old['sources']]:
             outputs[history + '/' + PurePosixPath(relative).name] = checked_path(root, artifact(root, base, relative), allow_missing=False).read_bytes()
         outputs[history + '/reconciliation.json'] = (json.dumps({'recorded_at': time, 'provenance': request['provenance'], 'sources': reconciliations}, ensure_ascii=True, indent=2) + '\n').encode()
+    warnings = coverage_warnings(new_entries)
+    previous_success = read_json(checked_path(root, artifact(root, base, 'chronicles/checkpoint.json'), allow_missing=False)).get('last_successful_at') if old else None
     checkpoint = {'checkpoint_format_version': 1, 'activity_id': ident, 'sources': sources, 'verified_ranges': verified, 'pending_ranges': [], 'cadence_cursors': cursors,
-                  'last_attempt': {'attempt_id': attempt, 'dispatch_cursors': cursors, 'started_at': time, 'finished_at': time, 'status': 'verified', 'error': None}, 'last_successful_at': time, 'in_flight': None}
+                  'last_attempt': {'attempt_id': attempt, 'dispatch_cursors': cursors, 'started_at': time, 'finished_at': time, 'status': 'recorded_with_gaps' if warnings else 'verified', 'error': None}, 'last_successful_at': previous_success if warnings else time, 'in_flight': None}
     outputs['chronicles/checkpoint.json'] = (json.dumps(checkpoint, ensure_ascii=True, indent=2) + '\n').encode()
     retained_hashes = {p: h for p, h in old['artifact_hashes'].items() if p.startswith('chronicles/history/')} if old else {}
     ledger = {'core_format_version': 1, 'activity_id': ident, 'updated_at': time, 'sources': new_entries, 'artifact_hashes': {**retained_hashes, **{p: digest(raw) for p, raw in outputs.items()}}, 'provenance': provenance(request['provenance']), 'enablement_revision': revision}
@@ -374,7 +458,7 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
         if (expected_hash is None and current is not None) or (expected_hash is not None and (current is None or current[-1] != expected_hash)):
             raise SafetyError('Chronicle target changed during preparation: ' + relative)
         expected_artifacts[relative] = current
-    result = {'activity_id': ident, 'status': 'verified' if apply else 'planned', 'segments': [e['segment_path'] for e in new_entries], 'checkpoint_path': artifact(root, base, 'chronicles/checkpoint.json'), 'cutoff': [v['range']['end'] for v in verified], 'source_count': len(new_entries), 'message_count': sum(len(o[2]) for o in observations), 'reconciliations': reconciliations}
+    result = {'activity_id': ident, 'status': ('recorded_with_gaps' if warnings else 'verified') if apply else 'planned', 'segments': [e['segment_path'] for e in new_entries], 'checkpoint_path': artifact(root, base, 'chronicles/checkpoint.json'), 'cutoff': [s['assigned_ranges'][0]['end'] for s in sources], 'source_count': len(new_entries), 'message_count': sum(len(o[2]) for o in observations), 'reconciliations': reconciliations, 'coverage': 'partial' if warnings else 'complete', 'warnings': warnings}
     if not apply:
         return result, []
     changed = []
@@ -385,7 +469,7 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
             raise SafetyError('Recording settings changed before synchronization')
         if fingerprint(checked_path(root, artifact(root, base, 'chronicles/core.json'))) != ledger_fp:
             raise SafetyError('Chronicle ledger changed before recording')
-        for b, raw, messages in observations: assert_fresh(b, raw, messages)
+        for b, raw, messages, gaps in observations: assert_fresh(b, raw, messages, gaps)
         directory = checked_path(root, base + '/chronicles')
         if not directory.exists(): directory.mkdir(); changed.append(base + '/chronicles')
         # Preserve predecessor evidence before replacing any current artifact.
@@ -400,7 +484,7 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
             changed.append(artifact(root, base, relative))
         write_json(root, artifact(root, base, 'chronicles/core.json'), ledger, ledger_fp); changed.append(artifact(root, base, 'chronicles/core.json'))
         load(root, base, ident)
-        for b, raw, messages in observations: assert_fresh(b, raw, messages)
+        for b, raw, messages, gaps in observations: assert_fresh(b, raw, messages, gaps)
         if fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)) != expected_state:
             raise SafetyError('Activity changed during recording')
         if fingerprint(environment_path) != environment_fp:
@@ -410,7 +494,7 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
         raise SafetyError(str(exc), list(dict.fromkeys(changed + getattr(exc, 'changed_files', [])))) from exc
 
 
-def verify(root, base, ident, closing=False):
+def verify(root, base, ident, closing=False, *, require_complete=True):
     data, _ = load(root, base, ident)
     if data is None:
         raise SafetyError('No core chronicle checkpoint to verify')
@@ -425,10 +509,13 @@ def verify(root, base, ident, closing=False):
         if active and not closing and entry['closure_binding'] is not None:
             raise SafetyError('Interrupted closure assignment requires fresh synchronization')
         target = checked_path(root, base + '/' + entry['segment_path'], allow_missing=False)
-        if target.read_bytes() != render(ident, b, extracted['original_started_at'], messages):
+        if target.read_bytes() != render(ident, b, extracted['original_started_at'], messages, extracted['gaps']):
             raise SafetyError('Chronicles do not cover current eligible source; synchronize required')
         if closing and entry['closure_binding'] is not None:
-            _, _, live = read_assigned(entry['closure_binding'], entry)
-            if live != messages:
+            _, live_extracted, live = read_assigned(entry['closure_binding'], entry)
+            if live != messages or live_extracted['gaps'] != extracted['gaps']:
                 raise SafetyError('New eligible exchange appeared after closure cutoff')
-    return {'activity_id': ident, 'status': 'verified', 'source_count': len(data['sources']), 'checkpoint_path': artifact(root, base, 'chronicles/checkpoint.json')}
+    warnings = coverage_warnings(data['sources'])
+    if closing and require_complete and warnings:
+        raise RecordingInterruption('Recognized chronicles are stored but coverage is incomplete: ' + str(warnings))
+    return {'activity_id': ident, 'status': 'recorded_with_gaps' if warnings else 'verified', 'coverage': 'partial' if warnings else 'complete', 'warnings': warnings, 'source_count': len(data['sources']), 'checkpoint_path': artifact(root, base, 'chronicles/checkpoint.json')}

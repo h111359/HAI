@@ -27,9 +27,10 @@ observed saved first work-prompt position, enabled intervals and provenance.
    Prefer `source_path`; otherwise search exact-ID filenames only under
    `codex_home/sessions`, `CODEX_HOME/sessions` or `~/.codex/sessions`. Embedded
    identity/workspace, source schema, safe paths and a stable read are checked.
-   The default representation is `auto`: select completely parsed supported event
-   messages first, otherwise supported response items. An interpretation error
-   interrupts recording rather than triggering fallback. Explicit selection is
+   The default representation is `auto`: select event messages and their explicit
+   gaps first; response items are selected only when the event view is complete
+   and contains no messages. An unsupported record
+   retains an explicit gap in tolerant runtime recording rather than triggering fallback. Explicit selection is
    still available; never guess unknown schemas or merge representations.
    Zero/multiple matches or invalid evidence stop binding; do not select by
    recency, broaden the search to unrelated sessions or reconstruct source text.
@@ -74,3 +75,8 @@ import authority. Discovery, preview and startup are read-only.
 - [Chronicles](../conventions/chronicles_conv.md) — authority and integrity.
 - [Source adapter](../conventions/codex-source_conv.md) — exact representations.
 - [Runtime commands](../tools/runtime/README.md) — requests and operations.
+
+When discovery returns a usable source with unsupported records, keep its warnings
+and establish only an actually observed supported work-prompt boundary. Do not
+require a fully recognized source merely to save known messages. Unknown work
+prompt identity or ambiguous attribution still blocks assignment.

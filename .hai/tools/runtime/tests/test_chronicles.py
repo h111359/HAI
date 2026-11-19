@@ -46,6 +46,138 @@ class CoreChronicleTests(unittest.TestCase):
     def close(self, **kw):
         return activities.handle('close', self.root, {'activity_id': self.ident, 'outcome': 'completed', 'archive_label': 'core-chronicles', 'outcome_text': 'done', 'recording': {'status': 'pending', 'details': 'core must flush'}, 'provenance': self.prov, **kw}, True)
 
+    def test_supported_messages_persist_around_unknown_record_and_reload(self):
+        self.lines.insert(3, self.record('event_msg', {'type': 'future_chat', 'text': 'NEVER PROMOTE THIS'})); self.save()
+        preview = self.sync(False, sources=[self.assignment]); self.assertTrue(preview['ok'], preview)
+        self.assertEqual(preview['result']['coverage'], 'partial')
+        self.assertFalse((self.base / 'chronicles').exists())
+        saved = self.sync(sources=[self.assignment]); self.assertTrue(saved['ok'], saved)
+        self.assertEqual(saved['result']['status'], 'recorded_with_gaps')
+        self.assertEqual(saved['result']['warnings'][0]['source_position'], 3)
+        segment = self.base / saved['result']['segments'][0]; before = segment.read_bytes()
+        self.assertIn('Exact answer', before.decode()); self.assertNotIn('NEVER PROMOTE THIS', before.decode())
+        ledger, _ = chronicles.load(self.root, self.base.relative_to(self.root).as_posix(), self.ident)
+        checkpoint = json.loads((self.base / 'chronicles/checkpoint.json').read_text())
+        self.assertEqual(checkpoint['sources'][0]['gaps'], ledger['sources'][0]['gaps'])
+        self.assertFalse(checkpoint['sources'][0]['retained_source_complete'])
+        self.assertIsNone(checkpoint['last_successful_at'])
+        self.assertEqual([(r['range']['start']['source_position'], r['range']['end']['source_position'])
+                          for r in checkpoint['verified_ranges']], [(2, 2), (4, 4)])
+        self.assertTrue(self.sync()['ok']); self.assertEqual(segment.read_bytes(), before)
+        verified = recording.handle('verify', self.root, {'activity_id': self.ident}, False)
+        self.assertTrue(verified['ok'], verified); self.assertEqual(verified['result']['coverage'], 'partial')
+
+    def test_gaps_outside_enabled_assignment_do_not_poison_coverage(self):
+        self.lines[1] = self.record('event_msg', {'type': 'future_chat', 'text': 'outside'}); self.save()
+        result = self.sync(sources=[self.assignment]); self.assertTrue(result['ok'], result)
+        self.assertEqual(result['result']['coverage'], 'complete'); self.assertEqual(result['result']['warnings'], [])
+        self.assertTrue(self.close()['ok'])
+
+    def test_gap_only_source_records_evidence_then_accepts_later_known_message(self):
+        self.lines = self.lines[:2] + [self.record('event_msg', {'type': 'future_chat', 'text': 'unknown'})]; self.save()
+        saved = self.sync(sources=[self.assignment]); self.assertTrue(saved['ok'], saved)
+        self.assertEqual(saved['result']['message_count'], 0)
+        self.assertEqual(saved['result']['coverage'], 'partial')
+        checkpoint = json.loads((self.base / 'chronicles/checkpoint.json').read_text())
+        self.assertEqual(checkpoint['verified_ranges'], [])
+        self.assertTrue(recording.handle('verify', self.root, {'activity_id': self.ident}, False)['ok'])
+        self.lines.append(self.message('user_message', 'later known message')); self.save()
+        saved = self.sync(); self.assertTrue(saved['ok'], saved)
+        self.assertEqual(saved['result']['message_count'], 1); self.assertEqual(saved['result']['coverage'], 'partial')
+
+    def test_required_close_stores_new_supported_text_before_rejecting_gaps(self):
+        initial = self.sync(sources=[self.assignment]); self.assertTrue(initial['ok'])
+        initial_success = json.loads((self.base / 'chronicles/checkpoint.json').read_text())['last_successful_at']
+        self.lines += [self.record('event_msg', {'type': 'future_chat'}), self.message('user_message', 'new supported message')]; self.save()
+        closed = self.close(); self.assertFalse(closed['ok'], closed)
+        self.assertIn('required coverage is incomplete', str(closed['issues']))
+        self.assertTrue(closed['changed_files']); self.assertTrue(self.base.exists())
+        self.assertEqual(json.loads((self.base / 'state.json').read_text())['lifecycle'], 'active')
+        self.assertFalse((self.base / 'outcome.md').exists())
+        checkpoint = json.loads((self.base / 'chronicles/checkpoint.json').read_text())
+        self.assertEqual(checkpoint['last_successful_at'], initial_success)
+        self.assertIn('new supported message', next((self.base / 'chronicles').glob('*segment*.md')).read_text())
+
+    def test_best_effort_close_keeps_trailing_gap_and_reports_partial(self):
+        self.state['features']['chronicles']['mode'] = 'best_effort'; self.save_state()
+        self.lines.append(self.record('event_msg', {'type': 'future_chat'})); self.save()
+        self.assertTrue(self.sync(sources=[self.assignment])['ok'])
+        closed = self.close(); self.assertTrue(closed['ok'], closed)
+        self.assertEqual(closed['result']['recording']['status'], 'recorded_with_gaps')
+        archive = self.root / closed['result']['archive_path']
+        ledger = json.loads((archive / 'chronicles/core.json').read_text())
+        self.assertEqual(ledger['sources'][0]['binding']['end_position'], 5)
+        self.assertEqual(ledger['sources'][0]['gaps'][0]['source_position'], 5)
+        self.assertEqual(chronicles.verify(self.root, closed['result']['archive_path'], self.ident)['coverage'], 'partial')
+
+    def test_close_uses_actual_partial_sync_status_after_complete_preview(self):
+        self.state['features']['chronicles']['mode'] = 'best_effort'; self.save_state()
+        self.assertTrue(self.sync(sources=[self.assignment])['ok'])
+        original = chronicles.synchronize
+        injected = False
+        def append_after_preview(*args, **kwargs):
+            nonlocal injected
+            result = original(*args, **kwargs)
+            if not args[5] and not injected:
+                injected = True
+                self.lines.append(self.record('event_msg', {'type': 'future_chat'})); self.save()
+            return result
+        with mock.patch.object(chronicles, 'synchronize', side_effect=append_after_preview):
+            closed = self.close()
+        self.assertTrue(closed['ok'], closed)
+        self.assertEqual(closed['result']['recording']['status'], 'recorded_with_gaps')
+        archive = self.root / closed['result']['archive_path']
+        self.assertIn('Recording: recorded_with_gaps', (archive / 'outcome.md').read_text())
+
+    def test_new_unknown_record_invalidates_finalize_freshness(self):
+        self.assertTrue(self.sync(sources=[self.assignment])['ok'])
+        base = self.base.relative_to(self.root).as_posix()
+        chronicles.synchronize(self.root, base, self.ident, {'provenance': self.prov}, activities.now(), True,
+                               chronicles.fingerprint(self.base / 'state.json'), finalize=True)
+        self.lines.append(self.record('event_msg', {'type': 'future_chat'})); self.save()
+        with self.assertRaises(chronicles.SafetyError):
+            chronicles.verify(self.root, base, self.ident, closing=True, require_complete=False)
+
+    def test_partial_source_rewrite_cannot_erase_retained_unknown_history(self):
+        self.lines.insert(3, self.record('event_msg', {'type': 'future_chat'})); self.save()
+        self.assertTrue(self.sync(sources=[self.assignment])['ok'])
+        before = (self.base / 'chronicles/core.json').read_bytes()
+        del self.lines[3]; self.save()
+        result = self.sync(); self.assertFalse(result['ok'], result)
+        self.assertIn('coverage gaps requires explicit reconciliation', str(result['issues']))
+        self.assertEqual((self.base / 'chronicles/core.json').read_bytes(), before)
+
+    def test_changed_enabled_intervals_cannot_hide_recorded_gaps(self):
+        self.lines.append(self.record('event_msg', {'type': 'future_chat'})); self.save()
+        self.assertTrue(self.sync(sources=[self.assignment])['ok'])
+        before = (self.base / 'chronicles/core.json').read_bytes()
+        self.state['features']['chronicles']['enablement_revision'] = 1; self.save_state()
+        updated = json.loads(json.dumps(self.assignment))
+        updated['enabled_intervals'][0]['end'] = {'source_session_id': 'one', 'source_position': 4}
+        result = self.sync(sources=[updated]); self.assertFalse(result['ok'], result)
+        self.assertIn('remove previously recorded coverage gaps', str(result['issues']))
+        self.assertEqual((self.base / 'chronicles/core.json').read_bytes(), before)
+
+    def test_reviewed_gap_resolution_preserves_predecessor_evidence(self):
+        from chronicles import read_codex_source as reader
+        self.lines.insert(3, self.record('event_msg', {'type': 'future_chat', 'text': 'newly understood'})); self.save()
+        partial = self.sync(sources=[self.assignment]); self.assertTrue(partial['ok'])
+        old_ledger = (self.base / 'chronicles/core.json').read_bytes()
+        segment = self.base / partial['result']['segments'][0]; old_segment = segment.read_bytes()
+        original = reader.event_message
+        def reviewed(payload):
+            if payload.get('type') == 'future_chat':
+                return {'type': 'user_message', 'message': payload['text']}, 'fixture-reviewed-future-message'
+            return original(payload)
+        with mock.patch.object(reader, 'event_message', side_effect=reviewed):
+            result = self.sync(); self.assertTrue(result['ok'], result)
+            self.assertEqual(result['result']['coverage'], 'complete')
+            self.assertIn('newly understood', segment.read_text())
+            self.assertTrue(recording.handle('verify', self.root, {'activity_id': self.ident}, False)['ok'])
+        history = self.base / 'chronicles/history'
+        self.assertTrue(any(p.read_bytes() == old_ledger for p in history.rglob('core.json')))
+        self.assertTrue(any(p.read_bytes() == old_segment for p in history.rglob('*segment*.md')))
+
     def test_unrelated_archived_content_does_not_block_new_source_assignment(self):
         self.assertTrue(self.sync(sources=[self.assignment])['ok'])
         closed = self.close(); self.assertTrue(closed['ok'], closed)

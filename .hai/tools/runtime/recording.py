@@ -21,7 +21,7 @@ def handle(operation, workspace, request, apply):
             from chronicles.adapters import ADAPTERS
             return envelope(operation, result={'adapters': list(ADAPTERS),
                 'discovery': 'exact host session identity in configured session store',
-                'unknown_formats': 'interrupted; reviewed adapter implementation required'})
+                'unknown_formats': 'supported messages retained with explicit coverage gaps; reviewed adapters required to interpret unknown records'})
         if op in ('synchronize', 'verify', 'discover', 'bind'):
             from .startup import require_mutation_context
             from .activities import store_path, discover, now, required_text, handle as activity_handle

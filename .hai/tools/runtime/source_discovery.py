@@ -54,8 +54,8 @@ def inspect_source(workspace, path, identity, representation):
     path = canonical(path)
     before = fingerprint(path)
     raw = path.read_bytes()
-    extracted = read_source(path, representation, identity)
-    if not extracted['ok']:
+    extracted = read_source(path, representation, identity, allow_partial=True)
+    if not extracted['usable']:
         from .recording_policy import RecordingInterruption
         if extracted['source_session_id'] != identity:
             raise SafetyError('Source session does not match the selected session')
@@ -69,7 +69,7 @@ def inspect_source(workspace, path, identity, representation):
         raise SafetyError('Source workspace metadata does not match the selected workspace')
     users = [m for m in extracted['messages'] if m['role'] == 'user']
     result = {'path': str(path), 'session_id': identity, 'representation': extracted['representation'],
-              'adapters': extracted.get('adapters', []),
+              'adapters': extracted.get('adapters', []), 'coverage': 'partial' if extracted['gaps'] else 'complete', 'warnings': extracted['gaps'],
               'original_started_at': extracted['original_started_at'],
               'source_sha256': extracted['source_sha256'],
               'latest_user_occurrence': ({'source_position': users[-1]['source_position'],
@@ -132,7 +132,7 @@ def readiness(workspace, activity):
     result = _readiness(root, activity)
     result['policy'] = policy['mode']
     result['continuation_allowed'] = (not policy['required'] or result['status'] in ('verified', 'disabled'))
-    if result['status'] not in ('verified', 'disabled'):
+    if result['status'] not in ('verified', 'disabled', 'recorded_with_gaps'):
         result['coverage'] = 'unverified'
     return result
 
@@ -154,7 +154,7 @@ def _readiness(root, activity):
         if data and any(e['binding']['session_id'] == identity for e in data['sources']):
             try:
                 evidence = chronicles.verify(root, activity['path'], activity['activity_id'])
-                return {'status': 'verified', 'details': 'Registered sources only; no claim about unknown sessions', **evidence}
+                return {'details': 'Registered sources only; no claim about unknown sessions', **evidence}
             except SafetyError as exc:
                 if str(exc) in ('Chronicles do not cover current eligible source; synchronize required',
                                 'Chronicle source continuity verified; synchronize to retain reconciliation evidence'):

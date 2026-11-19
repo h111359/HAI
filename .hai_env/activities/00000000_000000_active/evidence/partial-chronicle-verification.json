@@ -1,0 +1,57 @@
+{
+  "feature": "recognized messages stored around unsupported source records with durable scoped gaps",
+  "developer_tests": {
+    "reader": {
+      "run": 25,
+      "skips": 1
+    },
+    "runtime_chronicles": {
+      "run": 33,
+      "skips": 1
+    },
+    "source_discovery": {
+      "run": 18,
+      "skips": 1
+    },
+    "source_continuity": {
+      "run": 80,
+      "skips": 2,
+      "note": "Includes reused chronicle test cases"
+    },
+    "recording_policy": {
+      "run": 8,
+      "skips": 0
+    }
+  },
+  "independent_review": {
+    "agent": "/root/compaction_review",
+    "approved": true,
+    "baseline_tests": 81,
+    "baseline_skips": 3,
+    "final_focused_passed": 2,
+    "note": "Baseline preceded reviewed metadata exclusions; final focused checks cover final changes."
+  },
+  "live_smoke": {
+    "initial_partial_storage_message_count": 32,
+    "final_preview_coverage": "complete",
+    "final_sync_status": "verified",
+    "final_message_count": 32,
+    "final_warnings": 0,
+    "predecessor_reconciliations": 1,
+    "fresh_verify": "verified",
+    "startup_recording": "verified"
+  },
+  "documentation_link_check": {
+    "files": 12,
+    "missing_targets": []
+  },
+  "git_diff_check": "passed",
+  "code_sha256": {
+    ".hai/tools/chronicles/read_codex_source.py": "dc3450a9ff657d68f3e6437347d9fd2ad83115ce33e4f733b3be4474fda04651",
+    ".hai/tools/chronicles/adapters.py": "9e5becdfab9ca7646de8ad609dbe2cb90c7128ecd30382b149338de5c8c963eb",
+    ".hai/tools/runtime/chronicles.py": "5362aa931736218de95f156812d9746e97f547610011d178feccd843bd62c776",
+    ".hai/tools/runtime/activities.py": "713ccd731c2deac5e764ad6612b12f5e8d55e79ff299effec3afcdd6f88c01a9",
+    ".hai/tools/runtime/source_discovery.py": "c473ae15a32da83e5c293e5da859b5be2856f9748c862205926e27ce1f52cf15",
+    ".hai/tools/runtime/recording.py": "9e7fed62d0d73259e20a6d003a1fc30b54749f6b1146746b352bf1faf812d78a"
+  }
+}

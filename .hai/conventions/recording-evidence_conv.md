@@ -2,7 +2,7 @@
 
 ## Ownership and purpose
 
-Core owns Activity lifecycle, source synchronization and exact-source coverage verification. The host assigns explicit sources, boundaries, provenance and serializes writers. Enabled recording attempts synchronization and verification before closure. Required-mode or independently mandatory recording requires success. Best-effort source interruptions may close with explicit unavailable coverage while preserving retained evidence; integrity and partial-write errors remain blockers. Disabled/no-independent-obligation closure needs no source or recording writes.
+Core owns Activity lifecycle, source synchronization and exact-source coverage verification. The host assigns explicit sources, boundaries, provenance and serializes writers. Enabled recording attempts synchronization and verification before closure. Required-mode or independently mandatory recording requires success. Best-effort closure may retain safely stored `recorded_with_gaps` coverage with warnings, or an explicit unavailable-source outcome from failed preparation, while preserving retained evidence; integrity and partial-write errors remain blockers. Disabled/no-independent-obligation closure needs no source or recording writes.
 
 ## Closure request
 
@@ -50,4 +50,8 @@ The host resolves earlier writers and supplies explicit registered assignments. 
 
 An explicitly authorized immutable exact-byte source-prefix snapshot may be used only with the original-source provenance and freshness safeguards in the [source convention](codex-source_conv.md). Changed original prefix, unavailable original, ambiguous tail or new eligible exchanges block stale proof. New eligible completed source before archival requires a fresh cutoff and verification. Future undelivered acknowledgement is not required.
 
-Missing or pending required source, gaps, conflicts, altered artifacts, changed requirement or assignment, or uncertain writer status blocks required-mode or independently mandatory closure. Best-effort closure can only downgrade typed source interruptions found before recording writes; damaged artifacts or partial operations still block. Do not silently repair legacy state or partial operations. Disabled/no-independent-obligation closure requires no source and creates no transcript or checkpoint. A schema comparison or hash alone cannot prove truthful attribution or exact coverage.
+Missing or pending required source, gaps, conflicts, altered artifacts, changed requirement or assignment, or uncertain writer status blocks required-mode or independently mandatory closure. Best-effort closure can retain successfully stored partial coverage with warnings. Only failed source preparation is downgraded as an unavailable interruption before writes; damaged artifacts or partial mutations still block. Do not silently repair legacy state or partial operations. Disabled/no-independent-obligation closure requires no source and creates no transcript or checkpoint. A schema comparison or hash alone cannot prove truthful attribution or exact coverage.
+
+Successful partial storage does not satisfy the fully verified external proof
+contract above: its explicit gaps and warnings remain visible. Required-mode
+completeness checks must save supported messages before reporting that limitation.

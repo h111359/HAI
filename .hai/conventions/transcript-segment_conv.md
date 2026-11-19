@@ -74,11 +74,12 @@ present unless explicitly optional; timestamps use `YYYY-MM-DDTHH:MM:SSZ`.
 
 - **Occurrence:** `source_session_id` is a nonblank string, with exactly one of `message_id` (nonblank authoritative string) or `source_position` (nonnegative integer excluding Boolean). An occurrence names existing source, never a future message.
 - **Range:** `start` and `end` are inclusive Occurrence objects in the same session, in authoritative source order.
-- **Source:** `source_session_id` is a nonblank string; `durable_path` is the authoritative path string or `null` if unavailable; `original_started_at` is the authoritative original timestamp string or `null`; `assigned_ranges` is an array of Range objects; `enabled_intervals` is an array of Interval objects; `retained_source_complete` is `true`, `false` or `null` when unverified.
+- **Source:** `source_session_id` is a nonblank string; `durable_path` is the authoritative path string or `null` if unavailable; `original_started_at` is the authoritative original timestamp string or `null`; `assigned_ranges` is an array of Range objects; `enabled_intervals` is an array of Interval objects; `retained_source_complete` is `true`, `false` or `null` when unverified; optional `gaps` is an array of Gap objects for safely stored incomplete interpretation.
+- **Gap:** `source_position` is a nonnegative physical record position within the source's assigned enabled ranges; `reason` is a nonblank interpretation warning. A Gap is durable partial coverage, distinct from Pending write/attribution failures.
 - **Interval:** `start` is an Occurrence; `end` is an Occurrence or `null` while enablement continues; `provenance` is a nonblank attributable configuration-boundary string. The source-session identity follows the occurrences. Unverified boundaries are Pending objects, not guessed intervals.
 - **Verified:** `range` is a Range; `segment_path` is a contained Activity-relative string; `verified_at` is an actual UTC timestamp string.
 - **Pending:** `source_session_id` is a known nonblank string or `null`; `range` is a Range or `null` when exact boundaries are unavailable; `reason` is `missing_source`, `unknown_boundary`, `pending_outcome`, `prepared_delivery`, `divergence`, `overlap` or `partial_write`; `status` is `pending`, `blocked` or `partial`; `details` is a nonblank explanation. A missing future outcome can reference its known prompt range without inventing an outcome identity.
-- **Attempt:** `attempt_id` is a nonblank generated operational identity; `dispatch_cursors` has the same object shape as `cadence_cursors`; `started_at` is an actual UTC timestamp; `finished_at` is an actual UTC timestamp or `null`; `status` is `running`, `verified`, `pending`, `blocked`, `partial`, `failed` or `disabled`; `error` is a nonblank string or `null`.
+- **Attempt:** `attempt_id` is a nonblank generated operational identity; `dispatch_cursors` has the same object shape as `cadence_cursors`; `started_at` is an actual UTC timestamp; `finished_at` is an actual UTC timestamp or `null`; `status` is `running`, `verified`, `recorded_with_gaps`, `pending`, `blocked`, `partial`, `failed` or `disabled`; `error` is a nonblank string or `null`.
 - **In-flight:** `attempt_id` is the matching Attempt identity; `invocation_id` is the actual runtime identity string or `null` if not exposed; `cutoffs` is an array of existing Occurrence objects, one per assigned source boundary. It is never evidence that a runtime job has stopped.
 
 A source occurrence is identified by its authoritative session/message identity.
@@ -142,3 +143,23 @@ Layout-1 recording checkpoints/recovery remain under chronicles/. Layout 2 moves
 operational metadata and recovery copies under system/chronicles/ while readable
 segments stay chronicles/*.md. Logical artifact hash keys and source ranges remain
 unchanged; the shared layout resolver maps physical metadata paths.
+
+## Recorded messages with unsupported-record gaps
+
+Core partial-recording metadata identifies unknown occurrences separately from
+verbatim Prompt/Outcome text. Segments retain recognized messages on both sides
+of a gap in source order; a source boundary or scheduling cursor does not imply
+that every intervening occurrence is understood. Source ledgers, checkpoint
+coverage and transcript metadata must agree about gaps. Complete historical
+ledgers without gap metadata remain readable.
+
+A safely stored partial batch reports `recorded_with_gaps` and warnings. Its gap
+evidence must remain durable even when no recognized message follows the gap.
+The recorder must not turn partial storage into a fully verified success or
+clear an earlier unresolved gap through a later cursor alone.
+
+Gap metadata extends the current recording format without a state/layout migration.
+The updated runtime reads previous complete format-1 ledgers/checkpoints. Older
+strict runtimes may reject gap-bearing records or their extended attempt status;
+this is not a downgrade-compatibility guarantee. Preserve evidence and update the
+reader rather than removing gap metadata to make an old reader accept it.

@@ -1,0 +1,72 @@
+{
+  "checkpoint_format_version": 1,
+  "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+  "sources": [
+    {
+      "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+      "durable_path": "C:\\Users\\hmhri\\.codex\\sessions\\2026\\11\\12\\rollout-2026-11-12T21-52-18-01a1d151-7046-7d83-89ee-573c30ee6685.jsonl",
+      "original_started_at": "2026-11-12T19:52:18.056Z",
+      "assigned_ranges": [
+        {
+          "start": {
+            "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+            "source_position": 52
+          },
+          "end": {
+            "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+            "source_position": 1688
+          }
+        }
+      ],
+      "enabled_intervals": [
+        {
+          "start": {
+            "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+            "source_position": 52
+          },
+          "end": null,
+          "provenance": "Chronicles enabled before observed workflow research work prompt"
+        }
+      ],
+      "retained_source_complete": true
+    }
+  ],
+  "verified_ranges": [
+    {
+      "range": {
+        "start": {
+          "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+          "source_position": 52
+        },
+        "end": {
+          "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+          "source_position": 1688
+        }
+      },
+      "segment_path": "chronicles/20261112_195218_segment-01.md",
+      "verified_at": "2026-11-15T14:21:09Z"
+    }
+  ],
+  "pending_ranges": [],
+  "cadence_cursors": {
+    "01a1d151-7046-7d83-89ee-573c30ee6685": {
+      "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+      "source_position": 1688
+    }
+  },
+  "last_attempt": {
+    "attempt_id": "46e9f613-010e-4a00-aa67-36530f70dec3",
+    "dispatch_cursors": {
+      "01a1d151-7046-7d83-89ee-573c30ee6685": {
+        "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+        "source_position": 1688
+      }
+    },
+    "started_at": "2026-11-15T14:21:09Z",
+    "finished_at": "2026-11-15T14:21:09Z",
+    "status": "verified",
+    "error": null
+  },
+  "last_successful_at": "2026-11-15T14:21:09Z",
+  "in_flight": null
+}

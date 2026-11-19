@@ -39,13 +39,15 @@ recording health and mandatory recording obligations remain separate.
 
 1. Inspect [input:activity] and the applicable recording mode. Report source gaps
    separately from core validity; ordinary best-effort work may continue. Never
-   claim successful synchronization when extraction or continuity is unresolved.
+   claim complete coverage while unknown-record gaps remain. Safe partial storage
+   should continue; unresolved identity or continuity failures still block dependent work.
 2. Resolve [input:source] using `recording discover` and inspect known support with
    `recording adapters`. Existing adapters may handle a new location or envelope
    without code changes. Preview synchronization first to assess continuity.
 3. If extraction is unsupported, inspect discriminator fields, identity, completed
    user/final assistant text, ordering and excluded records. Keep unknown cases
-   explicit; do not silently skip message-shaped records.
+   explicit as positional gaps; do not silently skip or invent message-shaped content.
+   Continue storing recognized messages while adapter support is investigated.
 4. Under [input:scope], update `.hai/tools/chronicles/adapters.py` and the reader as
    needed. Register a descriptive adapter name in `ADAPTERS` and document its exact
    supported subset in the source convention. This is ordinary reviewed code
@@ -56,13 +58,15 @@ recording health and mandatory recording obligations remain separate.
    all temporary outputs inside [input:activity]'s working area.
 6. Obtain independent review of recognition, extraction and recovery evidence.
    If review or tests fail, preserve the proposed adapter as untrusted work and
-   leave dependent recording interrupted. Continue independent permitted work.
+   leave the unsupported shape unrecognized with explicit warnings. Existing safe
+   partial recording and independent permitted work continue.
 7. Preview synchronization again. Core must prove an unambiguous exact mapping,
    preserve predecessor ledger/checkpoint/transcript evidence and retain recovery
    provenance. Apply only when validation succeeds, then verify afresh.
 8. Return [output:result], including limits. No background retry is assumed; later
    active host turns can try known adapters again. Unrecognized future schemas
-   remain interruptions until supported through this procedure.
+   remain explicit coverage gaps until supported through this procedure; they do
+   not suppress storage of recognized messages.
 
 ## Outputs
 

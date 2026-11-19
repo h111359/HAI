@@ -414,10 +414,11 @@ review before trust. No source file can install executable adapters.
 
 Startup reports `recording_context.policy` and `continuation_allowed` separately
 from recording evidence. Missing mode defaults to `best_effort` without migration.
-Ordinary work can continue with visible unverified coverage. Explicit synchronize
-and verify still return real failures. `required` mode or an independently mandatory
-obligation retains recording gates. Best-effort closure may retain an explicit
-unavailable-source gap only before recording writes; retained artifact corruption,
+Ordinary work can continue with visible unverified coverage. Synchronize and verify distinguish `recorded_with_gaps` from complete verification
+and retain actual integrity/mutation failures. `required` mode or an independently mandatory
+obligation retains recording gates. Best-effort closure can retain successful partial recording with explicit gaps.
+A failed source preparation may retain an unavailable-source gap only before
+recording writes; retained artifact corruption,
 unsafe paths, identity conflicts and partial mutations are not downgraded.
 
 Synchronization checks exact retained message continuity after a supported source
@@ -429,7 +430,9 @@ Recovery preserves the preceding core ledger, checkpoint and transcript under
 `chronicles/history/<id>/`, with hashed reconciliation provenance. Message indexes
 support subsequent rewrites; legacy transcripts with ambiguous framing are refused.
 Read-only verification never changes mappings; synchronization applies the proved
-mapping and rechecks freshness. Unknown formats remain visible interruptions.
+mapping and rechecks freshness. Unsupported valid records become visible positional
+gaps while recognized messages are retained; unsafe or unverifiable sources remain
+failures.
 
 ## Core chronicles
 
@@ -486,3 +489,27 @@ Cadence-only changes do not reset recording or require interval reconciliation.
 Ordinary synchronization does not implement legacy adoption, closed-record
 catch-up or prepared-text mutations; those remain explicit maintenance dependencies.
 Pending checkpoint work blocks normal refresh rather than being overwritten.
+
+## Unsupported records and partial chronicles
+
+Runtime discovery, synchronization and verification use tolerant source extraction.
+Unsupported records do not suppress recognized messages on either side of a gap.
+A safely stored partial batch returns `status: recorded_with_gaps`,
+`coverage: partial` and warnings with source identity, position and reason.
+The host must communicate those warnings without claiming complete coverage.
+
+Ledger, checkpoint and transcript source metadata retain the same scoped gaps.
+Verified ranges exclude gaps; `last_successful_at` retains the last fully verified
+batch (or null). Current completeness is re-evaluated on fresh synchronization,
+allowing a reviewed adapter to resolve an earlier gap without inventing text.
+
+Required-mode closure stores recognized content and gap evidence before refusing
+its incomplete-coverage gate. This separates successful partial storage from
+full-recording obligations. Existing unsafe-path, attribution, identity, retained
+artifact and source-continuity checks are unchanged.
+
+Gap metadata extends the current recording format without a state/layout migration.
+The updated runtime reads previous complete format-1 ledgers/checkpoints. Older
+strict runtimes may reject gap-bearing records or their extended attempt status;
+this is not a downgrade-compatibility guarantee. Preserve evidence and update the
+reader rather than removing gap metadata to make an old reader accept it.

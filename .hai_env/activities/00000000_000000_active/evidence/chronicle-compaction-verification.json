@@ -1,0 +1,63 @@
+{
+  "reader_tests": {
+    "run": 20,
+    "skipped": 1,
+    "failed": 0
+  },
+  "runtime_chronicles_tests": {
+    "run": 23,
+    "skipped": 1,
+    "failed": 0
+  },
+  "independent_review": {
+    "agent": "/root/compaction_review",
+    "result": "no code blockers; required source-convention update and suggested fixtures completed; narrow archive sealing adopted"
+  },
+  "archived_repair": {
+    "operation": "seal archived assignment to its existing verified range",
+    "previous_end": null,
+    "sealed_end": 1688,
+    "retained_message_count": 55,
+    "backfilled_messages": 0,
+    "unverified_historical_gap": {
+      "start": 1689,
+      "end": 2804,
+      "reason": "Not part of the retained checkpoint; no historical backfill is authorized by this narrow repair."
+    },
+    "next_activity_observed_prompt_position": 2805,
+    "review": "Independent reviewer required narrow metadata sealing instead of backfill. Broad isolated candidate was never published.",
+    "provenance": {
+      "source": "user request to fix chronicles, existing checkpoint, independent repair review",
+      "reason": "Resolve stale archived open-ended attribution without expanding coverage or altering any retained conversation text."
+    }
+  },
+  "archived_candidate_verification": {
+    "activity_id": "1b440d51-819b-4299-862b-0182f0f4fca5",
+    "status": "verified",
+    "source_count": 1,
+    "checkpoint_path": ".hai_env/activities/20261115_195335_workflow-implementation/system/chronicles/checkpoint.json"
+  },
+  "current_recording_health": {
+    "status": "verified",
+    "details": "Registered sources only; no claim about unknown sessions",
+    "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+    "source_count": 1,
+    "checkpoint_path": ".hai_env/activities/00000000_000000_active/system/chronicles/checkpoint.json",
+    "policy": "best_effort",
+    "continuation_allowed": true
+  },
+  "current_recording_verify": {
+    "ok": true,
+    "status": "ok",
+    "operation": "verify",
+    "result": {
+      "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+      "status": "verified",
+      "source_count": 1,
+      "checkpoint_path": ".hai_env/activities/00000000_000000_active/system/chronicles/checkpoint.json"
+    },
+    "changed_files": [],
+    "issues": []
+  },
+  "scope": "Registered current main-session source; historical gap explicitly retained."
+}

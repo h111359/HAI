@@ -89,3 +89,11 @@ artifact rules apply equally to direct skill execution.
 ## Built-in definition authoring
 
 For requests to create, revise or review HAI roles, follow [Manage role definitions](procedures/manage-role-definitions.md). For workflow definitions, follow [Manage workflow definitions](procedures/manage-workflow-definitions.md). These are core procedures available in every installation, without authoring role/skill packages or registration. Creating a definition does not install/register it or execute a workflow.
+
+## Partial chronicle recording
+
+Unsupported valid source records must not prevent known messages from being
+stored. Use tolerant core synchronization, retain and report warnings and gap
+positions, and distinguish `recorded_with_gaps` from verified complete coverage.
+Integrity and attribution failures remain separate. Required completeness gates
+must preserve recognized evidence before refusing a dependent operation.

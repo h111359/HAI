@@ -1,0 +1,18 @@
+{
+  "operation": "seal archived assignment to its existing verified range",
+  "previous_end": null,
+  "sealed_end": 1688,
+  "retained_message_count": 55,
+  "backfilled_messages": 0,
+  "unverified_historical_gap": {
+    "start": 1689,
+    "end": 2804,
+    "reason": "Not part of the retained checkpoint; no historical backfill is authorized by this narrow repair."
+  },
+  "next_activity_observed_prompt_position": 2805,
+  "review": "Independent reviewer required narrow metadata sealing instead of backfill. Broad isolated candidate was never published.",
+  "provenance": {
+    "source": "user request to fix chronicles, existing checkpoint, independent repair review",
+    "reason": "Resolve stale archived open-ended attribution without expanding coverage or altering any retained conversation text."
+  }
+}

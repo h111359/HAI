@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+  "invocation_id": "16c10315-95eb-45e2-b088-1592d9d9fa6d",
+  "role": "software-developer",
+  "created_at": "2026-11-19T01:48:46Z",
+  "provenance": {
+    "source": "shared recording change",
+    "reason": "Implement coherent partial-recording behavior and meaningful regression checks."
+  }
+}

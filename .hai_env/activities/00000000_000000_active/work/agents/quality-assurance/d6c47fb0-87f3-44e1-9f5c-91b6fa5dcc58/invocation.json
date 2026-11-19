@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+  "invocation_id": "d6c47fb0-87f3-44e1-9f5c-91b6fa5dcc58",
+  "role": "quality-assurance",
+  "created_at": "2026-11-19T01:36:45Z",
+  "provenance": {
+    "source": "maintain-source-adapters independent review requirement",
+    "reason": "Review inspected ContextCompaction/web.search adapter handling and regression evidence before recording recovery."
+  }
+}

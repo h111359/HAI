@@ -24,7 +24,10 @@
             "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
             "source_position": 52
           },
-          "end": null,
+          "end": {
+            "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+            "source_position": 1688
+          },
           "provenance": "Chronicles enabled before observed workflow research work prompt"
         }
       ],
@@ -44,7 +47,7 @@
         }
       },
       "segment_path": "chronicles/20261112_195218_segment-01.md",
-      "verified_at": "2026-11-15T14:21:09Z"
+      "verified_at": "2026-11-19T01:42:55Z"
     }
   ],
   "pending_ranges": [],
@@ -55,18 +58,18 @@
     }
   },
   "last_attempt": {
-    "attempt_id": "46e9f613-010e-4a00-aa67-36530f70dec3",
+    "attempt_id": "6b45a6c8-72ac-4393-9e2d-78d1c34c6343",
     "dispatch_cursors": {
       "01a1d151-7046-7d83-89ee-573c30ee6685": {
         "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
         "source_position": 1688
       }
     },
-    "started_at": "2026-11-15T14:21:09Z",
-    "finished_at": "2026-11-15T14:21:09Z",
+    "started_at": "2026-11-19T01:42:55Z",
+    "finished_at": "2026-11-19T01:42:55Z",
     "status": "verified",
     "error": null
   },
-  "last_successful_at": "2026-11-15T14:21:09Z",
+  "last_successful_at": "2026-11-19T01:42:55Z",
   "in_flight": null
 }

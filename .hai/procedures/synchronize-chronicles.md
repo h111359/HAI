@@ -33,3 +33,12 @@ Actual segment paths, source identities, verified occurrence boundaries, checkpo
 
 - [Chronicles](../conventions/chronicles_conv.md), [source](../conventions/codex-source_conv.md), and [segments](../conventions/transcript-segment_conv.md).
 - [Runtime commands](../tools/runtime/README.md).
+
+## Unsupported records
+
+Use tolerant runtime extraction to save recognized messages before and after
+unsupported records. Inspect returned `recorded_with_gaps` status and warnings,
+retain the positional gap evidence and tell the user that logging continued.
+Only full coverage may be described as verified. Required completeness gates
+remain separate from the successful storage of partial evidence. Do not repair
+or discard unknown records merely to obtain a clean status.

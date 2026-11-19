@@ -32,6 +32,22 @@ def event_message(payload):
         if not isinstance(item, dict) or not isinstance(item.get('type'), str):
             raise ValueError('completed item discriminator is missing or invalid')
         item_type = item['type']
+        if item_type == 'ContextCompaction':
+            # Observed completed compactions are lifecycle markers, not chat.
+            # Reject a changed/message-bearing shape rather than lose content.
+            if (set(item) != {'type', 'id'} or not isinstance(item['id'], str)
+                    or not item['id'].strip()):
+                raise ValueError('unsupported or incomplete context compaction item')
+            return None
+        if item_type == 'Extension' and item.get('kind') == 'web.search':
+            # Reviewed host web-search/open-page tool records are not messages.
+            if (set(item) != {'type', 'kind', 'id', 'query', 'action', 'results'}
+                    or not isinstance(item['id'], str) or not item['id'].strip()
+                    or not isinstance(item['query'], str)
+                    or not isinstance(item['action'], dict)
+                    or not isinstance(item['results'], list)):
+                raise ValueError('unsupported or incomplete web-search extension item')
+            return None
         if item_type not in ('UserMessage', 'AgentMessage'):
             if item_type in ('Reasoning', 'McpToolCall', 'CommandExecution', 'FileChange',
                              'WebSearch', 'ImageView', 'Plan', 'CollabAgentToolCall',

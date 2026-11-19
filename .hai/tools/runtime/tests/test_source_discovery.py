@@ -78,6 +78,28 @@ class SourceDiscoveryTests(unittest.TestCase):
         self.assertNotIn('same question', json.dumps(result))
         self.assertEqual(before, self.snapshot())
 
+    def test_partial_source_can_be_discovered_bound_and_reported_without_false_readiness(self):
+        self.records.insert(2, self.record('event_msg', {'type': 'future_chat', 'content': 'opaque'})); self.save()
+        discovered = self.call('discover', {})
+        self.assertTrue(discovered['ok'], discovered)
+        self.assertEqual(discovered['result']['coverage'], 'partial')
+        self.assertEqual(discovered['result']['warnings'][0]['source_position'], 2)
+        self.assertNotIn('opaque', json.dumps(discovered))
+        bound = self.call('bind', self.binding(), True)
+        self.assertTrue(bound['ok'], bound)
+        self.assertEqual(bound['result']['status'], 'recorded_with_gaps')
+        context = {'status': 'current', 'activity_id': self.ident, 'path': self.base.relative_to(self.root).as_posix()}
+        with mock.patch.dict(os.environ, self.env, clear=True):
+            health = sources.readiness(self.root, context)
+        self.assertEqual(health['status'], 'recorded_with_gaps')
+        self.assertEqual(health['coverage'], 'partial')
+        self.assertTrue(health['continuation_allowed'])
+        self.state['features']['chronicles']['mode'] = 'required'; self.save_state()
+        with mock.patch.dict(os.environ, self.env, clear=True):
+            health = sources.readiness(self.root, context)
+        self.assertFalse(health['continuation_allowed'])
+        self.assertEqual(health['coverage'], 'partial')
+
     def test_discovery_detects_completed_item_adapter(self):
         self.records = [self.records[0], self.record('event_msg', {
             'type': 'item_completed', 'item': {'type': 'UserMessage', 'id': 'u-1',

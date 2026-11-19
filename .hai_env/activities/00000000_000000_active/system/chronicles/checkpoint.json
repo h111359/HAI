@@ -1,0 +1,72 @@
+{
+  "checkpoint_format_version": 1,
+  "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+  "sources": [
+    {
+      "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+      "durable_path": "C:\\Users\\hmhri\\.codex\\sessions\\2026\\11\\12\\rollout-2026-11-12T21-52-18-01a1d151-7046-7d83-89ee-573c30ee6685.jsonl",
+      "original_started_at": "2026-11-12T19:52:18.056Z",
+      "assigned_ranges": [
+        {
+          "start": {
+            "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+            "source_position": 6901
+          },
+          "end": {
+            "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+            "source_position": 8356
+          }
+        }
+      ],
+      "enabled_intervals": [
+        {
+          "start": {
+            "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+            "source_position": 6901
+          },
+          "end": null,
+          "provenance": "Recording enabled at revision 2 before this Activity, evidenced by unchanged pre-Activity commit16dca1a state and retained Activity startup history. Exact first saved Activity work prompt at position6901 is Create a new activity, timestamp2026-11-18T06:25:09.307Z; Activity created06:25:27Z. No enablement changes were authorized during the Activity."
+        }
+      ],
+      "retained_source_complete": true
+    }
+  ],
+  "verified_ranges": [
+    {
+      "range": {
+        "start": {
+          "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+          "source_position": 6901
+        },
+        "end": {
+          "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+          "source_position": 8356
+        }
+      },
+      "segment_path": "chronicles/20261112_195218_segment-01.md",
+      "verified_at": "2026-11-19T02:56:39Z"
+    }
+  ],
+  "pending_ranges": [],
+  "cadence_cursors": {
+    "01a1d151-7046-7d83-89ee-573c30ee6685": {
+      "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+      "source_position": 8356
+    }
+  },
+  "last_attempt": {
+    "attempt_id": "3a6852b6-57a0-4831-9400-864294c20999",
+    "dispatch_cursors": {
+      "01a1d151-7046-7d83-89ee-573c30ee6685": {
+        "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+        "source_position": 8356
+      }
+    },
+    "started_at": "2026-11-19T02:56:39Z",
+    "finished_at": "2026-11-19T02:56:39Z",
+    "status": "verified",
+    "error": null
+  },
+  "last_successful_at": "2026-11-19T02:56:39Z",
+  "in_flight": null
+}

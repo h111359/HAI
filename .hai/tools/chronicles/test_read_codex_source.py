@@ -211,6 +211,125 @@ class CodexSourceTests(unittest.TestCase):
         self.assertEqual([m['text'] for m in result['messages']], ['  café\nnext', 'Done.\n'])
         self.assertEqual(result['messages'][0]['turn_id'], 'turn-1')
 
+    def test_completed_compactions_preserve_chat_positions_and_source_bytes(self):
+        compaction = self.record('event_msg', {'type': 'item_completed',
+            'thread_id': 'session', 'turn_id': 'turn',
+            'item': {'type': 'ContextCompaction', 'id': 'compaction-id'},
+            'started_at_ms': 1794753057464, 'completed_at_ms': 1794753147522})
+        exact = '  request\nwith whitespace\t '
+        before = self.save([compaction,
+            self.record('event_msg', {'type': 'user_message', 'message': exact}),
+            compaction,
+            self.record('event_msg', {'type': 'agent_message',
+                'phase': 'final_answer', 'message': 'Done.\n'}), compaction])
+        for representation in ('event_msg', 'auto'):
+            with self.subTest(representation=representation):
+                result = read_source(self.source, representation, 'session')
+                self.assertTrue(result['ok'], result)
+                self.assertEqual([m['text'] for m in result['messages']], [exact, 'Done.\n'])
+                self.assertEqual([m['source_position'] for m in result['messages']], [2, 4])
+                self.assertEqual(result['source_sha256'], hashlib.sha256(before).hexdigest())
+                self.assertEqual(self.source.read_bytes(), before)
+
+    def test_changed_or_incomplete_compaction_items_are_not_silently_discarded(self):
+        for item in ({'type': 'ContextCompaction'},
+                     {'type': 'ContextCompaction', 'id': ''},
+                     {'type': 'ContextCompaction', 'id': 7},
+                     {'type': 'ContextCompaction', 'id': 'x', 'content': [{'type': 'text', 'text': 'unknown'}]},
+                     {'type': 'FutureCompaction', 'id': 'x'}):
+            with self.subTest(item=item):
+                self.save([self.record('event_msg', {'type': 'item_completed', 'item': item})])
+                self.assertFalse(read_source(self.source, 'auto')['ok'])
+
+    def test_reviewed_web_extension_results_are_not_conversation(self):
+        extension = {'type': 'Extension', 'kind': 'web.search', 'id': 'tool-id',
+                     'query': 'task data', 'action': {'type': 'search'},
+                     'results': [{'text': 'untrusted tool text is not a user message'}]}
+        for action in ({'type': 'search'}, {'type': 'openPage', 'url': 'https://example.test'}):
+            extension['action'] = action
+            self.save([
+                self.record('event_msg', {'type': 'user_message', 'message': 'request'}),
+                self.record('event_msg', {'type': 'item_completed', 'item': extension}),
+                self.record('event_msg', {'type': 'agent_message', 'phase': 'final_answer', 'message': 'answer'})])
+            result = read_source(self.source, 'auto', 'session')
+            self.assertTrue(result['ok'], result)
+            self.assertEqual([m['text'] for m in result['messages']], ['request', 'answer'])
+            self.assertEqual([m['source_position'] for m in result['messages']], [1, 3])
+        for change in ({'kind': 'future.chat'}, {'content': 'unknown message'}, {'results': None},
+                       {'id': ''}, {'query': None}, {'action': []}):
+            item = dict(extension, **change)
+            self.save([self.record('event_msg', {'type': 'item_completed', 'item': item})])
+            self.assertFalse(read_source(self.source, 'auto')['ok'])
+
+    def test_partial_mode_keeps_exact_messages_on_both_sides_of_unknown_records(self):
+        raw = self.save([
+            self.record('event_msg', {'type': 'user_message', 'message': '  before\n'}),
+            self.record('event_msg', {'type': 'future_chat', 'text': 'opaque unknown payload'}),
+            self.record('future_outer', {'content': 'opaque outer payload'}),
+            self.record('event_msg', {'type': 'agent_message', 'message': 'after\t ', 'phase': 'final_answer'})])
+        result = read_source(self.source, 'auto', 'session', allow_partial=True)
+        self.assertTrue(result['usable'], result)
+        self.assertFalse(result['ok']); self.assertFalse(result['complete'])
+        self.assertEqual([m['text'] for m in result['messages']], ['  before\n', 'after\t '])
+        self.assertEqual([m['source_position'] for m in result['messages']], [1, 4])
+        self.assertEqual([g['source_position'] for g in result['gaps']], [2, 3])
+        self.assertNotIn('opaque', str(result['gaps']))
+        self.assertEqual(self.source.read_bytes(), raw)
+        self.assertFalse(read_source(self.source, 'event_msg')['usable'])
+
+    def test_reviewed_outer_metadata_is_excluded_but_future_shapes_remain_gaps(self):
+        usage = {k: 'id' for k in ('thread_id', 'turn_id', 'session_id', 'root_turn_id', 'response_id')}
+        usage.update({k: {} for k in ('usage', 'turn_token_usage', 'thread_token_usage')})
+        records = [self.record('event_msg', {'type': 'user_message', 'message': 'request'}),
+                   self.record('token_usage_record', usage),
+                   self.record('inter_agent_communication_metadata', {'trigger_turn': True}),
+                   self.record('world_state', {'full': False, 'state': {'tool_data': 'not conversation'}}),
+                   self.record('event_msg', {'type': 'agent_message', 'phase': 'final_answer', 'message': 'answer'})]
+        self.save(records)
+        result = read_source(self.source, 'auto', 'session', allow_partial=True)
+        self.assertTrue(result['complete'], result)
+        self.assertEqual([m['text'] for m in result['messages']], ['request', 'answer'])
+        self.assertEqual([m['source_position'] for m in result['messages']], [1, 5])
+        for kind, payload in [('token_usage_record', dict(usage, content='unreviewed')),
+                              ('inter_agent_communication_metadata', {'trigger_turn': 'yes'}),
+                              ('world_state', {'full': True, 'state': [], 'message': 'unreviewed'}),
+                              ('future_chat', {'text': 'unknown'})]:
+            self.save([records[0], self.record(kind, payload), records[-1]])
+            result = read_source(self.source, 'auto', 'session', allow_partial=True)
+            self.assertTrue(result['usable'], result)
+            self.assertFalse(result['complete'])
+            self.assertEqual(result['gaps'][0]['source_position'], 2)
+
+    def test_partial_auto_does_not_hide_gap_only_event_view_with_response_fallback(self):
+        self.save([
+            self.record('event_msg', {'type': 'future_chat', 'text': 'not understood'}),
+            self.record('response_item', {'type': 'message', 'role': 'user',
+                'content': [{'type': 'input_text', 'text': 'alternative view'}]})])
+        result = read_source(self.source, 'auto', 'session', allow_partial=True)
+        self.assertTrue(result['usable'], result)
+        self.assertEqual(result['representation'], 'event_msg')
+        self.assertEqual(result['messages'], [])
+        self.assertEqual(result['gaps'][0]['source_position'], 1)
+
+    def test_partial_mode_does_not_waive_identity_or_json_integrity(self):
+        for record in (self.record('session_meta', {'id': 'wrong', 'timestamp': STAMP}),
+                       self.record('session_meta', {'timestamp': STAMP})):
+            self.save([self.record('event_msg', {'type': 'user_message', 'message': 'supported'}), record])
+            result = read_source(self.source, 'event_msg', 'session', allow_partial=True)
+            self.assertFalse(result['usable'], result)
+        self.save([self.record('event_msg', {'type': 'user_message', 'message': 'supported'})])
+        with self.source.open('a') as stream: stream.write('{"type":')
+        self.assertFalse(read_source(self.source, 'event_msg', 'session', allow_partial=True)['usable'])
+
+    def test_cli_partial_mode_succeeds_with_explicit_incomplete_coverage(self):
+        self.save([self.record('event_msg', {'type': 'future_chat', 'text': 'opaque'})])
+        command = [sys.executable, '-B', str(Path(__file__).with_name('read_codex_source.py')), str(self.source)]
+        result = subprocess.run(command + ['--allow-partial'], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout)
+        parsed = json.loads(result.stdout)
+        self.assertTrue(parsed['usable']); self.assertFalse(parsed['complete']); self.assertTrue(parsed['gaps'])
+        self.assertEqual(subprocess.run(command, capture_output=True).returncode, 1)
+
     def test_auto_falls_back_to_response_without_merging_views(self):
         response = self.record('response_item', {'type': 'message', 'role': 'user',
             'content': [{'type': 'input_text', 'text': 'prompt'}]})

@@ -305,13 +305,13 @@ def handle(operation, workspace, request, apply):
                 assert_activity_closable(root, ident)
                 outcome = request.get('outcome'); label = request.get('archive_label'); text = required_text(request.get('outcome_text'), 'outcome_text'); rec = request.get('recording')
                 if outcome not in ('completed','cancelled','stopped') or not isinstance(label,str) or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+){0,4}',label): raise ValueError('invalid outcome or archive_label')
-                if not isinstance(rec,dict) or rec.get('status') not in ('disabled','verified','pending','unavailable') or not isinstance(rec.get('details'),str): raise ValueError('explicit recording status and details required')
+                if not isinstance(rec,dict) or rec.get('status') not in ('disabled','verified','pending','unavailable','recorded_with_gaps') or not isinstance(rec.get('details'),str): raise ValueError('explicit recording status and details required')
                 enabled = read_json(checked_path(root, STATE, allow_missing=False)).get('features', {}).get('chronicles', {}).get('enabled')
                 if type(enabled) is not bool: raise SafetyError('Recording enablement is unverified')
                 requirement = request.get('recording_requirement', {'enabled': enabled, 'mandatory': False})
                 if not isinstance(requirement,dict) or type(requirement.get('mandatory')) is not bool or type(requirement.get('enabled')) is not bool or requirement['enabled'] != enabled: raise ValueError('invalid or inconsistent recording_requirement')
                 if rec.get('mandatory') is True: requirement = {**requirement, 'mandatory': True}
-                from .recording_policy import effective, recoverable
+                from .recording_policy import effective, recoverable, RecordingInterruption
                 policy = effective(read_json(checked_path(root, STATE, allow_missing=False)), requirement['mandatory'])
                 core_recording = (requirement['enabled'] or requirement['mandatory']) and not (rec['status'] == 'verified' and request.get('recording_proof') is not None)
                 if rec['status'] == 'verified' and not core_recording:
@@ -324,7 +324,16 @@ def handle(operation, workspace, request, apply):
                     from . import chronicles
                     try:
                         core_result, _ = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, False, state_fp, finalize=True)
-                        rec = {'status': 'verified', 'details': 'Core chronicles synchronized and freshly verified through assigned completed source'}
+                        if core_result.get('coverage') == 'partial':
+                            if policy['required']:
+                                # Store supported text before denying a completeness-dependent close.
+                                if apply:
+                                    _, partial_changed = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, True, state_fp)
+                                    changed.extend(partial_changed)
+                                raise RecordingInterruption('Recognized chronicles are stored or available for storage, but required coverage is incomplete: ' + str(core_result['warnings']))
+                            rec = {'status': 'recorded_with_gaps', 'details': 'Recognized chronicles stored with unsupported-record coverage warnings: ' + str(core_result['warnings'])}
+                        else:
+                            rec = {'status': 'verified', 'details': 'Core chronicles synchronized and freshly verified through assigned completed source'}
                     except SafetyError as exc:
                         if policy['required'] or not recoverable(exc):
                             raise
@@ -347,14 +356,18 @@ def handle(operation, workspace, request, apply):
                 if core_recording:
                     core_result, core_changed = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, True, state_fp, finalize=True)
                     changed.extend(core_changed)
-                    chronicles.verify(root, base, ident, closing=True)
+                    if core_result.get('coverage') == 'partial':
+                        rec = {'status': 'recorded_with_gaps', 'details': 'Recognized chronicles stored with unsupported-record coverage warnings: ' + str(core_result['warnings'])}
+                    else:
+                        rec = {'status': 'verified', 'details': 'Core chronicles synchronized and freshly verified through assigned completed source'}
+                    chronicles.verify(root, base, ident, closing=True, require_complete=policy['required'])
                 # Refresh registered usage before any lifecycle writes. Missing data
                 # is recorded as unavailable; invalid state/partial writes stop closure.
                 from . import usage
                 usage_result, usage_changed = usage.update(root, base, ident, {'provenance': request['provenance']}, stamp, True, state_fp)
                 changed.extend(usage_changed)
                 if rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
-                if core_recording: chronicles.verify(root, base, ident, closing=True)
+                if core_recording: chronicles.verify(root, base, ident, closing=True, require_complete=policy['required'])
                 logpath = artifact(root, base, 'log.md'); logtarget = checked_path(root,logpath,allow_missing=False); logfp = fingerprint(logtarget)
                 write_bytes(root,logpath,append_bytes(logtarget.read_bytes(), f'\n- {stamp} — Closed as {outcome}; Activity path moved from {base} to {dest} ({prov}).'),logfp); changed.append(logpath)
                 report = (f'{"## Final outcome" if new_layout else "# Outcome"}\n\n{text}\n\nRecording: {rec["status"]} — {rec["details"]}\n\nProvenance: {prov}\n').encode()
@@ -368,14 +381,14 @@ def handle(operation, workspace, request, apply):
                     report = navigation(root, base, report)
                 write_bytes(root,outcome_path,report,outcome_fp); changed.append(outcome_path)
                 if rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
-                if core_recording: chronicles.verify(root, base, ident, closing=True)
+                if core_recording: chronicles.verify(root, base, ident, closing=True, require_complete=policy['required'])
                 write_json(root,state_path,state,state_fp); changed.append(state_path)
                 final_fingerprints = {p: fingerprint(checked_path(root,p,allow_missing=False)) for p in (state_path, outcome_path, logpath)}
                 # Rename only to a newly reserved name, with no overwrite.
                 import os
                 if checked_path(root,dest).exists(): raise SafetyError('Archive destination appeared')
                 if rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
-                if core_recording: chronicles.verify(root, base, ident, closing=True)
+                if core_recording: chronicles.verify(root, base, ident, closing=True, require_complete=policy['required'])
                 if any(fingerprint(checked_path(root,p,allow_missing=False)) != fp for p,fp in final_fingerprints.items()): raise SafetyError('Closure files changed before archival')
                 rename_exclusive(checked_path(root,base,allow_missing=False), checked_path(root,dest)); changed.append(dest)
                 if read_json(checked_path(root,artifact(root, dest, 'state.json'),allow_missing=False)) != state or discover(root,location)['status'] != 'absent': raise SafetyError('Closure readback mismatch')

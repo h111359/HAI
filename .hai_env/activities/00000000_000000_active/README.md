@@ -32,9 +32,18 @@ The initial investigation is complete. The human subsequently accepted the bound
 - [Work log](system/log.md)
 - [Reviewable outputs](results)
 - [Verification evidence](evidence)
+- [Readable chronicles](chronicles)
 - [Previous versions](history)
 <!-- hai-navigation:end -->
 
 ## Current result: authoring merged into core
 
 The human subsequently requested complete core consolidation. See [core authoring merge](results/core-authoring-merge.md). Both definition managers and their authoring skills are now core procedures/conventions; their source and installed packages and catalogue registrations have been removed after preservation checks. All 14 resources and 57 checked authoring rules are accounted for, and a core-only fresh-install check passes. Earlier source cleanup and installed-rename reports describe preceding states, not the current installation. The Activity remains open; no commit was made.
+
+## Current recording repair
+
+The native-source compatibility issue is repaired. See [chronicle repair and recovery](results/chronicle-compaction-repair.md). Current registered main-session recording now synchronizes and verifies successfully. Earlier reports describe the pre-repair blocked state. One older archived interval remains explicitly unverified; its stale open-ended assignment has been sealed without changing retained conversation text.
+
+## Current result: partial chronicle storage
+
+Unsupported records no longer prevent storing recognized messages. See [partial chronicle recording](results/partial-chronicle-recording.md) for automatic warning/gap behavior, integrity boundaries, tests and independent review. The real-session smoke saved32messages despite unsupported records; reviewed metadata recognition then resolved those warnings with predecessor evidence preserved. Current synchronization, verification and startup are verified. The Activity remains open and this change is uncommitted.
