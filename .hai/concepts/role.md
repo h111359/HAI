@@ -11,3 +11,7 @@ Root `roles/<name>/ROLE.md` packages are reusable sources. Installed `.hai_env/r
 Settings remain with their actual capability, service or role owner and are stored once. Settings-free roles need no configuration contract. A direct skill may read an installed owner's validated settings without selecting that role. See [role configuration](role-configuration.md), [role convention](../conventions/role_conv.md) and [skill convention](../conventions/skill_conv.md).
 
 A direct role invocation and a spawned sub-agent are distinct execution modes. Apply the shared [execution policy](../conventions/role_conv.md#role-execution-and-delegation), model/capability prerequisites and [invocation convention](../conventions/agent-invocation_conv.md). Core initialization and Activity administration require no optional role.
+
+## Built-in authoring
+
+HAI maintains its own role definitions through [core role authoring](../procedures/manage-role-definitions.md). The host follows it directly; optional role and skill packages are not prerequisites. Runtime remains the owner of installation and registration.

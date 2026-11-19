@@ -42,7 +42,7 @@ the layout-specific artifact rules below and
 [Execute workflow](procedures/execute-workflow.md). Discover single-file definitions
 with `workflow list`; file presence does not start work. Keep runs within the owning
 Activity and use `<activity>/workflow-runs/<run-id>/` storage. Ordinary tasks
-do not require a workflow or its optional definition manager. Core startup must not
+do not require a workflow or an installed authoring package. Core startup must not
 create workflow scaffolds or blanket-audit the collection merely to report status.
 
 New Activities use [layout 2](conventions/activity_conv.md): README.md is the human
@@ -85,3 +85,7 @@ roles/, skills/ and workflows/ are inspected as data, never an installed fallbac
 For an unavailable suitable skill, report the dependency rather than inventing
 capability or a successful result. Existing Activity, invocation, recording and
 artifact rules apply equally to direct skill execution.
+
+## Built-in definition authoring
+
+For requests to create, revise or review HAI roles, follow [Manage role definitions](procedures/manage-role-definitions.md). For workflow definitions, follow [Manage workflow definitions](procedures/manage-workflow-definitions.md). These are core procedures available in every installation, without authoring role/skill packages or registration. Creating a definition does not install/register it or execute a workflow.

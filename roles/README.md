@@ -7,3 +7,9 @@ Roles retain responsibility, scope, quality, decisions, authority limits and han
 Actual settings owners retain their contract and single saved file outside the package. Settings-free roles need no empty contract or procedure tree. Preserve model declarations; skills grant no model override or permissions. See the [role convention](../.hai/conventions/role_conv.md), [skill convention](../.hai/conventions/skill_conv.md), [skill collection](../skills/README.md) and [migration procedure](../.hai/procedures/migrate-capabilities.md).
 
 Validate selected sources with roles validate. Install required skills first, then preview role installation, review local installed differences and chosen-setting compatibility, apply the explicit installation and register separately when requested. Preserve workspace-only customizations; source updates do not update installed snapshots automatically. Runtime lookup uses installed packages only.
+
+## Collection scope
+
+Keep reusable project capabilities here. Packages dedicated to this repository's HAI product remain in its environment. Preserve uninstalled packages; verify installed content before removing a repository-specific duplicate. Reusable capabilities may exist in both source and installed collections.
+
+Role and workflow definition management are built into HAI core. Follow [role authoring](../.hai/procedures/manage-role-definitions.md) or [workflow authoring](../.hai/procedures/manage-workflow-definitions.md); no separate administration role or skill is installed or registered.

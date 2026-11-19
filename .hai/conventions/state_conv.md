@@ -138,11 +138,11 @@ Malformed table structure, unreadable catalogue, or conflicting catalogue target
 
 runtime owns explicitly requested registration and synchronization of
 existing rows after authorized definition/package updates in the workspace catalogue.
-Role-definition-manager owns authoring/verification and returns exact decoded
-metadata through host coordinator; it never copies packages into installation or mutates
-catalogues. Creation alone does not register a role. runtime can
+The host follows core [role authoring](../procedures/manage-role-definitions.md) for definition creation/verification and exact decoded
+metadata. Authoring does not itself install packages or mutate
+catalogues; the host uses separately authorized runtime operations. Creation alone does not register a role. runtime can
 install and validate the first selected optional package using shared core tools,
-without the optional authoring role or a whole library. Workspace mutations retain
+without an optional authoring package or a whole library. Workspace mutations retain
 compatible initialized context, instructions and Activity prerequisites. Preserve
 unrelated rows/prose/settings; selection/execution still requires valid registration
 and remains the host coordinator’s responsibility.

@@ -38,8 +38,8 @@ separate; optional missing dependencies block only affected execution.
 ## Steps
 
 1. Resolve [input:request], [input:definition] and [input:activity]. Use `workflow list`
-   for explicit discovery and `workflow validate` for structural evidence; ask the
-   definition manager for scoped semantic review when needed. Do not change workflow
+   for explicit discovery and `workflow validate` for structural evidence; follow
+   [core workflow review](author-workflow-validate-workflow.md) for scoped semantic review when needed. Do not change workflow
    files merely to display a menu. A malformed file is not absence of the whole feature.
 2. For an uninstalled format-3 source, preview `workflow install` without locations,
    present each returned purpose/contents question and obtain actual human-chosen

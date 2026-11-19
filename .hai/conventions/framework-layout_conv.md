@@ -41,3 +41,7 @@ Presence of source data grants no runtime fallback, execution or installation
 authority. Workflow installation collects the actual human-selected output bases;
 configuration is environment-specific and generated run material belongs to the
 owning Activity or explicitly configured run destinations under the workflow contract.
+
+## Core definition authoring
+
+Core role/workflow authoring methods live in procedures/, conventions/ and concepts/ under .hai/. They ship with the core and require no optional authoring packages. Start with [role management](../procedures/manage-role-definitions.md) or [workflow management](../procedures/manage-workflow-definitions.md).

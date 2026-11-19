@@ -39,7 +39,8 @@ The core uses Python's standard library, so no extra Python packages are require
 
 5. Describe what you want to do. You can also ask **"Help with HAI"**.
 
-Roles, skills and workflows are optional and installed separately. For setup details and upgrades,
+HAI includes help for creating and reviewing role and workflow definitions.
+Project roles, skills and workflows are optional and installed separately. For setup details and upgrades,
 see [the installation guide](INSTALL.md).
 
 HAI is available under the [MIT license](LICENSE).

@@ -9,8 +9,8 @@ coordinator is not a built-in role package. The required responsibility sections
 and specialist execution metadata are defined by the role convention.
 
 The installed registered role owns its supported settings, validation, requested
-setup and scoped migration. Role-definition-manager owns contracts as definition
-resources, not live settings. runtime retains core state, Activity location, chronicles, profiles
+setup and scoped migration. Core [role authoring](../procedures/manage-role-definitions.md) maintains contracts as definition
+resources; the installed settings owner retains live settings. runtime retains core state, Activity location, chronicles, profiles
 and startup policy. Specification-manager owns its enabled/location settings in
 its own file. Core format 3 removes only the former specification feature entry;
 chronicles stays central. Format 2 is recognized read-only migration context. Other-role configuration dependencies pass through host coordinator.

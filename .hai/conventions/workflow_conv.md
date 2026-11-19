@@ -151,7 +151,7 @@ changes invalidate stale approval; QA success alone is never human acceptance.
 ## Validation responsibilities
 
 Core structural validation checks syntax, references, paths and graph/data contracts.
-The definition manager checks instructions, role responsibilities, useful conditions
+The host follows [core workflow authoring](../procedures/manage-workflow-definitions.md) to check instructions, role responsibilities, useful conditions
 and sufficient handoffs. The host checks current authority, registration, configuration,
 capability and actual input/output evidence. Structural validity MUST NOT be reported
 as participant readiness, semantic acceptance or successful execution.

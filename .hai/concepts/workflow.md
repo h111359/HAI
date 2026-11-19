@@ -57,7 +57,7 @@ host semantic attestation. Runtime validates recorded attribution and identities
 it does not independently authenticate the human. QA pass and human acceptance
 remain distinct.
 
-The definition manager authors and reviews processes. The shared workflow convention
+The host authors and reviews processes through [built-in workflow authoring](../procedures/manage-workflow-definitions.md), without an installed authoring role or skill. The shared workflow convention
 is the format authority, core tools check structure, and the host assesses actual
 output meaning and current execution readiness. A valid file alone proves neither
 participant availability nor successful product changes.

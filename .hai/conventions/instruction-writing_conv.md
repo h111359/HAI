@@ -72,7 +72,7 @@ unresolved policy question rather than permission to invent a stricter rule.
 Shared tools check the documented Markdown structure and selected word forms.
 They do not prove that an actor is clear, a condition is complete, a permission is
 valid, or a revision preserves meaning. Keyword presence alone proves none of
-these. Authoring and review procedures belong to an installed registered role-definition-manager; its absence is an optional-owner dependency, not a core startup failure.
+these. The host follows the built-in [role definition management](../procedures/manage-role-definitions.md) and [workflow definition management](../procedures/manage-workflow-definitions.md) procedures. No authoring role or skill installation is required.
 
 ## References
 

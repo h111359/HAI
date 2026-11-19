@@ -1,0 +1,44 @@
+{
+  "resource_count": 14,
+  "source_and_installed_resources_preserved": 28,
+  "authoring_rules_checked": 57,
+  "missing_authoring_rules": [],
+  "remaining_definitions_validated": 33,
+  "catalogue_audit": "passed",
+  "startup": "passed",
+  "missing_transferred_markdown_targets": [],
+  "unrelated_installed_changes": [],
+  "core_only_fixture": ".hai_env/activities/00000000_000000_active/work/test-work/core-authoring-only",
+  "fresh_initialization": "passed",
+  "fresh_startup": "passed, no registered roles",
+  "fresh_authored_role_validation": "passed",
+  "fresh_workflow_template_validation": "passed; structural only, no semantic approval or execution claim",
+  "core_sha256": {
+    ".hai/procedures/manage-role-definitions.md": "a7e3d3a5c39ce7be467b221a4d2c3705e7a24bb166580dff4b011c357d09cef9",
+    ".hai/procedures/manage-workflow-definitions.md": "0c419e8a0b2d9c5bf9a2cf1cf869d076693e29c0fb95d70da0ba431612bc92c6",
+    ".hai/conventions/role-authoring_conv.md": "1c9ab2d28bfe0354db327f5ab7a5ebdc768eb4558dcbac539a666b41b1c52dac",
+    ".hai/concepts/definition-management.md": "2b3b507f2acdfe6311ba0a8008d24187f79227b69a8e045dc735e8d27900d5a8",
+    ".hai/procedures/author-role-create-definition.md": "d8173d4e5a7cbf8a16b15a46ba1c48df0e7724e1d4b9cab44c0677b36f212df4",
+    ".hai/procedures/author-role-establish-scope-and-inspect.md": "e543ac8886e555a97218329b9054c63f379e5b4ab563a5b1e47f726251e1baa4",
+    ".hai/procedures/author-role-update-definition.md": "ff892dbcc104fbaa796277af0cdb728ae3c71045bcf1a871abf0b4255a0be5c4",
+    ".hai/procedures/author-role-validate-or-audit.md": "f1a2a2afd6fc61cf568935f50d9ba73615badf3cf824406d6d8777d77fd64976",
+    ".hai/conventions/workflow-authoring_conv.md": "74a6c0fb3923d20bb69fdff268320296295f8864a250885b15b95ade34965613",
+    ".hai/conventions/workflow-authoring-format3_conv.md": "63dadf1d28e665ed34fe9e00b0ca32433091e2f4e5e3a2661ef2d1d3e8e23b3a",
+    ".hai/procedures/author-workflow-create-workflow.md": "39b8f421d8a560298601ac4b39733cc4da4c4feec399fa0bfd2c7d60f8889076",
+    ".hai/procedures/author-workflow-establish-scope.md": "29072161b5a960626a15b596473e5c40272a4adf8b40d0c7905ca9f3d8e47dd9",
+    ".hai/procedures/author-workflow-update-workflow.md": "8c6db04a9ecdb9ec97403eabbd56846c4cbfc939b5d8ee88895e34b602a15907",
+    ".hai/procedures/author-workflow-validate-workflow.md": "f7b42e2b84ff3316ea12ab1be102d873d2647cddb825457ea6ecd46b0cde3864"
+  },
+  "git_diff_check": "passed, normal catalogue line-ending notice",
+  "scope_normalization": "Existing optional-settings rule applied consistently to inspection and definition vocabulary. Former package identity/model/skill-selection metadata retired; authoring behavior preserved in core host procedures.",
+  "recording": {
+    "ok": false,
+    "status": "blocked",
+    "operation": "synchronize",
+    "result": {},
+    "changed_files": [],
+    "issues": [
+      "Enabled chronicles require explicit source assignments before closure/synchronization"
+    ]
+  }
+}

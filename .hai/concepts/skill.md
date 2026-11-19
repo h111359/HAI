@@ -9,3 +9,7 @@ Source skills live under root `skills/`; installed snapshots live under `.hai_en
 Reusable definitions carry no run status or generated outputs. Actual task evidence belongs to its Activity or established product owner. Shared contracts have one owner. When a capability uses installed role-owned service settings, it reads that owner's single validated configuration; this does not adopt the owner role or duplicate settings.
 
 See [role](role.md), [workflow](workflow.md), [Activity](activity.md) and [skill convention](../conventions/skill_conv.md).
+
+## HAI definition maintenance
+
+HAI role/workflow definition maintenance is built into core [role authoring](../procedures/manage-role-definitions.md) and [workflow authoring](../procedures/manage-workflow-definitions.md). These methods are core procedures, not installed skills.

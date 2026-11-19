@@ -7,8 +7,8 @@ repairs registrations, or installs dependencies. Use a working interpreter per
 
 Core runtime uses this trusted read-only auditor directly when staging
 and registering selected packages, including the first optional installation with
-no Role-definition-manager or source library present. The optional authoring role
-creates/maintains definitions and returns verified metadata; the tool itself writes
+no optional authoring package or source library present. The host follows the
+[core authoring procedure](../../procedures/manage-role-definitions.md) to create/maintain definitions and prepare verified metadata; the tool itself writes
 neither packages nor catalogues. A registered-only audit does not prove that unregistered folders are conflict-free.
 
 The tool and tests use only the Python standard library. No downloads, package
@@ -42,7 +42,7 @@ From the workspace root:
 
 ```text
 python -B .hai/tools/roles/role_tools.py audit
-python -B .hai/tools/roles/role_tools.py validate --definition .hai_env/roles/role-definition-manager/ROLE.md
+python -B .hai/tools/roles/role_tools.py validate --definition .hai_env/roles/<name>/ROLE.md
 python -B .hai/tools/roles/role_tools.py resolve --definition .hai_env/roles/software-developer/ROLE.md --runtime /path/to/runtime.json
 python -B .hai/tools/roles/test_role_tools.py
 ```
@@ -79,9 +79,9 @@ supporting references, check cross-origin name collisions, validate role semanti
 execution permission. Workspace definitions require valid registration before selection for execution or delegation; an explicit name or path does not bypass that requirement.
 
 Use `validate` for one definition before registration or after editing; use `audit`
-for registered definitions and catalogue/profile consistency. Role-definition-manager
-owns the creation/update/audit/registration workflow and its semantic review; host coordinator
-owns runtime selection. These shared commands do not perform either role's mutations.
+for registered definitions and catalogue/profile consistency. The host follows core
+authoring procedures for creation/update and semantic review, and uses runtime for
+separately authorized registration and selection. These shared read-only commands do not mutate definitions or registrations.
 
 ## Procedure and reference validation
 

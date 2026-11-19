@@ -53,7 +53,9 @@ the migration preserves and converts them independently.
    It records status, mappings and hashes in .hai_env/config/role-migration.json.
    The lock coordinates runtime writes; it does not stop external processes.
 4. Inspect actual changed_files and the migration marker. This legacy naming migration uses .hai_env/roles/, .hai_env/config/roles/, the intermediate hai_roles_library/roles/ bridge and
-   ROLE.md package entries. The definition manager is role-definition-manager.
+   ROLE.md package entries. This historical migration produces the identity
+   role-definition-manager; later explicit package renames may use
+   hai-role-definition-manager. Migration records retain their original identities.
    Source/installed local differences remain independent. Settings values and
    model profiles retain their original bytes and meaning.
 5. Run startup, `roles audit`, selected configuration reads and reusable workflow

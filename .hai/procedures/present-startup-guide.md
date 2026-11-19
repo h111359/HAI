@@ -100,7 +100,7 @@ reporting of missing prerequisites remain possible under `.hai/start.md`.
    follow [Execute workflow](execute-workflow.md), preserving current Activity,
    authority and readiness checks. An existing run needs its exact identity when
    several runs make a pause/resume/cancel request ambiguous. Listing workflows
-   does not require the optional definition manager and does not change its catalogue.
+   requires no authoring package and does not change definitions or registrations.
 
 ### Illustrative presentations
 

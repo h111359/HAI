@@ -1,0 +1,18 @@
+{
+  "definitions_validated": 41,
+  "definition_failures": [],
+  "installed_files_unchanged": 140,
+  "uninstalled_design_skill_unchanged": true,
+  "missing_actual_markdown_targets": [],
+  "git_diff_check": "passed",
+  "chronicles_synchronize": {
+    "ok": false,
+    "status": "blocked",
+    "operation": "synchronize",
+    "result": {},
+    "changed_files": [],
+    "issues": [
+      "Enabled chronicles require explicit source assignments before closure/synchronization"
+    ]
+  }
+}
