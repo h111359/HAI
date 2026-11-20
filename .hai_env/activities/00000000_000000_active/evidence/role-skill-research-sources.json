@@ -1,0 +1,577 @@
+{
+  "date": "2026-11-19",
+  "method": "Exa multi-pass research; primary technical sources, concrete repositories, named practitioners, social discussion, professional workforce frameworks and published/preprint research. Vendor evaluations treated as bounded evidence, opinions labeled, architectural application to HAI identified as synthesis.",
+  "search_calls": 17,
+  "search_result_slots_screened": 85,
+  "unique_result_urls": 79,
+  "source_pages_examined": 30,
+  "workstreams": [
+    "Standards and vendor architecture",
+    "Concrete GitHub implementations",
+    "Empirical evaluations and scientific AI research",
+    "Practitioners and social experience",
+    "Organizational and workforce design",
+    "Modularity and organizational routines"
+  ],
+  "screened_results": [
+    {
+      "angle": "standards",
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview"
+    },
+    {
+      "angle": "standards",
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices"
+    },
+    {
+      "angle": "standards",
+      "url": "https://agentskills.io/specification"
+    },
+    {
+      "angle": "standards",
+      "url": "https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills"
+    },
+    {
+      "angle": "standards",
+      "url": "https://code.claude.com/docs/en/skills"
+    },
+    {
+      "angle": "practice",
+      "url": "https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals"
+    },
+    {
+      "angle": "practice",
+      "url": "https://www.langchain.com/blog/evaluating-skills"
+    },
+    {
+      "angle": "practice",
+      "url": "https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills"
+    },
+    {
+      "angle": "practice",
+      "url": "https://vercel.com/kb/guide/agent-skills-creating-installing-and-sharing-reusable-agent-context"
+    },
+    {
+      "angle": "practice",
+      "url": "https://www.langchain.com/blog/langchain-skills"
+    },
+    {
+      "angle": "papers",
+      "url": "https://arxiv.org/abs/2602.12670"
+    },
+    {
+      "angle": "papers",
+      "url": "https://www.skillsbench.ai/"
+    },
+    {
+      "angle": "papers",
+      "url": "https://www.skillsbench.ai/blogs/introducing-skillsbench"
+    },
+    {
+      "angle": "papers",
+      "url": "https://github.com/benchflow-ai/skillsbench"
+    },
+    {
+      "angle": "papers",
+      "url": "https://www.skillsbench.ai/blogs/skillsbench-1-1"
+    },
+    {
+      "angle": "org",
+      "url": "https://www.onetcenter.org/content.html"
+    },
+    {
+      "angle": "org",
+      "url": "https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center/resources/occupations-jobs-and-work"
+    },
+    {
+      "angle": "org",
+      "url": "https://www.dol.gov/agencies/eta/onet"
+    },
+    {
+      "angle": "org",
+      "url": "https://www.onetcenter.org/database.html"
+    },
+    {
+      "angle": "org",
+      "url": "https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center/playbook-workforce-frameworks"
+    },
+    {
+      "angle": "expert",
+      "url": "https://claude.com/resources/articles/building-agents-with-skills-equipping-agents-for-specialized-work"
+    },
+    {
+      "angle": "expert",
+      "url": "https://simonwillison.net/2025/Oct/16/barry-zhang/"
+    },
+    {
+      "angle": "expert",
+      "url": "https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills"
+    },
+    {
+      "angle": "expert",
+      "url": "https://claude.com/resources/articles/skills"
+    },
+    {
+      "angle": "expert",
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview"
+    },
+    {
+      "angle": "social",
+      "url": "https://news.ycombinator.com/item?id=45181577"
+    },
+    {
+      "angle": "social",
+      "url": "https://news.ycombinator.com/item?id=45986929"
+    },
+    {
+      "angle": "social",
+      "url": "https://news.ycombinator.com/item?id=45622765"
+    },
+    {
+      "angle": "social",
+      "url": "https://news.ycombinator.com/item?id=45615271"
+    },
+    {
+      "angle": "social",
+      "url": "https://news.ycombinator.com/item?id=46315414"
+    },
+    {
+      "angle": "github",
+      "url": "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations"
+    },
+    {
+      "angle": "github",
+      "url": "https://docs.github.com/en/copilot/concepts/customizations/custom-agents"
+    },
+    {
+      "angle": "github",
+      "url": "https://docs.github.com/en/copilot/reference/customization-cheat-sheet"
+    },
+    {
+      "angle": "github",
+      "url": "https://docs.github.com/en/copilot/concepts/customizations/agent-skills"
+    },
+    {
+      "angle": "github",
+      "url": "https://docs.github.com/en/copilot/concepts/prompting-and-context/custom-instructions"
+    },
+    {
+      "angle": "simon",
+      "url": "https://simonwillison.net/2025/Oct/16/claude-skills/"
+    },
+    {
+      "angle": "simon",
+      "url": "https://simonwillison.net/2025/Oct/10/claude-skills/"
+    },
+    {
+      "angle": "simon",
+      "url": "https://simonwillison.net/2025/Dec/12/openai-skills/"
+    },
+    {
+      "angle": "simon",
+      "url": "https://simonwillison.net/2025/Dec/13/openai-codex-cli/"
+    },
+    {
+      "angle": "simon",
+      "url": "https://simonwillison.net/tags/skills/"
+    },
+    {
+      "angle": "management",
+      "url": "https://sloanreview.mit.edu/article/cant-fill-jobs-deconstruct-them/"
+    },
+    {
+      "angle": "management",
+      "url": "https://sloanreview.mit.edu/article/are-you-ready-to-lead-work-without-jobs/"
+    },
+    {
+      "angle": "management",
+      "url": "https://www.deloitte.com/global/en/issues/work/skills-based-organizations.html"
+    },
+    {
+      "angle": "management",
+      "url": "https://hbr.org/2025/01/how-deconstructing-jobs-can-change-your-organization"
+    },
+    {
+      "angle": "management",
+      "url": "https://www.deloitte.com/us/en/insights/topics/talent/human-capital-trends/2023/skills-based-model-end-of-jobs.html"
+    },
+    {
+      "angle": "modularity",
+      "url": "https://dl.acm.org/doi/pdf/10.1145/361598.361623"
+    },
+    {
+      "angle": "modularity",
+      "url": "https://journals.sagepub.com/doi/10.2307/3556620"
+    },
+    {
+      "angle": "modularity",
+      "url": "https://socialecology.uci.edu/sites/socialecology.uci.edu/files/users/feldmanm/Feldman_and_Pentland_2003.pdf"
+    },
+    {
+      "angle": "modularity",
+      "url": "https://socialecology.uci.edu/sites/socialecology.uci.edu/files/users/feldmanm/Pentland_and_Feldman_2008_-_Information_and_Organization.pdf"
+    },
+    {
+      "angle": "modularity",
+      "url": "https://effectivesoftwaredesign.com/2012/11/25/on-information-hiding-and-encapsulation/"
+    },
+    {
+      "angle": "repositories",
+      "url": "https://github.com/anthropics/skills/"
+    },
+    {
+      "angle": "repositories",
+      "url": "https://github.com/anthropics/skills/blob/main/skills/internal-comms/SKILL.md"
+    },
+    {
+      "angle": "repositories",
+      "url": "https://github.com/obra/superpowers/"
+    },
+    {
+      "angle": "repositories",
+      "url": "https://github.com/anthropics/skills/blob/main/skills/brand-guidelines/SKILL.md"
+    },
+    {
+      "angle": "repositories",
+      "url": "https://github.com/obra/superpowers/tree/main/skills"
+    },
+    {
+      "angle": "skeptic",
+      "url": "https://exa.ai/library/podcast/ysb667wqkjg/episode/rpc6r2k4r1c"
+    },
+    {
+      "angle": "skeptic",
+      "url": "https://exa.ai/library/podcast/yxymvsdqrvn/episode/mwvsybcvd55"
+    },
+    {
+      "angle": "skeptic",
+      "url": "https://www.oreilly.com/radar/superpowers-for-humans/"
+    },
+    {
+      "angle": "skeptic",
+      "url": "https://www.mehmetsemihbabacan.com/2026/superpowers-skill"
+    },
+    {
+      "angle": "skeptic",
+      "url": "https://github.com/obra/superpowers"
+    },
+    {
+      "angle": "scientific",
+      "url": "https://arxiv.org/abs/2503.13657v3"
+    },
+    {
+      "angle": "scientific",
+      "url": "https://sites.google.com/berkeley.edu/mast"
+    },
+    {
+      "angle": "scientific",
+      "url": "https://arxiv.org/html/2503.13657v1"
+    },
+    {
+      "angle": "scientific",
+      "url": "https://proceedings.nips.cc/paper_files/paper/2025/hash/b1041e52d3be19f0a9bc491657488e4a-Abstract-Datasets_and_Benchmarks_Track.html"
+    },
+    {
+      "angle": "scientific",
+      "url": "https://arxiv.org/pdf/2503.13657"
+    },
+    {
+      "angle": "business",
+      "url": "https://www.cipd.org/en/the-people-profession/the-profession-map/how-it-works/role-design/"
+    },
+    {
+      "angle": "business",
+      "url": "https://www.cipd.org/en/knowledge/factsheets/competency-factsheet/"
+    },
+    {
+      "angle": "business",
+      "url": "https://www.cipd.org/en/knowledge/factsheets/job-design-factsheet"
+    },
+    {
+      "angle": "business",
+      "url": "https://www.cipd.org/en/knowledge/case-studies/operating-model-firstsource/"
+    },
+    {
+      "angle": "business",
+      "url": "https://www.cipd.org/en/views-and-insights/thought-leadership/insight/learning-value-skills-development/"
+    },
+    {
+      "angle": "agentsrepo",
+      "url": "https://github.com/wshobson/agents/blob/main/docs/agent-skills.md"
+    },
+    {
+      "angle": "agentsrepo",
+      "url": "https://github.com/wshobson/agents/blob/HEAD/docs/authoring.md"
+    },
+    {
+      "angle": "agentsrepo",
+      "url": "https://github.com/wshobson/agents/blob/main/docs/architecture.md"
+    },
+    {
+      "angle": "agentsrepo",
+      "url": "https://github.com/wshobson/agents/blob/main/docs/plugins.md"
+    },
+    {
+      "angle": "agentsrepo",
+      "url": "http://github.com/wshobson/agents"
+    },
+    {
+      "angle": "foundation",
+      "url": "https://www.anthropic.com/research/building-effective-agents"
+    },
+    {
+      "angle": "foundation",
+      "url": "https://resources.anthropic.com/hubfs/Building%20Effective%20AI%20Agents-%20Architecture%20Patterns%20and%20Implementation%20Frameworks.pdf"
+    },
+    {
+      "angle": "foundation",
+      "url": "https://resources.anthropic.com/building-effective-ai-agents"
+    },
+    {
+      "angle": "foundation",
+      "url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents"
+    },
+    {
+      "angle": "foundation",
+      "url": "https://www.anthropic.com/research/multi-agent-research-system"
+    },
+    {
+      "angle": "social_experts",
+      "url": "https://simonwillison.net/2025/Oct/16/barry-zhang/"
+    },
+    {
+      "angle": "social_experts",
+      "url": "https://ai.engineer/talks/CEvIs9y1uog-agent-skills"
+    },
+    {
+      "angle": "social_experts",
+      "url": "https://simonwillison.net/2025/oct/16/claude-skills/"
+    },
+    {
+      "angle": "social_experts",
+      "url": "https://www.linkedin.com/posts/barry-z_let-me-pitch-you-skills-something-ive-been-activity-7384630968948563968-novo"
+    },
+    {
+      "angle": "social_experts",
+      "url": "https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Specification",
+      "url": "https://agentskills.io/specification",
+      "kind": "Official/product guidance",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 7613
+    },
+    {
+      "title": "Create custom subagents",
+      "url": "https://code.claude.com/docs/en/sub-agents",
+      "kind": "Official/product guidance",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 16077
+    },
+    {
+      "title": "Comparing Copilot customization features",
+      "url": "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "kind": "Official product guidance",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 16135
+    },
+    {
+      "title": "Equipping agents with Agent Skills \\ Anthropic",
+      "url": "https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills",
+      "kind": "Official/product guidance",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 9092
+    },
+    {
+      "title": "Evaluating Skills",
+      "url": "https://www.langchain.com/blog/evaluating-skills",
+      "kind": "Vendor-run evaluation; scope-specific, not independent validation",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 11956
+    },
+    {
+      "title": "skills/internal-comms/SKILL.md",
+      "url": "https://github.com/anthropics/skills/blob/main/skills/internal-comms/SKILL.md",
+      "kind": "Primary implementation",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 1705
+    },
+    {
+      "title": "skills/brand-guidelines/SKILL.md",
+      "url": "https://github.com/anthropics/skills/blob/main/skills/brand-guidelines/SKILL.md",
+      "kind": "Primary implementation",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 2447
+    },
+    {
+      "title": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "kind": "Primary implementation",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 11063
+    },
+    {
+      "title": "Claude Skills are awesome, maybe a bigger deal than MCP",
+      "url": "https://simonwillison.net/2025/Oct/16/claude-skills/",
+      "kind": "First-hand practitioner",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 10798
+    },
+    {
+      "title": "Superpowers for Humans – O’Reilly",
+      "url": "https://www.oreilly.com/radar/superpowers-for-humans/",
+      "kind": "Expert interview / professional publication",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 11139
+    },
+    {
+      "title": "The O*NET® Content Model at O*NET Resource Center",
+      "url": "https://www.onetcenter.org/content.html",
+      "kind": "Workforce/organization professional framework",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 11100
+    },
+    {
+      "title": "Occupations, Jobs, and Work Roles | NIST",
+      "url": "https://www.nist.gov/itl/applied-cybersecurity/nice/nice-framework-resource-center/resources/occupations-jobs-and-work",
+      "kind": "Workforce/organization professional framework",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 3673
+    },
+    {
+      "title": "How to use the Profession Map for role design",
+      "url": "https://www.cipd.org/en/the-people-profession/the-profession-map/how-it-works/role-design/",
+      "kind": "Workforce/organization professional framework",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 5638
+    },
+    {
+      "title": "Analysis | How L&D can create value: Focusing on skills development",
+      "url": "https://www.cipd.org/en/views-and-insights/thought-leadership/insight/learning-value-skills-development/",
+      "kind": "Workforce/organization professional framework",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 11183
+    },
+    {
+      "title": "Can’t Fill Jobs? Deconstruct Them",
+      "url": "https://sloanreview.mit.edu/article/cant-fill-jobs-deconstruct-them/",
+      "kind": "Management publication",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 10130
+    },
+    {
+      "title": "Designing routines: On the folly of designing artifacts, while hoping for patterns of action",
+      "url": "https://socialecology.uci.edu/sites/socialecology.uci.edu/files/users/feldmanm/Pentland_and_Feldman_2008_-_Information_and_Organization.pdf",
+      "kind": "Peer-reviewed research / conceptual or qualitative evidence",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 11288
+    },
+    {
+      "title": "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
+      "url": "https://arxiv.org/abs/2602.12670",
+      "kind": "Research preprint",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 45161
+    },
+    {
+      "title": "Why Do Multi-Agent LLM Systems Fail?",
+      "url": "https://proceedings.nips.cc/paper_files/paper/2025/hash/b1041e52d3be19f0a9bc491657488e4a-Abstract-Datasets_and_Benchmarks_Track.html",
+      "kind": "Peer-reviewed conference paper",
+      "review_extent": "Publisher abstract; used only for reported dataset and failure categories.",
+      "fetched_characters": 2182
+    },
+    {
+      "title": "On the criteria to be used in decomposing systems into modules",
+      "url": "https://dl.acm.org/doi/pdf/10.1145/361598.361623",
+      "kind": "Peer-reviewed research / conceptual or qualitative evidence",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 28242
+    },
+    {
+      "title": "How is it different from subagents? | Hacker News",
+      "url": "https://news.ycombinator.com/item?id=45622765",
+      "kind": "Community opinion",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 1315
+    },
+    {
+      "title": "This is interesting, and I think there are use cases where this feature may make... | Hacker News",
+      "url": "https://news.ycombinator.com/item?id=45615271",
+      "kind": "Community opinion",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 4145
+    },
+    {
+      "title": "AGENTS.md outperforms skills in our agent evals",
+      "url": "https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals",
+      "kind": "Vendor-run evaluation; scope-specific, not independent validation",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 11279
+    },
+    {
+      "title": "Building effective AI agents \\ Anthropic",
+      "url": "https://www.anthropic.com/research/building-effective-agents",
+      "kind": "Official/product guidance",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 15134
+    },
+    {
+      "title": "docs/architecture.md",
+      "url": "https://github.com/wshobson/agents/blob/main/docs/architecture.md",
+      "kind": "Primary implementation",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 12795
+    },
+    {
+      "title": "How Deconstructing Jobs Can Change Your Organization",
+      "url": "https://hbr.org/2025/01/how-deconstructing-jobs-can-change-your-organization",
+      "kind": "Management publication",
+      "review_extent": "Accessible introduction/summary only; no paywall bypass.",
+      "fetched_characters": 1384
+    },
+    {
+      "title": "plugins/backend-development/agents/backend-architect.md",
+      "url": "https://github.com/wshobson/agents/blob/main/plugins/backend-development/agents/backend-architect.md",
+      "kind": "Primary implementation",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 18633
+    },
+    {
+      "title": "Effective context engineering for AI agents \\ Anthropic",
+      "url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents",
+      "kind": "Official/product guidance",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 18167
+    },
+    {
+      "title": "Skill authoring best practices",
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices",
+      "kind": "Official/product guidance",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 18120
+    },
+    {
+      "title": "Let me pitch you Skills, something I’ve been working on with Mahesh Murag and Keith Lazuka the past few months: | Barry Zhang",
+      "url": "https://www.linkedin.com/posts/barry-z_let-me-pitch-you-skills-something-ive-been-activity-7384630968948563968-novo",
+      "kind": "Creator social post / promotional opinion",
+      "review_extent": "Relevant accessible sections; no claim of exhaustive full-document reading.",
+      "fetched_characters": 2669
+    },
+    {
+      "title": "Don't Build Agents, Build Skills Instead",
+      "url": "https://ai.engineer/talks/CEvIs9y1uog-agent-skills",
+      "kind": "Conference talk materials / presenter-summary evidence",
+      "review_extent": "Published talk materials; no claim to have watched the video.",
+      "fetched_characters": 15099
+    }
+  ],
+  "limitations": [
+    "No controlled study located that establishes the ideal HAI role/skill folder boundary.",
+    "No HAI comparative performance experiments were run.",
+    "SkillsBench revisions differ; current preprint findings were kept separate from older launch-blog figures.",
+    "Roles are logical responsibility packages; subagents are execution/context mechanisms, so those comparisons are not identical.",
+    "The human-work analogy is informative but an AI skill folder is not literally a human skill."
+  ]
+}

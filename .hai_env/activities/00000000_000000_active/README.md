@@ -47,3 +47,11 @@ The native-source compatibility issue is repaired. See [chronicle repair and rec
 ## Current result: partial chronicle storage
 
 Unsupported records no longer prevent storing recognized messages. See [partial chronicle recording](results/partial-chronicle-recording.md) for automatic warning/gap behavior, integrity boundaries, tests and independent review. The real-session smoke saved32messages despite unsupported records; reviewed metadata recognition then resolved those warnings with predecessor evidence preserved. Current synchronization, verification and startup are verified. The Activity remains open and this change is uncommitted.
+
+## Latest research: role and skill boundaries
+
+The discussion was reset before this independent research. Read [roles/skills research](results/role-skill-boundaries-research.md) for the current evidence-grounded recommendation and [source register](evidence/role-skill-research-sources.json). It supports complete role packages with job-specific methods and selectively extracted independent skills; no earlier six-skill proposal is treated as accepted. No role, skill, runtime or workflow files were changed for this research.
+
+## Core principles updated
+
+The human authorized reflecting the agreed role/skill ownership principles in core before backlog refactoring. Updated role/skill concepts, conventions, authoring create/update/review guidance and compatibility documentation across11core documents. Roles may own job-specific conventions/procedures/helpers and use no skills; independent skills receive explicit inputs and newly authored/refactored portable skills require no HAI internals. Existing settings-owner behavior and legacy conversion remain supported without automatic package migration. All33source/installed definitions validate, local links and core whitespace checks pass. No role, skill or runtime code was changed; no commit was requested.

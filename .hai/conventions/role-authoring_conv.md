@@ -64,10 +64,19 @@ The host follows this core method directly. Apply actual task authority, workspa
 
 ## Role and skill authoring split
 
-Keep the role a job description: responsibilities, scope, quality, decisions, authority limits and handoffs. Reference reusable methods with quoted metadata `hai-skills: "capability-one, capability-two"` and matching Skills links. Several roles may select the same capability. A role may retain genuinely local procedures when needed; no empty procedure tree is required. Preserve hai-model-class and hai-reasoning-effort as host execution declarations; skills cannot override them.
+Keep the role a job description: responsibilities, scope, quality, decisions, authority limits and handoffs. Reference reusable methods with quoted metadata `hai-skills: "capability-one, capability-two"` and matching Skills links. Several roles may select the same capability. A role may own job-specific conventions, procedures, scripts and templates even when it uses no skills; no empty procedure tree or artificial skill dependency is required. Preserve hai-model-class and hai-reasoning-effort as host execution declarations; skills cannot override them.
 
 Author reusable capabilities under root `skills/<name>/SKILL.md` with native name/description frontmatter and free-form task instructions plus only necessary resources. No ROLE headings, empty configuration contract or model metadata is imposed on a skill. Native optional license, compatibility, metadata and allowed-tools remain descriptive under actual host authority. Source roles live directly in `roles/<name>/ROLE.md`; installed counterparts live in `.hai_env/roles/`. Recompute relative paths from actual package depth.
 
-For settings owned by an installed service role, a skill may declare `metadata.hai-settings-owner` and use `skills resolve` to validate that one owner contract and read existing saved settings. This does not adopt the role. Never duplicate saved settings in a skill package. Installed skill lookup must not fall back to root sources.
+For existing integration packages pending separately authorized refactoring, a skill may declare `metadata.hai-settings-owner` and use `skills resolve` to validate that one owner contract and read existing saved settings. This does not adopt the role. Never duplicate saved settings in a skill package. Installed skill lookup must not fall back to root sources.
 
 Apply the authoring scope and boundaries in [definition management](../procedures/manage-role-definitions.md).
+
+## Ownership and extraction checks
+
+- **Complete role.** The author MUST retain job-specific operating knowledge with the role when independent skill packaging adds no useful capability. A role MAY use no skills.
+- **Independent capability.** Before extracting a skill, the author MUST identify a useful direct invocation, sufficient explicit inputs, clear outputs and its independent maintenance purpose. The author MUST NOT extract solely because a resource is a convention, procedure, script or template.
+- **Single owner.** The author MUST keep related invariants under one owner and MUST NOT duplicate implementations between role and skill. A method reused across deployments of one role MAY remain in that role package.
+- **Shared policy.** The author MUST reference shared core/project policies from their owner. Cross-role sequencing belongs in workflows; HAI lifecycle and recording remain core responsibilities.
+- **Portable skill.** The author MUST keep newly authored or refactored skills usable without HAI or a selected role. Domain specialization MAY remain where it provides useful expertise.
+- **Explicit refactoring.** The author MUST preserve current capabilities and configuration during any approved transfer and verify all resources before retirement. New principles alone do not migrate or remove existing source/installed packages.

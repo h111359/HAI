@@ -59,3 +59,7 @@ Verified `inspection` output from [Establish scope and inspect](author-role-esta
   conditional when creating, changing, or executing supporting helpers.
 - Caller-supplied sources — target-role knowledge and authority — read only what
   the selected operation needs.
+
+## Ownership review
+
+Apply the [ownership and extraction checks](../conventions/role-authoring_conv.md#ownership-and-extraction-checks). Verify that job-specific procedures/conventions/helpers may remain with the role, skill dependencies are optional, and extracted skills have a useful HAI-independent invocation. Check shared contracts and related invariants for duplicate or fragmented ownership. Preserve existing source/installed behavior until its refactoring is explicitly authorized.

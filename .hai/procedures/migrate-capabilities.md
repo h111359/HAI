@@ -38,3 +38,7 @@ A reviewed complete migration has flat source roles, reusable native skills, ind
 
 - [Role convention](../conventions/role_conv.md) and [skill convention](../conventions/skill_conv.md).
 - [Skill tools](../tools/skills/README.md), [workspace boundary](../conventions/workspace-boundary_conv.md) and [artifact placement](../conventions/artifact-placement_conv.md).
+
+## Scope of the legacy conversion
+
+This versioned migration preserves its historical conversion behavior. It is not a requirement to extract every role method into a skill. New authoring and separately authorized refactoring follow the current [ownership rules](../conventions/role-authoring_conv.md#ownership-and-extraction-checks); do not rerun a migration to impose a thin-role design.

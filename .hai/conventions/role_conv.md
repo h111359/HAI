@@ -105,7 +105,7 @@ Spawned specialists MUST declare both HAI extension keys under `metadata`:
 `xhigh`, `max`, or `ultra`). Quote metadata values as strings. Concrete model IDs belong only in local model profiles, never role declarations.
 
 There is no role H1 title, Selection guide body section, embedded Definitions,
-or role-level Inputs/Outputs section. Include Purpose, Scope, Out of Scope, Rules and References once in order. Skills is optional before References, after any optional Procedures section. Retain Procedures only for genuinely role-local methods; reusable methods belong in referenced skills:
+or role-level Inputs/Outputs section. Include Purpose, Scope, Out of Scope, Rules and References once in order. Skills is optional before References, after any optional Procedures section. Procedures may define the role's job-specific operations, including a role with no skill dependencies. Independently useful capabilities may be referenced as skills; reuse across installations of the same role alone does not require extraction:
 
 ```markdown
 ---
@@ -212,7 +212,7 @@ For an optional extension, use its declared model and effort only if supported b
 
 ## Supporting resources
 
-A role's `ROLE.md` is its canonical job description: identity, purpose, scope, exclusions, responsibility/conduct, skill references and optional genuinely local procedure selection. Its linked
+A role's `ROLE.md` is its canonical job description: identity, purpose, scope, exclusions, responsibility/conduct, skill references and optional job-specific procedure selection. Its linked
 `procedures/` files own their execution steps, procedure-specific rules, and local input/output contracts;
 a single procedure may remain inline. This deliberately separates procedure files
 from shared role rules without moving execution behavior into conventions. Concepts
@@ -231,7 +231,7 @@ Optional supporting folders are `procedures/`, `concepts/`, `conventions/`, and
 `scripts/` for owned helpers and usage documentation. Other justified resources,
 including existing `templates/`, remain permitted. Create no unused scaffold.
 Framework-wide concepts and conventions retain their canonical framework location.
-Reusable task knowledge belongs in coherent skills; genuinely role-specific knowledge may remain in its package as a single authority, with shared readers linking to it. Scripts follow [tooling_conv.md](tooling_conv.md).
+A role may own the conventions, procedures, scripts, templates and knowledge that implement its job. Independent skills own their own coherent task methods. Each contract and invariant has one owner; shared readers link to it. Do not split related record, index and history rules solely to create more skill packages. Scripts follow [tooling_conv.md](tooling_conv.md).
 
 ## Registration and verification
 
@@ -254,7 +254,7 @@ Explicit registration is separate from package installation, authoring and execu
 
 ## Roles, AI agents and skills
 
-A HAI role is a job description with a ROLE.md entry point. Skills own reusable methods and may be used directly or through several roles. Workflows assign roles and expected results; the role chooses suitable available skills. Declare quoted comma-separated `metadata.hai-skills` and matching Skills links. Missing methods are reported dependencies. Source and installed skill roots remain separate; runtime never falls back to source. An AI agent is
+A HAI role is a job description with a ROLE.md entry point. Roles may own their job-specific methods and may optionally use independent skills directly usable by a person or other roles. Workflows assign roles and expected results; the role chooses suitable available skills. Declare quoted comma-separated `metadata.hai-skills` and matching Skills links. Missing methods are reported dependencies. Source and installed skill roots remain separate; runtime never falls back to source. An AI agent is
 the executing tool or a separate running worker. A role may be followed directly
 or assigned to an AI agent under the execution policy above. Actual reusable
 skills use SKILL.md and remain distinct from HAI roles. Native .agents/ and

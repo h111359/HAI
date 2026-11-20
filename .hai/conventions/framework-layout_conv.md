@@ -45,3 +45,7 @@ owning Activity or explicitly configured run destinations under the workflow con
 ## Core definition authoring
 
 Core role/workflow authoring methods live in procedures/, conventions/ and concepts/ under .hai/. They ship with the core and require no optional authoring packages. Start with [role management](../procedures/manage-role-definitions.md) or [workflow management](../procedures/manage-workflow-definitions.md).
+
+## Complete role packages and independent skills
+
+Roles may contain job-specific procedures, conventions, scripts and templates, and may omit skill dependencies. ROLE.md remains a concise entry point to those resources. Skills package independently usable capabilities and receive explicit caller context; resource file type does not decide ownership. See [authoring ownership](role-authoring_conv.md#ownership-and-extraction-checks). Existing installed/source packages and settings remain unchanged until separately authorized refactoring.
