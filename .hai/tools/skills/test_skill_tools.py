@@ -120,9 +120,21 @@ class SkillTests(unittest.TestCase):
                 if not package.is_dir() or package.name.startswith('.'):continue
                 relative=package.relative_to(self.root).as_posix();manifest=packages.snapshot(self.root,relative,entry=entry);content={name:(package/name).read_bytes() for name in manifest}
                 self.assertEqual(package_content.validate(self.root,relative,content),[],relative)
-        for name in ['git-operations','quality-verification']:
+        for name in ['crete-design-package']:
             result=skills.handle('resolve',self.root,{'name':name},False);self.assertTrue(result['ok'],result)
-        definition='.hai_env/roles/software-developer/ROLE.md';self.assertTrue(packages.handle('skills',self.root,{'definition':definition},False)['ok'])
+        retired=['requirements-analysis','solution-design','software-implementation','git-operations','quality-verification']
+        for name in retired:self.assertFalse(skills.handle('resolve',self.root,{'name':name},False)['ok'])
+        for role in ['business-analyst','solution-architect','git-manager']:
+            definition=f'.hai_env/roles/{role}/ROLE.md'
+            result=packages.handle('skills',self.root,{'definition':definition},False)
+            self.assertTrue(result['ok'],result);self.assertEqual(result['result']['skills'],[])
+        for role in ['software-developer','quality-assurance']:
+            definition=f'.hai_env/roles/{role}/ROLE.md'
+            result=packages.handle('skills',self.root,{'definition':definition},False)
+            self.assertTrue(result['ok'],result)
+            self.assertEqual(result['result']['skills'],[])
+        for path in ['business-analyst/scripts/clarification.py','solution-architect/scripts/plan_contract.py','software-developer/scripts/execution_contract.py','git-manager/scripts/validate_git_configuration.py']:
+            self.assertTrue((self.root/'.hai_env/roles'/path).is_file(),path)
         example=(self.root/'.hai_env/roles/backlog-manager/conventions/backlog_conv.md').read_text(encoding='utf-8');self.assertIn('[BL-0001](new/BL-0001.md)',example)
     def test_complete_backlog_role_operates_without_skills_or_source_collections(self):
         import subprocess
@@ -177,6 +189,23 @@ class SkillTests(unittest.TestCase):
             report=json.loads(checked.stdout);self.assertTrue(report['ok'],report)
             self.assertFalse((self.root/'.hai_env/specifications').exists());self.assertFalse((self.root/'product/specification').exists())
             self.assertEqual(before,{p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
+
+    def test_all_real_roles_install_without_any_skills(self):
+        self.environment_only();repo=TOOLS.parent.parent
+        shutil.copytree(repo/'.hai',self.root/'.hai',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
+        shutil.copytree(repo/'roles',self.root/'roles')
+        names=[p.name for p in (self.root/'roles').iterdir() if p.is_dir()]
+        for name in names:
+            result=packages.handle('install',self.root,{'source':'roles/'+name,'name':name,'provenance':self.prov},True)
+            self.assertTrue(result['ok'],result)
+        (self.root/'roles').rename(self.root/'retained-source-roles')
+        self.assertFalse((self.root/'skills').exists());self.assertFalse((self.root/'.hai_env/skills').exists())
+        for name in names:
+            definition='.hai_env/roles/'+name+'/ROLE.md'
+            self.assertTrue(packages.handle('validate',self.root,{'definition':definition},False)['ok'])
+            result=packages.handle('skills',self.root,{'definition':definition},False)
+            self.assertTrue(result['ok'],result);self.assertEqual(result['result']['skills'],[])
+        self.assertFalse(skills.handle('resolve',self.root,{'name':'quality-verification'},False)['ok'])
 
     def test_portable_skill_installs_and_resolves_independently_without_roles(self):
         self.environment_only()

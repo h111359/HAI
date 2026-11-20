@@ -1,0 +1,5 @@
+order_id,subtotal,status,shipping,grand_total
+ORD-101,120.00,paid,0.00,120.00
+ORD-102,80.00,paid,5.00,85.00
+ORD-103,150.00,pending,0.00,150.00
+ORD-104,50.00,paid,5.00,54.00

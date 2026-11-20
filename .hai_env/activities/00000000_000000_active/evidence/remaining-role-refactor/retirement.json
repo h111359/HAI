@@ -1,0 +1,16 @@
+{
+  "retired": [
+    "skills/requirements-analysis",
+    "skills/solution-design",
+    "skills/software-implementation",
+    "skills/git-operations",
+    ".hai_env/skills/requirements-analysis",
+    ".hai_env/skills/solution-design",
+    ".hai_env/skills/software-implementation",
+    ".hai_env/skills/git-operations",
+    ".hai_env/skills/release-management",
+    ".hai_env/skills/framework-advice"
+  ],
+  "preserved_original_files": 238,
+  "protected_files_unchanged": 155
+}

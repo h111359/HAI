@@ -1,0 +1,58 @@
+{
+  "installed_roles": {
+    "backlog-manager": {
+      "files": 10,
+      "required_skills": [],
+      "source_matched": true
+    },
+    "business-analyst": {
+      "files": 14,
+      "required_skills": [],
+      "source_matched": true
+    },
+    "git-manager": {
+      "files": 16,
+      "required_skills": [],
+      "source_matched": true
+    },
+    "hai-framework-advisor": {
+      "files": 1,
+      "required_skills": [],
+      "source_matched": false
+    },
+    "quality-assurance": {
+      "files": 2,
+      "required_skills": [
+        "quality-verification"
+      ],
+      "source_matched": true
+    },
+    "release-manager": {
+      "files": 8,
+      "required_skills": [],
+      "source_matched": false
+    },
+    "software-developer": {
+      "files": 8,
+      "required_skills": [
+        "quality-verification"
+      ],
+      "source_matched": true
+    },
+    "solution-architect": {
+      "files": 9,
+      "required_skills": [],
+      "source_matched": true
+    },
+    "specification-manager": {
+      "files": 48,
+      "required_skills": [],
+      "source_matched": true
+    }
+  },
+  "original_files_preserved": 238,
+  "protected_files_unchanged": 155,
+  "production_helper_change": "Only developer installed architect-helper lookup path; other production helper bytes unchanged.",
+  "startup_ok": true,
+  "package_audit_ok": true
+}

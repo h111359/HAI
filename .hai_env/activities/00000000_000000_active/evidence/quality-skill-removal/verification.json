@@ -1,0 +1,38 @@
+{
+  "checks": [
+    {
+      "check": "role-and-skill-integration",
+      "command": [
+        "C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\skills",
+        "-p",
+        "test_skill_tools.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ".........s.............\n----------------------------------------------------------------------\nRan 23 tests in 13.183s\n\nOK (skipped=1)\n"
+    },
+    {
+      "check": "developer-verification",
+      "command": [
+        "C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\roles\\software-developer\\scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "..............s......\n----------------------------------------------------------------------\nRan 21 tests in 0.595s\n\nOK (skipped=1)\n"
+    }
+  ]
+}

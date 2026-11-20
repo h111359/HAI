@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+  "invocation_id": "6e5bd9e3-6ea1-41f9-a876-ef4c6da6c492",
+  "role": "skill-evaluator",
+  "created_at": "2026-11-20T21:36:33Z",
+  "provenance": {
+    "source": "Skill-creator independent forward-testing guidance",
+    "reason": "Evaluate the substantially revised shared verification method on an isolated realistic task without HAI-dependent inputs."
+  }
+}

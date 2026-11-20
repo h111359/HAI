@@ -1,0 +1,16 @@
+{
+  "role_required_skills": {
+    "backlog-manager": [],
+    "business-analyst": [],
+    "git-manager": [],
+    "hai-framework-advisor": [],
+    "quality-assurance": [],
+    "release-manager": [],
+    "software-developer": [],
+    "solution-architect": [],
+    "specification-manager": []
+  },
+  "installed_skills": [],
+  "removed_skill_resolves": false,
+  "startup_ok": true
+}

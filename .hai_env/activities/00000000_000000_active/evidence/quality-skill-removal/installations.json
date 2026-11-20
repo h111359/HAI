@@ -1,0 +1,56 @@
+[
+  {
+    "ok": true,
+    "status": "ok",
+    "operation": "install",
+    "result": {
+      "source": "roles/quality-assurance",
+      "destination": ".hai_env/roles/quality-assurance",
+      "differences": [
+        "ROLE.md",
+        "procedures/perform-assigned-work.md"
+      ],
+      "registration_requested": true,
+      "relocated_files": [
+        "ROLE.md"
+      ],
+      "unresolved_references": [],
+      "execution_readiness": "not_checked",
+      "backup": ".hai_env/roles/.hai-backup-f044ebf00680426499013661e5e03b9b"
+    },
+    "changed_files": [
+      ".hai_env/roles/.hai-stage-fcf302d0b40f4734a892fef553141a9a",
+      ".hai_env/roles/.hai-stage-fcf302d0b40f4734a892fef553141a9a/quality-assurance",
+      ".hai_env/roles/.hai-backup-f044ebf00680426499013661e5e03b9b",
+      ".hai_env/roles/quality-assurance"
+    ],
+    "issues": []
+  },
+  {
+    "ok": true,
+    "status": "ok",
+    "operation": "install",
+    "result": {
+      "source": "roles/software-developer",
+      "destination": ".hai_env/roles/software-developer",
+      "differences": [
+        "ROLE.md",
+        "procedures/verify-and-handoff.md"
+      ],
+      "registration_requested": true,
+      "relocated_files": [
+        "ROLE.md"
+      ],
+      "unresolved_references": [],
+      "execution_readiness": "not_checked",
+      "backup": ".hai_env/roles/.hai-backup-d90f512f6a724c06ababbfd7dd912cb0"
+    },
+    "changed_files": [
+      ".hai_env/roles/.hai-stage-bd0ed17482f04a529bc0941dacd1e104",
+      ".hai_env/roles/.hai-stage-bd0ed17482f04a529bc0941dacd1e104/software-developer",
+      ".hai_env/roles/.hai-backup-d90f512f6a724c06ababbfd7dd912cb0",
+      ".hai_env/roles/software-developer"
+    ],
+    "issues": []
+  }
+]

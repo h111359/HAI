@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "install",
+  "result": {
+    "source": "roles/git-manager",
+    "destination": ".hai_env/roles/git-manager",
+    "differences": [
+      "scripts/test_migrate_git_configuration.py"
+    ],
+    "registration_requested": true,
+    "relocated_files": [
+      "ROLE.md",
+      "conventions/git-configuration_conv.md",
+      "procedures/collaborate.md",
+      "procedures/commit-and-export.md",
+      "procedures/configure-integrations.md",
+      "procedures/operate.md",
+      "procedures/release-and-recover.md",
+      "procedures/synchronize.md",
+      "scripts/README.md"
+    ],
+    "unresolved_references": [],
+    "execution_readiness": "not_checked",
+    "backup": ".hai_env/roles/.hai-backup-4182b8846966492c948b0cd1153a03cc"
+  },
+  "changed_files": [
+    ".hai_env/roles/.hai-stage-d021a4cc941d49219efafe609ac7d6af",
+    ".hai_env/roles/.hai-stage-d021a4cc941d49219efafe609ac7d6af/git-manager",
+    ".hai_env/roles/.hai-backup-4182b8846966492c948b0cd1153a03cc",
+    ".hai_env/roles/git-manager"
+  ],
+  "issues": []
+}

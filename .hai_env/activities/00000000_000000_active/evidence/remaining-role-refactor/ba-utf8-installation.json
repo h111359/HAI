@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "install",
+  "result": {
+    "source": "roles/business-analyst",
+    "destination": ".hai_env/roles/business-analyst",
+    "differences": [
+      "scripts/test_clarification.py",
+      "scripts/test_context_registry.py"
+    ],
+    "registration_requested": true,
+    "relocated_files": [
+      "ROLE.md",
+      "procedures/acquire-context.md"
+    ],
+    "unresolved_references": [],
+    "execution_readiness": "not_checked",
+    "backup": ".hai_env/roles/.hai-backup-4c3aa9ac03b04ca58d66a79144738e10"
+  },
+  "changed_files": [
+    ".hai_env/roles/.hai-stage-a4a21dfb18f44450a860503e52fbe726",
+    ".hai_env/roles/.hai-stage-a4a21dfb18f44450a860503e52fbe726/business-analyst",
+    ".hai_env/roles/.hai-backup-4c3aa9ac03b04ca58d66a79144738e10",
+    ".hai_env/roles/business-analyst"
+  ],
+  "issues": []
+}

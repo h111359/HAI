@@ -1,0 +1,132 @@
+{
+  "checked_at_utc": "2026-11-20T21:37:44.258305+00:00",
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "sha256": {
+    "shipping-policy.md": "9d51635672b8518d16570357a24ecdabbf3e45fd19f8e25aa3927ce79d48258a",
+    "shipping-report.csv": "c0de585014db1d9937d271620a319edb80dd0b2a8e18aa509caab3a1aef33fa6"
+  },
+  "inputs_unchanged_during_check": true,
+  "criteria": [
+    {
+      "id": "C1",
+      "criterion": "Each subtotal is nonnegative; each status is paid or pending",
+      "status": "pass",
+      "evidence": "All four rows: domain_pass"
+    },
+    {
+      "id": "C2",
+      "criterion": "Paid orders with subtotal at least 100.00 have shipping 0.00",
+      "status": "pass",
+      "evidence": "ORD-101, CSV line 2"
+    },
+    {
+      "id": "C3",
+      "criterion": "All other orders have shipping 5.00",
+      "status": "fail",
+      "evidence": "ORD-102 line 3 and ORD-104 line 5 pass; ORD-103 line 4 fails"
+    },
+    {
+      "id": "C4",
+      "criterion": "Grand total equals subtotal plus shipping",
+      "status": "fail",
+      "evidence": "ORD-101/102/103 pass reported-field addition; ORD-104 line 5 fails"
+    },
+    {
+      "id": "C5",
+      "criterion": "Amounts are decimal currency values rounded to two decimal places",
+      "status": "pass",
+      "evidence": "All 12 amount fields have two decimal places; all supplied arithmetic is exact at this precision"
+    },
+    {
+      "id": "C6",
+      "criterion": "Preserve order IDs and include exactly one row per supplied order",
+      "status": "pass",
+      "evidence": "Four rows, four unique IDs, exact supplied ID set"
+    }
+  ],
+  "rows": [
+    {
+      "csv_line": 2,
+      "order_id": "ORD-101",
+      "row": {
+        "order_id": "ORD-101",
+        "subtotal": "120.00",
+        "status": "paid",
+        "shipping": "0.00",
+        "grand_total": "120.00"
+      },
+      "domain_pass": true,
+      "eligible": true,
+      "expected_shipping": "0.00",
+      "shipping_pass": true,
+      "expected_total_from_reported_shipping": "120.00",
+      "addition_pass": true,
+      "expected_policy_total": "120.00",
+      "currency_format_pass": true,
+      "supplied_values_preserved": true
+    },
+    {
+      "csv_line": 3,
+      "order_id": "ORD-102",
+      "row": {
+        "order_id": "ORD-102",
+        "subtotal": "80.00",
+        "status": "paid",
+        "shipping": "5.00",
+        "grand_total": "85.00"
+      },
+      "domain_pass": true,
+      "eligible": false,
+      "expected_shipping": "5.00",
+      "shipping_pass": true,
+      "expected_total_from_reported_shipping": "85.00",
+      "addition_pass": true,
+      "expected_policy_total": "85.00",
+      "currency_format_pass": true,
+      "supplied_values_preserved": true
+    },
+    {
+      "csv_line": 4,
+      "order_id": "ORD-103",
+      "row": {
+        "order_id": "ORD-103",
+        "subtotal": "150.00",
+        "status": "pending",
+        "shipping": "0.00",
+        "grand_total": "150.00"
+      },
+      "domain_pass": true,
+      "eligible": false,
+      "expected_shipping": "5.00",
+      "shipping_pass": false,
+      "expected_total_from_reported_shipping": "150.00",
+      "addition_pass": true,
+      "expected_policy_total": "155.00",
+      "currency_format_pass": true,
+      "supplied_values_preserved": true
+    },
+    {
+      "csv_line": 5,
+      "order_id": "ORD-104",
+      "row": {
+        "order_id": "ORD-104",
+        "subtotal": "50.00",
+        "status": "paid",
+        "shipping": "5.00",
+        "grand_total": "54.00"
+      },
+      "domain_pass": true,
+      "eligible": false,
+      "expected_shipping": "5.00",
+      "shipping_pass": true,
+      "expected_total_from_reported_shipping": "55.00",
+      "addition_pass": false,
+      "expected_policy_total": "55.00",
+      "currency_format_pass": true,
+      "supplied_values_preserved": true
+    }
+  ],
+  "supplied_values_preserved": true
+}

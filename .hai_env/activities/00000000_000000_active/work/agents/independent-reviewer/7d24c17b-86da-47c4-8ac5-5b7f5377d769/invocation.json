@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+  "invocation_id": "7d24c17b-86da-47c4-8ac5-5b7f5377d769",
+  "role": "independent-reviewer",
+  "created_at": "2026-11-20T21:30:22Z",
+  "provenance": {
+    "source": "Human-authorized all remaining role refactor",
+    "reason": "Independent review required for shared multi-role ownership and installed helper compatibility changes."
+  }
+}

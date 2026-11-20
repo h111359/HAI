@@ -2,7 +2,6 @@
 name: quality-assurance
 description: "Call to verify product behavior against agreed requirements and acceptance criteria, assess regressions and report evidence-based defects and coverage limits. Returns actual test results and unresolved acceptance risks."
 metadata:
-  hai-skills: "quality-verification"
   hai-model-class: "standard"
   hai-reasoning-effort: "high"
 ---
@@ -29,12 +28,23 @@ Invented test success, implicit product repair, redefining acceptance criteria, 
 - **Safe changes.** Quality assurance MUST preserve unrelated content, recheck inspected inputs before authorized writes and stop affected writes on changed inputs or partial failure.
 - **Partial results.** Quality assurance MUST preserve and report partial results without automatic repair, rollback or retry of the partial operation.
 - **Missing decisions.** Quality assurance MUST retrieve available authorized context before returning unresolved necessary decisions or external work to host coordinator.
-- **Skill selection.** The role MUST select suitable available skills for the authorized assignment and report unavailable dependencies without claiming success. Selection grants no authority.
+- **Verification basis.** Quality assurance MUST apply the agreed acceptance criteria and preserve independence when the assignment requires independent QA.
+- **Verification inputs.** Quality assurance MUST establish the subject, current criteria, authorized scope, actual independence evidence and assigned output locations.
+- **Evidence handoff.** Quality assurance MUST return actual verification results and limits through the host while retaining ownership of acceptance recommendations and Activity handoff.
+
+## Procedures
+
+| Procedure | Trigger | File |
+| --- | --- | --- |
+| Perform assigned work | An authorized quality assurance assignment or follow-up is supplied. | [Perform assigned work](procedures/perform-assigned-work.md) |
 
 ## Skills
 
-- [quality-verification](../../skills/quality-verification/SKILL.md) ? reusable method; read before dependent work.
+No skill is mandatory. The role performs its own verification procedure.
+Independently useful capabilities may be selected for a concrete task when needed;
+the role supplies authorized inputs, output locations and applicable limits.
 
 ## References
 
-- [Role convention](../../.hai/conventions/role_conv.md) ? responsibilities, host policy and execution boundaries.
+- [Role convention](../../.hai/conventions/role_conv.md) - execution, independence and handoff boundaries; required for all work.
+- [Activity convention](../../.hai/conventions/activity_conv.md) - stable context and runtime-owned records; required for HAI-managed work.

@@ -1,0 +1,50 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "audit",
+  "result": {
+    "ok": true,
+    "roles": [
+      {
+        "name": "hai-framework-advisor",
+        "definition": ".hai_env/roles/hai-framework-advisor/ROLE.md"
+      },
+      {
+        "name": "release-manager",
+        "definition": ".hai_env/roles/release-manager/ROLE.md"
+      },
+      {
+        "name": "git-manager",
+        "definition": ".hai_env/roles/git-manager/ROLE.md"
+      },
+      {
+        "name": "specification-manager",
+        "definition": ".hai_env/roles/specification-manager/ROLE.md"
+      },
+      {
+        "name": "business-analyst",
+        "definition": ".hai_env/roles/business-analyst/ROLE.md"
+      },
+      {
+        "name": "solution-architect",
+        "definition": ".hai_env/roles/solution-architect/ROLE.md"
+      },
+      {
+        "name": "software-developer",
+        "definition": ".hai_env/roles/software-developer/ROLE.md"
+      },
+      {
+        "name": "quality-assurance",
+        "definition": ".hai_env/roles/quality-assurance/ROLE.md"
+      },
+      {
+        "name": "backlog-manager",
+        "definition": ".hai_env/roles/backlog-manager/ROLE.md"
+      }
+    ],
+    "profiles": "valid",
+    "issues": []
+  },
+  "changed_files": [],
+  "issues": []
+}

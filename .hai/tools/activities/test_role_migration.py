@@ -158,10 +158,10 @@ class SourceStagingTests(unittest.TestCase):
             skill = (self.stage/f'.hai_env/roles/{name}/ROLE.md').read_text(encoding='utf-8')
             self.assertIn('MUST NOT invoke or coordinate other agents', skill)
             self.assertIn('rather than mutate Activity records', skill)
-        package = self.stage/'.hai_env/skills/software-implementation'
-        skill = (package/'SKILL.md').read_text(encoding='utf-8')
+        package = self.stage/'.hai_env/roles/software-developer'
+        skill = (package/'ROLE.md').read_text(encoding='utf-8')
         procedure_paths = re.findall(r'\]\((procedures/[^)]+\.md)\)', skill)
-        self.assertTrue(procedure_paths, 'implementation skill must retain its reusable execution methods')
+        self.assertTrue(procedure_paths, 'developer role must retain its job-specific execution methods')
         developer = '\n'.join((package/path).read_text(encoding='utf-8') for path in procedure_paths)
         self.assertRegex(developer, r'original (?:Activity |runtime )?implementation-start (?:marker|evidence)')
         self.assertTrue((self.stage/'.hai/tools/hai.py').is_file())
