@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "install",
+  "result": {
+    "source": "skills/pdf",
+    "destination": ".hai_env/skills/pdf",
+    "differences": [
+      "UPSTREAM.md"
+    ],
+    "relocated_files": [],
+    "unresolved_references": [],
+    "execution_readiness": "not_checked",
+    "backup": ".hai_env/skills/.hai-backup-ecd31b8b59b24e5881de56bf9070334d"
+  },
+  "changed_files": [
+    ".hai_env/skills/.hai-stage-3d2b65fb23644514b4dbed00f67c9292",
+    ".hai_env/skills/.hai-stage-3d2b65fb23644514b4dbed00f67c9292/pdf",
+    ".hai_env/skills/.hai-backup-ecd31b8b59b24e5881de56bf9070334d",
+    ".hai_env/skills/pdf"
+  ],
+  "issues": []
+}

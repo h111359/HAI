@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "install",
+  "result": {
+    "source": "roles/backlog-manager",
+    "destination": ".hai_env/roles/backlog-manager",
+    "differences": [
+      "ROLE.md",
+      "conventions/backlog_conv.md",
+      "procedures/configure-backlog.md",
+      "procedures/import-drafts.md",
+      "procedures/maintain-items.md",
+      "procedures/prepare-activity-input.md",
+      "scripts/README.md",
+      "scripts/audit_backlog.py",
+      "scripts/test_audit_backlog.py"
+    ],
+    "registration_requested": true,
+    "relocated_files": [
+      "ROLE.md"
+    ],
+    "unresolved_references": [],
+    "execution_readiness": "not_checked",
+    "backup": ".hai_env/roles/.hai-backup-b5467afd475749d59cc9db416dc84576"
+  },
+  "changed_files": [
+    ".hai_env/roles/.hai-stage-15db7af7b1ff405ab3f535a76e6e4d2f",
+    ".hai_env/roles/.hai-stage-15db7af7b1ff405ab3f535a76e6e4d2f/backlog-manager",
+    ".hai_env/roles/.hai-backup-b5467afd475749d59cc9db416dc84576",
+    ".hai_env/roles/backlog-manager"
+  ],
+  "issues": []
+}

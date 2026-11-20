@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "validate",
+  "result": {
+    "ok": true,
+    "definition": ".hai_env/roles/backlog-manager/ROLE.md",
+    "role": "backlog-manager",
+    "issues": []
+  },
+  "changed_files": [],
+  "issues": []
+}

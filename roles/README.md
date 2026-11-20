@@ -2,7 +2,7 @@
 
 Direct child folders contain the reusable ROLE.md job descriptions. This flat source collection is separate from installed `.hai_env/roles/` snapshots and the explicit installed catalogue. Installation, registration, selection and actual authorization are distinct; source inspection never invokes a role.
 
-Roles retain responsibility, scope, quality, decisions, authority limits and handoffs. They select reusable methods from root skills/ through quoted comma-separated hai-skills metadata and Skills links. Methods and their resources have one skill owner; several roles may use the same capability. Software-developer and quality-assurance both use quality-verification while keeping their own conduct and independence requirements.
+Roles are complete job packages: responsibility, scope, quality, decisions, authority limits, handoffs and any job-specific conventions, procedures, scripts or templates. They may use independent skills when a task needs them; a role need not require a skill. Declared required skills use quoted comma-separated hai-skills metadata and matching Skills links. Each method and its resources have one owner. Backlog-manager owns its backlog methods without requiring a skill; Software-developer and quality-assurance currently share quality-verification.
 
 Actual settings owners retain their contract and single saved file outside the package. Settings-free roles need no empty contract or procedure tree. Preserve model declarations; skills grant no model override or permissions. See the [role convention](../.hai/conventions/role_conv.md), [skill convention](../.hai/conventions/skill_conv.md), [skill collection](../skills/README.md) and [migration procedure](../.hai/procedures/migrate-capabilities.md).
 

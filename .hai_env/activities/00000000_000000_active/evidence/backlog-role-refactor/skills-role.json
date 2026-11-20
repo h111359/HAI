@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "skills",
+  "result": {
+    "role": "backlog-manager",
+    "skills": [],
+    "authority": "unchanged"
+  },
+  "changed_files": [],
+  "issues": []
+}

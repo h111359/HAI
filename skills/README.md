@@ -2,9 +2,9 @@
 
 Each direct child package has a native SKILL.md entry point with name/description frontmatter and free-form task instructions. Resources belong to the task method; no ROLE persona, empty configuration contract or model policy is imposed. Skills may be used directly or selected by several roles within actual task authority.
 
-The existing crete-design-package skill remains unchanged. Extracted capabilities cover backlog management, requirements analysis, Git operations, quality verification, software implementation, solution design, specification management. Small related procedures stay together in a coherent capability; shared contracts have one owner.
+Skills provide useful capabilities across roles and workspaces. Backlog-specific methods now belong to Backlog-manager rather than a backlog-management skill. The existing crete-design-package and other packages remain unchanged pending their separate review. Related procedures stay with their actual method owner; shared contracts have one owner.
 
-These are source packages. Installed independent snapshots live in `.hai_env/skills/`; runtime never falls back to this collection. Install dependencies explicitly before dependent roles and review differences before replacement. A direct skill can consume one installed service owner's validated settings without selecting that role or duplicating saved configuration.
+These are source packages. Installed independent snapshots live in `.hai_env/skills/`; runtime never falls back to this collection. Install dependencies explicitly before dependent roles and review differences before replacement. Existing integration skills can consume one installed service owner's validated settings for compatibility. That coupling does not make them HAI-independent. New portable skills receive sufficient explicit task inputs; callers supply their environment context.
 
 See the [skill convention](../.hai/conventions/skill_conv.md), [tools](../.hai/tools/skills/README.md), [roles](../roles/README.md) and [explicit capability migration](../.hai/procedures/migrate-capabilities.md). Runtime records and generated results stay with their Activity or established product owner, outside reusable definitions.
 

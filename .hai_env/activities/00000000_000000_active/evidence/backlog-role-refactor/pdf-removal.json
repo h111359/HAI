@@ -1,0 +1,53 @@
+{
+  "required_by_roles": [],
+  "workflow_or_configuration_dependencies": [],
+  "retired": {
+    "skills/pdf": {
+      "preserved_at": ".hai_env/activities/00000000_000000_active/history/pdf-skill-removal/source/pdf",
+      "files": {
+        "LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+        "SKILL.md": "d108cf2b36355ab37eb5962933f4d09785ec002f3105c506129320209306b9d2",
+        "UPSTREAM.md": "dcbc8282e892784a359e1244eafc754cb6237fcae872a4ec97981077f39504d9",
+        "agents/openai.yaml": "f8b223e25343559f57e1839ccd849fd1494a9729da33da04bb5074b7f80f4887",
+        "assets/pdf.png": "17da356d195d4e3fa24f9becbee6b8d9e60e13005762b5ab0809c520c76da6ee"
+      }
+    },
+    ".hai_env/skills/pdf": {
+      "preserved_at": ".hai_env/activities/00000000_000000_active/history/pdf-skill-removal/installed/pdf",
+      "files": {
+        "LICENSE.txt": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+        "SKILL.md": "d108cf2b36355ab37eb5962933f4d09785ec002f3105c506129320209306b9d2",
+        "UPSTREAM.md": "dcbc8282e892784a359e1244eafc754cb6237fcae872a4ec97981077f39504d9",
+        "agents/openai.yaml": "f8b223e25343559f57e1839ccd849fd1494a9729da33da04bb5074b7f80f4887",
+        "assets/pdf.png": "17da356d195d4e3fa24f9becbee6b8d9e60e13005762b5ab0809c520c76da6ee"
+      }
+    }
+  },
+  "role_installation": {
+    "ok": true,
+    "status": "ok",
+    "operation": "install",
+    "result": {
+      "source": "roles/backlog-manager",
+      "destination": ".hai_env/roles/backlog-manager",
+      "differences": [
+        "ROLE.md"
+      ],
+      "registration_requested": true,
+      "relocated_files": [
+        "ROLE.md"
+      ],
+      "unresolved_references": [],
+      "execution_readiness": "not_checked",
+      "backup": ".hai_env/roles/.hai-backup-367545e4c4f2482bb720f2dc75af0c93"
+    },
+    "changed_files": [
+      ".hai_env/roles/.hai-stage-e34f589973fb47aba82f0097673cd83c",
+      ".hai_env/roles/.hai-stage-e34f589973fb47aba82f0097673cd83c/backlog-manager",
+      ".hai_env/roles/.hai-backup-367545e4c4f2482bb720f2dc75af0c93",
+      ".hai_env/roles/backlog-manager"
+    ],
+    "issues": []
+  },
+  "archived_role_backup": ".hai_env/activities/00000000_000000_active/history/pdf-skill-removal/installed-role-before-update"
+}

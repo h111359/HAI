@@ -1,0 +1,11 @@
+{
+  "python": "C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+  "packages": {
+    "reportlab": false,
+    "pdfplumber": false,
+    "pypdf": false
+  },
+  "pdftoppm": null,
+  "dependencies_installed_by_this_task": false,
+  "pdf_document_processing_executed": false
+}

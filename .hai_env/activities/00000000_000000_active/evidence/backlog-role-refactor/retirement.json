@@ -1,0 +1,28 @@
+{
+  "retired": [
+    "skills/backlog-management",
+    ".hai_env/skills/backlog-management"
+  ],
+  "complete_predecessors": ".hai_env/activities/00000000_000000_active/history/backlog-role-refactor",
+  "archived_runtime_backups": [
+    {
+      "from": ".hai_env/roles/.hai-backup-b5467afd475749d59cc9db416dc84576",
+      "to": ".hai_env/activities/00000000_000000_active/history/backlog-role-refactor/runtime-installations/.hai-backup-b5467afd475749d59cc9db416dc84576"
+    },
+    {
+      "from": ".hai_env/skills/.hai-backup-ecd31b8b59b24e5881de56bf9070334d",
+      "to": ".hai_env/activities/00000000_000000_active/history/backlog-role-refactor/runtime-installations/.hai-backup-ecd31b8b59b24e5881de56bf9070334d"
+    },
+    {
+      "from": ".hai_env/roles/.hai-backup-be8eb39087d540c99233909da5ed7478",
+      "to": ".hai_env/activities/00000000_000000_active/history/backlog-role-refactor/runtime-installations/.hai-backup-be8eb39087d540c99233909da5ed7478"
+    }
+  ],
+  "removed_empty_stages": [
+    ".hai_env/skills/.hai-stage-448e7019b36a433c952208950cc93f84",
+    ".hai_env/roles/.hai-stage-15db7af7b1ff405ab3f535a76e6e4d2f",
+    ".hai_env/skills/.hai-stage-3d2b65fb23644514b4dbed00f67c9292",
+    ".hai_env/roles/.hai-stage-f13aee3ebfc846ac9082236369615f72"
+  ],
+  "preserved_original_files": 22
+}

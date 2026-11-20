@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "install",
+  "result": {
+    "source": "skills/pdf",
+    "destination": ".hai_env/skills/pdf",
+    "differences": [
+      "LICENSE.txt",
+      "SKILL.md",
+      "UPSTREAM.md",
+      "agents/openai.yaml",
+      "assets/pdf.png"
+    ],
+    "relocated_files": [],
+    "unresolved_references": [],
+    "execution_readiness": "not_checked"
+  },
+  "changed_files": [
+    ".hai_env/skills/.hai-stage-448e7019b36a433c952208950cc93f84",
+    ".hai_env/skills/.hai-stage-448e7019b36a433c952208950cc93f84/pdf",
+    ".hai_env/skills/pdf"
+  ],
+  "issues": []
+}

@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+  "invocation_id": "6dd3aeb4-1116-4978-b7c5-c3da7c5e53d7",
+  "role": "independent-reviewer",
+  "created_at": "2026-11-20T20:10:19Z",
+  "provenance": {
+    "source": "Authorized Backlog-manager refactor",
+    "reason": "Prepare independently reviewed role replacement and optional PDF installation."
+  }
+}

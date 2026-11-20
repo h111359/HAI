@@ -1,0 +1,16 @@
+{
+  "command": [
+    "C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\skills",
+    "-p",
+    "test_skill_tools.py"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ".......s.............\n----------------------------------------------------------------------\nRan 21 tests in 8.574s\n\nOK (skipped=1)\n"
+}

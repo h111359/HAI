@@ -1,0 +1,18 @@
+{
+  "protected_files_unchanged": 35,
+  "retired_packages_absent": true,
+  "packages": {
+    "backlog-manager": {
+      "source_files": 10,
+      "installed_matches_prepared_source": true,
+      "unresolved_links": []
+    },
+    "pdf": {
+      "source_files": 5,
+      "installed_matches_prepared_source": true,
+      "unresolved_links": []
+    }
+  },
+  "independent_review": "Passed, including guidance follow-up; /root/backlog_role_review; no substantive findings, writer ended, usage source unavailable.",
+  "startup_ok": true
+}

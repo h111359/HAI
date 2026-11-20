@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "resolve",
+  "result": {
+    "ok": true,
+    "definition": ".hai_env/skills/pdf/SKILL.md",
+    "skill": "pdf",
+    "issues": [],
+    "authority": "unchanged; skill selection grants no permissions"
+  },
+  "changed_files": [],
+  "issues": []
+}

@@ -120,10 +120,49 @@ class SkillTests(unittest.TestCase):
                 if not package.is_dir() or package.name.startswith('.'):continue
                 relative=package.relative_to(self.root).as_posix();manifest=packages.snapshot(self.root,relative,entry=entry);content={name:(package/name).read_bytes() for name in manifest}
                 self.assertEqual(package_content.validate(self.root,relative,content),[],relative)
-        for name in ['git-operations','backlog-management','specification-management','quality-verification']:
+        for name in ['git-operations','specification-management','quality-verification']:
             result=skills.handle('resolve',self.root,{'name':name},False);self.assertTrue(result['ok'],result)
         definition='.hai_env/roles/software-developer/ROLE.md';self.assertTrue(packages.handle('skills',self.root,{'definition':definition},False)['ok'])
-        example=(self.root/'.hai_env/skills/backlog-management/conventions/backlog_conv.md').read_text(encoding='utf-8');self.assertIn('[BL-0001](new/BL-0001.md)',example)
+        example=(self.root/'.hai_env/roles/backlog-manager/conventions/backlog_conv.md').read_text(encoding='utf-8');self.assertIn('[BL-0001](new/BL-0001.md)',example)
+    def test_complete_backlog_role_operates_without_skills_or_source_collections(self):
+        import subprocess
+        self.environment_only();repo=TOOLS.parent.parent
+        shutil.copytree(repo/'.hai',self.root/'.hai',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
+        shutil.copytree(repo/'roles/backlog-manager',self.root/'roles/backlog-manager')
+        result=packages.handle('install',self.root,{'source':'roles/backlog-manager','name':'backlog-manager','provenance':self.prov},True)
+        self.assertTrue(result['ok'],result)
+        (self.root/'roles').rename(self.root/'retained-source-roles')
+        self.assertFalse((self.root/'roles').exists());self.assertFalse((self.root/'skills').exists())
+        self.assertFalse((self.root/'.hai_env/skills').exists())
+        definition='.hai_env/roles/backlog-manager/ROLE.md'
+        self.assertTrue(packages.handle('validate',self.root,{'definition':definition},False)['ok'])
+        dependencies=packages.handle('skills',self.root,{'definition':definition},False)
+        self.assertTrue(dependencies['ok'],dependencies);self.assertEqual(dependencies['result']['skills'],[])
+        self.assertFalse(skills.handle('resolve',self.root,{'name':'backlog-management'},False)['ok'])
+        for location in ['backlog','planning/team-backlog']:
+            self.write(location+'/catalogue.md','# Backlog\n\n| ID | Title | Status | File |\n| --- | --- | --- | --- |\n')
+            for folder in ['new','closed']:(self.root/location/folder).mkdir()
+            if location!='backlog':
+                self.write('.hai_env/config/roles/backlog-manager.json',json.dumps({'config_format_version':1,'settings':{'location':location}}))
+            before={p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
+            checked=subprocess.run([sys.executable,'-B',str(self.root/'.hai_env/roles/backlog-manager/scripts/audit_backlog.py'),'--workspace',str(self.root)],capture_output=True,text=True,timeout=30)
+            self.assertEqual(checked.returncode,0,checked.stdout+checked.stderr)
+            report=json.loads(checked.stdout);self.assertTrue(report['ok'],report);self.assertEqual(report['location'],location)
+            self.assertEqual(before,{p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
+
+    def test_portable_skill_installs_and_resolves_independently_without_roles(self):
+        self.environment_only()
+        self.skill('incoming',name='portable-document')
+        self.write('incoming/portable-document/references/format.md','# Document format\n\nCaller-supplied content and outputs.\n')
+        before={p.relative_to(self.root/'incoming/portable-document'):p.read_bytes() for p in (self.root/'incoming/portable-document').rglob('*') if p.is_file()}
+        result=skills.handle('install',self.root,{'source':'incoming/portable-document','name':'portable-document','provenance':self.prov},True)
+        self.assertTrue(result['ok'],result)
+        (self.root/'incoming').rename(self.root/'retained-sources')
+        self.assertFalse((self.root/'.hai_env/roles').exists())
+        result=skills.handle('resolve',self.root,{'name':'portable-document'},False)
+        self.assertTrue(result['ok'],result);self.assertNotIn('configuration_owner',result['result'])
+        self.assertEqual(before,{p.relative_to(self.root/'.hai_env/skills/portable-document'):p.read_bytes() for p in (self.root/'.hai_env/skills/portable-document').rglob('*') if p.is_file()})
+
     def test_role_local_procedure_is_validated_in_final_logical_location(self):
         from runtime import package_content
         self.environment_only();self.skill('.hai_env/skills');p=self.role('worker',base='roles')
