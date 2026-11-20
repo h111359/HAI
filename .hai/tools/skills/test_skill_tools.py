@@ -120,7 +120,7 @@ class SkillTests(unittest.TestCase):
                 if not package.is_dir() or package.name.startswith('.'):continue
                 relative=package.relative_to(self.root).as_posix();manifest=packages.snapshot(self.root,relative,entry=entry);content={name:(package/name).read_bytes() for name in manifest}
                 self.assertEqual(package_content.validate(self.root,relative,content),[],relative)
-        for name in ['git-operations','specification-management','quality-verification']:
+        for name in ['git-operations','quality-verification']:
             result=skills.handle('resolve',self.root,{'name':name},False);self.assertTrue(result['ok'],result)
         definition='.hai_env/roles/software-developer/ROLE.md';self.assertTrue(packages.handle('skills',self.root,{'definition':definition},False)['ok'])
         example=(self.root/'.hai_env/roles/backlog-manager/conventions/backlog_conv.md').read_text(encoding='utf-8');self.assertIn('[BL-0001](new/BL-0001.md)',example)
@@ -148,6 +148,34 @@ class SkillTests(unittest.TestCase):
             checked=subprocess.run([sys.executable,'-B',str(self.root/'.hai_env/roles/backlog-manager/scripts/audit_backlog.py'),'--workspace',str(self.root)],capture_output=True,text=True,timeout=30)
             self.assertEqual(checked.returncode,0,checked.stdout+checked.stderr)
             report=json.loads(checked.stdout);self.assertTrue(report['ok'],report);self.assertEqual(report['location'],location)
+            self.assertEqual(before,{p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
+
+    def test_complete_specification_role_operates_without_skills_or_source_collections(self):
+        import subprocess
+        self.environment_only();repo=TOOLS.parent.parent
+        shutil.copytree(repo/'.hai',self.root/'.hai',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
+        shutil.copytree(repo/'roles/specification-manager',self.root/'roles/specification-manager')
+        source=self.root/'roles/specification-manager'
+        contracts={name:(source/name).read_bytes() for name in ['contract.json','configuration/contract.json']}
+        result=packages.handle('install',self.root,{'source':'roles/specification-manager','name':'specification-manager','provenance':self.prov},True)
+        self.assertTrue(result['ok'],result)
+        (self.root/'roles').rename(self.root/'retained-source-roles')
+        self.assertFalse((self.root/'roles').exists());self.assertFalse((self.root/'skills').exists())
+        self.assertFalse((self.root/'.hai_env/skills').exists())
+        definition='.hai_env/roles/specification-manager/ROLE.md'
+        self.assertTrue(packages.handle('validate',self.root,{'definition':definition},False)['ok'])
+        dependencies=packages.handle('skills',self.root,{'definition':definition},False)
+        self.assertTrue(dependencies['ok'],dependencies);self.assertEqual(dependencies['result']['skills'],[])
+        self.assertFalse(skills.handle('resolve',self.root,{'name':'specification-management'},False)['ok'])
+        installed=self.root/'.hai_env/roles/specification-manager'
+        self.assertEqual(contracts,{name:(installed/name).read_bytes() for name in contracts})
+        for settings in [None,{'config_format_version':1,'settings':{'enabled':False,'location':'product/specification'}}]:
+            if settings:self.write('.hai_env/config/roles/specification-manager.json',json.dumps(settings))
+            before={p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
+            checked=subprocess.run([sys.executable,'-B',str(installed/'scripts/specification_configuration.py'),'--workspace',str(self.root)],capture_output=True,text=True,encoding='utf-8',timeout=30)
+            self.assertEqual(checked.returncode,0,checked.stdout+checked.stderr)
+            report=json.loads(checked.stdout);self.assertTrue(report['ok'],report)
+            self.assertFalse((self.root/'.hai_env/specifications').exists());self.assertFalse((self.root/'product/specification').exists())
             self.assertEqual(before,{p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
 
     def test_portable_skill_installs_and_resolves_independently_without_roles(self):

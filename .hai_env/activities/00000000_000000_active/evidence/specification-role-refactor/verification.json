@@ -1,0 +1,40 @@
+{
+  "checks": [
+    {
+      "check": "installed-specification-audit-and-settings",
+      "command": [
+        "C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai_env\\roles\\specification-manager\\scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "........s........................s........s....s...s\n----------------------------------------------------------------------\nRan 52 tests in 13.494s\n\nOK (skipped=5)\n"
+    },
+    {
+      "check": "role-and-skill-package-integration",
+      "command": [
+        "C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\skills",
+        "-p",
+        "test_skill_tools.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "........s.............\n----------------------------------------------------------------------\nRan 22 tests in 17.541s\n\nOK (skipped=1)\n"
+    }
+  ],
+  "initial_failure": "52 source fixture tests ran with one Unicode catalogue assertion failure and5skips due to default Windows text decoding. Corrected29test-only text IO calls to explicit UTF-8. Production helpers unchanged.",
+  "temporary_files": "All test processes run from Activity work/test-work with TEMP/TMP/TMPDIR/HAI_TEST_TMP explicitly inside the Activity."
+}

@@ -1,0 +1,15 @@
+{
+  "status": "configured",
+  "path": ".hai_env/config/roles/specification-manager.json",
+  "settings": {
+    "enabled": false,
+    "location": ".hai_env/specifications"
+  },
+  "configured_fields": [
+    "enabled",
+    "location"
+  ],
+  "issues": [],
+  "ok": true,
+  "scope": "saved_specification_configuration_only"
+}
