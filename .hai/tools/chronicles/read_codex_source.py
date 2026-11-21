@@ -56,14 +56,14 @@ def reviewed_metadata(kind, payload):
     return False
 
 
-def read_source(path, representation, expected_session=None, *, allow_partial=False):
+def read_source(path, representation, expected_session=None, *, allow_partial=False, include_commentary=False):
     """Read exact text; opt-in partial mode retains unsupported-record gaps."""
     if representation == 'auto':
         # Select one representation, never concatenate duplicate views of a turn.
-        events = read_source(path, 'event_msg', expected_session, allow_partial=allow_partial)
+        events = read_source(path, 'event_msg', expected_session, allow_partial=allow_partial, include_commentary=include_commentary)
         if not events['usable'] or events['messages'] or events['gaps']:
             return events
-        return read_source(path, 'response_item', expected_session, allow_partial=allow_partial)
+        return read_source(path, 'response_item', expected_session, allow_partial=allow_partial, include_commentary=include_commentary)
     result = {"ok": False, "source_session_id": None, "original_started_at": None,
               "representation": representation, "source_sha256": None, "messages": [], "issues": [],
               "adapters": [], "usable": False, "complete": False, "gaps": []}
@@ -124,7 +124,7 @@ def read_source(path, representation, expected_session=None, *, allow_partial=Fa
             if not nonblank(payload.get("type")):
                 raise ValueError("selected representation payload type discriminator is missing or invalid")
             if representation == "event_msg":
-                adapted = event_message(payload)
+                adapted = event_message(payload, include_commentary=include_commentary)
                 if adapted is None:
                     continue
                 payload, adapter = adapted
@@ -155,9 +155,9 @@ def read_source(path, representation, expected_session=None, *, allow_partial=Fa
                     result['adapters'].append('codex-response-message-v1')
             if role == "assistant":
                 phase = payload.get("phase")
-                if phase in {"commentary", "analysis"}:
+                if phase == "analysis" or (phase == "commentary" and not include_commentary):
                     continue
-                if phase != "final_answer":
+                if phase != "final_answer" and not (include_commentary and phase == "commentary"):
                     raise ValueError("assistant final-message phase is missing or unsupported")
             if representation == "response_item":
                 if not isinstance(content, list) or not content:

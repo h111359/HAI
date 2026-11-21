@@ -207,18 +207,13 @@ class SourceDiscoveryTests(unittest.TestCase):
         link.unlink(); link.hardlink_to(self.source)
         self.assertFalse(self.call('discover', {})['ok'])
 
-    def test_disabled_recording_does_not_discover_or_create_defaults(self):
-        self.state['features']['chronicles']['enabled'] = False; self.save_state()
-        before = self.snapshot()
-        with mock.patch.object(sources, 'resolve', side_effect=AssertionError('discovery forbidden when disabled')):
-            for op, req in [('discover', {}), ('bind', self.binding())]:
-                result = self.call(op, req, op == 'bind')
-                self.assertTrue(result['ok'], result)
-                self.assertEqual(result['result']['status'], 'disabled')
-        self.assertEqual(before, self.snapshot())
-        req = self.binding(); req['mandatory'] = True
-        self.assertTrue(self.call('bind', req, True)['ok'])
-        self.assertFalse(json.loads((self.root / '.hai_env/config/state.json').read_text(encoding='utf-8'))['features']['chronicles']['enabled'])
+    def test_historical_disabled_setting_does_not_disable_discovery(self):
+        self.state['features']['chronicles']['enabled']=False; self.save_state()
+        before=self.snapshot()
+        with mock.patch.object(sources,'resolve',wraps=sources.resolve) as resolve:
+            result=self.call('discover',{})
+            self.assertTrue(result['ok'],result);resolve.assert_called_once()
+        self.assertEqual(before,self.snapshot())
 
     def test_observed_occurrence_preview_first_bind_resume_and_exact_duplicate_text(self):
         before = self.snapshot(); result = self.call('bind', self.binding(), False)

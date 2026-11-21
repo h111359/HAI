@@ -69,7 +69,7 @@ def load(root, relative, activity_id):
                 raise ValueError('Unexpected message schema')
             fmt = message.get('chat_format_version')
             required = FIELDS if fmt == 1 else FIELDS | {'role', 'message_type'}
-            optional = {'source_message_id', 'delivery_status'} if fmt == 2 else set()
+            optional = {'source_message_id', 'delivery_status', 'source'} if fmt == 2 else set()
             if not required <= set(message) or set(message) - required - optional:
                 raise ValueError('Unexpected message schema')
             if type(fmt) is not int or fmt not in (1, 2):
@@ -79,6 +79,14 @@ def load(root, relative, activity_id):
                     raise ValueError('Unknown conversation role or message_type')
                 if 'delivery_status' in message and message['delivery_status'] not in DELIVERY:
                     raise ValueError('Unknown conversation delivery_status')
+                if 'source' in message:
+                    origin = message['source']
+                    if (not isinstance(origin, dict) or set(origin) != {'session_id','position','timestamp','message_id','turn_id'}
+                            or not isinstance(origin['session_id'], str) or not origin['session_id']
+                            or type(origin['position']) is not int or origin['position'] < 0
+                            or any(origin[k] is not None and not isinstance(origin[k], str) for k in ('timestamp','message_id','turn_id'))
+                            or not message.get('source_message_id')):
+                        raise ValueError('Invalid native message provenance')
                 if 'source_message_id' in message:
                     source_id = message['source_message_id']
                     if not isinstance(source_id, str) or not source_id.strip() or source_id in source_ids:
@@ -94,7 +102,7 @@ def load(root, relative, activity_id):
             if not isinstance(stamp, str) or datetime.strptime(stamp, '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%dT%H:%M:%SZ') != stamp:
                 raise ValueError('Invalid message timestamp')
             author(message['author']); text(message['text'], unlimited=fmt == 2,
-                allow_empty=fmt == 2 and message['message_type'] == 'legacy-input')
+                allow_empty=fmt == 2 and (message['message_type'] == 'legacy-input' or 'source' in message))
             prov = message['provenance']
             if not isinstance(prov, dict) or set(prov) != {'source', 'reason'} or any(not isinstance(v, str) or not v.strip() for v in prov.values()):
                 raise ValueError('Invalid message provenance')

@@ -8,7 +8,7 @@ HAI requires Python 3.11 or later and a host that can read workspace instruction
 
 Before replacing an existing framework, preserve the workspace's `.hai_env/`, configured Activity and specification data, and product files. A framework upgrade does not itself migrate state, records or transcripts. Current state format is 3; supported format 2 is read-only migration context. Preserve invalid, unsupported or conflicting state and use only an explicitly authorized migration after reviewing its inputs and backup/partial-result behavior. See the [state convention](.hai/conventions/state_conv.md) and [Activity migration notes](release-notes/activity-migration.md). Preserve Activity IDs, human inputs, revisions and transcript provenance through an upgrade.
 
-Optional workspace extensions are separate complete packages under `.hai_env/roles/`, with explicit entries in its catalogue. Golden source packages in root `roles/` are data; they do not execute from the source library. Installation, replacement, registration and execution are separate actions. Preserve local modifications and external settings at `.hai_env/config/roles/`, review replacement differences, and do not infer enabled capabilities or permission from a package being present. Core startup and administration require no optional extension or model profile. See [role configuration](.hai/conventions/role-configuration_conv.md).
+Optional workspace extensions are separate complete packages under `.hai_env/roles/`, with explicit entries in its catalogue. Explicitly selected source packages are data; no workspace-root collection is required. Installation, replacement, registration and execution are separate actions. Preserve local modifications and external settings at `.hai_env/config/roles/`, review replacement differences, and do not infer enabled capabilities or permission from a package being present. Core startup and administration require no optional extension or model profile. See [role configuration](.hai/conventions/role-configuration_conv.md).
 
 ## Upgrading the environment layout in 0.4.0
 
@@ -76,3 +76,5 @@ before apply; do not invent saved choices or launch a run during installation.
 Each run uses a separate folder, and step executions receive distinct intermediate
 names. Accepted evidence and input lineage remain with the Activity. Historical
 records and existing settings are preserved by explicit reviewed migration.
+
+Conversation recording is always enabled. When upgrading a current Activity with legacy chronicles, preview and apply `recording migrate` with its Activity ID and provenance. The runtime preserves original files/settings under the Activity history before retiring them, then synchronizes missing messages into chat. Archived records remain readable without automatic rewriting.

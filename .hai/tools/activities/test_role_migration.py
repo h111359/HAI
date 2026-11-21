@@ -48,7 +48,7 @@ def snapshot(root):
 
 
 class CoreIsolationTests(unittest.TestCase):
-    def test_enabled_recording_without_optional_owner_does_not_break_core_or_discover_records(self):
+    def test_always_recording_default_without_optional_owner_does_not_discover_records(self):
         with tempfile.TemporaryDirectory(prefix='hai-core-only-') as directory:
             stage = Path(directory).resolve()
             copy_core(stage)
@@ -56,7 +56,6 @@ class CoreIsolationTests(unittest.TestCase):
             env.mkdir()
             state = json.loads((stage/'.hai/templates/state.json').read_text(encoding='utf-8'))
             state['state_format_version'] = 3
-            state['features']['chronicles']['enabled'] = True
             (env/'config').mkdir()
             (env/'config/state.json').write_text(json.dumps(state), encoding='utf-8')
             (env/'config/agent_instructions.md').write_text('', encoding='utf-8')
@@ -68,7 +67,7 @@ class CoreIsolationTests(unittest.TestCase):
             result = startup_check.check(stage)
             self.assertTrue(result['ok'], result)
             self.assertEqual(result['environment'], 'valid')
-            self.assertTrue(result['features']['chronicles']['enabled'])
+            self.assertEqual(result['features'], {})
             self.assertEqual(result['roles'], [])
             self.assertFalse((env/'roles/codex-chronicle-manager').exists())
             self.assertEqual(snapshot(stage), before)

@@ -22,7 +22,7 @@ def blocks(content, allowed):
     return ''.join(parts)
 
 
-def event_message(payload):
+def event_message(payload, *, include_commentary=False):
     """Return normalized payload and adapter, or None for excluded events."""
     kind = payload.get('type')
     if kind in ('user_message', 'agent_message'):
@@ -55,8 +55,8 @@ def event_message(payload):
                 return None
             raise ValueError('unsupported completed item type: ' + item_type)
         user = item_type == 'UserMessage'
-        # Progress/analysis must stay excluded even if their content is non-text.
-        if not user and item.get('phase') in ('analysis', 'commentary'):
+        # Historical recording excludes progress; unified capture includes visible commentary.
+        if not user and (item.get('phase') == 'analysis' or (item.get('phase') == 'commentary' and not include_commentary)):
             return None
         normalized = {'type': 'user_message' if user else 'agent_message',
                       'message': blocks(item.get('content'), {'text', 'Text'}),

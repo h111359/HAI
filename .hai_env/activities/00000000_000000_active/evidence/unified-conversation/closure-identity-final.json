@@ -1,0 +1,37 @@
+[
+  {
+    "suite": "activities",
+    "pattern": "test_role_migration.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "...sss\n----------------------------------------------------------------------\nRan 6 tests in 0.490s\n\nOK (skipped=3)\n"
+  },
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_core_boundary.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 2.372s\n\nOK\n"
+  },
+  {
+    "suite": "startup",
+    "pattern": "test_startup_context.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "........s..s\n----------------------------------------------------------------------\nRan 12 tests in 7.828s\n\nOK (skipped=2)\n"
+  },
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_chat.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ".......s.......\n----------------------------------------------------------------------\nRan 15 tests in 16.242s\n\nOK (skipped=1)\n"
+  },
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_conversation_recording.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 23.023s\n\nOK\n"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "original_chat_bytes": 24346,
+  "original_chat_prefix_preserved": true,
+  "backup_files_verified": 7,
+  "legacy_messages_verified": 112,
+  "native_messages_after_sync": 117,
+  "total_chat_messages": 156,
+  "missing_messages": [],
+  "warnings": [],
+  "startup_valid": true,
+  "active_roots": {
+    "chronicles_exists": false,
+    "system_chronicles_exists": false
+  },
+  "features": {}
+}

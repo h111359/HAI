@@ -311,9 +311,11 @@ class CoreChronicleTests(unittest.TestCase):
 
 
     def toggle(self, enabled):
-        r = environment.handle('environment/configure', self.root,
-            {'changes': {'features.chronicles.enabled': enabled}, 'provenance': self.prov}, True)
-        self.assertTrue(r['ok'], r)
+        # Historical file compatibility, not a supported current configuration API.
+        config = self.state['features']['chronicles']
+        if config['enabled'] != enabled:
+            config['enablement_revision'] = config.get('enablement_revision', 0) + 1
+        config['enabled'] = enabled; self.save_state()
 
     def test_explicit_sync_recovers_live_binding_after_interrupted_closure(self):
         self.assertTrue(self.sync(sources=[self.assignment])['ok'])
@@ -357,9 +359,8 @@ class CoreChronicleTests(unittest.TestCase):
 
     def test_cadence_change_does_not_reset_enablement(self):
         self.assertTrue(self.sync(sources=[self.assignment])['ok'])
-        r = environment.handle('environment/configure', self.root,
-            {'changes': {'features.chronicles.record_every_prompts': 10}, 'provenance': self.prov}, True)
-        self.assertTrue(r['ok'], r); self.assertTrue(self.sync()['ok'])
+        self.state['features']['chronicles']['record_every_prompts'] = 10; self.save_state()
+        self.assertTrue(self.sync()['ok'])
 
     def test_two_sessions_and_nonoverlapping_legacy_ranges(self):
         legacy = self.root / '.hai_env/activities/20261106_000000_legacy'

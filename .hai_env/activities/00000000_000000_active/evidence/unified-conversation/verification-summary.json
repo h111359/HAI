@@ -1,0 +1,264 @@
+{
+  "modules": 32,
+  "tests": 607,
+  "skipped": 38,
+  "all_passed": true,
+  "checks": [
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_activity_layout_services.py",
+      "exit_code": 0,
+      "tests": 4,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_activity_migration.py",
+      "exit_code": 0,
+      "tests": 9,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_activity_layout.py",
+      "exit_code": 0,
+      "tests": 11,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_conversation.py",
+      "exit_code": 0,
+      "tests": 5,
+      "skipped": 0,
+      "evidence": "focused-final.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_chat.py",
+      "exit_code": 0,
+      "tests": 15,
+      "skipped": 1,
+      "evidence": "closure-identity-final.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_core_boundary.py",
+      "exit_code": 0,
+      "tests": 4,
+      "skipped": 0,
+      "evidence": "closure-identity-final.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_invocations.py",
+      "exit_code": 0,
+      "tests": 14,
+      "skipped": 1,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_conversation_recording.py",
+      "exit_code": 0,
+      "tests": 28,
+      "skipped": 0,
+      "evidence": "final-preservation-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_chronicles.py",
+      "exit_code": 0,
+      "tests": 33,
+      "skipped": 1,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_recording_policy.py",
+      "exit_code": 0,
+      "tests": 8,
+      "skipped": 0,
+      "evidence": "focused-final.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_layout_migration.py",
+      "exit_code": 0,
+      "tests": 18,
+      "skipped": 2,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_portability.py",
+      "exit_code": 0,
+      "tests": 8,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_source_discovery.py",
+      "exit_code": 0,
+      "tests": 18,
+      "skipped": 1,
+      "evidence": "focused-final.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_test_runner.py",
+      "exit_code": 0,
+      "tests": 4,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_role_migration.py",
+      "exit_code": 0,
+      "tests": 16,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_workflows.py",
+      "exit_code": 0,
+      "tests": 6,
+      "skipped": 2,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_usage.py",
+      "exit_code": 0,
+      "tests": 19,
+      "skipped": 1,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_workflow_integration.py",
+      "exit_code": 0,
+      "tests": 7,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "startup",
+      "pattern": "test_migrate_specification_configuration.py",
+      "exit_code": 0,
+      "tests": 5,
+      "skipped": 0,
+      "evidence": "focused-final.json"
+    },
+    {
+      "suite": "startup",
+      "pattern": "test_startup_check.py",
+      "exit_code": 0,
+      "tests": 51,
+      "skipped": 6,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_source_continuity.py",
+      "exit_code": 0,
+      "tests": 82,
+      "skipped": 2,
+      "evidence": "focused-final.json"
+    },
+    {
+      "suite": "activities",
+      "pattern": "test_recording_gate.py",
+      "exit_code": 0,
+      "tests": 10,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "startup",
+      "pattern": "test_startup_context.py",
+      "exit_code": 0,
+      "tests": 12,
+      "skipped": 2,
+      "evidence": "closure-identity-final.json"
+    },
+    {
+      "suite": "activities",
+      "pattern": "test_role_migration.py",
+      "exit_code": 0,
+      "tests": 6,
+      "skipped": 3,
+      "evidence": "closure-identity-final.json"
+    },
+    {
+      "suite": "chronicles",
+      "pattern": "test_read_codex_source.py",
+      "exit_code": 0,
+      "tests": 25,
+      "skipped": 1,
+      "evidence": "completed-commentary-tests.json"
+    },
+    {
+      "suite": "roles",
+      "pattern": "test_role_state.py",
+      "exit_code": 0,
+      "tests": 4,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "configuration",
+      "pattern": "test_configuration_tools.py",
+      "exit_code": 0,
+      "tests": 15,
+      "skipped": 3,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "skills",
+      "pattern": "test_skill_tools.py",
+      "exit_code": 0,
+      "tests": 28,
+      "skipped": 5,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "workflows/tests",
+      "pattern": "test_definition.py",
+      "exit_code": 0,
+      "tests": 24,
+      "skipped": 1,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "roles",
+      "pattern": "test_role_tools.py",
+      "exit_code": 0,
+      "tests": 77,
+      "skipped": 6,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_workflow_runs.py",
+      "exit_code": 0,
+      "tests": 29,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    },
+    {
+      "suite": "runtime/tests",
+      "pattern": "test_configurable_workflows.py",
+      "exit_code": 0,
+      "tests": 12,
+      "skipped": 0,
+      "evidence": "broad-tests.json"
+    }
+  ]
+}

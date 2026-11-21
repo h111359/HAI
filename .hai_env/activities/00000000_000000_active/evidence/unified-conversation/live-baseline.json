@@ -1,0 +1,34 @@
+{
+  "chat_bytes": 24346,
+  "chat_sha256": "54366717fdda1088104619cd10b9b4c4992542a3f6b189524cdfa1f52113b765",
+  "files": {
+    ".hai_env/activities/00000000_000000_active/chronicles/20261112_195218_segment-01.md": "935452a2d57bcbd7a207a7bc6253827b34f737268c0eae72ef9d63082e156b21",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/checkpoint.json": "198d73cfe3bc807af58431b4676f41a74ac3d5b58955a8e5d00b2b1f327e0436",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/core.json": "55ab955c7ff32536472dfeac7ae3304e1dc38a13f921aa1304a9cd24ee5833e7",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/20261112_195218_segment-01.md": "e7f3c52348af8e0ec6a455217335fa2c64d75348c6bb437951af325a6e20e160",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/checkpoint.json": "0700eefdebb5f264ac485ace4291beff6d980d1e189e075f787170665778f251",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/core.json": "12106bd67bc83b47e0eef9548f803808ebd1353da1be450e919ccdbcb3158786",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/reconciliation.json": "2b199834b606c7c8dd3e76e8796413abda56fc6cceb8e7105e49b6589be5b913"
+  },
+  "preview": {
+    "ok": true,
+    "status": "planned",
+    "operation": "migrate",
+    "result": {
+      "status": "planned",
+      "backup_path": ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1",
+      "files": [
+        ".hai_env/activities/00000000_000000_active/chronicles/20261112_195218_segment-01.md",
+        ".hai_env/activities/00000000_000000_active/system/chronicles/checkpoint.json",
+        ".hai_env/activities/00000000_000000_active/system/chronicles/core.json",
+        ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/20261112_195218_segment-01.md",
+        ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/checkpoint.json",
+        ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/core.json",
+        ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/reconciliation.json"
+      ],
+      "messages": 112
+    },
+    "changed_files": [],
+    "issues": []
+  }
+}

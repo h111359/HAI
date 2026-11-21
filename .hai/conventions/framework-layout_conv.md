@@ -30,7 +30,7 @@ Activity records use the configured store and the shared [Activity convention](a
 New Activities use layout 2: README.md at root; operational records under system/;
 review outputs in results/, retained proof in evidence/, prior versions in history/,
 and disposable material in work/. Human instructions persist in typed chat even
-when chronicles are disabled. Existing archives retain layout 1 until explicit
+when native sources are unavailable. Existing archives retain layout 1 until explicit
 compatible migration. See the Activity convention for exact generation/cleanup rules.
 
 Only `.hai/` and `.hai_env/` are fixed workspace roots. A new workspace needs
@@ -72,3 +72,5 @@ there is no external reference allowlist and no file is created automatically.
 This declares structural references, not execution permissions or permission to
 read secrets. Existing workflow/product/store location settings retain their own
 owners and need no duplicate entry merely to operate on those configured stores.
+
+Current recording text lives only in system/chat.jsonl; system/recording.json holds references and progress. Explicit legacy recording migration retains original transcript/metadata trees under history/recording/. No new root chronicles folder is generated for layout-2 recording.

@@ -27,18 +27,9 @@ The root is an object with required properties:
 | --- | --- | --- |
 | `state_format_version` | positive integer | Current installed runtime contract version `3`; Booleans are invalid. |
 | `activities` | object | Mandatory safe workspace-relative `location`, default `.hai_env/activities`; no `enabled` switch. |
-| `features` | object | Required `chronicles` object; specification is no longer a core feature entry. |
+| `features` | object | An empty object in new installations; conversation recording is always enabled. Legacy feature data remains readable for compatibility. |
 
-`features.chronicles.enabled` is a required Boolean, default false.
-`record_every_prompts` is an optional positive JSON integer, default 5; Booleans,
-zero, negative/fractional/string/null values are invalid even while disabled.
-`mode` is optional and accepts `best_effort` (default when absent) or `required`.
-Best-effort recording interruptions do not prohibit independent ordinary work.
-Required mode and independently mandatory recording obligations retain strict gates.
-Changing mode does not change enabled intervals or their enablement revision.
-Transcripts remain Activity-local under `chronicles/`; no global location exists.
-Core state stores no current Activity pointer, prompt counter, transcript coverage
-or in-flight-worker marker. runtime owns record discovery policy and lifecycle; the shared startup context helper may perform read-only discovery for host coordinator. Core owns source-backed transcript and checkpoint formats and writes. Configuration changes never alter record lifecycle/content.
+New installations contain no chronicles toggle, mode or cadence. Recording checks run every turn; operational state is Activity-local in system/recording.json and message text is only in system/chat.jsonl. Existing features.chronicles values are validated as historical data, not current recording controls. Unified recording migration preserves their exact predecessor and removes that obsolete entry. No global transcript location or current Activity pointer is introduced.
 
 The installed `.hai/contracts/state.json` is the single
 current/supported-version authority, independent of release SemVer or target copies.
@@ -60,7 +51,7 @@ owner absence or invalid configuration does not invalidate core startup. Startup
 can boundedly report the registered installed Specification-manager's separate
 `role_configurations` result without loading scripts, product contents or the library.
 
-runtime owns central state, chronicles configuration, model profiles and startup
+runtime owns central state, conversation synchronization, model profiles and startup
 policy. It does not perform ordinary specification setup. The explicit format-2-to-3
 extraction is its narrow transition exception, coordinated by host coordinator; it does not
 grant tree-edit authority. Other extensions' unknown subtrees remain opaque:
@@ -88,16 +79,9 @@ guessed root. An unavailable optional owner remains an isolated dependency; setu
 must resolve any potentially conflicting dormant configured root before a path
 change. Core read-only startup and unrelated work remain independent.
 
-### Chronicles configuration
+### Always-enabled conversation recording
 
-runtime applies explicit chosen Activity-location/chronicles changes,
-preserving unmentioned values and all optional owner files. Initialization creates
-state and mandatory instructions only; no catalogue, profiles, Activity records,
-specification/config file or transcript contents are fabricated. runtime creates the Activity store under its authorized record workflow. Core owns exact-source transcripts and checkpoints after the host assigns explicit sources; a missing required source blocks synchronization and required-recording closure.
-
-Enabling/disabling chronicles preserves existing content and does not override
-mandatory instructions. Return attributable enablement-change boundaries separately;
-threshold changes do not reset coverage or dispatch progress. The host owns source assignment, counting, cadence and continuation limits; core attempts source synchronization before closure and requires verified success in required mode or under an independently mandatory obligation. Default best-effort source interruptions retain explicit unavailable coverage. Disabled/no-obligation closure needs no transcript source or recording writes.
+Runtime configuration changes Activity location only; it cannot disable recording or change a recording threshold. Initialization creates minimal state and fixed instructions. Activity chat capture and native-source reconciliation use the [single conversation contract](chronicles_conv.md). Source assignments require observed Activity boundaries; missing sources produce warnings, and independent mandatory completeness obligations remain explicit. Legacy recording migration preserves originals before retiring old locations/settings.
 
 ## Local model profiles
 
@@ -168,7 +152,7 @@ directory only if absent. Recheck safe paths, state absence, inspected contract
 and template contents, and candidate validity immediately before exclusive state
 creation; stop on changed inputs and never replace an existing file or conflicting
 target. Read back and verify the current supported version, all template defaults,
-and disabled chronicles/default threshold, then run the startup
+and always-enabled conversation behavior, then run the startup
 helper. Create no catalogue or optional resources. Verify both mandatory resources
 and that existing unrelated contents remain unchanged, rather
 than requiring an empty container. No optional-setting questions or additional

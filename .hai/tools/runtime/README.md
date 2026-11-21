@@ -5,7 +5,7 @@ interpreter invocation, recording representation, exact-byte handling and the
 workspace-contained regression runner. Startup includes observed
 `execution_context`; this is separate from core validity and recording readiness.
 
-Run `python -B .hai/tools/hai.py startup --workspace .` for core environment, Activity and separate read-only `recording_context` readiness. Required recording needs binding/synchronization before substantive recorded work, even when core `ok` is true. Common options may precede or follow the group. Commands emit JSON with `ok`, `status`, `operation`, `result`, `changed_files`, and `issues`. Exit codes are 0 for success or a valid plan, 1 for blocked, partial or unsupported work, and 2 for invalid invocation. Optional registration and model profile issues are reported separately from core environment validity.
+Run `python -B .hai/tools/hai.py startup --workspace .` for core environment, Activity and separate read-only `recording_context` readiness. Recording checks are always enabled; inspect binding/synchronization needs even when core `ok` is true. Common options may precede or follow the group. Commands emit JSON with `ok`, `status`, `operation`, `result`, `changed_files`, and `issues`. Exit codes are 0 for success or a valid plan, 1 for blocked, partial or unsupported work, and 2 for invalid invocation. Optional registration and model profile issues are reported separately from core environment validity.
 
 Use `--request-stdin` for a strict UTF-8 JSON object on standard input, or
 `--request PATH` for an existing workspace-contained JSON file. These options are
@@ -15,12 +15,12 @@ folder, never loose in the Activity root. Prefer in-memory/standard-input calls.
 
 - `environment initialize`: provenance only; creates absent state and missing instructions, preserving existing instructions.
 - `environment migrate-layout`: provenance only; previews relocation of legacy `.hai_env/` state, profiles and instructions into `.hai_env/config/`. Add `--apply` only for explicitly authorized migration after stopping other writers. Preserves exact bytes and optional profile absence; retains recovery copies and a migration manifest. Mixed, conflicting or incomplete layouts require explicit reconciliation, never automatic overwrite or retry. See [migration procedure](../../procedures/migrate-environment-layout.md).
-- `environment configure`: `changes` maps explicit dotted names to values. Supported names are `activities.location`, `features.chronicles.enabled`, `features.chronicles.record_every_prompts`, and `features.chronicles.mode` (`best_effort` by default, or `required`); changing a location does not move content.
+- `environment configure`: `changes` accepts `activities.location`; changing a location does not move content. Recording is always enabled and has no mode/cadence controls.
 - `environment migrate-specification`: provenance only; previews or executes the scoped format-2 migration using its existing backup and candidate safeguards.
 - `profiles check` reads optional profiles. `profiles configure` takes `changes` naming `light`, `standard`, or `advanced`; all three model IDs must be present after the update. This does not establish host model availability.
 - `configuration read` takes `role`. `configuration update` takes `role`, provenance and `changes` keyed by names declared in that installed role's contract.
 
-For example, save `{"provenance":{"source":"user request","reason":"adjust cadence"},"changes":{"features.chronicles.record_every_prompts":10}}` in a workspace JSON file, then run `python -B .hai/tools/hai.py environment configure --request change.json --workspace .` to preview. Add `--apply` to write.
+For example, preview `environment configure` with `{"provenance":{"source":"user request","reason":"choose Activity store"},"changes":{"activities.location":".hai_env/records"}}` through --request-stdin. Add --apply only for the authorized change.
 
 Workflow modules provide Activity, package, recording and host operations. A host capability check reports availability; the runtime does not install dependencies or download packages implicitly.
 
@@ -233,7 +233,7 @@ specify output owners and retention. README navigation derives from existing pat
 Host instructions capture received human messages before dependent work regardless
 of chronicles, and record assistant content with truthful delivery status. This is
 an explicit host integration protocol, not a claim of an unavailable automatic UI
-hook or authentication. Optional chronicles still verify actual saved-source coverage.
+hook or authentication. Always-enabled reconciliation checks actual saved-source coverage into the same chat.
 
 ## Activity and package operations
 
@@ -243,7 +243,7 @@ Requests are JSON objects. All applied Activity and package mutations require va
 - `activity usage-update` takes `activity_id`, provenance and optional `sources`, `pricing` and `reported_spend`. It previews by default; `--apply` refreshes assigned source ranges into Activity-local `usage.json` and `usage.md`. `activity usage-read` takes only `activity_id` and reads a retained snapshot, including archives. Closure automatically refreshes usage before lifecycle writes; unknown data is unavailable/stale, never fabricated zero. See [source attribution, counters and estimates](../../conventions/activity-usage_conv.md).
 - `activity invocation-allocate` takes `activity_id`, `role` and provenance. Preview creates nothing (`allocated: false`); `--apply` exclusively creates `work/agents/<role>/<uuid>/invocation.json` in layout 2 (legacy Activities keep files/agent-invocations/<uuid>/invocation.json) below the current Activity and returns its existing folder (`allocated: true`), stable IDs, Activity-relative suffix and metadata. Closed/stale IDs, collisions and unsafe paths are rejected. Partial results retain and name changed paths. See [allocation and actual host handoff](../../conventions/agent-invocation_conv.md); the runtime does not spawn agents.
 - `activity chat-read` takes `activity_id`, optional nonnegative integer `after_sequence` (default `0`) and optional integer `limit` (`1..1000`, default `100`). Returns a page with `messages`, `total_messages`, `next_after_sequence` and `has_more`; reads closed Activities too. Omit `--apply` for reads. `activity chat-post` takes `activity_id`, `author`, `text` and provenance. It previews by default; `--apply` appends to the current Activity's `chat.jsonl` under the runtime lock. No edit/delete action exists. See [chat format and participation](../../conventions/activity-chat_conv.md), including attribution and filesystem-access limits.
-- `activity create` takes `initial_input` and provenance. `activity record` takes `activity_id`, optional `steps` mapping step names to statuses, optional `implementation_start` Boolean, optional `artifacts` array of `{name, text, reason}`, optional `input_append`, `log`, and provenance. `activity close` takes `activity_id`, `outcome`, `archive_label`, `outcome_text`, `recording` with `status` and `details`, and provenance. It also accepts `recording_requirement` with Boolean `enabled` and `mandatory`, and a `recording_proof` gate request. Verified closure additionally supplies `recording_paths` with `sources` mapping source IDs to workspace-relative files and `artifacts` mapping artifact IDs to files inside the Activity; their hashes must match the gate evidence. `activity supplement` takes `activity_id`, `text`, and provenance. When chronicles are enabled, closure attempts synchronization through completed saved exchanges. Required mode and independent mandatory obligations retain recording gates; best-effort source interruptions detected before writes become explicit unavailable coverage. Integrity and partial-write failures still block closure. Explicit compatible proof remains supported. Disabled/no-obligation closure requires no transcript. These operations preserve partial results on failure.
+- `activity create` takes initial_input and provenance. `activity record` takes activity_id, optional steps/implementation_start/artifacts/input_append, log and provenance. `activity close` takes activity_id, outcome, archive_label, outcome_text and provenance. Layout-2 closure always reconciles chat; optional recording_requirement must keep enabled:true and can declare an independent mandatory obligation. Legacy external recording_proof/recording_paths cannot bypass unified verification. Available recognized messages are saved before reporting completeness or unresolved-boundary blockers. Legacy layout-1 external proof remains historical compatibility only. `activity supplement` appends attributed evidence to a closed record without reopening it. Actual partial paths are retained on failures.
 - `packages validate` takes `definition`; `packages resolve` takes `definition` and `runtime`, a capability snapshot shaped as `{"models":{"model-id":["high"]}}`. `packages audit` takes `{}`. `packages install` takes workspace-relative `source`, `name`, provenance, and optional Boolean `replace` and `register`. Replacement additionally requires the exact `reviewed_differences` list returned by a preview; the previous package is retained as a backup. Registration may require a separate reconciliation after replacement. `packages register` takes `name` and provenance. Remote acquisition is unsupported. Safe no-overwrite package and Activity moves require an available native atomic rename primitive. Implementations cover Linux, Windows and macOS; only Linux has been tested here.
 - `recording status` takes `{}` and reports the configured flag, threshold, and available evidence. `recording schedule` takes `occurrence_ids`, optional `covered_ids`, optional positive integer `threshold`, and optional `last_dispatched_count` for the previously dispatched observed count. It reports gaps and whether dispatch is due; it does not persist a checkpoint or start a background task. `recording assess-closure` accepts the structured request defined by the recording gate helper. The recorder consumes explicit assignments; bounded current-session discovery/binding is documented below.
 - `host check` takes `model`, `effort`, and caller-supplied `models` mapping each model ID to an array of supported efforts. It reports whether that evidence contains the pair. The runtime does not discover host capabilities or invoke a host agent.
@@ -351,168 +351,20 @@ sources, idempotent totals, unavailable data, optimistic/partial persistence, CL
 archive reads and automatic pre-closure refresh. These checks do not authenticate
 host billing evidence or prove completeness of all related sessions.
 
-## Current-session source discovery and early binding
+## Always-enabled conversation recording
 
-Enabled recording authorizes read-only lookup of the current host-identified
-session. `recording discover` accepts optional `session_id`, `source_path`,
-`codex_home`, `representation` (default `auto`), `mandatory` and `provenance`.
-Prefer host `CODEX_THREAD_ID`, then `CODEX_SESSION_ID`; a supplied ID must agree
-with that selected identity. An inherited parent session ID can differ from a
-participant's current thread. Prefer a canonical supplied path;
-otherwise inspect filenames under the Codex home's `sessions/` tree for exactly
-one `rollout-*-<session UUID>.jsonl`, then validate only that candidate's embedded
-identity, workspace, schema and canonical nonlinked/singly-linked file. No other
-conversation content is read. Zero/multiple candidates fail; there is no newest-file
-heuristic. Results contain metadata and `latest_user_occurrence`, never source text.
-No saved user occurrence in the selected representation interrupts discovery with
-an actionable diagnostic. Automatic selection tries reviewed event adapters before
-response items; interpretations are never merged or guessed. Explicit representation
-selection remains available.
+New layout-2 Activities have one authoritative conversation: system/chat.jsonl. Applied chat-post stores the posted message and checks registered sources for missing saved messages. Every turn must also run recording synchronize --apply; startup is read-only and reports the action needed. There is no recording enable/disable switch or prompt threshold. Bookkeeping lives in system/recording.json without repeated message bodies.
 
-`recording bind` additionally requires `activity_id`, observed `start_position`,
-`enabled_intervals` and provenance. The start is a saved user occurrence in the
-selected representation; the host attributes it to the first actual Activity work
-prompt. Latest occurrence does not select an existing Activity's range. Intervals
-follow the existing synchronization schema. Preview is read-only; `--apply` persists
-through the synchronizer and returns `usage_source` for separate `activity usage-update`.
-Existing ranges cannot silently move. Disabled/no-independent-obligation commands
-perform no discovery/writes. Independent mandatory recording supplies `mandatory:
-true` plus applicable instruction provenance.
+- `recording discover`: read-only current-host session resolution using an explicit canonical source path or exact session filename under the configured host session store. Never searches unrelated conversation text.
+- `recording bind`: activity_id, authoritative session_id/source_path/representation, observed start_position and provenance. The Activity range is continuously recorded; enabled_intervals is unnecessary for unified binding. Preview without --apply; applied binding is durable before imports. It never infers the first work prompt.
+- `recording synchronize`: activity_id, provenance, optional explicitly assigned sources and optional independently attributable mandatory flag. Preview returns counts/warnings, not reserved message IDs. Apply appends missing messages and preserves existing bytes. Every retained occurrence is rechecked, including earlier gaps.
+- `recording verify`: activity_id; read-only missing-message, retained-reference and current-source checks. needs_synchronization requires an applied synchronization. recorded_with_gaps never means complete coverage.
+- `recording migrate`: activity_id and provenance. Explicitly previews/applies migration of the current layout-2 legacy transcript ledger. Every proven indexed message is imported even if the native source is unavailable. Exact predecessors, including old repair history and settings, go to history/recording/before-unified-v1/. Existing chat is an exact prefix. Publication/retirement are resumable; no guessed Markdown parsing or unverified deletion.
+- `recording status` reports always-enabled policy. `recording adapters` lists reviewed source adapters. Historical layout-1 recording/proof code remains for compatibility, not an optional current recorder.
 
-The host verifies that a user occurrence is the actual work prompt, not an
-environment-only context record. Native delegated assignments can use the
-existing explicit `recording synchronize` path at their verified assignment
-position; do not feed an environment record to interactive `recording bind`.
-The adapter still excludes inter-agent/tool metadata from transcript text.
+Visible assistant commentary/progress is included; internal analysis/tool plumbing is excluded. Imports retain source-qualified identities and source timestamps/positions separately from capture time/sequence. Repeated equal text is never deduplicated by text. Source-less older posts remain unchanged; overlapping imported source occurrences may coexist rather than guessing their identity. Prepared assistant messages remain prepared; delivered native replies are captured only after saved source evidence exists. No host delivery hook or background execution is assumed.
 
-Example workspace-contained request (values are placeholders):
-
-```json
-{"activity_id":"<current UUID>","start_position":42,"enabled_intervals":[{"start":{"source_session_id":"<host session UUID>","source_position":42},"end":null,"provenance":"recording enabled before this observed work prompt"}],"provenance":{"source":"authorized host assignment","reason":"register before recorded work"}}
-```
-
-Run `<absolute-python> -B .hai/tools/hai.py recording bind --workspace . --request <request.json>`;
-add `--apply` for persistence. Position 42 is illustrative, never a default. Startup
-never mutates a binding. `recording_context` reports disabled, needs_activity,
-needs_binding, verified, needs_synchronization, blocked or unverified independently
-of core validity. Missing current host identity remains unverified even with a
-previously registered source. Source failures become visible here immediately. See the owning
-[procedure](../../procedures/establish-recording-source.md).
-
-Run `<absolute-python> -B -m unittest discover -s .hai/tools/runtime/tests -p 'test_source_discovery.py'`
-for discovery/readiness/binding integration; existing `test_chronicles.py` checks
-range separation, off-periods, exact text, closure and persistence safeguards.
-Fixtures do not replace observed actual host/source integration.
-
-### Recording compatibility and policy
-
-`recording adapters` lists reviewed format names, recognized envelopes and the
-bounded discovery policy. Adding unfamiliar support follows
-[maintain source adapters](../../procedures/maintain-source-adapters.md); the host
-can author and test new support under a maintenance assignment, with independent
-review before trust. No source file can install executable adapters.
-
-Startup reports `recording_context.policy` and `continuation_allowed` separately
-from recording evidence. Missing mode defaults to `best_effort` without migration.
-Ordinary work can continue with visible unverified coverage. Synchronize and verify distinguish `recorded_with_gaps` from complete verification
-and retain actual integrity/mutation failures. `required` mode or an independently mandatory
-obligation retains recording gates. Best-effort closure can retain successful partial recording with explicit gaps.
-A failed source preparation may retain an unavailable-source gap only before
-recording writes; retained artifact corruption,
-unsafe paths, identity conflicts and partial mutations are not downgraded.
-
-Synchronization checks exact retained message continuity after a supported source
-rewrite. Positions may be remapped only for an unambiguous live continuously
-enabled assignment; closed bounds and off-period boundaries require explicit
-reconciliation. Known missing sources can be rediscovered only by exact current
-host session identity and checked workspace. No newest-file heuristic is used.
-Recovery preserves the preceding core ledger, checkpoint and transcript under
-`chronicles/history/<id>/`, with hashed reconciliation provenance. Message indexes
-support subsequent rewrites; legacy transcripts with ambiguous framing are refused.
-Read-only verification never changes mappings; synchronization applies the proved
-mapping and rechecks freshness. Unsupported valid records become visible positional
-gaps while recognized messages are retained; unsafe or unverifiable sources remain
-failures.
-
-## Core chronicles
-
-Chronicles are core framework functionality, independent of optional roles or model
-profiles. Supply explicit Activity-attributed sources in a workspace JSON request:
-
-```json
-{
-  "activity_id": "<current Activity UUID>",
-  "sources": [{
-    "path": "/explicit/saved/session.jsonl",
-    "session_id": "<original session UUID>",
-    "start_position": 42,
-    "representation": "event_msg",
-    "enabled_intervals": [{
-      "start": {"source_session_id": "<original session UUID>", "source_position": 42},
-      "end": null,
-      "provenance": "Recording was enabled before this assigned Activity range"
-    }]
-  }],
-  "provenance": {"source": "host assignment", "reason": "record current Activity exchanges"}
-}
-```
-
-`recording synchronize` previews; `--apply` writes exact eligible saved exchanges
-to Activity-local `chronicles/` with a format-1 checkpoint and a core binding/hash
-ledger. Position 42 is illustrative. Later requests need only Activity ID and
-provenance; source assignments remain fixed. `recording verify` takes only
-Activity ID and is read-only, including archived Activities. It freshly checks current eligible source and
-recorded artifacts. Preview/verify never creates files. Synchronization with
-recording disabled and no independent obligation writes nothing.
-
-Closure synchronizes regardless of prompt cadence and finalizes live assignment
-ends at the completed eligible cutoff. The final undelivered acknowledgement is
-excluded. New eligible input during closure invalidates freshness. Missing,
-rewritten or ambiguous source, edited artifacts and persistence failures preserve
-actual partial results and block enabled closure. Exact prior checkpoint/segments
-without a core binding ledger remain preserved but require explicit adoption;
-there is no implicit legacy migration. Never delete a ledger to retry partial work.
-
-See the [core chronicle contract](../../conventions/chronicles_conv.md),
-[transcript format](../../conventions/transcript-segment_conv.md) and
-[source adapter](../chronicles/README.md). The source reader extracts text; only
-core synchronization writes transcript/checkpoint/ledger files. Host assignment
-and cadence remain necessary; no background daemon or after-turn continuation
-is assumed.
-
-Independent mandatory recording while the setting is disabled supplies Boolean
-`mandatory: true` to synchronize, with the applicable instruction identified in
-provenance. The setting itself is preserved. Enablement toggles increment an
-internal revision; subsequent synchronization needs explicit reconciled enabled
-intervals for every registered source, retaining all previously recorded exchanges.
-Cadence-only changes do not reset recording or require interval reconciliation.
-Ordinary synchronization does not implement legacy adoption, closed-record
-catch-up or prepared-text mutations; those remain explicit maintenance dependencies.
-Pending checkpoint work blocks normal refresh rather than being overwritten.
-
-## Unsupported records and partial chronicles
-
-Runtime discovery, synchronization and verification use tolerant source extraction.
-Unsupported records do not suppress recognized messages on either side of a gap.
-A safely stored partial batch returns `status: recorded_with_gaps`,
-`coverage: partial` and warnings with source identity, position and reason.
-The host must communicate those warnings without claiming complete coverage.
-
-Ledger, checkpoint and transcript source metadata retain the same scoped gaps.
-Verified ranges exclude gaps; `last_successful_at` retains the last fully verified
-batch (or null). Current completeness is re-evaluated on fresh synchronization,
-allowing a reviewed adapter to resolve an earlier gap without inventing text.
-
-Required-mode closure stores recognized content and gap evidence before refusing
-its incomplete-coverage gate. This separates successful partial storage from
-full-recording obligations. Existing unsafe-path, attribution, identity, retained
-artifact and source-continuity checks are unchanged.
-
-Gap metadata extends the current recording format without a state/layout migration.
-The updated runtime reads previous complete format-1 ledgers/checkpoints. Older
-strict runtimes may reject gap-bearing records or their extended attempt status;
-this is not a downgrade-compatibility guarantee. Preserve evidence and update the
-reader rather than removing gap metadata to make an old reader accept it.
+Unavailable sources and unsupported valid records produce coverage warnings while recognized messages are stored. Integrity errors retain actual partial paths. Closure flushes messages and seals source assignments; independent mandatory completeness obligations and unresolved registered-source end boundaries can prevent archival after supported messages are retained. See [recording contract](../../conventions/chronicles_conv.md).
 
 Installed skill discovery reads entry-point frontmatter only, returning each
 candidate's name, description and definition path. Startup exposes this as

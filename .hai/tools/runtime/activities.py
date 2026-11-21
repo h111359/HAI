@@ -242,7 +242,19 @@ def handle(operation, workspace, request, apply):
                 if layout_version(root, base) == 2 and state.get('initial_message_id') is None and message.get('role') == 'human':
                     state['initial_message_id'] = message['message_id']
                     write_json(root, state_path, state, state_fp); posted_changes.append(state_path)
-                return envelope(operation, result={'path': relative, 'message': message, 'replayed': appended is False}, changed=posted_changes)
+                recording_result = None
+                if layout_version(root, base) == 2:
+                    from . import conversation
+                    legacy = checked_path(root, artifact(root, base, 'chronicles/core.json'))
+                    if legacy.exists() and not checked_path(root, conversation.state_path(root, base)).exists():
+                        recording_result = {'status': 'needs_migration', 'warnings': ['Run recording migrate; posted message is retained']}
+                    else:
+                        try:
+                            recording_result, recording_changes = conversation.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, True)
+                            posted_changes.extend(recording_changes)
+                        except SafetyError as exc:
+                            raise SafetyError(str(exc), posted_changes + getattr(exc, 'changed_files', [])) from exc
+                return envelope(operation, result={'path': relative, 'message': message, 'replayed': appended is False, 'recording': recording_result}, changed=posted_changes)
             if op == 'record':
                 steps = request.get('steps', {})
                 if not isinstance(steps, dict) or any(k not in STEPS or v not in STEP_VALUES for k,v in steps.items()): raise ValueError('invalid steps')
@@ -305,42 +317,58 @@ def handle(operation, workspace, request, apply):
                 assert_activity_closable(root, ident)
                 outcome = request.get('outcome'); label = request.get('archive_label'); text = required_text(request.get('outcome_text'), 'outcome_text'); rec = request.get('recording')
                 if outcome not in ('completed','cancelled','stopped') or not isinstance(label,str) or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+){0,4}',label): raise ValueError('invalid outcome or archive_label')
-                if not isinstance(rec,dict) or rec.get('status') not in ('disabled','verified','pending','unavailable','recorded_with_gaps') or not isinstance(rec.get('details'),str): raise ValueError('explicit recording status and details required')
-                enabled = read_json(checked_path(root, STATE, allow_missing=False)).get('features', {}).get('chronicles', {}).get('enabled')
-                if type(enabled) is not bool: raise SafetyError('Recording enablement is unverified')
-                requirement = request.get('recording_requirement', {'enabled': enabled, 'mandatory': False})
-                if not isinstance(requirement,dict) or type(requirement.get('mandatory')) is not bool or type(requirement.get('enabled')) is not bool or requirement['enabled'] != enabled: raise ValueError('invalid or inconsistent recording_requirement')
-                if rec.get('mandatory') is True: requirement = {**requirement, 'mandatory': True}
-                from .recording_policy import effective, recoverable, RecordingInterruption
-                policy = effective(read_json(checked_path(root, STATE, allow_missing=False)), requirement['mandatory'])
-                core_recording = (requirement['enabled'] or requirement['mandatory']) and not (rec['status'] == 'verified' and request.get('recording_proof') is not None)
-                if rec['status'] == 'verified' and not core_recording:
-                    from .recording import assess_closure
-                    proof = request.get('recording_proof')
-                    if not isinstance(proof,dict) or proof.get('recording_requirement') != requirement or not isinstance(proof.get('operation'),dict) or proof['operation'].get('activity_id') != ident or not assess_closure(proof)['ok'] or not (requirement['enabled'] or requirement['mandatory']):
-                        raise SafetyError('Recording verification evidence is missing or insufficient')
-                    check_recording_files(root, base, proof, request.get('recording_paths'))
-                elif core_recording:
-                    from . import chronicles
-                    try:
-                        core_result, _ = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, False, state_fp, finalize=True)
-                        if core_result.get('coverage') == 'partial':
-                            if policy['required']:
-                                # Store supported text before denying a completeness-dependent close.
-                                if apply:
-                                    _, partial_changed = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, True, state_fp)
-                                    changed.extend(partial_changed)
-                                raise RecordingInterruption('Recognized chronicles are stored or available for storage, but required coverage is incomplete: ' + str(core_result['warnings']))
-                            rec = {'status': 'recorded_with_gaps', 'details': 'Recognized chronicles stored with unsupported-record coverage warnings: ' + str(core_result['warnings'])}
-                        else:
-                            rec = {'status': 'verified', 'details': 'Core chronicles synchronized and freshly verified through assigned completed source'}
-                    except SafetyError as exc:
-                        if policy['required'] or not recoverable(exc):
-                            raise
-                        # Only a failed read-only preparation can be downgraded.
-                        # Partial writes, damaged artifacts and unsafe paths remain blockers.
-                        core_recording = False
-                        rec = {'status': 'unavailable', 'details': 'Recording interrupted; retained evidence preserved; coverage gap: ' + str(exc)}
+                unified = layout_version(root, base) == 2
+                if unified:
+                    from . import conversation
+                    requirement = request.get('recording_requirement', {'enabled': True, 'mandatory': False})
+                    if (not isinstance(requirement, dict) or type(requirement.get('mandatory')) is not bool or requirement.get('enabled') is not True
+                            or request.get('recording_proof') is not None or request.get('recording_paths') is not None):
+                        raise ValueError('Unified closure requires always-on recording; legacy external proof is unsupported')
+                    core_result, core_changed = conversation.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, apply, finalize=True)
+                    changed.extend(core_changed)
+                    if core_result.get('unsealed_sources'):
+                        raise SafetyError('Conversation retained, but unavailable source boundaries must be resolved before archival', changed)
+                    if (requirement['mandatory'] or (isinstance(rec, dict) and rec.get('mandatory') is True)) and core_result['coverage'] != 'complete':
+                        raise SafetyError('Supported conversation saved; mandatory complete source coverage is unavailable', changed)
+                    rec = {'status': core_result['status'], 'details': str(core_result['warnings']) if core_result['warnings'] else 'Single conversation synchronized and verified'}
+                    core_recording = False
+                else:
+                    if not isinstance(rec,dict) or rec.get('status') not in ('disabled','verified','pending','unavailable','recorded_with_gaps') or not isinstance(rec.get('details'),str): raise ValueError('explicit recording status and details required')
+                    enabled = read_json(checked_path(root, STATE, allow_missing=False)).get('features', {}).get('chronicles', {}).get('enabled')
+                    if type(enabled) is not bool: raise SafetyError('Recording enablement is unverified')
+                    requirement = request.get('recording_requirement', {'enabled': enabled, 'mandatory': False})
+                    if not isinstance(requirement,dict) or type(requirement.get('mandatory')) is not bool or type(requirement.get('enabled')) is not bool or requirement['enabled'] != enabled: raise ValueError('invalid or inconsistent recording_requirement')
+                    if rec.get('mandatory') is True: requirement = {**requirement, 'mandatory': True}
+                    from .recording_policy import effective, recoverable, RecordingInterruption
+                    policy = effective(read_json(checked_path(root, STATE, allow_missing=False)), requirement['mandatory'])
+                    core_recording = (requirement['enabled'] or requirement['mandatory']) and not (rec['status'] == 'verified' and request.get('recording_proof') is not None)
+                    if not unified and rec['status'] == 'verified' and not core_recording:
+                        from .recording import assess_closure
+                        proof = request.get('recording_proof')
+                        if not isinstance(proof,dict) or proof.get('recording_requirement') != requirement or not isinstance(proof.get('operation'),dict) or proof['operation'].get('activity_id') != ident or not assess_closure(proof)['ok'] or not (requirement['enabled'] or requirement['mandatory']):
+                            raise SafetyError('Recording verification evidence is missing or insufficient')
+                        check_recording_files(root, base, proof, request.get('recording_paths'))
+                    elif core_recording:
+                        from . import chronicles
+                        try:
+                            core_result, _ = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, False, state_fp, finalize=True)
+                            if core_result.get('coverage') == 'partial':
+                                if policy['required']:
+                                    # Store supported text before denying a completeness-dependent close.
+                                    if apply:
+                                        _, partial_changed = chronicles.synchronize(root, base, ident, {'provenance': request['provenance']}, stamp, True, state_fp)
+                                        changed.extend(partial_changed)
+                                    raise RecordingInterruption('Recognized chronicles are stored or available for storage, but required coverage is incomplete: ' + str(core_result['warnings']))
+                                rec = {'status': 'recorded_with_gaps', 'details': 'Recognized chronicles stored with unsupported-record coverage warnings: ' + str(core_result['warnings'])}
+                            else:
+                                rec = {'status': 'verified', 'details': 'Core chronicles synchronized and freshly verified through assigned completed source'}
+                        except SafetyError as exc:
+                            if policy['required'] or not recoverable(exc):
+                                raise
+                            # Only a failed read-only preparation can be downgraded.
+                            # Partial writes, damaged artifacts and unsafe paths remain blockers.
+                            core_recording = False
+                            rec = {'status': 'unavailable', 'details': 'Recording interrupted; retained evidence preserved; coverage gap: ' + str(exc)}
                 name = stamp.replace('-','').replace(':','').replace('T','_').removesuffix('Z') + '_' + label; dest = location + '/' + name; n = 2
                 while checked_path(root,dest).exists(): dest = location + '/' + name + f'_{n:02}'; n += 1
                 new_layout = layout_version(root, base) == 2
@@ -366,8 +394,9 @@ def handle(operation, workspace, request, apply):
                 from . import usage
                 usage_result, usage_changed = usage.update(root, base, ident, {'provenance': request['provenance']}, stamp, True, state_fp)
                 changed.extend(usage_changed)
-                if rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
+                if not unified and rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
                 if core_recording: chronicles.verify(root, base, ident, closing=True, require_complete=policy['required'])
+                if unified: conversation.check_closure(root, base, ident, core_result)
                 logpath = artifact(root, base, 'log.md'); logtarget = checked_path(root,logpath,allow_missing=False); logfp = fingerprint(logtarget)
                 write_bytes(root,logpath,append_bytes(logtarget.read_bytes(), f'\n- {stamp} — Closed as {outcome}; Activity path moved from {base} to {dest} ({prov}).'),logfp); changed.append(logpath)
                 report = (f'{"## Final outcome" if new_layout else "# Outcome"}\n\n{text}\n\nRecording: {rec["status"]} — {rec["details"]}\n\nProvenance: {prov}\n').encode()
@@ -380,16 +409,18 @@ def handle(operation, workspace, request, apply):
                     from .activity_documents import navigation
                     report = navigation(root, base, report)
                 write_bytes(root,outcome_path,report,outcome_fp); changed.append(outcome_path)
-                if rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
+                if not unified and rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
                 if core_recording: chronicles.verify(root, base, ident, closing=True, require_complete=policy['required'])
+                if unified: conversation.check_closure(root, base, ident, core_result)
                 write_json(root,state_path,state,state_fp); changed.append(state_path)
                 final_fingerprints = {p: fingerprint(checked_path(root,p,allow_missing=False)) for p in (state_path, outcome_path, logpath)}
                 # Rename only to a newly reserved name, with no overwrite.
                 import os
                 if checked_path(root,dest).exists(): raise SafetyError('Archive destination appeared')
-                if rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
+                if not unified and rec['status'] == 'verified' and not core_recording: check_recording_files(root, base, proof, request.get('recording_paths'))
                 if core_recording: chronicles.verify(root, base, ident, closing=True, require_complete=policy['required'])
                 if any(fingerprint(checked_path(root,p,allow_missing=False)) != fp for p,fp in final_fingerprints.items()): raise SafetyError('Closure files changed before archival')
+                if unified: conversation.check_closure(root, base, ident, core_result)
                 rename_exclusive(checked_path(root,base,allow_missing=False), checked_path(root,dest)); changed.append(dest)
                 if read_json(checked_path(root,artifact(root, dest, 'state.json'),allow_missing=False)) != state or discover(root,location)['status'] != 'absent': raise SafetyError('Closure readback mismatch')
                 usage_result.update(path=artifact(root, dest, 'usage.md'), checkpoint_path=artifact(root, dest, 'usage.json'))

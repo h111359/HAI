@@ -22,8 +22,7 @@ paths and duplicate Activity identities require explicit resolution.
   system/chat.jsonl                 Persistent typed conversation
   system/usage.md                   Readable usage summary, when available
   system/usage.json                 Usage bindings and checkpoint
-  system/chronicles/                Recording ledger, checkpoints and recovery
-  chronicles/                      Optional readable source segments
+  system/recording.json             Always-enabled source reconciliation state
   workflow-runs/<run-id>/            Optional run records and declared outputs
 ```
 
@@ -49,7 +48,7 @@ locations outside the Activity. Results are Activity-specific review deliverable
 ## Conversation and recording
 
 The host MUST persist each received human instruction verbatim through typed chat
-before dependent substantive work, even when chronicles are disabled or unavailable.
+before dependent substantive work, independently of native-source availability.
 It MUST distinguish human instructions, assistant replies, agent coordination and
 legacy imported context. Generated summaries never replace original human messages.
 Initial message IDs identify original records; original source identities/timestamps
@@ -61,7 +60,7 @@ written before transmission is prepared, not proven delivered; only actual obser
 delivery permits delivered status. No background hook or automatic host interception
 is claimed. Agents use the append API for coordination and cannot treat an agent
 message or prepared reply as human authorization. Chat is required in layout 2 and
-independent of optional chronicles, which provide readable source verification.
+the single conversation record, including source-backed imports.
 
 The host MUST NOT manually rewrite runtime state, log, chat, usage, checkpoints or
 workflow metadata. Core operations own those records. Log entries are append-only,
@@ -119,8 +118,7 @@ artifacts must be contained nonlinked paths; hard-link aliases are rejected.
 
 Closure requires resolved workflow runs and ended known writers. It appends the
 final report to README.md and preserves its predecessor in history/readme/.
-Usage is refreshed under system/, and recording follows best-effort/required policy
-with explicit gaps. Closed folders use YYYYMMDD_HHMMSS_short-label, matching actual
+Usage is refreshed under system/, and recording reconciles the unified chat with explicit coverage gaps and independent mandatory obligations. Closed folders use YYYYMMDD_HHMMSS_short-label, matching actual
 UTC closure time; labels contain one to five lowercase alphanumeric words separated
 by hyphens. Collisions use _02, _03, etc. All contained runs and records move with
 the Activity. Durable references use stable IDs plus Activity-relative paths.

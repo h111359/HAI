@@ -45,8 +45,7 @@ README.md and system-owned state, typed conversation and action log form the
 layout-2 minimum record. Original human input is a message, not input.md. Closure
 appends the final report to README.md rather than creating outcome.md. Decisions, analysis, plan, outcome and supporting artifacts add meaningful
 context when needed; product code and durable specification retain their canonical
-product locations. Exact-source chronicles are attributable optional segments,
-not a replacement for decision or action records. Closed records can gain dated
+product locations. Always-enabled conversation recording stores human entries, delivered assistant replies and participant messages in one chat, with source attribution and explicit coverage limits. It does not replace accepted decisions or action records. Closed records can gain dated
 attributable evidence and delayed old-source synchronization while remaining
 closed to new substantive work.
 

@@ -1,4 +1,5 @@
 """Read-only resolution of one host-identified Codex session, never reconstruction."""
+from activity_layout import artifact
 from environment_paths import STATE, PROFILES, INSTRUCTIONS
 import hashlib
 import json
@@ -114,14 +115,7 @@ def resolve(workspace, request, environ=None):
 
 
 def enabled(workspace, request):
-    flag = read_json(checked_path(workspace, STATE, allow_missing=False))['features']['chronicles']['enabled']
-    mandatory = request.get('mandatory', False)
-    if type(flag) is not bool or type(mandatory) is not bool:
-        raise ValueError('Recording flags must be Boolean')
-    if mandatory:
-        from .activities import provenance
-        provenance(request)  # The host identifies the independently applicable instruction.
-    return flag or mandatory
+    return True  # Conversation recording is an invariant, not an optional feature.
 
 
 def readiness(workspace, activity):
@@ -130,8 +124,10 @@ def readiness(workspace, activity):
     root = Path(workspace).resolve(strict=True)
     policy = effective(read_json(checked_path(root, STATE, allow_missing=False)))
     result = _readiness(root, activity)
-    result['policy'] = policy['mode']
-    result['continuation_allowed'] = (not policy['required'] or result['status'] in ('verified', 'disabled'))
+    from activity_layout import version
+    unified = activity.get('status') == 'current' and version(root, activity['path']) == 2
+    result['policy'] = 'always' if unified else policy['mode']
+    result['continuation_allowed'] = (unified or not policy['required'] or result['status'] in ('verified', 'disabled'))
     if result['status'] not in ('verified', 'disabled', 'recorded_with_gaps'):
         result['coverage'] = 'unverified'
     return result
@@ -140,6 +136,17 @@ def readiness(workspace, activity):
 def _readiness(root, activity):
     """Report evidence separately from the policy for continuing ordinary work."""
     try:
+        from activity_layout import version
+        if activity.get('status') == 'current' and version(root, activity['path']) == 2:
+            from . import conversation
+            if checked_path(root, artifact(root, activity['path'], 'chronicles/core.json')).exists() and not checked_path(root, conversation.state_path(root, activity['path'])).exists():
+                return {'status': 'needs_migration', 'next_operation': 'recording migrate', 'details': 'Preserve legacy transcripts in unified chat before synchronization'}
+            result = conversation.verify(root, activity['path'], activity['activity_id'])
+            current = os.environ.get('CODEX_THREAD_ID') or os.environ.get('CODEX_SESSION_ID')
+            data, _, _, _ = conversation.load(root, activity['path'], activity['activity_id'])
+            if current and not any(s['binding']['session_id'] == current for s in data['sources']):
+                result = {**result, 'status': 'needs_binding', 'details': 'Current host session is not assigned; no Activity boundary inferred'}
+            return result
         if not enabled(root, {}):
             return {'status': 'disabled', 'details': 'Optional recording is off; independent obligations remain host-owned'}
         if activity['status'] != 'current':

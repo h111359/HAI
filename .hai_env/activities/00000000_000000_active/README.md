@@ -33,7 +33,6 @@ The initial investigation is complete. The human subsequently accepted the bound
 - [Usage](system/usage.md)
 - [Reviewable outputs](results)
 - [Verification evidence](evidence)
-- [Readable chronicles](chronicles)
 - [Previous versions](history)
 <!-- hai-navigation:end -->
 
@@ -60,3 +59,7 @@ The human authorized reflecting the agreed role/skill ownership principles in co
 ## Current result: portable core deployment
 
 The human authorized fixing the framework for an otherwise empty workspace. See [portable core fix](results/core-boundary-fix.md). Default operations use only `.hai/` and `.hai_env/`, external sources/references require explicit choices, and shipped regressions run without development collections. The 31-module copied-core suite has 579 tests (38 skipped); all executed cases pass after a focused rerun of a Windows path-length fixture failure. Explicit development integrations and independent review also pass. Earlier investigation limits above refer to their earlier scope. The Activity remains open; this change is uncommitted.
+
+## Current result: one always-enabled conversation
+
+See [unified recording](results/unified-conversation-recording.md). The current conversation is system/chat.jsonl; system/recording.json stores bookkeeping without message bodies. Old active transcript/metadata trees were migrated into history/recording/before-unified-v1 after exact preservation checks. Every original chat byte and112 retained source messages were preserved; source synchronization backfilled earlier visible progress replies. Recording checks now run every turn and after chat posts, with explicit warnings for unavailable coverage. The latest test evidence covers607 tests/38 skips with no remaining failures; independent review passed. Earlier reports describe prior states. The Activity remains open and this implementation is uncommitted.

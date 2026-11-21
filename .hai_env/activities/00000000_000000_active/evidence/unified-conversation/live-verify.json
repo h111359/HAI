@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "verify",
+  "result": {
+    "status": "verified",
+    "coverage": "complete",
+    "missing_messages": [],
+    "warnings": [],
+    "message_count": 156,
+    "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93"
+  },
+  "changed_files": [],
+  "issues": []
+}

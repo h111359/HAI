@@ -25,6 +25,8 @@ class StartupTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
         self.state = {"state_format_version": 3, **copy.deepcopy(DEFAULT)}
+        # Explicit historical fixtures validate retained optional-recording settings.
+        self.state["features"]["chronicles"] = {"enabled": False,"record_every_prompts":5}
         self.write(startup.TEMPLATE, TEMPLATE.read_text(encoding="utf-8"))
         self.write(startup.INSTRUCTIONS, "")
         self.save_state()

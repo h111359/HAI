@@ -77,7 +77,7 @@ def handle(operation, workspace, request, apply):
         provenance(request)
         if set(request) != {'provenance', 'changes'} or not isinstance(request['changes'], dict) or not request['changes']:
             raise ValueError('Provide explicit named changes')
-        changes = request['changes']; allowed = {'activities.location', 'features.chronicles.enabled', 'features.chronicles.record_every_prompts', 'features.chronicles.mode'}
+        changes = request['changes']; allowed = {'activities.location'}
         if not set(changes) <= allowed: raise ValueError('Unknown environment change')
         rel = STATE; path = checked_path(workspace, rel, allow_missing=False); before = fingerprint(path); state = read_json(path)
         template = read_json(checked_path(workspace, '.hai/templates/state.json', allow_missing=False)); contract = startup.state_contract()
@@ -87,13 +87,6 @@ def handle(operation, workspace, request, apply):
             parts = name.split('.'); obj = candidate
             for part in parts[:-1]: obj = obj[part]
             obj[parts[-1]] = value
-        old_chronicles = state['features']['chronicles']
-        new_chronicles = candidate['features']['chronicles']
-        if old_chronicles['enabled'] != new_chronicles['enabled']:
-            revision = old_chronicles.get('enablement_revision', 0)
-            if type(revision) is not int or revision < 0:
-                raise SafetyError('Invalid chronicle enablement revision')
-            new_chronicles['enablement_revision'] = revision + 1
         startup.state_context(workspace, candidate, template, contract)
         owner = startup.check(workspace)['role_configurations']['specification-manager']
         if owner.get('status') in ('configured', 'defaulted'):

@@ -19,7 +19,7 @@ def navigation(root, base, raw):
     links = []
     for relative, label in [('system/chat.jsonl', 'Conversation'), ('system/log.md', 'Work log'),
                             ('system/usage.md', 'Usage'), ('results', 'Reviewable outputs'),
-                            ('evidence', 'Verification evidence'), ('chronicles', 'Readable chronicles'),
+                            ('evidence', 'Verification evidence'),
                             ('workflow-runs', 'Workflow runs'), ('history', 'Previous versions')]:
         if checked_path(root, base + '/' + relative).exists():
             links.append('- [' + label + '](' + relative + ')')

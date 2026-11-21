@@ -1,0 +1,99 @@
+{
+  "root_entries": [
+    ".hai",
+    ".hai_env"
+  ],
+  "features": {},
+  "synchronize": {
+    "ok": true,
+    "status": "ok",
+    "operation": "recording synchronize",
+    "result": {
+      "status": "verified",
+      "coverage": "complete",
+      "warnings": [],
+      "source_count": 1,
+      "message_count": 3,
+      "unsealed_sources": [],
+      "chat_path": ".hai_env/activities/00000000_000000_active/system/chat.jsonl",
+      "recording_path": ".hai_env/activities/00000000_000000_active/system/recording.json"
+    },
+    "changed_files": [
+      ".hai_env/activities/00000000_000000_active/system/recording.json",
+      ".hai_env/activities/00000000_000000_active/system/chat.jsonl"
+    ],
+    "issues": []
+  },
+  "verify": {
+    "ok": true,
+    "status": "ok",
+    "operation": "recording verify",
+    "result": {
+      "status": "verified",
+      "coverage": "complete",
+      "missing_messages": [],
+      "warnings": [],
+      "message_count": 4,
+      "activity_id": "2b9fb83f-9f1d-46ac-9932-d8c8cd0b2bfc"
+    },
+    "changed_files": [],
+    "issues": []
+  },
+  "close": {
+    "ok": true,
+    "status": "ok",
+    "operation": "activity close",
+    "result": {
+      "archive_path": ".hai_env/activities/20261121_065315_clean-chat",
+      "state": {
+        "activity_id": "2b9fb83f-9f1d-46ac-9932-d8c8cd0b2bfc",
+        "lifecycle": "closed",
+        "created_at": "2026-11-21T06:53:14Z",
+        "closed_at": "2026-11-21T06:53:15Z",
+        "outcome": "completed",
+        "implementation_started_at": null,
+        "steps": {
+          "analysis": "not_started",
+          "clarification": "not_started",
+          "implementation": "not_started",
+          "planning": "not_started",
+          "verification": "not_started"
+        },
+        "activity_layout_version": 2,
+        "initial_message_id": "d16064c2-855e-4e33-b936-c282e24d4595"
+      },
+      "recording": {
+        "status": "verified",
+        "details": "Single conversation synchronized and verified"
+      },
+      "usage": {
+        "activity_id": "2b9fb83f-9f1d-46ac-9932-d8c8cd0b2bfc",
+        "path": ".hai_env/activities/20261121_065315_clean-chat/system/usage.md",
+        "checkpoint_path": ".hai_env/activities/20261121_065315_clean-chat/system/usage.json",
+        "updated_at": "2026-11-21T06:53:15Z",
+        "summary": {
+          "coverage": "unavailable",
+          "tokens": null,
+          "by_model": {},
+          "estimated_credits": null,
+          "reported_credits": null,
+          "reported_spend_current": false,
+          "missing_rate_models": []
+        }
+      }
+    },
+    "changed_files": [
+      ".hai_env/activities/00000000_000000_active/system/recording.json",
+      ".hai_env/activities/00000000_000000_active/system/usage.json",
+      ".hai_env/activities/00000000_000000_active/system/usage.md",
+      ".hai_env/activities/00000000_000000_active/system/log.md",
+      ".hai_env/activities/00000000_000000_active/history",
+      ".hai_env/activities/00000000_000000_active/history/readme",
+      ".hai_env/activities/00000000_000000_active/history/readme/20261121_065315-before-closure.md",
+      ".hai_env/activities/00000000_000000_active/README.md",
+      ".hai_env/activities/00000000_000000_active/system/state.json",
+      ".hai_env/activities/20261121_065315_clean-chat"
+    ],
+    "issues": []
+  }
+}

@@ -1,4 +1,6 @@
-# Activity closure recording gate
+# Historical Activity closure recording gate
+
+This tool validates legacy external closure proof. Current layout-2 closure uses the unified chat and recording.json internally; external proof cannot bypass it. See [current recording](../../conventions/chronicles_conv.md).
 
 `recording_gate.py` uses Python 3.11+ and only the standard library. It performs a
 read-only comparison of the core [recording-evidence contract](../../conventions/recording-evidence_conv.md).

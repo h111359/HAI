@@ -202,7 +202,7 @@ Definition validation checks contract data without loading workspace settings or
 requiring initialized state. Saved settings do not affect registration identity,
 replace model-profile resolution, or override task permission. Package installation
 preserves external config bytes and reports format incompatibility; it never
-performs an implicit config migration. Activity location and chronicles remain runtime-owned in state
+performs an implicit config migration. Activity location and conversation synchronization remain runtime-owned
 format 3; Specification-manager owns enablement/root and validates it independently
 from core/Activity context. Format 2 is migration context, never an owner-settings fallback.
 

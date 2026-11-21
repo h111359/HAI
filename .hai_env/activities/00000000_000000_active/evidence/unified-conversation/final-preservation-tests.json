@@ -1,0 +1,7 @@
+{
+  "suite": "runtime/tests",
+  "pattern": "test_conversation_recording.py",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "............................\n----------------------------------------------------------------------\nRan 28 tests in 18.819s\n\nOK\n"
+}

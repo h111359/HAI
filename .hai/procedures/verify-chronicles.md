@@ -1,25 +1,7 @@
-# Verify chronicles
+# Verify the Activity conversation
 
-## Description
+Run `recording verify` with activity_id. It is read-only, validates retained chat references and checks every assigned native source for missing messages, changed retained content and coverage gaps. It does not merely inspect a tail cursor.
 
-Read-only fresh verification of assigned source coverage and recording status for an Activity.
+When needs_synchronization is returned, apply `recording synchronize` and verify again. Report unavailable/unrecognized source records as incomplete coverage; preserve recognized messages. Existing legacy evidence requires explicit recording migrate, never an implicit empty verified state. Verification does not authenticate caller-supplied messages or establish coverage of unknown sessions.
 
-Recording policy is defined by [chronicles](../conventions/chronicles_conv.md#availability-policy). In default best-effort mode, report a source interruption and continue independent ordinary work; never claim recording succeeded. Required mode or an independently mandatory obligation retains dependent recording gates. Integrity errors and partial writes remain explicit blockers.
-
-## Inputs
-
-A validated workspace, Activity ID, recording requirement, explicit registered bindings and authorized source access. Verification never invents missing source or assignment boundaries.
-
-## Steps
-
-1. Resolve the current recording requirement and ensure relevant writes have stopped. For enabled or independently mandatory recording, synchronize first through the completed operation cutoff; closure synchronizes registered sources itself.
-2. Run `recording verify --request` with `{"activity_id":"ACTIVITY-UUID"}`. Verify relevant assigned source and segment coverage afresh, including earlier pending ranges and all enabled intervals, rather than trusting a cursor or earlier result.
-3. Return exact coverage, fresh evidence, disabled/no-obligation status or precise gaps, conflicts, pending source, unsafe artifacts and partial status. Verification itself does not write. A `recorded_with_gaps` result reports safely retained partial coverage with warnings; it is not a fully verified result. Required missing, pending or incomplete evidence blocks completeness-dependent closure; do not require the future undelivered closure acknowledgement.
-
-## Outputs
-
-Fresh complete verification, safely retained partial coverage with explicit gaps, or an integrity/availability blocker, with no transcript or checkpoint writes by verification.
-
-## References
-
-- [Chronicles](../conventions/chronicles_conv.md) and [recording evidence](../conventions/recording-evidence_conv.md).
+See [recording](../conventions/chronicles_conv.md).

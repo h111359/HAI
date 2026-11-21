@@ -1,0 +1,51 @@
+[
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_conversation.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ".....\n----------------------------------------------------------------------\nRan 5 tests in 2.375s\n\nOK\n"
+  },
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_recording_policy.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "........\n----------------------------------------------------------------------\nRan 8 tests in 3.578s\n\nOK\n"
+  },
+  {
+    "suite": "chronicles",
+    "pattern": "test_read_codex_source.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "...............s.........\n----------------------------------------------------------------------\nRan 25 tests in 0.636s\n\nOK (skipped=1)\n"
+  },
+  {
+    "suite": "startup",
+    "pattern": "test_migrate_specification_configuration.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ".....\n----------------------------------------------------------------------\nRan 5 tests in 2.214s\n\nOK\n"
+  },
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_source_discovery.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ".................s\n----------------------------------------------------------------------\nRan 18 tests in 8.276s\n\nOK (skipped=1)\n"
+  },
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_conversation_recording.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "......................\n----------------------------------------------------------------------\nRan 22 tests in 17.217s\n\nOK\n"
+  },
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_source_continuity.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "......................................s.................................s.........\n----------------------------------------------------------------------\nRan 82 tests in 40.170s\n\nOK (skipped=2)\n"
+  }
+]

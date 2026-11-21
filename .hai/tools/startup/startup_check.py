@@ -121,10 +121,10 @@ def state_context(workspace: Path, state: dict, template: dict,
             or not isinstance(template.get("activities"), dict)
             or template["activities"] != {"location": ACTIVITIES_LOCATION}
             or not isinstance(template.get("features"), dict)
-            or set(template["features"]) != set(FEATURES)):
+            or set(template["features"]) not in (set(), set(FEATURES))):
         raise Invalid("Canonical format-3 template is invalid")
     chronicles = template["features"].get("chronicles")
-    if (not isinstance(chronicles, dict)
+    if chronicles is not None and (not isinstance(chronicles, dict)
             or chronicles.get("enabled") is not False
             or type(chronicles.get("record_every_prompts")) is not int
             or chronicles.get("record_every_prompts") != CHRONICLES_RECORD_EVERY_PROMPTS):
@@ -187,6 +187,8 @@ def state_context(workspace: Path, state: dict, template: dict,
                        "available": activity_target.exists(), "target_type": "directory"}
     for name, kind in FEATURES.items():
         value = state["features"].get(name)
+        if value is None:
+            continue  # Current installations have no optional recording toggle.
         if name == "chronicles":
             if not isinstance(value, dict) or type(value.get("enabled")) is not bool or "location" in value:
                 raise Invalid("Feature chronicles requires Boolean enabled and no global location")

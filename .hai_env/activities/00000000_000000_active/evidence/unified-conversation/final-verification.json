@@ -1,0 +1,46 @@
+{
+  "synchronize": {
+    "ok": true,
+    "status": "ok",
+    "operation": "synchronize",
+    "result": {
+      "status": "verified",
+      "coverage": "complete",
+      "warnings": [],
+      "source_count": 1,
+      "message_count": 228,
+      "unsealed_sources": [],
+      "chat_path": ".hai_env/activities/00000000_000000_active/system/chat.jsonl",
+      "recording_path": ".hai_env/activities/00000000_000000_active/system/recording.json"
+    },
+    "changed_files": [
+      ".hai_env/activities/00000000_000000_active/system/chat.jsonl",
+      ".hai_env/activities/00000000_000000_active/system/recording.json"
+    ],
+    "issues": []
+  },
+  "verify": {
+    "ok": true,
+    "status": "ok",
+    "operation": "verify",
+    "result": {
+      "status": "verified",
+      "coverage": "complete",
+      "missing_messages": [],
+      "warnings": [],
+      "message_count": 267,
+      "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93"
+    },
+    "changed_files": [],
+    "issues": []
+  },
+  "startup_valid": true,
+  "preservation": {
+    "original_chat_prefix_preserved": true,
+    "old_files_verified": 7,
+    "old_messages_verified": 112,
+    "native_messages": 228,
+    "total_messages": 267,
+    "backup_reference": "history/recording/before-unified-v1"
+  }
+}

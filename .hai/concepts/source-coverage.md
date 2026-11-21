@@ -1,5 +1,7 @@
 # Source coverage
 
+Historical transcript/closure-proof compatibility only. New layout-2 Activities use the [single conversation recording contract](../conventions/chronicles_conv.md). These older formats are retained for validation/migration, not a second active store or recording toggle.
+
 ## Definition
 
 [term:Source coverage] is the exact completed-source exchanges verified in a segment, including its assigned start/end boundary and last synchronized message.

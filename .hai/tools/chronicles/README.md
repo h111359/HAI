@@ -1,5 +1,7 @@
 # Read-only Codex source adapter
 
+The native-source adapters here also serve current always-enabled chat reconciliation. Standalone Markdown/checkpoint contracts described below are historical compatibility; current runtime imports text into chat.jsonl. See [recording](../../conventions/chronicles_conv.md).
+
 `read_codex_source.py` requires Python 3.11+ and the standard library. Verify an
 absolute interpreter under the core tooling convention before execution. Pass
 only the explicitly authorized canonical source; no session discovery occurs.

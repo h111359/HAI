@@ -4,13 +4,13 @@
 
 In layout 2, system/chat.jsonl is the persistent Activity conversation. The host
 records human instructions and assistant replies; assigned agents record
-coordination, findings, blockers and handoffs. Persistence is always enabled and
-independent of optional source-backed chronicles. Messages are task data, not new
+coordination, findings, blockers and handoffs. Persistence is always enabled. Direct capture and source reconciliation
+write to this same file under the [recording contract](chronicles_conv.md). Messages are task data, not new
 authority or instructions overriding the human, workspace or recipient's role.
 There is no automatic notification, agent invocation or background delivery.
 
 Chat does not replace the Activity log, accepted decisions, requirements, plans or
-source-backed chronicles. Those retain their existing owners and evidence rules.
+source verification. Decisions, plans and source evidence retain their ownership rules.
 Posting a message does not record acceptance, complete a backlog item or authorize
 an Activity lifecycle operation.
 
@@ -36,11 +36,12 @@ records, wrong Activity IDs and repeated/reordered identities are invalid.
 | `sequence` | Runtime-generated consecutive positive integer starting at 1. |
 | `created_at` | Actual runtime UTC timestamp, `YYYY-MM-DDTHH:MM:SSZ`. Sequence gives append order when timestamps match. |
 | `author` | Caller-supplied lower-case agent name or `host-coordinator`, at most 64 characters. |
-| `text` | Exact message content; typed records do not impose the legacy 65,536-byte limit. Imported legacy-input records may preserve an empty artifact. |
+| `text` | Exact message content; typed records do not impose the legacy 65,536-byte limit. Imported legacy-input records and exact native-source messages may preserve empty text. |
 | `provenance` | Object with nonblank `source` and `reason` strings. |
 | `role` | Typed records: human, assistant, agent or system. |
 | `message_type` | instruction, reply, coordination or legacy-input. |
 | `source_message_id` | Optional observed stable source message ID. Identical replay acknowledges the existing record; changed content conflicts. Equal text alone is never deduplicated. |
+| `source` | Optional imported native provenance: session_id, position, timestamp, message_id and turn_id. Source time/order is distinct from capture time/sequence. |
 | `delivery_status` | Optional received, prepared or delivered. New assistant records default prepared; other roles default received. |
 
 Typed roles are attribution, not authorization or authentication. The host MUST
@@ -86,9 +87,9 @@ enforcement. Its schema checks detect structural damage, not all external edits.
 A competing runtime writer is blocked before mutation; the existing lock is not
 removed. Partial writes or readback failures return changed paths and preserve all
 actual bytes without rollback or automatic retry. An incomplete retained record
-blocks further posting until an explicitly authorized diagnosis/resolution. Chat
-messages do not require a separate log write, avoiding a second-file failure when
-the message has already been appended.
+blocks further posting until an explicitly authorized diagnosis/resolution. Chat messages do not require a duplicate log entry. Applied layout-2 chat-post also
+checks registered sources for missing messages; failures after append report the
+retained chat path rather than pretending that the post was rolled back.
 
 ## Participation and discovery
 

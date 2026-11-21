@@ -1,0 +1,39 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "migrate",
+  "result": {
+    "status": "migrated",
+    "backup_path": ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1",
+    "message_count": 112
+  },
+  "changed_files": [
+    ".hai_env/activities/00000000_000000_active/history/recording",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/chronicles",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/chronicles/20261112_195218_segment-01.md",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles/checkpoint.json",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles/core.json",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles/history",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/20261112_195218_segment-01.md",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/checkpoint.json",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/core.json",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/reconciliation.json",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/chat-before.jsonl",
+    ".hai_env/activities/00000000_000000_active/system/recording.json",
+    ".hai_env/activities/00000000_000000_active/system/chat.jsonl",
+    ".hai_env/activities/00000000_000000_active/chronicles/20261112_195218_segment-01.md",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/checkpoint.json",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/core.json",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/20261112_195218_segment-01.md",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/checkpoint.json",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/core.json",
+    ".hai_env/activities/00000000_000000_active/system/chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/reconciliation.json",
+    ".hai_env/activities/00000000_000000_active/history/recording/before-unified-v1/environment-state.json",
+    ".hai_env/config/state.json"
+  ],
+  "issues": []
+}

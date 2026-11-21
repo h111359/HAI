@@ -1,5 +1,7 @@
 # Transcript segment convention
 
+Historical transcript/closure-proof compatibility only. New layout-2 Activities use the [single conversation recording contract](chronicles_conv.md). These older formats are retained for validation/migration, not a second active store or recording toggle.
+
 ## Segment identity and paths
 
 Segments are UTF-8 Markdown under the assigned existing Activity's `chronicles/`.

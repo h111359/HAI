@@ -14,15 +14,15 @@ def handle(operation, workspace, request, apply):
         source_fields = {'session_id', 'source_path', 'codex_home', 'representation', 'mandatory', 'provenance'}
         fields = {'status':set(), 'adapters':set(), 'schedule':{'occurrence_ids','covered_ids','threshold','last_dispatched_count'},
                   'discover': source_fields, 'bind': source_fields | {'activity_id', 'start_position', 'enabled_intervals'},
-                  'synchronize': {'activity_id', 'sources', 'provenance', 'mandatory'}, 'verify': {'activity_id'}}
+                  'synchronize': {'activity_id', 'sources', 'provenance', 'mandatory'}, 'verify': {'activity_id'}, 'migrate': {'activity_id','provenance'}}
         if not isinstance(request,dict) or (op in fields and set(request) - fields[op]): raise ValueError('Unknown or invalid request fields')
-        if apply and op not in ('synchronize', 'bind'): return envelope(operation, 'input_error', issues=['Only recording synchronize/bind support --apply'])
+        if apply and op not in ('synchronize', 'bind', 'migrate'): return envelope(operation, 'input_error', issues=['Only recording synchronize/bind support --apply'])
         if op == 'adapters':
             from chronicles.adapters import ADAPTERS
             return envelope(operation, result={'adapters': list(ADAPTERS),
                 'discovery': 'exact host session identity in configured session store',
                 'unknown_formats': 'supported messages retained with explicit coverage gaps; reviewed adapters required to interpret unknown records'})
-        if op in ('synchronize', 'verify', 'discover', 'bind'):
+        if op in ('synchronize', 'verify', 'discover', 'bind', 'migrate'):
             from .startup import require_mutation_context
             from .activities import store_path, discover, now, required_text, handle as activity_handle
             from . import chronicles
@@ -42,10 +42,21 @@ def handle(operation, workspace, request, apply):
                     selected = activity_handle('show', root, {'activity_id': ident}, False)
                     if not selected['ok']:
                         raise SafetyError('Activity not safely/uniquely found')
-                    return envelope(operation, result=chronicles.verify(root, selected['result']['path'], ident))
+                    from activity_layout import version
+                    from . import conversation
+                    verify = conversation.verify if version(root, selected['result']['path']) == 2 else chronicles.verify
+                    return envelope(operation, result=verify(root, selected['result']['path'], ident))
                 if context['status'] != 'current' or context['activity_id'] != ident:
                     raise SafetyError('Chronicle recording requires the sole current Activity')
                 base = context['path']
+                from activity_layout import version
+                from . import conversation
+                unified = version(root, base) == 2
+                if op == 'migrate':
+                    from .activities import provenance
+                    provenance(request)
+                    result, changed = conversation.migrate(root, base, ident, request, now(), apply)
+                    return envelope(operation, 'ok' if apply else 'planned', result, changed)
                 if op == 'bind':
                     from .activities import provenance
                     provenance(request)
@@ -55,12 +66,22 @@ def handle(operation, workspace, request, apply):
                         raise ValueError('start_position must identify an observed saved user occurrence, never an inferred timestamp')
                     binding = {k: source[k] for k in ('path', 'session_id', 'representation')}
                     binding.update(start_position=start, enabled_intervals=request.get('enabled_intervals'))
-                    chronicles.assignment(root, binding)
+                    (conversation.assignment if unified else chronicles.assignment)(root, binding)
                     request_for_sync = {'sources': [binding], 'provenance': request['provenance']}
-                    result, changed = chronicles.synchronize(root, base, ident, request_for_sync, now(), apply,
-                        fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)))
+                    if unified:
+                        result, changed = conversation.synchronize(root, base, ident, request_for_sync, now(), apply)
+                    else:
+                        result, changed = chronicles.synchronize(root, base, ident, request_for_sync, now(), apply,
+                            fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)))
                     result['source'] = source
                     result['usage_source'] = {k: binding[k] for k in ('path', 'session_id', 'start_position')}
+                    return envelope(operation, 'ok' if apply else 'planned', result, changed)
+                if unified:
+                    from .activities import provenance
+                    provenance(request)
+                    result, changed = conversation.synchronize(root, base, ident, request, now(), apply)
+                    if request.get('mandatory') and result['coverage'] != 'complete':
+                        return envelope(operation, 'blocked', result, changed, issues=['Supported messages retained; mandatory source coverage remains incomplete'])
                     return envelope(operation, 'ok' if apply else 'planned', result, changed)
                 enabled = read_json(checked_path(root, STATE, allow_missing=False))['features']['chronicles']['enabled']
                 mandatory = request.get('mandatory', False)
@@ -77,10 +98,7 @@ def handle(operation, workspace, request, apply):
             return envelope(operation, 'ok' if result['ok'] else 'blocked', result, issues=result['issues'])
         if op == 'status':
             state = read_json(checked_path(workspace, STATE, allow_missing=False))
-            config = state.get('features', {}).get('chronicles', {})
-            if type(config.get('enabled')) is not bool: raise ValueError('recording enablement is unverified')
-            from .recording_policy import effective
-            return envelope(operation, result={**effective(state), 'record_every_prompts': config.get('record_every_prompts', 5), 'source': 'host_assigned', 'coverage': 'unverified', 'synchronization': 'core recording synchronize'})
+            return envelope(operation, result={'enabled': True, 'mode': 'always', 'source': 'host_assigned', 'coverage': 'unverified', 'synchronization': 'core recording synchronize', 'record_every_prompts': 1})
         if op == 'schedule':
             occurrences = request.get('occurrence_ids'); covered = request.get('covered_ids', []); threshold = request.get('threshold', 5)
             if (not isinstance(occurrences,list) or not isinstance(covered,list) or type(threshold) is not int or threshold < 1

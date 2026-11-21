@@ -40,18 +40,13 @@ class RecordingPolicyTests(unittest.TestCase):
         self.assertFalse(effective(self.state)['required'])
         self.assertTrue(effective(self.state, True)['required'])
 
-    def test_configuration_validates_mode_and_preserves_enablement_revision(self):
-        self.mode()
-        request = {'changes': {'features.chronicles.mode': 'required'}, 'provenance': self.prov}
-        result = environment.handle('environment/configure', self.root, request, True)
-        self.assertTrue(result['ok'], result)
-        state = json.loads((self.root / '.hai_env/config/state.json').read_text())
-        self.assertEqual(state['features']['chronicles']['mode'], 'required')
-        self.assertNotIn('enablement_revision', state['features']['chronicles'])
-        for invalid in ('optional', None, True, 1, {}):
-            request['changes']['features.chronicles.mode'] = invalid
-            with self.subTest(invalid=invalid), self.assertRaises(Exception):
-                environment.handle('environment/configure', self.root, request, True)
+    def test_retired_recording_controls_are_rejected_without_mutation(self):
+        before=(self.root/'.hai_env/config/state.json').read_bytes()
+        for key,value in [('enabled',False),('mode','required'),('record_every_prompts',5)]:
+            with self.subTest(key=key),self.assertRaises(ValueError):
+                environment.handle('environment/configure', self.root,
+                    {'changes': {'features.chronicles.'+key:value}, 'provenance':self.prov},True)
+        self.assertEqual(before,(self.root/'.hai_env/config/state.json').read_bytes())
 
     def test_best_effort_close_records_gap_and_preserves_retained_bytes(self):
         self.mode()

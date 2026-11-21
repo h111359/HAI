@@ -2,10 +2,5 @@
   "activities": {
     "location": ".hai_env/activities"
   },
-  "features": {
-    "chronicles": {
-      "enabled": false,
-      "record_every_prompts": 5
-    }
-  }
+  "features": {}
 }

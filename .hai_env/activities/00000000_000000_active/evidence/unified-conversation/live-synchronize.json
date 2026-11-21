@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "status": "ok",
+  "operation": "synchronize",
+  "result": {
+    "status": "verified",
+    "coverage": "complete",
+    "warnings": [],
+    "source_count": 1,
+    "message_count": 117,
+    "unsealed_sources": [],
+    "chat_path": ".hai_env/activities/00000000_000000_active/system/chat.jsonl",
+    "recording_path": ".hai_env/activities/00000000_000000_active/system/recording.json"
+  },
+  "changed_files": [
+    ".hai_env/activities/00000000_000000_active/system/chat.jsonl",
+    ".hai_env/activities/00000000_000000_active/system/recording.json"
+  ],
+  "issues": []
+}

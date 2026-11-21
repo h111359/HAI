@@ -39,7 +39,7 @@ class MigrationTests(unittest.TestCase):
                       "extension_data": {"keep": [1, {"x": True}]}}
         self.state["features"]["specification"] = {"enabled": True, "location": "spec-data",
                                                        "owner_note": "keep in migrated config"}
-        self.state["features"]["chronicles"].update(enabled=True, record_every_prompts=9)
+        self.state["features"]["chronicles"] = {"enabled":True,"record_every_prompts":9}
         self.state["features"]["future_feature"] = {"opaque": "preserve"}
         (self.root / "spec-data").mkdir()
         self.save_state()

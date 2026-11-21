@@ -1,5 +1,7 @@
 # Recording evidence for Activity closure
 
+Historical transcript/closure-proof compatibility only. New layout-2 Activities use the [single conversation recording contract](chronicles_conv.md). These older formats are retained for validation/migration, not a second active store or recording toggle.
+
 ## Ownership and purpose
 
 Core owns Activity lifecycle, source synchronization and exact-source coverage verification. The host assigns explicit sources, boundaries, provenance and serializes writers. Enabled recording attempts synchronization and verification before closure. Required-mode or independently mandatory recording requires success. Best-effort closure may retain safely stored `recorded_with_gaps` coverage with warnings, or an explicit unavailable-source outcome from failed preparation, while preserving retained evidence; integrity and partial-write errors remain blockers. Disabled/no-independent-obligation closure needs no source or recording writes.

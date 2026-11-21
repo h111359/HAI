@@ -207,7 +207,7 @@ def load(root, base, ident, *, metadata_only=False):
     return data, fp
 
 
-def read_assigned(b, previous=None, *, root=None, base=None):
+def read_assigned(b, previous=None, *, root=None, base=None, include_commentary=False):
     from chronicles.read_codex_source import read_source
     original_binding = json.loads(json.dumps(b))
     # Foreign absolute locators are unavailable here, never workspace-relative.
@@ -228,7 +228,7 @@ def read_assigned(b, previous=None, *, root=None, base=None):
     before = fingerprint(path)
     raw = path.read_bytes()
     rewritten = previous and (relocated or len(raw) < previous['prefix_bytes'] or digest(raw[:previous['prefix_bytes']]) != previous['prefix_sha256'])
-    extracted = read_source(path, b['representation'], b['session_id'], allow_partial=True)
+    extracted = read_source(path, b['representation'], b['session_id'], allow_partial=True, include_commentary=include_commentary)
     if ((extracted['source_session_id'] is not None and extracted['source_session_id'] != b['session_id'])
             or any('conflicting original session identity or start time' in issue for issue in extracted['issues'])):
         raise SafetyError('Chronicle original source identity changed')
@@ -265,9 +265,9 @@ def read_assigned(b, previous=None, *, root=None, base=None):
     return raw, extracted, messages
 
 
-def assert_fresh(b, raw, messages, gaps=None):
+def assert_fresh(b, raw, messages, gaps=None, *, include_commentary=False):
     # Appended tool/progress records are harmless; new eligible exchanges are not.
-    newer, extracted, current = read_assigned(b)
+    newer, extracted, current = read_assigned(b, include_commentary=include_commentary)
     if (len(newer) < len(raw) or newer[:len(raw)] != raw or current != messages
             or extracted['gaps'] != (gaps or [])):
         raise SafetyError('Chronicle source gained eligible text or changed; refresh required')
@@ -347,7 +347,7 @@ def synchronize(root, base, ident, request, time, apply, expected_state, require
     old, ledger_fp = load(root, base, ident)
     environment_path = checked_path(root, STATE, allow_missing=False)
     environment_fp = fingerprint(environment_path)
-    revision = read_json(environment_path)['features']['chronicles'].get('enablement_revision', 0)
+    revision = read_json(environment_path)['features'].get('chronicles', {}).get('enablement_revision', 0)
     if type(revision) is not int or revision < 0:
         raise SafetyError('Invalid chronicle enablement revision')
     boundary_changed = old is not None and old['enablement_revision'] != revision
@@ -498,7 +498,7 @@ def verify(root, base, ident, closing=False, *, require_complete=True):
     data, _ = load(root, base, ident)
     if data is None:
         raise SafetyError('No core chronicle checkpoint to verify')
-    revision = read_json(checked_path(root, STATE, allow_missing=False))['features']['chronicles'].get('enablement_revision', 0)
+    revision = read_json(checked_path(root, STATE, allow_missing=False))['features'].get('chronicles', {}).get('enablement_revision', 0)
     active = read_json(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False))['lifecycle'] == 'active'
     if active and revision != data['enablement_revision']:
         raise SafetyError('Recording enablement changed; synchronize explicit intervals first')

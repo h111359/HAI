@@ -1,0 +1,16 @@
+[
+  {
+    "suite": "runtime/tests",
+    "pattern": "test_conversation_recording.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "..........................\n----------------------------------------------------------------------\nRan 26 tests in 17.560s\n\nOK\n"
+  },
+  {
+    "suite": "chronicles",
+    "pattern": "test_read_codex_source.py",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "...............s.........\n----------------------------------------------------------------------\nRan 25 tests in 0.605s\n\nOK (skipped=1)\n"
+  }
+]

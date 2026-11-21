@@ -7,7 +7,7 @@ class RecordingInterruption(SafetyError):
 
 
 def effective(state, mandatory=False):
-    config = state['features']['chronicles']
+    config = state['features'].get('chronicles', {'enabled': True})
     enabled = config['enabled']
     mode = config.get('mode', 'best_effort')
     if type(enabled) is not bool or type(mandatory) is not bool or mode not in ('best_effort', 'required'):
