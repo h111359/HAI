@@ -147,6 +147,64 @@ independent human authentication. Actual source-backed recording provenance, whe
 available, remains subject to its own validation contract. Material scope/design
 changes invalidate stale approval; QA success alone is never human acceptance.
 
+## File inventories in format 4
+
+Format 4 keeps the six frontmatter keys and orders its H2 sections as Purpose,
+Inputs, Intermediate Files, Final Files, Outcomes, and Steps. The file tables may
+contain headers only. Give every file a unique name across all three tables.
+
+| Section | Exact table columns |
+| --- | --- |
+| Inputs | Name, Required, Mode, Location, Format, Expectation |
+| Intermediate Files | Name, Mode, Location, Format, Expectation |
+| Final Files | Name, Action, Mode, Location, Format, Expectation |
+| Outcomes | Name, Meaning, Files |
+| Step Outputs | Name |
+| Step Results | Name, When, Outputs, Next, Gate |
+
+Declare `yes` or `no` for Required, and describe what each file must contain in
+Expectation. A file's Format is the representation to check. Use the step's Role
+and Instruction to identify who checks that expectation and how. The runtime
+checks regular files, path safety and byte identity. The host checks content
+against the authored contract.
+
+Use `fixed` with a path the caller must use, `default` with a path the caller
+can override, or `ask` with `-` for Location. The start request supplies
+overrides by file name in `paths`. Missing `ask` paths return the file
+expectations and stop launch. An absent optional fixed/default input may be
+omitted. A path the caller supplies explicitly must exist if it is an input.
+Format-4 installation copies the definition. All file choices are made per run.
+
+- A bare relative path or `workspace:` path is relative to the workspace root.
+- `activity:` is relative to the current Activity at launch. The binding retains
+  the owning Activity ID so it follows the Activity into its archive.
+- `run:files/` is relative to the run and available for output destinations.
+  Prefer it for per-run files, where the run ID already prevents collisions.
+
+Use portable literal paths. Protect runtime records, invocation allocations,
+configuration and other Activities. Layout-2 Activity output paths use
+`activity:results/`, `activity:evidence/`, or `activity:work/`.
+Final Action is `create` or `update`.
+Create requires an absent target. Update requires an existing file and records
+its launch fingerprint. A final update may target the exact path of a declared
+input because the run snapshots that input before any step. Other overlapping
+inputs and destinations or overlapping outputs are rejected.
+
+Steps list output names from the inventory. Each file has one producing step,
+which can emit it on multiple results or across attempts. A result lists the
+files it produces, or `-` for none. Outcome Files lists the final files to
+deliver, or `-` for none. Each listed final file must be available on every
+transition to that outcome. Steps can consume a final file once accepted inside
+the run. Its resolved destination is written only when a terminal outcome
+delivers it. Intermediate files are materialized on acceptance, and their latest
+versions may replace only that run's prior materializations. New attempts retain
+their own file bytes and lineage.
+
+The format-3 input references and gates also apply to format 4. For product changes
+whose exact paths depend on earlier decisions, describe the authorized scope in
+the instructions and record actual changed paths and checks in a declared file.
+Product ownership and authorization still apply.
+
 ## Validation responsibilities
 
 Core structural validation checks syntax, references, paths and graph/data contracts.

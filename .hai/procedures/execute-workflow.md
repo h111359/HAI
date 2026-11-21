@@ -46,6 +46,11 @@ separate; optional missing dependencies block only affected execution.
    workspace-relative bases. Apply with those values and provenance; never invent
    live choices. Compatible updates require the inspected installed hash and retain
    chosen values. Missing/unsafe settings block that workflow only.
+   For format 4, inspect the definition's file lists and the `paths` supplied
+   for this run. Preview start and ask the human for each missing `ask` path
+   using the returned file expectation. Explain any unsafe destination or
+   launch conflict before retrying. Use the owning Activity for `activity:`
+   bindings. Format-4 installation takes no file choices.
    Preview `workflow start` with the Activity ID and selected definition. Inspect
    initial files, task authority and missing prerequisites. Applying start pins the
    definition and initial artifact bytes, not permission for all possible effects.
@@ -70,10 +75,15 @@ separate; optional missing dependencies block only affected execution.
    in context; do not fabricate a message or treat QA pass as human acceptance.
    Stale scope/design/QA lineage requires fresh work/approval. Rejection does not
    dispatch the next step. A crash without required failure evidence remains an interruption.
+   For format 4, give the executor the staging paths from the assignment. Allow
+   the runtime to materialize intermediate files on acceptance and final files
+   on the outcome that names them. Inspect any pending publication before
+   applying `workflow publish` with the current revision.
 6. After acceptance, show the selected next action and refresh its prerequisites
    before dispatch. An explicit return creates a new attempt. Reaching a limit
    blocks rather than silently extending it. Finishing records the declared outcome
-   and does not close the Activity or publish anything.
+   and leaves the Activity open. Format-4 delivery writes the bound local files.
+   External publication requires its own authority.
 7. For waits, record actual questions/answers. For pause/cancel, stop scheduling and
    verify the assigned writers ended before releasing ownership. Resume/retry checks
    input/role/config changes and actual earlier effects. Identical accepted completion

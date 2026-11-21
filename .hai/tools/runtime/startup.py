@@ -16,6 +16,8 @@ def handle(operation, workspace, request, apply):
     }
     if result['environment'] == 'valid' and result['instructions_status'] == 'loaded':
         from .source_discovery import readiness
+        from .activities import add_workflow_context
+        add_workflow_context(Path(workspace), result['activity_context'])
         result['recording_context'] = readiness(workspace, result['activity_context'])
     else:
         result['recording_context'] = {'status': 'unverified', 'details': 'Core prerequisites are not valid'}

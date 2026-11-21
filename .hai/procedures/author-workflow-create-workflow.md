@@ -27,7 +27,7 @@ None.
 
 1. Use [input:request], [input:target] and [input:context] to establish the process purpose, one entry, intended participants and terminal outcomes. Retrieve known facts before asking for missing necessary choices.
 
-2. Prepare all step instructions, initial inputs, output paths/formats/expectations and named results. Each result needs evidence and one next action. Define positive per-step and total-run limits; do not assume success/failure are the only results.
+2. Use format 4 for new definitions unless the assignment calls for a different supported format. Declare inputs, intermediate files and final files once with paths, formats and expectations. List each result's file names and next action and each outcome's deliverables. Define positive per-step and total-run limits.
 
 3. Walk each transition, including returns and failure paths. Every required incoming artifact must be supplied by every predecessor result that reaches the consumer. Preserve necessary earlier decisions in the actual handoff, not just references the next step cannot read.
 

@@ -28,5 +28,6 @@ The host follows this core method directly. Apply actual task authority, workspa
 - [Instruction writing](instruction-writing_conv.md) — explicit readable rules — required when authoring.
 
 - [Configurable workflow authoring](workflow-authoring-format3_conv.md) - required for format-3 location declarations, per-step execution names, human gates and accepted or historical feedback input bindings. Source definitions are explicit caller-selected files; installation creates the distinct `.hai_env/workflows/` snapshot and saves chosen environment locations. Workflows assign roles and results; roles select available skills.
+- [Format-4 file inventories](workflow_conv.md#file-inventories-in-format-4) - use the three file tables, per-run path modes, step file references and outcome deliverables when authoring format-4 definitions.
 
 Apply the authoring scope and boundaries in [definition management](../procedures/manage-workflow-definitions.md).

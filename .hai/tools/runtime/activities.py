@@ -48,6 +48,26 @@ def store_path(root):
             raise SafetyError('Activity store overlaps a protected path')
     return location
 
+def find(root, location, activity_id):
+    matches = []
+    for child in checked_path(root, location, allow_missing=False).iterdir():
+        relative = child.relative_to(root).as_posix()
+        state = read_json(checked_path(root, artifact(root, relative, 'state.json'), allow_missing=False))
+        if state['activity_id'] == activity_id:
+            matches.append({'path': relative, 'state': state})
+    if len(matches) != 1:
+        raise SafetyError('Activity ID not uniquely found')
+    return matches[0]
+
+def add_workflow_context(root, context):
+    from .workflows import unfinished
+    if context['status'] == 'current':
+        context['workflows'] = unfinished(root, context['activity_id'])
+    else:
+        status = 'no_activity' if context['status'] == 'absent' else 'unverified'
+        context['workflows'] = {'status': status, 'runs': [], 'issues': []}
+    return context
+
 def rename_preflight():
     import ctypes, os, sys
     if os.name == 'nt': return 'windows'
@@ -122,24 +142,21 @@ def handle(operation, workspace, request, apply):
                 require_mutation_context(root)
             d = discover(root, location)
             if d['status'] == 'invalid': raise SafetyError('Activity store invalid: ' + str(d['issues']))
-            if op == 'discover': return envelope(operation, result=d)
+            if op == 'discover': return envelope(operation, result=add_workflow_context(root, d))
             if op in ('show', 'chat-read', 'usage-read'):
                 if op in ('chat-read', 'usage-read') and apply:
                     raise ValueError(op + ' is read-only; omit --apply')
                 ident = required_text(request.get('activity_id'), 'activity_id')
-                matches = []
-                for child in checked_path(root, location).iterdir():
-                    state = read_json(checked_path(root, artifact(root, child.relative_to(root).as_posix(), 'state.json'), allow_missing=False))
-                    if state.get('activity_id') == ident: matches.append((child, state))
-                if len(matches) != 1: raise SafetyError('Activity ID not uniquely found')
-                child, state = matches[0]
+                selected = find(root, location, ident)
                 if op == 'usage-read':
                     from . import usage
-                    return envelope(operation, result=usage.read(root, child.relative_to(root).as_posix(), ident))
+                    return envelope(operation, result=usage.read(root, selected['path'], ident))
                 if op == 'chat-read':
                     from . import chat
-                    return envelope(operation, result=chat.read(root, child.relative_to(root).as_posix(), ident, request))
-                return envelope(operation, result={'path': child.relative_to(root).as_posix(), 'state': state})
+                    return envelope(operation, result=chat.read(root, selected['path'], ident, request))
+                from .workflows import unfinished
+                selected['workflows'] = unfinished(root, ident)
+                return envelope(operation, result=selected)
             prov = provenance(request)
             stamp = now()
             if op == 'migrate-layout':

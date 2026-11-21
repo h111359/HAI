@@ -59,6 +59,47 @@ def load(root, parsed):
     return saved
 
 
+def install_inventory(operation, root, request, apply, parsed, raw, changed):
+    from workflows.definition import parse_definition
+    from .startup import require_mutation_context
+
+    if 'locations' in request:
+        raise ValueError('Format-4 file paths are supplied when starting a run, not at installation')
+    relative = '.hai_env/workflows/' + parsed['name'] + '.md'
+    target = checked_path(root, relative)
+    canonical_spelling(root, relative)
+    settings = checked_path(root, config_path(parsed['name']))
+    if settings.exists():
+        raise SafetyError('Existing workflow settings require an explicit format migration')
+    expected = fingerprint(target)
+    old = target.read_bytes() if expected else None
+    if old is not None:
+        old_definition = parse_definition(old, source=relative)
+        if old_definition['workflow_format'] != 4:
+            raise SafetyError('Existing workflow requires an explicit format migration')
+        if old != raw and request.get('expected_installed_sha256') != old_definition['sha256']:
+            raise SafetyError('Definition update requires expected_installed_sha256 of inspected installed bytes')
+    result = {'definition': relative, 'ready': True, 'starts_run': False, 'paths_chosen_at': 'start'}
+    if not apply:
+        return envelope(operation, 'planned', result)
+    require_mutation_context(root)
+    provenance(request)
+    with lock(root):
+        if fingerprint(target) != expected or settings.exists():
+            raise SafetyError('Workflow installation inputs changed before apply')
+        if old == raw:
+            return envelope(operation, result={**result, 'reused': True})
+        if old is not None:
+            backup = '.hai_env/config/workflows/history/' + parsed['name'] + '/' + str(uuid.uuid4())
+            mkdirs(root, backup, changed)
+            write_bytes(root, backup + '/definition.md', old)
+            changed.append(backup + '/definition.md')
+        mkdirs(root, '.hai_env/workflows', changed)
+        write_bytes(root, relative, raw, expected)
+        changed.append(relative)
+    return envelope(operation, result=result, changed=changed)
+
+
 def install(operation, root, request, apply):
     from .workflows import definition
     changed = []
@@ -66,6 +107,8 @@ def install(operation, root, request, apply):
         if set(request) - {'definition', 'locations', 'expected_installed_sha256', 'provenance'}:
             raise ValueError('Unknown workflow installation fields')
         parsed, raw = definition(root, request.get('definition'), registered=False)
+        if parsed['workflow_format'] == 4:
+            return install_inventory(operation, root, request, apply, parsed, raw, changed)
         if parsed['workflow_format'] != 3:
             raise SafetyError('Configurable installation requires workflow_format 3; historical formats require explicit authoring/migration')
         destination = '.hai_env/workflows/' + parsed['name'] + '.md'

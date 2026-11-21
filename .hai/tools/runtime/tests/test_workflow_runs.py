@@ -80,7 +80,7 @@ Check input and finish or return explicit questions.
 
 
 class WorkflowRunTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self, *, layout_version=1):
         # Caller/test runner owns cwd and redirects all temporary material inside workspace.
         self.temp = tempfile.TemporaryDirectory(dir=Path.cwd())
         self.addCleanup(self.temp.cleanup)
@@ -93,7 +93,7 @@ class WorkflowRunTests(unittest.TestCase):
             'activities': {'location': '.hai_env/activities'},
             'features': {'chronicles': {'enabled': False, 'record_every_prompts': 5}}}), encoding='utf-8')
         self.prov = {'source': 'explicit fixture assignment', 'reason': 'verify workflow behavior'}
-        result = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': 'Original request', 'provenance': self.prov}, True)
+        result = activities.handle('create', self.root, {'layout_version': layout_version, 'initial_input': 'Original request', 'provenance': self.prov}, True)
         self.assertTrue(result['ok'], result)
         self.aid = result['result']['state']['activity_id']
         self.activity = self.root / result['result']['path']

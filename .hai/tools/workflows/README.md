@@ -79,6 +79,12 @@ from installed .hai_env/workflows/ and config/workflows settings. See the shared
 [installation procedure](../../procedures/install-workflow.md) and runtime workflow
 commands for exact request shapes. Structural parsing requires no role or skill.
 
+Format 4 declares regular input, intermediate and final files in three tables.
+Validation checks file references and that every route to an outcome can supply
+its declared deliverables. Installation saves the definition. Start resolves
+fixed, default and launch-supplied paths against the workspace, Activity or run
+root and pins the bindings. See the [file inventory contract](../../conventions/workflow_conv.md#file-inventories-in-format-4).
+
 ## Checks
 
 Run maintained fixtures through the workspace-contained runner:

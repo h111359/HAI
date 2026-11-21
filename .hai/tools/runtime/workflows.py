@@ -9,15 +9,15 @@ from pathlib import Path, PurePosixPath
 from activity_layout import invocation_path
 
 from .storage import SafetyError, checked_path, fingerprint, read_json, write_bytes, write_json, lock
-from .activities import envelope, provenance, now, store_path, discover, handle as activity_handle
+from .activities import envelope, provenance, now, store_path, discover
 from .workflow_artifacts import observe, copy_snapshot, mkdirs, digest
 
 ROOT = 'workflow-runs'
 LEGACY_ROOT = '.hai_env/workflow-runs'
 DEFINITIONS = '.hai_env/workflows'
 TERMINAL = {'finished', 'cancelled'}
-STATES = {'ready', 'prepared', 'running', 'waiting', 'blocked', 'paused', 'cancelling', *TERMINAL}
-MUTATIONS = {'start', 'prepare-step', 'record-execution', 'complete-step', 'pause', 'resume', 'cancel', 'retry-step'}
+STATES = {'ready', 'prepared', 'running', 'waiting', 'blocked', 'paused', 'cancelling', 'publishing', *TERMINAL}
+MUTATIONS = {'start', 'prepare-step', 'record-execution', 'complete-step', 'publish', 'pause', 'resume', 'cancel', 'retry-step'}
 
 
 def canonical_json(value):
@@ -51,10 +51,11 @@ def activity(root, activity_id, active=False):
         if current['status'] != 'current' or current['activity_id'] != activity_id:
             raise SafetyError('Workflow mutation requires the sole current owning Activity')
         return current
-    result = activity_handle('show', root, {'activity_id': activity_id}, False)
-    if not result['ok']:
-        raise SafetyError('Owning Activity is unavailable or ambiguous')
-    return result['result']
+    from .activities import find
+    location = store_path(root)
+    if discover(root, location)['status'] == 'invalid':
+        raise SafetyError('Activity store is invalid')
+    return find(root, location, activity_id)
 
 
 def run_root(root, activity_id):
@@ -95,10 +96,10 @@ def _pairs(pairs):
     return out
 
 
-def load_run(root, activity_id, run_id):
+def load_run(root, activity_id, run_id, *, parent=None):
     """Read verified committed history; a stale projection is returned, not written."""
     from workflows.definition import parse_definition
-    base = run_base(root, activity_id, run_id)
+    base = run_base(root, activity_id, run_id) if parent is None else parent + '/' + ident(run_id, 'run_id')
     directory = checked_path(root, base, allow_missing=False)
     if not directory.is_dir():
         raise SafetyError('Workflow run is not a directory')
@@ -117,7 +118,7 @@ def load_run(root, activity_id, run_id):
             raise SafetyError('Workflow event history chain is inconsistent')
         ident(event['operation_id'], 'operation_id')
         state = event['state']
-        if (not isinstance(state, dict) or state.get('workflow_run_format') not in (1, 2)
+        if (not isinstance(state, dict) or state.get('workflow_run_format') not in (1, 2, 3)
                 or state.get('activity_id') != activity_id or state.get('run_id') != run_id
                 or state.get('revision') != event['sequence'] or state.get('status') not in STATES
                 or not isinstance(state.get('integrity'), dict)):
@@ -162,7 +163,8 @@ def load_run(root, activity_id, run_id):
 
 
 def runs(root, activity_id):
-    parent = checked_path(root, run_root(root, activity_id))
+    relative = run_root(root, activity_id)
+    parent = checked_path(root, relative)
     if not parent.exists():
         return []
     if not parent.is_dir():
@@ -171,8 +173,34 @@ def runs(root, activity_id):
     for child in sorted(parent.iterdir()):
         checked_path(root, child.relative_to(root).as_posix(), allow_missing=False)
         ident(child.name, 'run_id')
-        result.append(load_run(root, activity_id, child.name))
+        result.append(load_run(root, activity_id, child.name, parent=relative))
     return result
+
+
+def unfinished(root, activity_id):
+    """Read the Activity's run registration from committed records, with per-run issues."""
+    rows, issues = [], []
+    try:
+        relative = run_root(root, activity_id)
+        parent = checked_path(root, relative)
+        children = sorted(parent.iterdir()) if parent.exists() else []
+    except (SafetyError, OSError, ValueError) as exc:
+        return {'status': 'unverified', 'runs': [], 'issues': [str(exc)]}
+    for child in children:
+        try:
+            state, _, _, _ = load_run(root, activity_id, child.name, parent=relative)
+        except (SafetyError, OSError, ValueError, TypeError, KeyError) as exc:
+            issues.append(f'{child.name}: {exc}')
+            continue
+        if state['status'] not in TERMINAL:
+            defaults = {'publishing': 'Complete pending file publication', 'ready': 'Prepare the next step',
+                        'paused': 'Resume the run when authorized', 'prepared': 'Dispatch the prepared assignment'}
+            rows.append({'run_id': state['run_id'], 'workflow': state['definition']['name'],
+                         'status': state['status'], 'current_step': state['current_step'],
+                         'current_attempt': state['current_attempt'], 'revision': state['revision'],
+                         'pending_action': state.get('pending_action') or state.get('block_reason') or
+                         defaults.get(state['status'])})
+    return {'status': 'partial' if issues else 'valid', 'runs': rows, 'issues': issues}
 
 
 def assert_activity_closable(root, activity_id):
@@ -185,7 +213,7 @@ def _slot(root, activity_id, selected):
     for state, _, _, _ in runs(root, activity_id):
         if state['run_id'] == selected:
             continue
-        if (state.get('current_attempt') is not None or state.get('workflow_run_format') == 2) and state['status'] not in {'paused', *TERMINAL}:
+        if (state.get('current_attempt') is not None or state.get('workflow_run_format') >= 2) and state['status'] not in {'paused', *TERMINAL}:
             raise SafetyError('Another workflow run holds this Activity execution slot: ' + state['run_id'])
 
 
@@ -239,11 +267,15 @@ def _source(root, context, location):
         parts = relative[len(owner_runs):].lstrip('/').split('/')
         if len(parts) < 2:
             raise SafetyError('Workflow input must identify an accepted output, not a run directory')
-        prior, _, prior_base, _ = load_run(root, context['activity_id'], parts[0])
+        prior, _, _, _ = load_run(root, context['activity_id'], parts[0])
         key = '/'.join(parts[1:])
-        if key not in prior['integrity'] or not any(key == row['path'] for record in prior['accepted'].values() for row in record.get('outputs', {}).values()):
+        published = next((row for row in prior.get('materialized_files', {}).values()
+                          if row['location'] == 'run:' + key), None)
+        retained = published['path'] if published else key
+        if retained not in prior['integrity'] or not any(
+                retained == row['path'] for record in prior['accepted'].values() for row in record.get('outputs', {}).values()):
             raise SafetyError('Prior run input is not accepted output evidence')
-        expected = prior['integrity'][key]
+        expected = prior['integrity'][retained]
     # Reject ancestors that would copy protected stores or other Activity records.
     if path.is_dir():
         for protected in (*forbidden, store, LEGACY_ROOT, owner_runs):
@@ -302,7 +334,7 @@ def _unchanged_readiness(root, step, assignment):
 
 
 def _inputs(root, base, state, step):
-    if state.get('workflow_run_format') == 2:
+    if state['workflow_run_format'] >= 2:
         from .workflow_lineage import inputs
         return inputs(root, base, state, step)
     result = {}
@@ -362,7 +394,7 @@ def handle(operation, workspace, request, apply):
     changed = []
     common = {'activity_id', 'run_id', 'expected_revision', 'provenance'}
     fields = {'list': set(), 'validate': {'definition'}, 'show': {'activity_id', 'run_id'},
-              'start': {'activity_id', 'definition', 'provenance'},
+              'start': {'activity_id', 'definition', 'provenance', 'paths'}, 'publish': common,
               'prepare-step': common | {'runtime', 'authority', 'prerequisite_assessment'},
               'record-execution': common | {'step_id', 'attempt_id', 'status', 'executor', 'details'},
               'complete-step': common | {'step_id', 'attempt_id', 'result', 'assessment', 'executor', 'human_approval'},
@@ -405,21 +437,44 @@ def handle(operation, workspace, request, apply):
                 provenance(request)
                 parsed, raw = definition(root, request.get('definition'))
                 configuration = None
+                inventory = parsed['workflow_format'] == 4
+                if not inventory and 'paths' in request:
+                    raise ValueError('Per-run paths require workflow format 4')
                 if parsed['workflow_format'] == 3:
                     from .workflow_config import load as load_configuration
                     configuration = load_configuration(root, parsed)
                     _slot(root, aid, None)
-                inputs = {}
-                for name, row in parsed['inputs'].items():
-                    source, evidence = _source(root, context, row['location'])
-                    kind = evidence['kind']
-                    suffix = PurePosixPath(source).suffix if kind == 'file' else ''
-                    inputs[name] = {'source': source, 'path': 'inputs/' + name + suffix, 'artifact': evidence}
                 rid = str(uuid.uuid4())
                 base = run_base(root, aid, rid)
+                if inventory:
+                    from .workflow_files import bind, resolve
+                    _slot(root, aid, None)
+                    bindings, questions = bind(root, context['path'], base, parsed, request.get('paths', {}), store_path(root))
+                    if questions:
+                        return envelope(operation, 'needs_input', {'questions': questions, 'definition': parsed['name']})
+                inputs = {}
+                for name, row in parsed['inputs'].items():
+                    if inventory and bindings[name].get('available') is False:
+                        continue
+                    location = bindings[name]['location'] if inventory else row['location']
+                    source, evidence = _source(root, context, location)
+                    kind = evidence['kind']
+                    if inventory and kind != 'file':
+                        raise SafetyError('Format-4 input must be a file: ' + source)
+                    suffix = PurePosixPath(source).suffix if kind == 'file' else ''
+                    inputs[name] = {'source': source, 'path': 'inputs/' + name + suffix, 'artifact': evidence}
+                    if inventory:
+                        bindings[name].update(artifact=evidence, snapshot=inputs[name]['path'])
+                if inventory:
+                    input_paths = {row['source']: row['artifact'] for row in inputs.values()}
+                    for name in parsed['final_files']:
+                        binding = bindings[name]
+                        original = input_paths.get(resolve(context['path'], base, binding['location']))
+                        if original and binding['baseline'][-1] != original['sha256']:
+                            raise SafetyError('Update destination changed while binding input snapshot: ' + name)
                 if checked_path(root, base).exists():
                     raise SafetyError('New workflow run destination already exists; preserve it for reconciliation')
-                state = {'workflow_run_format': 2 if parsed['workflow_format'] == 3 else 1, 'activity_id': aid, 'run_id': rid,
+                state = {'workflow_run_format': max(1, parsed['workflow_format'] - 1), 'activity_id': aid, 'run_id': rid,
                          'definition': {'name': parsed['name'], 'revision': parsed['revision'], 'sha256': parsed['sha256']},
                          'created_at': now(), 'updated_at': now(), 'revision': 1, 'status': 'ready',
                          'current_step': parsed['entry'], 'current_attempt': None,
@@ -428,11 +483,17 @@ def handle(operation, workspace, request, apply):
                          'executor': None, 'integrity': {}}
                 if configuration is not None:
                     state['configuration'] = configuration
+                if inventory:
+                    state.update(bindings=bindings, materialized_files={}, pending_publications={})
                 if not apply:
                     return envelope(operation, 'planned', {'state': state, 'path': base, 'readiness': 'checked at prepare-step'})
                 mkdirs(root, base, changed)
                 write_bytes(root, base + '/definition.md', raw); changed.append(base + '/definition.md')
                 _remember(root, base, state, 'definition.md')
+                if inventory:
+                    write_json(root, base + '/bindings.json', {'activity_id': aid, 'run_id': rid, 'files': bindings})
+                    changed.append(base + '/bindings.json')
+                    _remember(root, base, state, 'bindings.json')
                 for row in inputs.values():
                     copied = copy_snapshot(root, row['source'], base + '/' + row['path'], changed)
                     if copied != row['artifact']:
@@ -442,11 +503,32 @@ def handle(operation, workspace, request, apply):
                 return envelope(operation, result={'state': state, 'path': base}, changed=changed)
 
             state, parsed, base, stale = load_run(root, aid, request.get('run_id'))
-            if op in ('prepare-step', 'record-execution', 'complete-step', 'retry-step', 'resume') and parsed['workflow_format'] not in (2, 3):
+            inventory = parsed['workflow_format'] == 4
+            if op in ('prepare-step', 'record-execution', 'complete-step', 'retry-step', 'resume') and parsed['workflow_format'] not in (2, 3, 4):
                 raise SafetyError('Legacy workflow runs are inspectable; resolve them before explicit role migration, then start a new migrated definition')
             if op == 'show':
-                return envelope(operation, result={'state': state, 'path': base, 'projection_stale': stale})
+                payload = {'state': state, 'path': base, 'projection_stale': stale}
+                if inventory:
+                    from .workflow_files import inventory as file_inventory
+                    payload['files'] = file_inventory(root, context['path'], base, state, parsed)
+                return envelope(operation, result=payload)
             provenance(request)
+
+            def finish_publications(pending):
+                from .workflow_files import publish
+                event_fp = fingerprint(checked_path(root, base + '/events.jsonl', allow_missing=False))
+                state_fp = fingerprint(checked_path(root, base + '/state.json'))
+                finalized = copy.deepcopy(pending)
+                finalized.update(finalized.pop('after_publication'))
+                finalized.update(revision=pending['revision'] + 1, updated_at=now())
+                if apply:
+                    materialized = publish(root, context['path'], base, store_path(root), pending['pending_publications'], changed)
+                    finalized['materialized_files'].update(materialized)
+                finalized['pending_publications'] = {}
+                if apply:
+                    _commit(root, base, finalized, 'publish', request['provenance'], changed, event_fp, state_fp)
+                return finalized
+
             # Retry acknowledgment must precede the now-stale revision check.
             key = str(request.get('step_id')) + '/' + str(request.get('attempt_id'))
             if op == 'complete-step' and key in state['accepted']:
@@ -454,13 +536,22 @@ def handle(operation, workspace, request, apply):
                 replay_executor = _executor(request.get('executor'))
                 if (record['result'] != request.get('result') or record['assessment'] != request.get('assessment')
                         or not _same_executor(record['executor'], replay_executor) or not replay_executor['writers_ended']
-                        or (state.get('workflow_run_format') == 2 and record.get('human_approval_request') != request.get('human_approval'))):
+                        or (state['workflow_run_format'] >= 2 and record.get('human_approval_request') != request.get('human_approval'))):
                     raise SafetyError('Conflicting replay of accepted workflow completion')
-                return envelope(operation, result={'state': state, 'acceptance': record, 'replayed': True})
+                if state['status'] == 'publishing' and state['last_accepted']['key'] == key and apply:
+                    state = finish_publications(state)
+                return envelope(operation, result={'state': state, 'acceptance': record, 'replayed': True}, changed=changed)
             if type(request.get('expected_revision')) is not int or request['expected_revision'] != state['revision']:
                 raise SafetyError('Workflow expected_revision is stale; inspect current state')
             if state['status'] in TERMINAL:
                 raise SafetyError('Finished/cancelled workflow run is read-only')
+            if op == 'publish':
+                if not inventory or state['status'] != 'publishing':
+                    raise SafetyError('Workflow has no pending file publication')
+                return envelope(operation, 'ok' if apply else 'planned',
+                                {'state': finish_publications(state), 'publications': state['pending_publications']}, changed)
+            if state['status'] == 'publishing':
+                raise SafetyError('Finish pending file publication before changing this run')
             events_fp = fingerprint(checked_path(root, base + '/events.jsonl', allow_missing=False))
             projection_fp = fingerprint(checked_path(root, base + '/state.json'))
             candidate = copy.deepcopy(state)
@@ -491,22 +582,29 @@ def handle(operation, workspace, request, apply):
                 if state.get('workflow_run_format') == 2:
                     from .workflow_config import outputs as configured
                     configured_outputs = configured(root, state, step, number)
-                assignment = {'assignment_format': 3 if configured_outputs is not None else 2, 'activity_id': aid, 'run_id': state['run_id'],
+                declared_outputs = configured_outputs if configured_outputs is not None else step['outputs']
+                if inventory:
+                    from .workflow_files import assignment_outputs
+                    declared_outputs = assignment_outputs(step, state, relative, context['path'], base)
+                assignment = {'assignment_format': 4 if inventory else 3 if configured_outputs is not None else 2, 'activity_id': aid, 'run_id': state['run_id'],
                               'step_id': step_id, 'attempt_id': new_attempt, 'role': step['role'],
                               'instruction': step['instruction'], 'inputs': resolved,
-                              'outputs': configured_outputs if configured_outputs is not None else step['outputs'], 'results': step['results'], 'readiness': readiness,
+                              'outputs': declared_outputs, 'results': step['results'], 'readiness': readiness,
                               'definition_sha256': parsed['sha256'], 'created_at': now()}
-                if configured_outputs is not None:
+                if state['workflow_run_format'] >= 2:
                     from .workflow_lineage import chat_messages, checkpoint
                     assignment['execution_number'] = number
                     messages = chat_messages(root, context)
                     assignment['chat_sequence'] = messages[-1]['sequence'] if messages else 0
                     assignment['checkpoint_sha256'] = checkpoint(assignment)
+                candidate.pop('pending_action', None)
                 candidate.update(status='prepared', current_attempt=new_attempt, executor=None, block_reason=None,
                                  attempt_count=state['attempt_count'] + 1)
                 candidate['step_attempt_counts'][step_id] = number
                 if apply:
                     mkdirs(root, base + '/' + relative, changed)
+                    if inventory and declared_outputs:
+                        mkdirs(root, base + '/' + relative + '/files', changed)
                     if configured_outputs is not None:
                         for output in configured_outputs.values():
                             mkdirs(root, PurePosixPath(output['path']).parent.as_posix(), changed)
@@ -556,6 +654,10 @@ def handle(operation, workspace, request, apply):
                 if not isinstance(request.get('details'), str) or not request['details'].strip():
                     raise ValueError('Execution report requires details')
                 candidate.update(status=status, executor=executor, block_reason=request['details'] if status == 'blocked' else None)
+                if status == 'waiting':
+                    candidate['pending_action'] = request['details']
+                else:
+                    candidate.pop('pending_action', None)
             elif op == 'complete-step':
                 if not attempt or request.get('step_id') != step_id or request.get('attempt_id') != attempt or state['status'] not in ('running', 'waiting', 'blocked'):
                     raise SafetyError('Completion does not identify a started current attempt')
@@ -574,7 +676,7 @@ def handle(operation, workspace, request, apply):
                     for row in assignment['inputs'].values():
                         if row and observe(root, base + '/' + row['path']) != row['artifact']:
                             raise SafetyError('Assigned input changed before completion')
-                    if state.get('workflow_run_format') == 2:
+                    if state['workflow_run_format'] >= 2:
                         current_inputs = _inputs(root, base, state, step)
                         if current_inputs != assignment['inputs']:
                             raise SafetyError('Accepted source binding changed after preparation')
@@ -594,11 +696,20 @@ def handle(operation, workspace, request, apply):
                             outputs[name] = {'path': location, 'configured_path': external, 'artifact': evidence,
                                              'format': output['format'], 'expectation': output['expectation']}
                         else:
-                            tail = output['location'].split(':', 1)[1]
+                            tail = assignment['outputs'][name]['location'].split(':', 1)[1]
                             location = relative + '/' + tail
+                            if inventory and not checked_path(root, base + '/' + location, allow_missing=False).is_file():
+                                raise SafetyError('Format-4 output must be a regular file: ' + name)
                             outputs[name] = {'path': location, 'artifact': observe(root, base + '/' + location),
                                              'format': output['format'], 'expectation': output['expectation']}
+                    kind, target = result['next'].split(':', 1)
+                    publications = {}
+                    if inventory:
+                        from .workflow_files import publication_plan
+                        publications = publication_plan(root, context['path'], base, store_path(root), state,
+                                                        parsed, outputs, kind, target)
                 except (SafetyError, ValueError) as exc:
+                    candidate.pop('pending_action', None)
                     candidate.update(status='blocked', executor=executor, block_reason='invalid-output: ' + str(exc))
                     rejection = {'result': label, 'assessment': request.get('assessment'), 'reason': str(exc), 'time': now()}
                     if apply:
@@ -612,11 +723,11 @@ def handle(operation, workspace, request, apply):
                             copied = copy_snapshot(root, output['configured_path'], base + '/' + output['path'], changed)
                             if copied != output['artifact']:
                                 raise SafetyError('Output changed during accepted copy staging', changed)
-                    record = {'result_format': 2 if state.get('workflow_run_format') == 2 else 1, 'activity_id': aid, 'run_id': state['run_id'], 'step_id': step_id,
+                    record = {'result_format': 2 if state['workflow_run_format'] >= 2 else 1, 'activity_id': aid, 'run_id': state['run_id'], 'step_id': step_id,
                               'attempt_id': attempt, 'result': label, 'inputs': assignment['inputs'], 'outputs': outputs,
                               'assessment': request['assessment'], 'executor': executor, 'accepted_at': now(),
                               'next': result['next']}
-                    if state.get('workflow_run_format') == 2:
+                    if state['workflow_run_format'] >= 2:
                         record['human_approval'] = human
                         record['human_approval_request'] = request.get('human_approval')
                         record['execution_number'] = assignment['execution_number']
@@ -627,11 +738,16 @@ def handle(operation, workspace, request, apply):
                         candidate['integrity'][row['path']] = row['artifact']
                     candidate['accepted'][key] = record
                     candidate['last_accepted'] = {'key': key, 'step': step_id, 'attempt': attempt, 'result': label}
-                    kind, target = result['next'].split(':', 1)
+                    candidate.pop('pending_action', None)
                     candidate.update(status='finished' if kind == 'end' else 'ready',
                                      current_step=step_id if kind == 'end' else target,
                                      current_attempt=None, outcome=target if kind == 'end' else None,
                                      executor=None, block_reason=None)
+                    if publications:
+                        candidate['after_publication'] = {field: candidate[field] for field in
+                                                          ('status', 'current_step', 'outcome')}
+                        candidate.update(status='publishing', current_step=step_id, outcome=None,
+                                         pending_publications=publications)
                     payload['acceptance'] = record
             elif op in ('pause', 'cancel'):
                 executor = request.get('executor')
@@ -667,6 +783,8 @@ def handle(operation, workspace, request, apply):
             if not apply:
                 return envelope(operation, 'planned', {'state': candidate, **payload, 'projection_stale': stale})
             _commit(root, base, candidate, op, request['provenance'], changed, events_fp, projection_fp)
+            if candidate['status'] == 'publishing':
+                candidate = finish_publications(candidate)
             if 'rejection' in payload:
                 return envelope(operation, 'blocked', {'state': candidate, **payload}, changed, [payload['rejection']['reason']])
             return envelope(operation, result={'state': candidate, **payload}, changed=changed)

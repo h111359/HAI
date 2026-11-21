@@ -14,8 +14,8 @@ handoff. Workflows remain optional; ordinary tasks and role procedures still wor
 
 ## Explanation
 
-An explicitly supplied reusable source definition is installed with explicit environment
-locations into `.hai_env/workflows/<name>.md`. An installed definition is discoverable by its presence;
+An explicitly supplied reusable source definition can be installed into
+`.hai_env/workflows/<name>.md`. An installed definition is discoverable by its presence;
 there is no separate workflow catalogue. Discovery is not execution authority.
 The host checks the definition and current prerequisites, then coordinates actual
 work. Core tools persist assignments and accept supported result evidence; they
@@ -48,6 +48,13 @@ UUID subfolder below its configured bases. Every intermediate name contains the
 step and runtime-assigned per-step execution number. Accepted copies, immutable
 initial snapshots and input lineage remain authoritative inside the Activity.
 Canonical product files keep their existing ownership and publication authority.
+
+Format 4 declares input, intermediate and final files in three tables. A run
+resolves fixed, default or caller-supplied paths and pins the bindings. A bare
+path is workspace-relative. An `activity:` path follows the run's owning
+Activity into its archive. Steps stage files, and accepted results determine
+which intermediate files become available and which final files are delivered.
+Activity status and startup show unfinished runs and known pending actions.
 
 An authored `accepted:step/result/output` source binds a named accepted result,
 including earlier approved requirements/design on a partial QA return. Superseded

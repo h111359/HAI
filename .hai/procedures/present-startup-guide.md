@@ -52,6 +52,10 @@ reporting of missing prerequisites remain possible under `.hai/start.md`.
      recording readiness. Keep valid independent information useful when another
      component fails. Do not run a blanket audit of role definitions/configurations
      or claim runtime/model availability was checked by startup.
+   - Show each unfinished workflow from the Activity's `workflows` summary
+     with its name, run ID, status, current step and pending action when supplied.
+     Report partial or unverified discovery from that summary. Viewing it does
+     not resume, retry or publish a workflow.
 4. For startup with a concrete task, include the role/Activity summary in the
    first response and proceed with that task through the existing continuity,
    permission and recording checks. Do not require a menu selection. For startup

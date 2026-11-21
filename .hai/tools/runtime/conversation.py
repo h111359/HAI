@@ -15,6 +15,9 @@ from .storage import SafetyError, checked_path, fingerprint, read_json, write_js
 from .recording_policy import RecordingInterruption
 
 
+NO_SOURCE_WARNING = 'No registered native source; direct chat capture remains available'
+
+
 def digest(raw):
     return hashlib.sha256(raw).hexdigest()
 
@@ -207,7 +210,7 @@ def synchronize(root, base, ident, request, stamp, apply, *, finalize=False):
         else:
             candidate['sources'].append({'binding': b, 'index': [], 'prefix_bytes': 0, 'prefix_sha256': digest(b'')})
     if not candidate['sources']:
-        warnings.append({'reason': 'No registered native source; direct chat capture remains available'})
+        warnings.append({'reason': NO_SOURCE_WARNING})
     check_overlaps(root, base, [s['binding'] for s in candidate['sources']])
     try:
         if apply and candidate['sources'] != data['sources']:
@@ -263,7 +266,7 @@ def verify(root, base, ident, *, closing=False):
     warnings = []; missing = []; pending = False
     if data['migration'] and data['migration'].get('status') != 'complete':
         raise SafetyError('Recording migration is incomplete')
-    if not data['sources']: warnings.append({'reason': 'No registered native source'})
+    if not data['sources']: warnings.append({'reason': NO_SOURCE_WARNING})
     keys = {m.get('source_message_id') for m in messages}
     for source in data['sources']:
         try:

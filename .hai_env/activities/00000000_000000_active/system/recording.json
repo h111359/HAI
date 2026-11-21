@@ -1,0 +1,11 @@
+{
+  "recording_format_version": 1,
+  "activity_id": "f91d0067-7962-4516-b97e-e408330e2faa",
+  "sources": [],
+  "migration": null,
+  "warnings": [
+    {
+      "reason": "No registered native source; direct chat capture remains available"
+    }
+  ]
+}

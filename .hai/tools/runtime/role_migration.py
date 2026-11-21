@@ -206,7 +206,7 @@ def _plan(root, legacy_source=None):
             if re.search(rb'(?m)^workflow_format: 1\r?$', raw):
                 files[relative] = workflow(raw)
                 moves.append({'source': relative, 'destination': relative})
-            elif not re.search(rb'(?m)^workflow_format: 2\r?$', raw):
+            elif not re.search(rb'(?m)^workflow_format: [234]\r?$', raw):
                 raise SafetyError('Unsupported reusable workflow format: ' + relative)
     serial = {'observed': observed, 'moves': moves,
               'files': {path: hashlib.sha256(raw).hexdigest() for path, raw in sorted(files.items())},

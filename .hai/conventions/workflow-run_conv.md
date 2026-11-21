@@ -41,14 +41,15 @@ communication, not accepted workflow state or execution permission.
 
 ## Progress and ownership
 
-Runs distinguish ready, prepared, running, waiting, blocked, paused, cancelling,
+Runs distinguish ready, prepared, running, waiting, blocked, paused, cancelling, publishing,
 cancelled and finished progress. These administrative labels do not limit authored
 result/outcome names. Prepared/running/waiting or an unfinished blocked/cancelling
 attempt holds the Activity's one workflow execution slot. Preparation reserves that
 slot before launch, so another run cannot start writing in the gap before launch
 confirmation. Historical format-2 runs allow multiple ready runs. Format-3 runs
 reserve the slot from start, including ready status; safely paused and finished
-runs may coexist.
+runs may coexist. Format-4 runs follow the same rule and retain the slot during
+publication.
 
 Waits retain actual questions/answers. Invalid outputs block transition; the same
 unaccepted attempt can correct its outputs before acceptance. Missing authority,
@@ -120,6 +121,33 @@ absolute path or continued availability of configured copies. Mutations still ch
 required configured handoffs. Archival keeps all accepted evidence with its Activity.
 Reports name actual canonical product changes; configured handoff storage does not
 transfer ownership or authorize publication or backlog status changes.
+
+## File bindings and publication
+
+Format 4 creates run-format 3 and assignment-format 4 records. The runtime writes
+`bindings.json` with the owning Activity ID, run ID and the labeled path,
+selection source and any launch baseline for each file. Inputs are pinned as
+snapshots. The assignment supplies the exact attempt-local staging path for
+each output and its resolved destination. The step writes the staging path and
+leaves materialization to the runtime. Downstream steps use accepted attempt
+bytes with producer lineage.
+
+On completion, the runtime commits accepted evidence and any pending publication
+plan before writing destinations. It then records publication and advances the
+run. An interrupted publication is visible as publishing. `workflow publish`
+with the current revision can resume it. Identical completion replay can also
+finish the pending plan. Exact bytes already at a destination satisfy a pending
+write. A different file that conflicts with the recorded baseline blocks and
+requires reconciliation. Publication never reverses accepted evidence or unrelated
+product changes. A run with pending writes cannot finish or release its slot.
+
+`workflow show` reports the file inventory, drafts awaiting acceptance, ready
+versions, superseded versions, publication status and changed destinations. It
+resolves labeled Activity paths using the current or archived owning folder.
+`activity discover`, `activity show`, and startup expose an unfinished-workflow
+summary from the committed Activity-local run records, including run ID, step,
+status and any known pending action. Discovery is read-only. A new session can
+identify the same run before choosing whether to continue it.
 
 ## Completion and recording
 

@@ -172,7 +172,8 @@ accepted copies, input lineage, events and state below the owning Activity's
 workflow-runs/<run-uuid>/. Configured handoffs are checked before dependent work;
 internal accepted bytes/hashes remain authoritative and inspectable after archival
 even when configured copies are unavailable. Product outputs retain their existing
-owners; no stable-name overwrite/publication or Activity closure is automatic.
+owners. Formats 2 and 3 do not materialize files under stable final names.
+Workflow completion never closes the Activity.
 
 Format-1/2 historical definitions and run-format-1 evidence retain their original
 interpretation and bytes. Format 3 creates run-format 2 and assignment-format 3;
@@ -185,6 +186,38 @@ limits remain pinned and retries never overwrite earlier accepted attempts.
 Use `**/workflow-runs/** -text` when versioning evidence to prevent line-ending
 conversion. Resolve archived evidence using stable Activity/run IDs, not cached
 active-folder absolute paths. Optional workflow absence does not block ordinary work.
+
+### Format-4 workflow files
+
+`workflow start` accepts an optional `paths` object for a format-4 definition.
+Send this example through `--request-stdin` with the actual current Activity
+ID and provenance.
+
+```json
+{
+  "activity_id": "<current Activity UUID>",
+  "definition": ".hai_env/workflows/change-assessment.md",
+  "paths": {
+    "request": "activity:work/request.md",
+    "assessment": "activity:results/assessment.md"
+  },
+  "provenance": {"source": "user request", "reason": "Assess the supplied proposal"}
+}
+```
+
+Preview first. A `needs_input` response returns the missing file paths and their
+expectations without creating a run. The apply operation pins the paths in
+`bindings.json` and snapshots input bytes. `workflow install` for format 4
+requires no `locations` because path selection happens at launch.
+
+`workflow show` adds `files` with the resolved paths, file states and accepted
+versions. Assignment output `path` is relative to the run directory. Write to
+that staging path. The runtime materializes intermediates at acceptance and
+delivers final files for the accepted outcome. When status is `publishing`,
+`workflow publish` accepts `activity_id`, `run_id`, `expected_revision`,
+and `provenance`. Apply to finish the committed pending plan after inspecting
+conflicts. Startup and Activity status list unfinished runs without dispatching
+anything. Formats 2 and 3 keep their existing path and run semantics.
 
 ## Activity layout and conversation
 

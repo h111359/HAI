@@ -13,6 +13,7 @@ NAMES = re.compile(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z')
 META = {'workflow_format', 'name', 'revision', 'entry', 'max_step_attempts', 'max_run_attempts'}
 SECTIONS = ['Purpose', 'Inputs', 'Outcomes', 'Steps']
 STEP_SECTIONS = ['Role', 'Instruction', 'Inputs', 'Outputs', 'Results']
+FILE_SECTIONS = ['Inputs', 'Intermediate Files', 'Final Files']
 
 
 class DefinitionError(ValueError):
@@ -145,6 +146,95 @@ def _named(rows):
     return result
 
 
+def file_location(value, *, output=False, where='Location'):
+    prefix, separator, tail = value.partition(':')
+    if not separator:
+        prefix, tail = 'workspace', value
+    if prefix not in (('workspace', 'activity', 'run') if output else ('workspace', 'activity')):
+        raise DefinitionError(f'{where}: unsupported file root {prefix!r}')
+    if prefix == 'run' and not tail.startswith('files/'):
+        raise DefinitionError(f'{where}: run destinations must be under run:files/')
+    location = prefix + ':' + tail
+    _reference(location, (prefix,), where)
+    return location
+
+
+def _file_lists(sections):
+    catalogues = {}
+    for section in FILE_SECTIONS:
+        inputs = section == 'Inputs'
+        headers = ['Name', 'Mode', 'Location', 'Format', 'Expectation']
+        if inputs:
+            headers.insert(1, 'Required')
+        if section == 'Final Files':
+            headers.insert(1, 'Action')
+        rows = _named(_table(sections[section], headers, section))
+        for row in rows.values():
+            mode, location = row['mode'], row['location']
+            if mode not in ('fixed', 'default', 'ask') or (mode == 'ask') != (location == '-'):
+                raise DefinitionError(f'{row["_where"]}: use fixed/default with a path or ask with -')
+            if mode != 'ask':
+                row['location'] = file_location(location, output=not inputs, where=row['_where'])
+            if inputs:
+                if row['required'] not in ('yes', 'no'):
+                    raise DefinitionError(f'{row["_where"]}: Required must be yes or no')
+                row['required'] = row['required'] == 'yes'
+            elif section == 'Final Files' and row['action'] not in ('create', 'update'):
+                raise DefinitionError(f'{row["_where"]}: Action must be create or update')
+        catalogues[section] = rows
+    names = [name for rows in catalogues.values() for name in rows]
+    if len(names) != len(set(names)):
+        raise DefinitionError('File names must be unique across the three file lists')
+    return [catalogues[section] for section in FILE_SECTIONS]
+
+
+def _output_names(row, column, *, empty=False):
+    if empty and row[column] == '-':
+        return []
+    names = [name.strip() for name in row[column].split(',')]
+    if len(names) != len(set(names)):
+        raise DefinitionError(f'{row["_where"]}: expected distinct output names')
+    for name in names:
+        identifier(name, row['_where'])
+    return names
+
+
+def _validate_inventory(definition):
+    final = definition['final_files']
+    declared = set(definition['intermediate_files']) | set(final)
+    producers = {}
+    for sid, step in definition['steps'].items():
+        for name in step['outputs']:
+            if name in producers:
+                raise DefinitionError(f'{name}: file must have a single producing step')
+            producers[name] = sid
+    if set(producers) != declared:
+        raise DefinitionError(f'Files without a producing step: {sorted(declared - set(producers))}')
+    delivered = set()
+    for outcome in definition['outcomes'].values():
+        for name in outcome['files']:
+            if name not in final:
+                raise DefinitionError(f'Outcome {outcome["name"]}: {name!r} is not a declared final file')
+            delivered.add(name)
+    if delivered != set(final):
+        raise DefinitionError(f'Final files without an outcome: {sorted(set(final) - delivered)}')
+    available = {definition['entry']: set()}
+    pending = [definition['entry']]
+    while pending:
+        sid = pending.pop()
+        step = definition['steps'][sid]
+        for result in step['results'].values():
+            kind, target = result['next'].split(':', 1)
+            after = (available[sid] - step['outputs'].keys()) | set(result['outputs'])
+            if kind == 'end':
+                missing = set(definition['outcomes'][target]['files']) - after
+                if missing:
+                    raise DefinitionError(f'{sid}/{result["name"]}: outcome requires unavailable files {sorted(missing)}')
+            elif target not in available or not available[target] <= after:
+                available[target] = available.get(target, after) & after
+                pending.append(target)
+
+
 def _validate_graph(definition):
     steps, outcomes = definition['steps'], definition['outcomes']
     entry = definition['entry']
@@ -256,7 +346,7 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
                 metadata[key] = int(value)
         if set(metadata) != META:
             raise DefinitionError(f'frontmatter: missing keys {sorted(META - set(metadata))}')
-        if metadata['workflow_format'] not in (1, 2, 3):
+        if metadata['workflow_format'] not in (1, 2, 3, 4):
             raise DefinitionError('workflow_format: unsupported version')
         if metadata['workflow_format'] == 1 and not allow_legacy:
             raise DefinitionError('Legacy workflow_format 1 requires explicit role migration')
@@ -272,7 +362,13 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
         if any(level == 1 for _, level, _ in headings):
             raise DefinitionError('expected exactly one H1 title')
         version3 = metadata['workflow_format'] == 3
-        sections = _sections(body, 2, source, ['Purpose', 'Locations', *SECTIONS[1:]] if version3 else SECTIONS)
+        inventory = metadata['workflow_format'] == 4
+        section_names = SECTIONS
+        if version3:
+            section_names = ['Purpose', 'Locations', *SECTIONS[1:]]
+        if inventory:
+            section_names = ['Purpose', *FILE_SECTIONS, 'Outcomes', 'Steps']
+        sections = _sections(body, 2, source, section_names)
         locations = _named(_table(sections['Locations'], ['Name', 'Purpose', 'Contents'], 'Locations')) if version3 else None
         if version3 and not locations:
             raise DefinitionError('Locations: at least one configured output base is required')
@@ -282,10 +378,17 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
         for name in ('Purpose', 'Inputs', 'Outcomes'):
             if any(level in (3, 4) for _, level, _ in _masked_headings(sections[name][0], name)):
                 raise DefinitionError(f'{name}: nested structural headings are unsupported')
-        inputs = _named(_table(sections['Inputs'], ['Name', 'Location', 'Format', 'Expectation'], 'Inputs'))
-        for row in inputs.values():
-            _reference(row['location'], ('workspace', 'activity'), row['_where'] + '/Location')
-        outcomes = _named(_table(sections['Outcomes'], ['Name', 'Meaning'], 'Outcomes'))
+        if inventory:
+            inputs, intermediate, final = _file_lists(sections)
+            files = {**intermediate, **final}
+        else:
+            inputs = _named(_table(sections['Inputs'], ['Name', 'Location', 'Format', 'Expectation'], 'Inputs'))
+            for row in inputs.values():
+                _reference(row['location'], ('workspace', 'activity'), row['_where'] + '/Location')
+        outcomes = _named(_table(sections['Outcomes'], ['Name', 'Meaning', *(['Files'] if inventory else [])], 'Outcomes'))
+        if inventory:
+            for row in outcomes.values():
+                row['files'] = _output_names(row, 'files', empty=True)
         if not outcomes:
             raise DefinitionError('Outcomes: at least one terminal outcome is required')
         step_sections = _sections(sections['Steps'][0], 3, 'Steps')
@@ -301,12 +404,18 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
                 raise DefinitionError(f'step {sid}/Instruction: nonempty instruction required')
             inp = _named(_table(pieces['Inputs'], ['Name', 'Source', 'Required', 'Format', 'Expectation'], f'step {sid}/Inputs'))
             for row in inp.values():
-                _reference(row['source'], ('workflow', 'incoming', 'feedback', 'accepted') if version3 else ('workflow', 'incoming'), row['_where'] + '/Source')
+                _reference(row['source'], ('workflow', 'incoming', 'feedback', 'accepted') if version3 or inventory else ('workflow', 'incoming'), row['_where'] + '/Source')
                 if row['required'] not in ('yes', 'no'):
                     raise DefinitionError(f'{row["_where"]}/Required: expected yes or no')
                 row['required'] = row['required'] == 'yes'
-            outputs = _named(_table(pieces['Outputs'], ['Name', 'Location', 'Format', 'Expectation'], f'step {sid}/Outputs'))
-            if not outputs:
+            headers = ['Name'] if inventory else ['Name', 'Location', 'Format', 'Expectation']
+            outputs = _named(_table(pieces['Outputs'], headers, f'step {sid}/Outputs'))
+            if inventory:
+                for name, row in outputs.items():
+                    if name not in files:
+                        raise DefinitionError(f'{row["_where"]}: undeclared output file {name!r}')
+                    outputs[name] = {**files[name], 'location': 'attempt:files/' + name}
+            if not outputs and not inventory:
                 raise DefinitionError(f'step {sid}/Outputs: at least one output is required')
             output_paths = []
             for row in outputs.values():
@@ -327,18 +436,13 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
                 if any(lower == prior or lower.startswith(prior + '/') or prior.startswith(lower + '/') for prior in output_paths):
                     raise DefinitionError(f'{row["_where"]}/Location: duplicate, case-alias or overlapping output path')
                 output_paths.append(lower)
-            results = _named(_table(pieces['Results'], ['Name', 'When', 'Outputs', 'Next', *(['Gate'] if version3 else [])], f'step {sid}/Results'))
+            results = _named(_table(pieces['Results'], ['Name', 'When', 'Outputs', 'Next', *(['Gate'] if version3 or inventory else [])], f'step {sid}/Results'))
             if not results:
                 raise DefinitionError(f'step {sid}/Results: at least one named result is required')
             for row in results.values():
-                if version3 and row['gate'] not in ('none', 'human'):
+                if (version3 or inventory) and row['gate'] not in ('none', 'human'):
                     raise DefinitionError('Results/Gate: expected none or human')
-                names = [name.strip() for name in row['outputs'].split(',')]
-                if not names or len(names) != len(set(names)):
-                    raise DefinitionError(f'{row["_where"]}/Outputs: expected distinct output names')
-                for name in names:
-                    identifier(name, row['_where'] + '/Outputs')
-                row['outputs'] = names
+                row['outputs'] = _output_names(row, 'outputs', empty=inventory)
                 _reference(row['next'], ('step', 'end'), row['_where'] + '/Next')
             steps[sid] = {'id': sid, 'role': role, 'instruction': instruction, 'inputs': inp, 'outputs': outputs, 'results': results}
         definition = {**metadata, 'title': title, 'purpose': purpose, 'inputs': inputs,
@@ -348,8 +452,12 @@ def parse_definition(raw, source='<definition>', *, allow_legacy=False):
             used_locations = {out['location'].split(':', 1)[1].split('/')[0] for step in steps.values() for out in step['outputs'].values()}
             if used_locations != set(locations):
                 raise DefinitionError('Locations: every location must be used by an output')
+        if inventory:
+            definition.update(intermediate_files=intermediate, final_files=final)
         _validate_graph(definition)
-        for rows in [inputs, outcomes, *[s[k] for s in steps.values() for k in ('inputs', 'outputs', 'results')]]:
+        if inventory:
+            _validate_inventory(definition)
+        for rows in [inputs, outcomes, *([intermediate, final] if inventory else []), *[s[k] for s in steps.values() for k in ('inputs', 'outputs', 'results')]]:
             for row in rows.values():
                 row.pop('_where', None)
         if locations:
