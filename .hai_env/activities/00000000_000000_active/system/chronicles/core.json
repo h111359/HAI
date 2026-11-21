@@ -1,7 +1,7 @@
 {
   "core_format_version": 1,
   "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
-  "updated_at": "2026-11-21T04:47:28Z",
+  "updated_at": "2026-11-21T05:37:49Z",
   "sources": [
     {
       "binding": {
@@ -21,8 +21,8 @@
           }
         ]
       },
-      "prefix_bytes": 37575220,
-      "prefix_sha256": "4b11b0eda52e2be876d593999fc1d804179366dd836656b30a7e72cba2a3b9bb",
+      "prefix_bytes": 40977505,
+      "prefix_sha256": "3869429b87a8e9f5bce3ce105ea8cd2aebcf7085cb1c313e6cbeeeee2c13cb71",
       "segment_path": "chronicles/20261112_195218_segment-01.md",
       "original_started_at": "2026-11-12T19:52:18.056Z",
       "closure_binding": null,
@@ -858,6 +858,54 @@
           "timestamp": "2026-11-21T04:46:46.756Z",
           "message_id": "01a1fc6d-a5e2-7282-9f84-edb8a0806edc",
           "turn_id": "01a1fc6d-a55a-7663-83d5-4b006a4cc676"
+        },
+        {
+          "source_position": 10586,
+          "role": "assistant",
+          "text": "Committed as `c5e9374` \u2014 `feat: discover installed skills and guide task selection`.\n\nWorking tree is clean. The Activity remains open.",
+          "timestamp": "2026-11-21T04:47:46.973Z",
+          "message_id": "msg_08f247297895facc016b0122726a6087d2b324593acd6f0635",
+          "turn_id": "01a1fc6d-a55a-7663-83d5-4b006a4cc676"
+        },
+        {
+          "source_position": 10597,
+          "role": "user",
+          "text": "HAI core should not depend on any file or folder outside .hai/ and .hai_env/ folders. The current workspace is the place where HAI is developed, but when installed on another machine, the files and folders outside .hai/ won't be installed. There is a misinterpretation now and for example HAI has in its instructions to rely on skills and roles in its workspace root folder. When .hai_env/ is installed in another workspace - it could have configured some workspace specific additional locations, but this is a custom configuration for this workspace, not a fixed dependency. Make a full review and identify all places where this issue appears.\n",
+          "timestamp": "2026-11-21T04:48:38.031Z",
+          "message_id": "01a1fc6f-588d-7141-b9ff-3384acf046fc",
+          "turn_id": "01a1fc6f-581f-7683-96c4-d02623200df2"
+        },
+        {
+          "source_position": 10709,
+          "role": "assistant",
+          "text": "I found fixed development-workspace assumptions in **six areas**, documented with file locations in the [full review](C:/Users/hmhri/Desktop/repos/HAI/.hai_env/activities/00000000_000000_active/results/core-boundary-review.md).\n\n| Area | Finding |\n|---|---|\n| Readiness checks | Core automatically probes root `roles/` and legacy library folders. An unrelated file named `roles` blocks skill operations. |\n| Path protection | Root `roles/`, `skills/` and `workflows/` are reserved even when no development library is configured. |\n| Source handling | Dependency resolution and installation infer source peers from fixed root folders. |\n| Instructions | Concepts, layout rules and authoring procedures prescribe this repository\u2019s source collections. |\n| Legacy migrations | Migration tools contain fixed external library names and destinations. These need explicit scoping while preserving historical behavior. |\n| Shipped tests | Several core tests read development assets outside the shipped folders. |\n\nThe isolated deployment checks confirmed:\n\n- Basic startup and skill listing work with only `.hai/` and a minimal `.hai_env/`.\n- An unrelated root `roles` file causes a readiness failure.\n- Configured content locations under those reserved names are rejected.\n- Twelve workflow tests fail without the repository\u2019s external sample workflow.\n\nConfigured Activity/specification locations, workflow outputs and explicitly supplied package sources remain legitimate. The correction should remove **implicit development assumptions**, while preserving those explicit choices.\n\nNo framework files were changed.",
+          "timestamp": "2026-11-21T04:55:32.599Z",
+          "message_id": "msg_08f247297895facc016b01243eecdc87d2a70e207d938d7aad",
+          "turn_id": "01a1fc6f-581f-7683-96c4-d02623200df2"
+        },
+        {
+          "source_position": 10719,
+          "role": "user",
+          "text": "Fix the framework. Be with the mindset that HAI can be installed in a pure new workspace without any other folder in it. HAI will initiate .hai_env/ folder for its work but after that there is no requirement anything else to be created in this workspace and HAI should not even check if some other folders exist.\n",
+          "timestamp": "2026-11-21T05:07:40.794Z",
+          "message_id": "01a1fc80-c876-7c51-8276-ec08b0c0e7e1",
+          "turn_id": "01a1fc80-c816-70c3-8f25-8851f6614c76"
+        },
+        {
+          "source_position": 11171,
+          "role": "assistant",
+          "text": "Implemented. HAI now works with only `.hai/` and `.hai_env/`. Initialization creates `.hai_env/`; default operations do not probe unrelated workspace folders. Other locations require explicit task input or configuration.\n\nUpdated runtime, core instructions, migrations, installation documentation and tests.\n\nVerification: 579 tests, 38 skipped; independent review passed. Chronicles synchronized and verified. [Full results and limitations](/C:/Users/hmhri/Desktop/repos/HAI/.hai_env/activities/00000000_000000_active/results/core-boundary-fix.md).\n\nThe Activity remains open. Changes are uncommitted.",
+          "timestamp": "2026-11-21T05:36:39.260Z",
+          "message_id": "msg_08f247297895facc016b012de5d6a087d283b6e6157e66c15e",
+          "turn_id": "01a1fc80-c816-70c3-8f25-8851f6614c76"
+        },
+        {
+          "source_position": 11182,
+          "role": "user",
+          "text": "make a commit\n",
+          "timestamp": "2026-11-21T05:37:23.345Z",
+          "message_id": "01a1fc9b-fb8f-7c32-bae9-9674d2cb015e",
+          "turn_id": "01a1fc9b-fb3a-7670-bc1c-94a1501c13c1"
         }
       ]
     }
@@ -867,12 +915,12 @@
     "chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/checkpoint.json": "0700eefdebb5f264ac485ace4291beff6d980d1e189e075f787170665778f251",
     "chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/20261112_195218_segment-01.md": "e7f3c52348af8e0ec6a455217335fa2c64d75348c6bb437951af325a6e20e160",
     "chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/reconciliation.json": "2b199834b606c7c8dd3e76e8796413abda56fc6cceb8e7105e49b6589be5b913",
-    "chronicles/20261112_195218_segment-01.md": "9456b8be53fbe2ea252fe3c3b70eb0b0b69403ee7e30691525cd9b4ffb15eae7",
-    "chronicles/checkpoint.json": "1ebb189bec31772f17d4282164fa65eb445a76faa971eba8583ffcb8261c33f4"
+    "chronicles/20261112_195218_segment-01.md": "16c0a45ddb66860917157eb1d51c2bae290ff8b09a3dea43cf33cbfc466f9b61",
+    "chronicles/checkpoint.json": "0c72aaeb922e117fb615305f5a41af2917db347b9c437d6fad29a1f0586ab795"
   },
   "provenance": {
     "source": "Human request: make a commit",
-    "reason": "Commit verified lightweight skill discovery, selection policy, tests and Activity evidence."
+    "reason": "Commit verified portable-core fix and related Activity records; keep Activity open"
   },
   "enablement_revision": 2
 }

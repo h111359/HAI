@@ -89,17 +89,13 @@ class LayoutMigrationTests(unittest.TestCase):
         self.assertFalse(environment.startup.check(self.root)['ok'])
 
     def test_schema_two_layout_then_schema_conversion_end_to_end(self):
-        owner = TOOLS.parent.parent / '.hai_env/roles/specification-manager'
-        if not owner.exists() and not owner.is_symlink():
-            self.skipTest('optional Specification-manager integration unavailable in core-only distribution')
         state = copy.deepcopy(self.state)
         state['state_format_version'] = 2
         state['features']['specification'] = {'enabled': False, 'location': 'specifications', 'note': 'preserve'}
         self.write(LEGACY[STATE], json.dumps(state).encode())
         self.write('.hai_env/roles/specification-manager/ROLE.md', b'Installed fixture')
         self.write('.hai_env/roles/catalogue.md', b'| Role | Selection guide | Definition |\n| --- | --- | --- |\n| `specification-manager` | Manage specifications. | [ROLE.md](specification-manager/ROLE.md) |\n')
-        source_contract = owner / 'configuration/contract.json'
-        self.write('.hai_env/roles/specification-manager/configuration/contract.json', source_contract.read_bytes())
+        self.write('.hai_env/roles/specification-manager/configuration/contract.json', json.dumps({'contract_format_version':3,'role':'specification-manager','current_config_format_version':1,'supported_config_format_versions':[1],'settings':{'enabled':{'type':'boolean','default':False},'location':{'type':'workspace-relative-directory','default':'.hai_env/specifications'}}}).encode())
         self.assertTrue(self.call(True)['ok'])
         result = environment.handle('environment/migrate-specification', self.root, self.request, True)
         self.assertTrue(result['ok'], result)

@@ -15,7 +15,7 @@ def handle(operation,workspace,request,apply):
         from .capability_migration import handle as migrate
         return migrate(root,request,apply)
     try:
-        allowed={'validate':{'definition'},'list':set(),'resolve':{'name'},'install':{'source','name','replace','reviewed_differences','provenance'}}
+        allowed={'validate':{'definition'},'list':set(),'resolve':{'name'},'install':{'source','name','replace','reviewed_differences','source_mappings','provenance'}}
         if operation not in allowed or not isinstance(request,dict) or set(request)-allowed[operation]: raise ValueError('Unsupported skill operation or fields')
         if operation!='validate':
             from role_state import require_ready
@@ -37,7 +37,7 @@ def handle(operation,workspace,request,apply):
         result=skills.validate(root,source+'/SKILL.md')
         if not result['ok']: raise SafetyError(str(result['issues']))
         before=snapshot(root,source,entry='SKILL.md'); previous=snapshot(root,dest,entry='SKILL.md') if target.exists() else None
-        candidate,relocated,unresolved=package_content.prepare(root,source,dest,before)
+        candidate,relocated,unresolved=package_content.prepare(root,source,dest,before,request.get('source_mappings'))
         candidate_hashes=package_content.hashes(candidate)
         differences=[k for k in sorted(set(candidate)|set(previous or {})) if k not in candidate_hashes or k not in (previous or {}) or candidate_hashes[k]!=(previous or {})[k][-1]]
         replace=request.get('replace',False)

@@ -1,0 +1,190 @@
+{
+  "ok": true,
+  "status": "valid",
+  "result": {
+    "ok": true,
+    "environment": "valid",
+    "activities": {
+      "location": ".hai_env/activities",
+      "available": true,
+      "target_type": "directory"
+    },
+    "features": {
+      "chronicles": {
+        "enabled": true,
+        "record_every_prompts": 5
+      }
+    },
+    "agent_instructions": {
+      "path": ".hai_env/config/agent_instructions.md",
+      "text": ""
+    },
+    "instructions_status": "loaded",
+    "roles": [
+      {
+        "name": "hai-framework-advisor",
+        "selection_guide": "Call to review this repository's HAI framework and recommend the top three logical next actions in chat without changing files.",
+        "definition": ".hai_env/roles/hai-framework-advisor/ROLE.md",
+        "origin": ".hai_env"
+      },
+      {
+        "name": "release-manager",
+        "selection_guide": "Call to prepare a HAI bundle release, recommend an evidence-based SemVer bump, and verify release readiness and publication evidence. Returns release assets, readiness findings, publication status, and unresolved dependencies.",
+        "definition": ".hai_env/roles/release-manager/ROLE.md",
+        "origin": ".hai_env"
+      },
+      {
+        "name": "git-manager",
+        "selection_guide": "Call to configure this workspace's optional Git/GitHub integrations or inspect and operate repositories, commits, branches, merges, pushes, pull requests, issues, tags, releases, and checks. Returns validated settings, verified changes, repository and remote status, and unresolved dependencies.",
+        "definition": ".hai_env/roles/git-manager/ROLE.md",
+        "origin": ".hai_env"
+      },
+      {
+        "name": "specification-manager",
+        "selection_guide": "Call to configure HAI specification enablement and location, or enter, update, organize, or validate durable product specification information. Returns validated settings, changes, verification evidence, and unresolved decisions.",
+        "definition": ".hai_env/roles/specification-manager/ROLE.md",
+        "origin": ".hai_env"
+      },
+      {
+        "name": "business-analyst",
+        "selection_guide": "Call to clarify business intent, analyze requirements and define scope and acceptance criteria. Returns attributable requirements, decisions, ambiguities and evidence for host coordinator and the Activity record owner.",
+        "definition": ".hai_env/roles/business-analyst/ROLE.md",
+        "origin": ".hai_env"
+      },
+      {
+        "name": "solution-architect",
+        "selection_guide": "Call to analyze technical options, design a solution and plan implementation and verification against agreed requirements. Returns justified architecture, tradeoffs, dependencies, risks and an actionable plan.",
+        "definition": ".hai_env/roles/solution-architect/ROLE.md",
+        "origin": ".hai_env"
+      },
+      {
+        "name": "software-developer",
+        "selection_guide": "Call to implement authorized product changes and run appropriate developer checks against agreed requirements and technical decisions. Returns actual changes, verification evidence, failures and unresolved dependencies.",
+        "definition": ".hai_env/roles/software-developer/ROLE.md",
+        "origin": ".hai_env"
+      },
+      {
+        "name": "quality-assurance",
+        "selection_guide": "Call to verify product behavior against agreed requirements and acceptance criteria, assess regressions and report evidence-based defects and coverage limits. Returns actual test results and unresolved acceptance risks.",
+        "definition": ".hai_env/roles/quality-assurance/ROLE.md",
+        "origin": ".hai_env"
+      },
+      {
+        "name": "backlog-manager",
+        "selection_guide": "Call to configure a workspace backlog location, capture or import backlog items, maintain their catalogue, prepare an item for Activity work, and record evidence-backed completion, cancellation or rejection. Returns item paths, status changes, catalogue checks and unresolved decisions.",
+        "definition": ".hai_env/roles/backlog-manager/ROLE.md",
+        "origin": ".hai_env"
+      }
+    ],
+    "catalogues": {
+      "workspace": "valid"
+    },
+    "role_configurations": {
+      "specification-manager": {
+        "status": "configured",
+        "path": ".hai_env/config/roles/specification-manager.json",
+        "settings": {
+          "enabled": false,
+          "location": ".hai_env/specifications"
+        },
+        "configured_fields": [
+          "enabled",
+          "location"
+        ],
+        "issues": []
+      }
+    },
+    "profiles": {
+      "status": "valid",
+      "runtime_availability": "not_checked",
+      "models": {
+        "light": "gpt-6-luna",
+        "standard": "gpt-6.1-terra",
+        "advanced": "gpt-6.1-sol"
+      },
+      "feature_conflicts_checked": true
+    },
+    "issues": [],
+    "current_state_format_version": 3,
+    "state_format_version": 3,
+    "state_status": "valid",
+    "role_context": {
+      "status": "ready",
+      "legacy_paths": [],
+      "issues": []
+    },
+    "skill_context": {
+      "status": "available",
+      "skills": [],
+      "issues": []
+    },
+    "activity_context": {
+      "status": "current",
+      "store": ".hai_env/activities",
+      "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+      "path": ".hai_env/activities/00000000_000000_active",
+      "state": {
+        "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+        "lifecycle": "active",
+        "created_at": "2026-11-18T06:25:27Z",
+        "closed_at": null,
+        "outcome": null,
+        "implementation_started_at": "2026-11-19T00:51:54Z",
+        "steps": {
+          "analysis": "completed",
+          "clarification": "completed",
+          "implementation": "completed",
+          "planning": "not_started",
+          "verification": "completed"
+        },
+        "activity_layout_version": 2,
+        "initial_message_id": "8a16e5e0-5d01-45a3-8b83-85f9ef1754df"
+      },
+      "continuity": {
+        "README.md": {
+          "path": ".hai_env/activities/00000000_000000_active/README.md",
+          "status": "loaded",
+          "text": "# Skill portability investigation\n\nActivity: `88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93`\n\n## Objective\n\nInvestigate all source and installed skills, assess HAI-independent reuse and external skill adoption, research best practices, and recommend the responsibility boundary between skills, roles, workflows and HAI integration. The human will decide how to continue before implementation.\n\n## Review result\n\nStart with the [investigation and recommendation](results/skill-portability-review.md). The recommended direction is portable methods with HAI-specific usage supplied by roles and shared operational enforcement retained in the framework. The report covers all 12 distinct skills and identifies compatibility limits.\n\nThe initial investigation is complete. The human",
+          "truncated": true,
+          "portion": "head",
+          "limit_bytes": 768
+        },
+        "plan.md": {
+          "path": ".hai_env/activities/00000000_000000_active/results/plan.md",
+          "status": "absent"
+        },
+        "decisions.md": {
+          "path": ".hai_env/activities/00000000_000000_active/results/decisions.md",
+          "status": "absent"
+        },
+        "log.md": {
+          "path": ".hai_env/activities/00000000_000000_active/system/log.md",
+          "status": "loaded",
+          "text": "ll text/link/AST inventory and isolated core-only probes. Confirmed ordinarystartup/list succeed without development libraries; rootroles file poisons role/skillreadiness; fixed developmentfolder reservations reject explicit custom paths; shipped configurableworkflow suite fails12cases without externalsample. Catalogued sourcepeer inference, authoring/layout instructions, legacy migrations, shipped developmenttests and examples; distinguished explicit custom/host inputs and guarded integrations. Retained evidence scan/candidate-locations/reproductions and detailed results/core-boundary-review.md. No production framework/package/configuration changes, no commit or closure. (source: Full core boundary inventory, inspected source contracts and isolated deployment probes; reason: Deliver all located dependency categories with file locations, impact and legitimate configured exceptions.). Artifacts: results/core-boundary-review.md: Complete findings catalogue for fixed dependencies outside core/environment roots.\n",
+          "truncated": true,
+          "portion": "tail",
+          "limit_bytes": 1024
+        }
+      },
+      "issues": []
+    },
+    "execution_context": {
+      "os": "Windows",
+      "sys_platform": "win32",
+      "os_name": "nt",
+      "python_version": "3.14.7",
+      "python_executable": "C:\\Users\\hmhri\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "workspace_path_format": "posix-relative"
+    },
+    "recording_context": {
+      "status": "needs_synchronization",
+      "details": "Chronicles do not cover current eligible source; synchronize required",
+      "next_operation": "recording synchronize",
+      "policy": "best_effort",
+      "continuation_allowed": true,
+      "coverage": "unverified"
+    }
+  },
+  "issues": [],
+  "changed_files": []
+}

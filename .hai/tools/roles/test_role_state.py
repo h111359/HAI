@@ -27,7 +27,7 @@ class RoleStateTests(unittest.TestCase):
         self.assertEqual(list(self.root.iterdir()), [])
 
     def test_each_legacy_root_requires_explicit_migration(self):
-        for relative in (".hai_env/agents", ".hai_env/config/agents", "hai_agents_library", ".hai/agents"):
+        for relative in (".hai_env/agents", ".hai_env/config/agents", ".hai/agents"):
             with self.subTest(relative=relative):
                 path = self.root / relative
                 path.mkdir(parents=True)

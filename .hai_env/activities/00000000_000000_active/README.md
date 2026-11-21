@@ -56,3 +56,7 @@ The discussion was reset before this independent research. Read [roles/skills re
 ## Core principles updated
 
 The human authorized reflecting the agreed role/skill ownership principles in core before backlog refactoring. Updated role/skill concepts, conventions, authoring create/update/review guidance and compatibility documentation across11core documents. Roles may own job-specific conventions/procedures/helpers and use no skills; independent skills receive explicit inputs and newly authored/refactored portable skills require no HAI internals. Existing settings-owner behavior and legacy conversion remain supported without automatic package migration. All33source/installed definitions validate, local links and core whitespace checks pass. No role, skill or runtime code was changed; no commit was requested.
+
+## Current result: portable core deployment
+
+The human authorized fixing the framework for an otherwise empty workspace. See [portable core fix](results/core-boundary-fix.md). Default operations use only `.hai/` and `.hai_env/`, external sources/references require explicit choices, and shipped regressions run without development collections. The 31-module copied-core suite has 579 tests (38 skipped); all executed cases pass after a focused rerun of a Windows path-length fixture failure. Explicit development integrations and independent review also pass. Earlier investigation limits above refer to their earlier scope. The Activity remains open; this change is uncommitted.

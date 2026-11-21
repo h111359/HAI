@@ -73,7 +73,7 @@ their written expectations.
 Format 3 adds Locations, configured filename patterns, result-specific accepted
 sources and human result gates. `runtime/workflow_config.py` owns explicit
 installation/settings and `runtime/workflow_lineage.py` validates accepted sources
-and checkpoint-bound host attestations. Reusable source workflows/ stays separate
+and checkpoint-bound host attestations. Explicitly supplied reusable workflow sources stay separate
 from installed .hai_env/workflows/ and config/workflows settings. See the shared
 [format convention](../../conventions/workflow_conv.md),
 [installation procedure](../../procedures/install-workflow.md) and runtime workflow

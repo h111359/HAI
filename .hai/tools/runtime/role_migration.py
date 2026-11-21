@@ -16,8 +16,7 @@ from .workflow_artifacts import mkdirs
 from .activities import envelope, provenance, now, store_path, discover, rename_exclusive
 
 ROOTS = (('.hai_env/agents', '.hai_env/roles'),
-         ('.hai_env/config/agents', '.hai_env/config/roles'),
-         ('hai_agents_library', 'hai_roles_library'))
+         ('.hai_env/config/agents', '.hai_env/config/roles'))
 
 
 def _manifest(root, relative):
@@ -111,7 +110,9 @@ def _target_path(suffix, *, library=False, settings=False):
     return '/'.join(parts)
 
 
-def _plan(root):
+def _plan(root, legacy_source=None):
+    if legacy_source not in (None, "hai_agents_library"):
+        raise SafetyError("This historical converter accepts only the explicitly selected hai_agents_library source")
     marker = checked_path(root, MARKER)
     if marker.exists():
         data = read_json(marker)
@@ -130,7 +131,8 @@ def _plan(root):
     observed.update(_workflow_states(root, location))
     moves, files, directories = [], {}, set()
     names = set()
-    for source, destination in ROOTS:
+    selected_roots = ROOTS + ((('hai_agents_library','hai_roles_library'),) if legacy_source else ())
+    for source, destination in selected_roots:
         observed[source] = _manifest(root, source)
         observed[destination] = _manifest(root, destination)
         if observed[destination] is not None:
@@ -217,7 +219,7 @@ def _plan(root):
 def _validate_stage(candidate, plan):
     from roles.role_tools import read_definition, audit
     from workflows.definition import parse_definition
-    for origin in ('.hai_env/roles', 'hai_roles_library/roles', 'roles'):
+    for origin in ('.hai_env/roles',) + (('hai_roles_library/roles',) if 'hai_agents_library' in plan['observed'] else ()):
         folder = candidate / origin
         if not folder.exists():
             continue
@@ -376,18 +378,18 @@ def handle(workspace, request, apply=False):
     """Preview without writes; apply exactly one inspected, explicit migration."""
     changed = []
     try:
-        if not isinstance(request, dict) or set(request) - {'provenance', 'expected_snapshot', 'writers_ended'}:
-            raise ValueError('Migration accepts only provenance, expected_snapshot and writers_ended')
+        if not isinstance(request, dict) or set(request) - {'provenance', 'expected_snapshot', 'writers_ended', 'legacy_source'}:
+            raise ValueError('Migration accepts only provenance, expected_snapshot, writers_ended and optional legacy_source')
         provenance(request)
         root = Path(workspace).resolve(strict=True)
         if apply:
             _require_supported_core(root)
             with lock(root):
                 _require_supported_core(root)
-                plan = _plan(root)
+                plan = _plan(root, request.get('legacy_source'))
                 result = _apply(root, request, plan, changed)
             return envelope('roles.migrate', result=result, changed=list(dict.fromkeys(changed)))
-        plan = _plan(root)
+        plan = _plan(root, request.get('legacy_source'))
         return envelope('roles.migrate', 'planned', result={key: plan[key] for key in ('expected_snapshot', 'activity_id', 'activity_layout_version', 'moves')})
     except (SafetyError, ValueError, OSError, RuntimeError, UnicodeError) as exc:
         changed.extend(getattr(exc, 'changed_files', []))

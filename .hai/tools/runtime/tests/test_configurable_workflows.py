@@ -11,7 +11,7 @@ from runtime import activities, workflows, workflow_config, workflow_lineage
 from runtime.storage import SafetyError
 from workflows.definition import parse_definition, DefinitionError
 
-SOURCE = fixtures.TOOLS.parents[1] / 'workflows/software-development.md'
+SOURCE = Path(__file__).with_name('fixtures') / 'software-development.md'
 
 
 class ConfigurableWorkflowTests(unittest.TestCase):
@@ -123,7 +123,7 @@ class ConfigurableWorkflowTests(unittest.TestCase):
             other.doCleanups()
 
     def test_unsafe_locations_block_without_writes(self):
-        for unsafe in ('../escape', '/absolute', 'C:/absolute', '.hai_env/config', '.git/x', 'roles/x', 'skills/x', 'workflows/x', '.hai', '.hai_env/roles', '.hai_env/skills', '.hai_env/workflows', 'delivery/../x', 'NUL', '.hai_env/activities'):
+        for unsafe in ('../escape', '/absolute', 'C:/absolute', '.hai_env/config', '.git/x', '.hai', '.hai_env/roles', '.hai_env/skills', '.hai_env/workflows', 'delivery/../x', 'NUL', '.hai_env/activities'):
             before = self.snapshot()
             result = self.install({**self.locations, 'handoffs': unsafe})
             self.assertFalse(result['ok'], (unsafe, result))

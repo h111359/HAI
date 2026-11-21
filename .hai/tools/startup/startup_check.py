@@ -101,7 +101,7 @@ def instruction_path(workspace: Path) -> Path:
         raise Invalid('Mandatory instructions alias another configuration resource')
     if target.exists() and target.is_file() and target.stat().st_nlink != 1:
         raise Invalid('Mandatory instructions must not have hardlink aliases')
-    for relative in (".hai", ".git", STATE, ".hai_env/roles",
+    for relative in (".hai", STATE, ".hai_env/roles",
                      ".hai_env/config/roles", ".hai_env/agents", ".hai_env/config/agents",
                      PROFILES):
         reserved_paths = [workspace / relative]
@@ -157,11 +157,13 @@ def state_context(workspace: Path, state: dict, template: dict,
     if ("enabled" in activities or not isinstance(activities.get("location"), str)
             or not activities["location"].strip()):
         raise Invalid("Mandatory activities requires a nonblank workspace-relative location and no enabled switch")
-    reserved = [".hai", ".git", STATE, ".hai_env/roles", ".hai_env/agents", "hai_agents_library", "hai_roles_library", "roles", "skills", "workflows", ".hai_env/skills",
+    reserved = [".hai", ".git", STATE, ".hai_env/roles", ".hai_env/agents", ".hai_env/skills",
                 ".hai_env/config", ".hai_env/workflows", ".hai_env/workflow-runs",
                 PROFILES, INSTRUCTIONS, *LEGACY.values()]
-    reserved_paths = [workspace / name for name in reserved]
+    reserved_paths = [workspace / name for name in reserved if name != ".git"]
     for name in reserved:
+        if name == '.git':
+            continue  # Do not inspect unrelated security metadata.
         try:
             reserved_paths.append(safe_path(workspace, name))
         except Invalid:
@@ -171,6 +173,10 @@ def state_context(workspace: Path, state: dict, template: dict,
     activity_relative = activities["location"]
     activity_target = safe_path(workspace, activity_relative)
     activity_lexical = workspace / activity_relative
+    security = workspace / '.git'
+    if any(x == security or x.is_relative_to(security) or security.is_relative_to(x)
+           for x in (activity_lexical, activity_target)):
+        raise Invalid('Mandatory Activity store overlaps security metadata')
     if any(overlaps(candidate, reserved_path) for candidate in (activity_lexical, activity_target)
            for reserved_path in reserved_paths):
         raise Invalid("Mandatory Activity store overlaps a reserved location")

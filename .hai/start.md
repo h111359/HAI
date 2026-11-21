@@ -82,8 +82,9 @@ contract to new/resumed substantive assignments and workflow role assignments.
 Startup `skill_context` provides lightweight installed metadata and separate
 optional discovery issues; use `skills list` for a fresh inventory. Load only a
 selected skill and its relevant resources after resolution. Role-required skills
-remain explicit dependencies. Source collections in roles/, skills/ and workflows/
-are data, never an installed fallback. Selection grants no authority; fixed
+remain explicit dependencies. Only .hai/ and .hai_env/ are fixed HAI roots. Do not discover or probe
+workspace libraries outside them. Other locations require explicit task inputs
+or environment configuration and never become an installed fallback. Selection grants no authority; fixed
 instructions, Activity, recording and artifact rules still apply.
 
 ## Built-in definition authoring

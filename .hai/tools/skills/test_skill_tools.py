@@ -91,7 +91,7 @@ class SkillTests(unittest.TestCase):
         self.role('worker',base='roles');self.assertFalse(role_tools.validate(self.root,'roles/worker/ROLE.md')['ok'])
         self.assertFalse(packages.handle('install',self.root,{'source':'roles/worker','name':'worker','provenance':self.prov},False)['ok']);self.assertFalse((self.root/'.hai_env/roles/worker').exists())
     def test_flat_source_validation_is_independent(self):
-        self.skill();self.role('worker',base='roles');self.assertTrue(role_tools.validate(self.root,'roles/worker/ROLE.md')['ok'])
+        self.skill('.hai_env/skills');self.role('worker',base='selected');self.assertTrue(role_tools.validate(self.root,'selected/worker/ROLE.md')['ok'])
     def test_direct_owner_configuration_is_chosen_once(self):
         self.skill('.hai_env/skills',metadata='metadata:\n  hai-settings-owner: "service-owner"\n');self.write('.hai_env/roles/service-owner/configuration/contract.json',json.dumps({'contract_format_version':3,'role':'service-owner','current_config_format_version':1,'supported_config_format_versions':[1],'settings':{'enabled':{'type':'boolean','default':False}}}))
         p=self.write('.hai_env/config/roles/service-owner.json',json.dumps({'config_format_version':1,'settings':{'enabled':True},'custom':'retain'}));before=p.read_bytes();result=skills.handle('resolve',self.root,{'name':'inspect'},False);self.assertTrue(result['ok'],result);self.assertTrue(result['result']['configuration']['settings']['enabled']);self.assertEqual(p.read_bytes(),before);self.assertFalse((p.parent/'inspect.json').exists())
@@ -150,21 +150,22 @@ class SkillTests(unittest.TestCase):
         self.assertFalse(result['ok'],result);self.assertEqual(saved.read_bytes(),before);self.assertFalse((self.root/'.hai_env/roles/worker').exists())
 
 
+    @unittest.skipUnless(os.environ.get('HAI_DEVELOPMENT_SOURCES'), 'explicit development source workspace not selected')
     def test_real_flat_sources_install_with_resolved_links_then_sources_absent(self):
         from runtime import package_content
-        self.environment_only();repo=TOOLS.parent.parent
+        self.environment_only();repo=Path(os.environ['HAI_DEVELOPMENT_SOURCES']).resolve()
         shutil.copytree(repo/'.hai',self.root/'.hai',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
         shutil.copytree(repo/'roles',self.root/'roles');shutil.copytree(repo/'skills',self.root/'skills')
         self.write('.hai_env/roles/catalogue.md','# Role catalogue\n\n| Role | Selection guide | Definition |\n| --- | --- | --- |\n')
         original={p.relative_to(self.root).as_posix():p.read_bytes() for directory in ['roles','skills'] for p in (self.root/directory).rglob('*') if p.is_file()}
         for source in sorted((self.root/'skills').iterdir()):
             if not source.is_dir():continue
-            request={'source':source.relative_to(self.root).as_posix(),'name':source.name,'provenance':self.prov}
+            request={'source':source.relative_to(self.root).as_posix(),'name':source.name,'provenance':self.prov,'source_mappings':{str(p.relative_to(self.root)).replace('\\','/') : '.hai_env/'+str(p.relative_to(self.root)).replace('\\','/') for kind in ['roles','skills'] for p in (self.root/kind).iterdir() if p.is_dir()}}
             result=skills.handle('install',self.root,request,True);self.assertTrue(result['ok'],result)
         self.assertFalse(skills.handle('resolve',self.root,{'name':'git-operations'},False)['ok'])
         for source in sorted((self.root/'roles').iterdir()):
             if not source.is_dir():continue
-            request={'source':source.relative_to(self.root).as_posix(),'name':source.name,'provenance':self.prov}
+            request={'source':source.relative_to(self.root).as_posix(),'name':source.name,'provenance':self.prov,'source_mappings':{str(p.relative_to(self.root)).replace('\\','/') : '.hai_env/'+str(p.relative_to(self.root)).replace('\\','/') for kind in ['roles','skills'] for p in (self.root/kind).iterdir() if p.is_dir()}}
             result=packages.handle('install',self.root,request,True);self.assertTrue(result['ok'],result)
         self.assertEqual(original,{p.relative_to(self.root).as_posix():p.read_bytes() for directory in ['roles','skills'] for p in (self.root/directory).rglob('*') if p.is_file()})
         (self.root/'roles').rename(self.root/'retained-source-roles');(self.root/'skills').rename(self.root/'retained-source-skills')
@@ -189,9 +190,10 @@ class SkillTests(unittest.TestCase):
         for path in ['business-analyst/scripts/clarification.py','solution-architect/scripts/plan_contract.py','software-developer/scripts/execution_contract.py','git-manager/scripts/validate_git_configuration.py']:
             self.assertTrue((self.root/'.hai_env/roles'/path).is_file(),path)
         example=(self.root/'.hai_env/roles/backlog-manager/conventions/backlog_conv.md').read_text(encoding='utf-8');self.assertIn('[BL-0001](new/BL-0001.md)',example)
+    @unittest.skipUnless(os.environ.get('HAI_DEVELOPMENT_SOURCES'), 'explicit development source workspace not selected')
     def test_complete_backlog_role_operates_without_skills_or_source_collections(self):
         import subprocess
-        self.environment_only();repo=TOOLS.parent.parent
+        self.environment_only();repo=Path(os.environ['HAI_DEVELOPMENT_SOURCES']).resolve()
         shutil.copytree(repo/'.hai',self.root/'.hai',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
         shutil.copytree(repo/'roles/backlog-manager',self.root/'roles/backlog-manager')
         result=packages.handle('install',self.root,{'source':'roles/backlog-manager','name':'backlog-manager','provenance':self.prov},True)
@@ -215,9 +217,10 @@ class SkillTests(unittest.TestCase):
             report=json.loads(checked.stdout);self.assertTrue(report['ok'],report);self.assertEqual(report['location'],location)
             self.assertEqual(before,{p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
 
+    @unittest.skipUnless(os.environ.get('HAI_DEVELOPMENT_SOURCES'), 'explicit development source workspace not selected')
     def test_complete_specification_role_operates_without_skills_or_source_collections(self):
         import subprocess
-        self.environment_only();repo=TOOLS.parent.parent
+        self.environment_only();repo=Path(os.environ['HAI_DEVELOPMENT_SOURCES']).resolve()
         shutil.copytree(repo/'.hai',self.root/'.hai',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
         shutil.copytree(repo/'roles/specification-manager',self.root/'roles/specification-manager')
         source=self.root/'roles/specification-manager'
@@ -243,13 +246,15 @@ class SkillTests(unittest.TestCase):
             self.assertFalse((self.root/'.hai_env/specifications').exists());self.assertFalse((self.root/'product/specification').exists())
             self.assertEqual(before,{p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
 
+    @unittest.skipUnless(os.environ.get('HAI_DEVELOPMENT_SOURCES'), 'explicit development source workspace not selected')
     def test_all_real_roles_install_without_any_skills(self):
-        self.environment_only();repo=TOOLS.parent.parent
+        self.environment_only();repo=Path(os.environ['HAI_DEVELOPMENT_SOURCES']).resolve()
         shutil.copytree(repo/'.hai',self.root/'.hai',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
         shutil.copytree(repo/'roles',self.root/'roles')
         names=[p.name for p in (self.root/'roles').iterdir() if p.is_dir()]
         for name in names:
-            result=packages.handle('install',self.root,{'source':'roles/'+name,'name':name,'provenance':self.prov},True)
+            result=packages.handle('install',self.root,{'source':'roles/'+name,'name':name,'provenance':self.prov,
+                'source_mappings':{'roles/'+peer:'.hai_env/roles/'+peer for peer in names}},True)
             self.assertTrue(result['ok'],result)
         (self.root/'roles').rename(self.root/'retained-source-roles')
         self.assertFalse((self.root/'skills').exists());self.assertFalse((self.root/'.hai_env/skills').exists())

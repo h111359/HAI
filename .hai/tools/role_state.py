@@ -3,8 +3,8 @@ from pathlib import Path
 from runtime.storage import SafetyError, checked_path, read_json
 
 MARKER = ".hai_env/config/role-migration.json"
-LEGACY_ROOTS = (".hai_env/agents", ".hai_env/config/agents", "hai_agents_library", ".hai/agents")
-ROLE_ROOTS = (".hai_env/roles", ".hai_env/config/roles", "hai_roles_library", "roles")
+LEGACY_ROOTS = (".hai_env/agents", ".hai_env/config/agents", ".hai/agents")
+ROLE_ROOTS = (".hai_env/roles", ".hai_env/config/roles")
 
 
 def status(workspace):

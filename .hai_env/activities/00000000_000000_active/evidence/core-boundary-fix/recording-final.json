@@ -1,0 +1,47 @@
+{
+  "synchronize": {
+    "ok": true,
+    "status": "ok",
+    "operation": "synchronize",
+    "result": {
+      "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+      "status": "verified",
+      "segments": [
+        "chronicles/20261112_195218_segment-01.md"
+      ],
+      "checkpoint_path": ".hai_env/activities/00000000_000000_active/system/chronicles/checkpoint.json",
+      "cutoff": [
+        {
+          "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+          "source_position": 10719
+        }
+      ],
+      "source_count": 1,
+      "message_count": 108,
+      "reconciliations": [],
+      "coverage": "complete",
+      "warnings": []
+    },
+    "changed_files": [
+      ".hai_env/activities/00000000_000000_active/chronicles/20261112_195218_segment-01.md",
+      ".hai_env/activities/00000000_000000_active/system/chronicles/checkpoint.json",
+      ".hai_env/activities/00000000_000000_active/system/chronicles/core.json"
+    ],
+    "issues": []
+  },
+  "verify": {
+    "ok": true,
+    "status": "ok",
+    "operation": "verify",
+    "result": {
+      "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+      "status": "verified",
+      "coverage": "complete",
+      "warnings": [],
+      "source_count": 1,
+      "checkpoint_path": ".hai_env/activities/00000000_000000_active/system/chronicles/checkpoint.json"
+    },
+    "changed_files": [],
+    "issues": []
+  }
+}

@@ -2,13 +2,13 @@
 
 ## Definition and ownership
 
-Use root `skills/<name>/SKILL.md` for reusable source packages and `.hai_env/skills/<name>/SKILL.md` for independent installed snapshots. Native `name` and `description` frontmatter describe capability and when to use it. Names match the canonical package directory and are at most 64 characters. Preserve native optional license, compatibility, metadata and allowed-tools fields. Metadata values are strings. Supporting resources are optional and justified by continuing reusable purpose.
+Use `.hai_env/skills/<name>/SKILL.md` for installed snapshots. Reusable sources are optional, explicitly selected package paths, never an assumed workspace-root collection. Native `name` and `description` frontmatter describe capability and when to use it. Names match the canonical package directory and are at most 64 characters. Preserve native optional license, compatibility, metadata and allowed-tools fields. Metadata values are strings. Supporting resources are optional and justified by continuing reusable purpose.
 
 The body is free-form task instruction; no role sections, model metadata or empty configuration contract is required. Independent task capabilities belong here; role responsibility/conduct belongs in ROLE.md and job-specific operating methods may live in its linked resources. Small related procedures may share one coherent capability. Shared data contracts retain a single owner and readers reference them.
 
 ## Selection and settings
 
-A role with skill dependencies declares quoted comma-separated `metadata.hai-skills` names and matching Skills links. Source role validation resolves root source skills; installed roles resolve installed skills only. A role chooses suitable available methods for each assignment. Missing dependencies block dependent claims; workflow definitions name roles and results without skill binding.
+A role with skill dependencies declares quoted comma-separated `metadata.hai-skills` names and matching Skills links. Source role validation resolves required installed skills; installed roles resolve installed skills only. A role chooses suitable available methods for each assignment. Missing dependencies block dependent claims; workflow definitions name roles and results without skill binding.
 
 New or refactored portable skills MUST accept sufficient explicit task inputs and MUST NOT require HAI paths, Activity records, installed role configuration or imports from HAI core. The caller supplies environment-specific context. Skills MAY contain domain-specific formats and procedures when they form a useful independent capability.
 

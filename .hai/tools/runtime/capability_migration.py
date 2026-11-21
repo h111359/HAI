@@ -37,6 +37,8 @@ def _plan(root,request):
         if not result['ok']: raise SafetyError('Invalid candidate '+relative+': '+str(result['issues']))
     retire=request.get('retire_legacy_source',False)
     if type(retire) is not bool: raise ValueError('retire_legacy_source must be Boolean')
+    if retire and request.get('legacy_source') != 'hai_roles_library':
+        raise SafetyError('Retirement requires explicit legacy_source: hai_roles_library')
     if retire:
         expected={p.name for p in checked_path(root,'hai_roles_library/roles',allow_missing=False).iterdir() if p.is_dir()}
         if any('roles/'+name not in selected for name in expected): raise SafetyError('Every legacy role needs an explicit candidate before container retirement')
@@ -49,7 +51,7 @@ def _plan(root,request):
 def handle(workspace,request,apply):
     root=Path(workspace).resolve(strict=True); changed=[]
     try:
-        allowed={'activity_id','candidate_workspace','packages','retire_legacy_source','writers_ended','expected_preview','provenance'}
+        allowed={'activity_id','candidate_workspace','packages','retire_legacy_source','legacy_source','writers_ended','expected_preview','provenance'}
         if not isinstance(request,dict) or set(request)-allowed: raise ValueError('Unknown migration fields')
         provenance(request)
         def run():

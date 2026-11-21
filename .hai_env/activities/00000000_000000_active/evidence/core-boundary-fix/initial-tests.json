@@ -1,0 +1,50 @@
+[
+  {
+    "suite": "configuration",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "ss......s......\n----------------------------------------------------------------------\nRan 15 tests in 1.422s\n\nOK (skipped=3)\n"
+  },
+  {
+    "suite": "skills",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "sss.......F..s.........s....\n======================================================================\nFAIL: test_flat_source_validation_is_independent (test_skill_tools.SkillTests.test_flat_source_validation_is_independent)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\skills\\test_skill_tools.py\", line 94, in test_flat_source_validation_is_independent\n    self.skill();self.role('worker',base='roles');self.assertTrue(role_tools.validate(self.root,'roles/worker/ROLE.md')['ok'])\n                                                  ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true\n\n----------------------------------------------------------------------\nRan 28 tests in 3.776s\n\nFAILED (failures=1, skipped=5)\n"
+  },
+  {
+    "suite": "activities",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ".............sss\n----------------------------------------------------------------------\nRan 16 tests in 0.860s\n\nOK (skipped=3)\n"
+  },
+  {
+    "suite": "roles",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "...........s...s........s....................s......s.......................s....\n----------------------------------------------------------------------\nRan 81 tests in 10.304s\n\nOK (skipped=6)\n"
+  },
+  {
+    "suite": "chronicles",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "...............s.........\n----------------------------------------------------------------------\nRan 25 tests in 0.748s\n\nOK (skipped=1)\n"
+  },
+  {
+    "suite": "workflows/tests",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "...............s........\n----------------------------------------------------------------------\nRan 24 tests in 0.056s\n\nOK (skipped=1)\n"
+  },
+  {
+    "suite": "startup",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "..............s.sss...ss........................................s..s\n----------------------------------------------------------------------\nRan 68 tests in 16.199s\n\nOK (skipped=8)\n"
+  },
+  {
+    "suite": "runtime/tests",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "...............................s...................................s............................s.............s.........s......................................................................s.................................s..........................s.............s...............F...............................s.s.\n======================================================================\nFAIL: test_workflow_roots_cannot_be_configured_as_activity_store (test_workflow_integration.WorkflowIntegrationTests.test_workflow_roots_cannot_be_configured_as_activity_store)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\runtime\\tests\\test_workflow_integration.py\", line 65, in test_workflow_roots_cannot_be_configured_as_activity_store\n    with self.assertRaises(SafetyError, msg=path):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: SafetyError not raised : roles\n\n----------------------------------------------------------------------\nRan 318 tests in 399.355s\n\nFAILED (failures=1, skipped=11)\n"
+  }
+]

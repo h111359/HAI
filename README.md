@@ -32,8 +32,8 @@ The core uses Python's standard library, so no extra Python packages are require
 
 1. Open the [latest HAI release](https://github.com/h111359/HAI/releases/latest).
 2. Under **Assets**, download the HAI release ZIP.
-3. Extract it and copy the complete `.hai` folder and `LICENSE` into your project
-   folder. Make sure the hidden `.hai` folder is included.
+3. Extract it and copy the complete `.hai` folder into your project folder,
+   including its license. Make sure the hidden `.hai` folder is included.
 4. Start your AI agent in your project folder and ask:
 
    > Set up HAI in this project by following `.hai/start.md`, then help me get started.

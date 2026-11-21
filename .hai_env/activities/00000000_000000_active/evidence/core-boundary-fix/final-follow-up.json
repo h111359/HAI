@@ -1,0 +1,20 @@
+[
+  {
+    "name": "deployed-runner",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 2.784s\n\nOK\n"
+  },
+  {
+    "name": "skills",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ".............s..............\n----------------------------------------------------------------------\nRan 28 tests in 12.736s\n\nOK (skipped=1)\n"
+  },
+  {
+    "name": "workflow-install",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "..F.s.\n======================================================================\nFAIL: test_real_package_install_and_registration (test_workflows.WorkflowTests.test_real_package_install_and_registration)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\runtime\\tests\\test_workflows.py\", line 109, in test_real_package_install_and_registration\n    self.assertTrue(result['ok'],result)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true : {'ok': False, 'status': 'blocked', 'operation': 'install', 'result': {}, 'changed_files': [], 'issues': ['External package reference needs an explicit source mapping: ../solution-architect/conventions/implementation-plan_conv.md']}\n\n----------------------------------------------------------------------\nRan 6 tests in 3.110s\n\nFAILED (failures=1, skipped=1)\n"
+  }
+]

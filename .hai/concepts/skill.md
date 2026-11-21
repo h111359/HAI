@@ -4,7 +4,7 @@ A skill is an independently usable, reusable capability: task instructions, inte
 
 Skill extraction is optional: job-specific methods may stay with a role. When a role uses a skill, it references that skill rather than copying its method. Several roles may use the same skill. Direct skill use needs no HAI role selection, within actual task authority and applicable host instructions. A skill supplies neither permissions nor model policy and does not launch an AI agent.
 
-Source skills live under root `skills/`; installed snapshots live under `.hai_env/skills/`. Runtime lookup uses installed packages only and reports unavailable dependencies. Native skills have name/description frontmatter and free-form instructions; HAI does not impose ROLE headings, an empty configuration contract or a role persona.
+Installed snapshots live under `.hai_env/skills/`. Source packages may be supplied from an explicitly selected workspace location; no source library is required or discovered. Runtime lookup uses installed packages only and reports unavailable dependencies. Native skills have name/description frontmatter and free-form instructions; HAI does not impose ROLE headings, an empty configuration contract or a role persona.
 
 Reusable definitions carry no run status or generated outputs. Actual task evidence belongs to its Activity or established product owner. Shared contracts have one owner. Portable skills receive sufficient explicit inputs, including locations and relevant conventions, without importing HAI core or discovering role settings. Existing settings-owner integration remains readable for compatibility; it does not establish HAI independence and is not the pattern for newly authored portable skills.
 

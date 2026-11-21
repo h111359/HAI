@@ -97,12 +97,12 @@ Common run-mutation fields are `activity_id`, `run_id`, integer
 is environment configuration, so takes no Activity ID. Only the sole current
 owning Activity can mutate runs. Read operations reject --apply.
 
-For installation, first preview `{"definition":"workflows/software-development.md"}`.
+For installation, first preview `{"definition":"<selected-workflow-definition>.md"}`.
 Present returned questions to the human. Apply with their actual choices:
 
 ```json
 {
-  "definition": "workflows/software-development.md",
+  "definition": "<selected-workflow-definition>.md",
   "locations": {"handoffs": "<human-chosen-base>", "completion": "<human-chosen-base>"},
   "provenance": {"source": "actual human location choices", "reason": "authorized installation"}
 }
@@ -523,3 +523,14 @@ is not execution readiness: `skills resolve` still validates the full selected
 entry and any required settings. Supporting resources/scripts are never loaded
 by discovery. Headers without valid delimiters or exceeding 64 KiB are reported.
 Follow the core skill convention for selection and refresh rules.
+
+Core deployment requires only .hai/ and initialized .hai_env/. Package sources
+and workflow definitions outside them must be explicitly supplied. Role/skill
+installation accepts optional source_mappings, for example
+{"selected/peer-role": ".hai_env/roles/peer-role"}; no root library is inferred.
+Source role dependencies always use installed skills. Required dependencies must
+be installed before installing or validating their dependent role. roles migrate
+handles internal legacy paths by default; historical library conversion needs
+explicit legacy_source: "hai_agents_library". Legacy capability retirement needs
+explicit legacy_source: "hai_roles_library" alongside retire_legacy_source.
+Historical markers/recovery evidence retain their recorded interpretation.

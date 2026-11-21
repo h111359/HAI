@@ -41,7 +41,7 @@ def store_path(root):
     location = state.get('activities', {}).get('location')
     path = checked_path(root, location)
     if path.exists() and not path.is_dir(): raise SafetyError('Activity store is not a directory')
-    for reserved in ('.hai', '.git', '.hai_env/roles', '.hai_env/skills', 'roles', 'skills', 'workflows', '.hai_env/agents', 'hai_roles_library', 'hai_agents_library', '.hai_env/config', '.hai_env/workflows',
+    for reserved in ('.hai', '.git', '.hai_env/roles', '.hai_env/skills', '.hai_env/agents', '.hai_env/config', '.hai_env/workflows',
                      '.hai_env/workflow-runs', STATE, INSTRUCTIONS, PROFILES, *LEGACY.values()):
         candidate, protected = (location.casefold(), reserved.casefold()) if os.name == 'nt' else (location, reserved)
         if candidate == protected or candidate.startswith(protected + '/') or protected.startswith(candidate + '/'):

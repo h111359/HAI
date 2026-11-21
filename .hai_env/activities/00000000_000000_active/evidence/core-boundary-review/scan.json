@@ -1,0 +1,1607 @@
+{
+  "files": [
+    ".hai/concepts/activity-lifecycle.md",
+    ".hai/concepts/activity-store.md",
+    ".hai/concepts/activity.md",
+    ".hai/concepts/definition-management.md",
+    ".hai/concepts/durable-session-source.md",
+    ".hai/concepts/environment.md",
+    ".hai/concepts/hai.md",
+    ".hai/concepts/implementation-start.md",
+    ".hai/concepts/procedure.md",
+    ".hai/concepts/role-configuration.md",
+    ".hai/concepts/role.md",
+    ".hai/concepts/skill.md",
+    ".hai/concepts/source-coverage.md",
+    ".hai/concepts/transcript-segment.md",
+    ".hai/concepts/workflow.md",
+    ".hai/contracts/state.json",
+    ".hai/conventions/activity-chat_conv.md",
+    ".hai/conventions/activity-usage_conv.md",
+    ".hai/conventions/activity_conv.md",
+    ".hai/conventions/agent-invocation_conv.md",
+    ".hai/conventions/artifact-placement_conv.md",
+    ".hai/conventions/chronicles_conv.md",
+    ".hai/conventions/codex-source_conv.md",
+    ".hai/conventions/concept_conv.md",
+    ".hai/conventions/framework-layout_conv.md",
+    ".hai/conventions/instruction-writing_conv.md",
+    ".hai/conventions/model-profiles_conv.md",
+    ".hai/conventions/procedure_conv.md",
+    ".hai/conventions/recording-evidence_conv.md",
+    ".hai/conventions/reference-notation_conv.md",
+    ".hai/conventions/role-authoring_conv.md",
+    ".hai/conventions/role-configuration_conv.md",
+    ".hai/conventions/role_conv.md",
+    ".hai/conventions/skill_conv.md",
+    ".hai/conventions/state_conv.md",
+    ".hai/conventions/tooling_conv.md",
+    ".hai/conventions/transcript-segment_conv.md",
+    ".hai/conventions/workflow-authoring-format3_conv.md",
+    ".hai/conventions/workflow-authoring_conv.md",
+    ".hai/conventions/workflow-run_conv.md",
+    ".hai/conventions/workflow_conv.md",
+    ".hai/conventions/workspace-boundary_conv.md",
+    ".hai/procedures/author-role-create-definition.md",
+    ".hai/procedures/author-role-establish-scope-and-inspect.md",
+    ".hai/procedures/author-role-update-definition.md",
+    ".hai/procedures/author-role-validate-or-audit.md",
+    ".hai/procedures/author-workflow-create-workflow.md",
+    ".hai/procedures/author-workflow-establish-scope.md",
+    ".hai/procedures/author-workflow-update-workflow.md",
+    ".hai/procedures/author-workflow-validate-workflow.md",
+    ".hai/procedures/establish-recording-source.md",
+    ".hai/procedures/execute-workflow.md",
+    ".hai/procedures/install-workflow.md",
+    ".hai/procedures/maintain-source-adapters.md",
+    ".hai/procedures/manage-role-definitions.md",
+    ".hai/procedures/manage-workflow-definitions.md",
+    ".hai/procedures/mandatory-pre-delivery-recording.md",
+    ".hai/procedures/migrate-capabilities.md",
+    ".hai/procedures/migrate-environment-layout.md",
+    ".hai/procedures/migrate-roles.md",
+    ".hai/procedures/present-startup-guide.md",
+    ".hai/procedures/synchronize-chronicles.md",
+    ".hai/procedures/verify-chronicles.md",
+    ".hai/release-0.4.0.json",
+    ".hai/start.md",
+    ".hai/templates/state.json",
+    ".hai/templates/workflow.md",
+    ".hai/tools/activities/README.md",
+    ".hai/tools/activities/discovery.py",
+    ".hai/tools/activities/recording_gate.py",
+    ".hai/tools/activities/test_recording_gate.py",
+    ".hai/tools/activities/test_role_migration.py",
+    ".hai/tools/activity_layout.py",
+    ".hai/tools/chronicles/README.md",
+    ".hai/tools/chronicles/adapters.py",
+    ".hai/tools/chronicles/read_codex_source.py",
+    ".hai/tools/chronicles/test_read_codex_source.py",
+    ".hai/tools/configuration/README.md",
+    ".hai/tools/configuration/configuration_tools.py",
+    ".hai/tools/configuration/test_configuration_tools.py",
+    ".hai/tools/environment_paths.py",
+    ".hai/tools/hai.py",
+    ".hai/tools/path_contract.py",
+    ".hai/tools/role_state.py",
+    ".hai/tools/role_upgrade.py",
+    ".hai/tools/roles/README.md",
+    ".hai/tools/roles/role_tools.py",
+    ".hai/tools/roles/test_role_state.py",
+    ".hai/tools/roles/test_role_tools.py",
+    ".hai/tools/run_tests.py",
+    ".hai/tools/runtime/PORTABILITY.md",
+    ".hai/tools/runtime/README.md",
+    ".hai/tools/runtime/__init__.py",
+    ".hai/tools/runtime/activities.py",
+    ".hai/tools/runtime/activity_documents.py",
+    ".hai/tools/runtime/activity_migration.py",
+    ".hai/tools/runtime/activity_work.py",
+    ".hai/tools/runtime/capability_migration.py",
+    ".hai/tools/runtime/chat.py",
+    ".hai/tools/runtime/chronicles.py",
+    ".hai/tools/runtime/cli.py",
+    ".hai/tools/runtime/environment.py",
+    ".hai/tools/runtime/host.py",
+    ".hai/tools/runtime/invocations.py",
+    ".hai/tools/runtime/layout_migration.py",
+    ".hai/tools/runtime/package_content.py",
+    ".hai/tools/runtime/packages.py",
+    ".hai/tools/runtime/recording.py",
+    ".hai/tools/runtime/recording_policy.py",
+    ".hai/tools/runtime/role_migration.py",
+    ".hai/tools/runtime/skills.py",
+    ".hai/tools/runtime/source_continuity.py",
+    ".hai/tools/runtime/source_discovery.py",
+    ".hai/tools/runtime/startup.py",
+    ".hai/tools/runtime/storage.py",
+    ".hai/tools/runtime/tests/test_activity_layout.py",
+    ".hai/tools/runtime/tests/test_activity_layout_services.py",
+    ".hai/tools/runtime/tests/test_activity_migration.py",
+    ".hai/tools/runtime/tests/test_chat.py",
+    ".hai/tools/runtime/tests/test_chronicles.py",
+    ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    ".hai/tools/runtime/tests/test_conversation.py",
+    ".hai/tools/runtime/tests/test_invocations.py",
+    ".hai/tools/runtime/tests/test_layout_migration.py",
+    ".hai/tools/runtime/tests/test_portability.py",
+    ".hai/tools/runtime/tests/test_recording_policy.py",
+    ".hai/tools/runtime/tests/test_role_migration.py",
+    ".hai/tools/runtime/tests/test_source_continuity.py",
+    ".hai/tools/runtime/tests/test_source_discovery.py",
+    ".hai/tools/runtime/tests/test_test_runner.py",
+    ".hai/tools/runtime/tests/test_usage.py",
+    ".hai/tools/runtime/tests/test_workflow_integration.py",
+    ".hai/tools/runtime/tests/test_workflow_runs.py",
+    ".hai/tools/runtime/tests/test_workflows.py",
+    ".hai/tools/runtime/usage.py",
+    ".hai/tools/runtime/workflow_artifacts.py",
+    ".hai/tools/runtime/workflow_config.py",
+    ".hai/tools/runtime/workflow_lineage.py",
+    ".hai/tools/runtime/workflows.py",
+    ".hai/tools/skills/README.md",
+    ".hai/tools/skills/skill_tools.py",
+    ".hai/tools/skills/test_skill_tools.py",
+    ".hai/tools/startup/README.md",
+    ".hai/tools/startup/migrate_specification_configuration.py",
+    ".hai/tools/startup/startup_check.py",
+    ".hai/tools/startup/startup_context.py",
+    ".hai/tools/startup/test_migrate_specification_configuration.py",
+    ".hai/tools/startup/test_startup_check.py",
+    ".hai/tools/startup/test_startup_context.py",
+    ".hai/tools/workflows/README.md",
+    ".hai/tools/workflows/__init__.py",
+    ".hai/tools/workflows/definition.py",
+    ".hai/tools/workflows/tests/test_definition.py"
+  ],
+  "external_markdown_links": [
+    {
+      "file": ".hai/conventions/role_conv.md",
+      "line": 133,
+      "target": "../../skills/example-capability/SKILL.md",
+      "resolved": "skills\\example-capability\\SKILL.md"
+    }
+  ],
+  "candidate_python_literals": [
+    {
+      "file": ".hai/tools/role_state.py",
+      "line": 6,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/role_state.py",
+      "line": 7,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 8,
+      "literal": "hai_agents_library/agents"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 8,
+      "literal": "hai_roles_library/roles"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 9,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 9,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 13,
+      "literal": "../roles/role_tools"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 52,
+      "literal": "((?:\\.hai_env/roles|hai_roles_library/roles)/[^/\\s)]+/)SKILL\\.md"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 76,
+      "literal": "skills/"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 76,
+      "literal": "/skills/"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 45,
+      "literal": "(?:\\.hai_env/roles|hai_roles_library/roles)/[^/]+/SKILL\\.md"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 92,
+      "literal": "('hai_roles_library','agents')"
+    },
+    {
+      "file": ".hai/tools/role_upgrade.py",
+      "line": 92,
+      "literal": "('hai_roles_library','roles')"
+    },
+    {
+      "file": ".hai/tools/run_tests.py",
+      "line": 11,
+      "literal": "workflows/tests"
+    },
+    {
+      "file": ".hai/tools/activities/test_role_migration.py",
+      "line": 39,
+      "literal": "roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/activities/test_role_migration.py",
+      "line": 161,
+      "literal": ".hai_env/roles/software-developer"
+    },
+    {
+      "file": ".hai/tools/activities/test_role_migration.py",
+      "line": 81,
+      "literal": "INSTALL.md"
+    },
+    {
+      "file": ".hai/tools/activities/test_role_migration.py",
+      "line": 109,
+      "literal": "skills/"
+    },
+    {
+      "file": ".hai/tools/activities/test_role_migration.py",
+      "line": 115,
+      "literal": "roles/"
+    },
+    {
+      "file": ".hai/tools/activities/test_role_migration.py",
+      "line": 72,
+      "literal": "roles/codex-chronicle-manager"
+    },
+    {
+      "file": ".hai/tools/activities/test_role_migration.py",
+      "line": 139,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/activities/test_role_migration.py",
+      "line": 158,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 151,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 151,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 222,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 222,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 251,
+      "literal": ".hai_env/config/roles/"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 284,
+      "literal": ".hai_env/config/roles/"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 132,
+      "literal": ".hai_env/config/roles/"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 333,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/configuration/configuration_tools.py",
+      "line": 330,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/configuration/test_configuration_tools.py",
+      "line": 31,
+      "literal": ".hai_env/roles/git-manager/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/configuration/test_configuration_tools.py",
+      "line": 37,
+      "literal": ".hai_env/config/roles/git-manager.json"
+    },
+    {
+      "file": ".hai/tools/configuration/test_configuration_tools.py",
+      "line": 102,
+      "literal": ".hai_env/config/roles/advisor.json"
+    },
+    {
+      "file": ".hai/tools/configuration/test_configuration_tools.py",
+      "line": 150,
+      "literal": ".hai_env/roles/specification-manager/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/configuration/test_configuration_tools.py",
+      "line": 158,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/configuration/test_configuration_tools.py",
+      "line": 246,
+      "literal": ".hai_env/roles/git-manager/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/roles/role_tools.py",
+      "line": 667,
+      "literal": "\\.hai_env/roles/[^/]+/ROLE\\.md"
+    },
+    {
+      "file": ".hai/tools/roles/role_tools.py",
+      "line": 706,
+      "literal": "/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/role_tools.py",
+      "line": 748,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/roles/role_tools.py",
+      "line": 754,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_state.py",
+      "line": 30,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 21,
+      "literal": ".hai_env/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 529,
+      "literal": ".hai_env/roles/leader/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 952,
+      "literal": ".hai_env/roles/leader/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 27,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 114,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 130,
+      "literal": ".hai_env/roles/worker/procedures/inspect.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 397,
+      "literal": ".hai_env/roles/worker/procedures/other.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 406,
+      "literal": ".hai_env/roles/worker/concepts/local.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 458,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 537,
+      "literal": ".hai_env/roles/worker/knowledge.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 544,
+      "literal": "sources/roles/other/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 557,
+      "literal": ".hai_env/roles/worker/../worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 558,
+      "literal": ".hai_env/roles/worker/ROLE.md#part"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 559,
+      "literal": ".hai_env/roles/worker/ROLE.md?query"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 559,
+      "literal": ".hai/roles/worker"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 617,
+      "literal": ".hai_env/roles/worker/skills/helper/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 619,
+      "literal": ".hai_env/roles/worker/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 634,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 656,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 726,
+      "literal": "sources/roles/missing/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 964,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 968,
+      "literal": "sources/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 972,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 977,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 985,
+      "literal": ".hai_env/roles/worker/knowledge.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 1007,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 111,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 461,
+      "literal": "/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 474,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 622,
+      "literal": ".hai_env/roles/worker/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 650,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 118,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 447,
+      "literal": ".hai_env/roles/worker/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 643,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 467,
+      "literal": ".hai_env/roles/worker/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/roles/test_role_tools.py",
+      "line": 473,
+      "literal": "roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/runtime/activities.py",
+      "line": 44,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/runtime/activities.py",
+      "line": 44,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/runtime/capability_migration.py",
+      "line": 43,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/runtime/capability_migration.py",
+      "line": 43,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/runtime/capability_migration.py",
+      "line": 30,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/capability_migration.py",
+      "line": 57,
+      "literal": "Stop affected writers; preserve new/partial destinations separately. Explicitly restore each original directory from backup_base/originals to its recorded destination using no-replace moves; remove only reviewed newly-created destinations. Restore hai_roles_library from its original backup if retired. Keep marker and evidence until an owner reconciles state; never retry or merge automatically."
+    },
+    {
+      "file": ".hai/tools/runtime/capability_migration.py",
+      "line": 42,
+      "literal": "roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/capability_migration.py",
+      "line": 70,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/capability_migration.py",
+      "line": 41,
+      "literal": "hai_roles_library/roles"
+    },
+    {
+      "file": ".hai/tools/runtime/environment.py",
+      "line": 131,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/environment.py",
+      "line": 153,
+      "literal": ".hai_env/config/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/environment.py",
+      "line": 133,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/environment.py",
+      "line": 138,
+      "literal": ".hai_env/config/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/layout_migration.py",
+      "line": 53,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/runtime/packages.py",
+      "line": 62,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/packages.py",
+      "line": 67,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/runtime/packages.py",
+      "line": 127,
+      "literal": ".hai_env/roles/.hai-stage-"
+    },
+    {
+      "file": ".hai/tools/runtime/packages.py",
+      "line": 104,
+      "literal": ".hai_env/config/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/packages.py",
+      "line": 141,
+      "literal": ".hai_env/roles/.hai-backup-"
+    },
+    {
+      "file": ".hai/tools/runtime/packages.py",
+      "line": 146,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/runtime/packages.py",
+      "line": 51,
+      "literal": "\\.hai_env/roles/[^/]+/ROLE\\.md"
+    },
+    {
+      "file": ".hai/tools/runtime/package_content.py",
+      "line": 82,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/package_content.py",
+      "line": 82,
+      "literal": ".hai_env/skills/"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 20,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 20,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 220,
+      "literal": "hai_roles_library/roles"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 156,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 231,
+      "literal": ".hai_env/workflows/"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 245,
+      "literal": ".hai_env/workflows/"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 325,
+      "literal": ".hai_env/workflows/"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 144,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 189,
+      "literal": "roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/role_migration.py",
+      "line": 193,
+      "literal": "roles/\\1/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/skills.py",
+      "line": 35,
+      "literal": ".hai_env/skills/"
+    },
+    {
+      "file": ".hai/tools/runtime/skills.py",
+      "line": 53,
+      "literal": ".hai_env/skills/.hai-stage-"
+    },
+    {
+      "file": ".hai/tools/runtime/skills.py",
+      "line": 63,
+      "literal": ".hai_env/skills/.hai-backup-"
+    },
+    {
+      "file": ".hai/tools/runtime/workflows.py",
+      "line": 74,
+      "literal": "\\.hai_env/workflows/[a-z][a-z0-9-]*\\.md"
+    },
+    {
+      "file": ".hai/tools/runtime/workflows.py",
+      "line": 276,
+      "literal": ".hai_env/config/roles/"
+    },
+    {
+      "file": ".hai/tools/runtime/workflow_config.py",
+      "line": 26,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/runtime/workflow_config.py",
+      "line": 26,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/runtime/workflow_config.py",
+      "line": 10,
+      "literal": ".hai_env/config/workflows/"
+    },
+    {
+      "file": ".hai/tools/runtime/workflow_config.py",
+      "line": 71,
+      "literal": ".hai_env/workflows/"
+    },
+    {
+      "file": ".hai/tools/runtime/workflow_config.py",
+      "line": 123,
+      "literal": ".hai_env/config/workflows/history/"
+    },
+    {
+      "file": ".hai/tools/skills/skill_tools.py",
+      "line": 125,
+      "literal": ".hai_env/skills/"
+    },
+    {
+      "file": ".hai/tools/skills/skill_tools.py",
+      "line": 81,
+      "literal": ".hai_env/skills/"
+    },
+    {
+      "file": ".hai/tools/skills/skill_tools.py",
+      "line": 134,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 202,
+      "literal": ".hai_env/roles/backlog-manager/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 230,
+      "literal": ".hai_env/roles/specification-manager/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 31,
+      "literal": ".hai_env/skills/inspect/scripts/never.py"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 36,
+      "literal": ".hai_env/skills/inspect/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 41,
+      "literal": ".hai_env/skills/broken/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 66,
+      "literal": ".hai_env/skills/broken/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 76,
+      "literal": ".hai_env/skills/large/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 96,
+      "literal": ".hai_env/roles/service-owner/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 97,
+      "literal": ".hai_env/config/roles/service-owner.json"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 100,
+      "literal": "originals/skills/inspect/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 119,
+      "literal": "skills/inspect"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 148,
+      "literal": ".hai_env/config/roles/worker.json"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 158,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 223,
+      "literal": "roles/specification-manager"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 235,
+      "literal": ".hai_env/roles/specification-manager"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 281,
+      "literal": "roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 282,
+      "literal": "roles/worker/procedures/inspect.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 283,
+      "literal": "roles/worker"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 285,
+      "literal": ".hai_env/roles/worker/procedures/inspect.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 27,
+      "literal": "skills/inspect"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 88,
+      "literal": ".hai_env/skills/inspect/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 181,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 185,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 196,
+      "literal": "roles/backlog-manager"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 196,
+      "literal": "roles/backlog-manager"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 197,
+      "literal": "roles/backlog-manager"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 222,
+      "literal": "roles/specification-manager"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 222,
+      "literal": "roles/specification-manager"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 225,
+      "literal": "roles/specification-manager"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 293,
+      "literal": "skills/inspect"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 48,
+      "literal": ".hai_env/skills/inspect/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 71,
+      "literal": ".hai_env/skills/inspect/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 91,
+      "literal": "roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 94,
+      "literal": "roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 127,
+      "literal": ".hai_env/skills/inspect/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 130,
+      "literal": "skills/inspect"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 191,
+      "literal": ".hai_env/roles/backlog-manager/conventions/backlog_conv.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 211,
+      "literal": ".hai_env/config/roles/backlog-manager.json"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 238,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 257,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 294,
+      "literal": ".hai_env/skills/inspect/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 70,
+      "literal": ".hai_env/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 72,
+      "literal": ".hai_env/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 88,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 92,
+      "literal": "roles/worker"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 92,
+      "literal": ".hai_env/roles/worker"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 113,
+      "literal": ".hai_env/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 146,
+      "literal": ".hai_env/config/roles/worker.json"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 150,
+      "literal": ".hai_env/roles/worker"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 252,
+      "literal": "roles/"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 274,
+      "literal": ".hai_env/skills/portable-document"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 213,
+      "literal": ".hai_env/roles/backlog-manager/scripts/audit_backlog.py"
+    },
+    {
+      "file": ".hai/tools/skills/test_skill_tools.py",
+      "line": 274,
+      "literal": ".hai_env/skills/portable-document"
+    },
+    {
+      "file": ".hai/tools/startup/migrate_specification_configuration.py",
+      "line": 22,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/startup/migrate_specification_configuration.py",
+      "line": 76,
+      "literal": ".hai_env/roles/"
+    },
+    {
+      "file": ".hai/tools/startup/migrate_specification_configuration.py",
+      "line": 144,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/migrate_specification_configuration.py",
+      "line": 176,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/migrate_specification_configuration.py",
+      "line": 178,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/migrate_specification_configuration.py",
+      "line": 201,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/startup_check.py",
+      "line": 302,
+      "literal": ".hai_env/roles/specification-manager/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/startup/startup_check.py",
+      "line": 160,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/startup/startup_check.py",
+      "line": 160,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/startup/startup_check.py",
+      "line": 218,
+      "literal": "/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/startup/startup_check.py",
+      "line": 295,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/startup_check.py",
+      "line": 273,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/startup/startup_check.py",
+      "line": 276,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/startup/startup_check.py",
+      "line": 279,
+      "literal": "/roles/"
+    },
+    {
+      "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+      "line": 31,
+      "literal": ".hai/roles/leader/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+      "line": 33,
+      "literal": ".hai_env/roles/specification-manager/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+      "line": 102,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+      "line": 60,
+      "literal": "/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+      "line": 90,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+      "line": 128,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+      "line": 143,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 53,
+      "literal": ".hai_env/roles/specification-manager/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 61,
+      "literal": ".hai_env/roles/specification-manager/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 165,
+      "literal": ".hai_env/roles/git-manager/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 174,
+      "literal": ".hai_env/roles/git-manager/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 213,
+      "literal": ".hai_env/roles/specification-manager/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 266,
+      "literal": ".hai/roles/environment-manager/contract.json"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 324,
+      "literal": ".hai_env/roles/x"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 547,
+      "literal": ".hai_env/roles/good/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 559,
+      "literal": ".hai_env/roles/good/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 567,
+      "literal": ".hai_env/roles/good/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 579,
+      "literal": ".hai/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 593,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 46,
+      "literal": "/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 65,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 694,
+      "literal": ".hai_env/roles/escape/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 121,
+      "literal": ".hai/roles/git-manager"
+    },
+    {
+      "file": ".hai/tools/startup/test_startup_check.py",
+      "line": 122,
+      "literal": ".hai_env/roles/git-manager"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 14,
+      "literal": "workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 33,
+      "literal": "workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 102,
+      "literal": ".hai_env/workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 126,
+      "literal": "roles/x"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 126,
+      "literal": "skills/x"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 126,
+      "literal": "workflows/x"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 137,
+      "literal": ".hai_env/workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 159,
+      "literal": ".hai_env/workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 167,
+      "literal": ".hai_env/config/workflows/history/software-development"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 51,
+      "literal": "workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 56,
+      "literal": ".hai_env/workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 104,
+      "literal": ".hai_env/workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 174,
+      "literal": ".hai_env/workflows/software-development.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 40,
+      "literal": ".hai_env/roles/worker"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 46,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+      "line": 320,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "line": 29,
+      "literal": ".hai_env/config/roles/custom.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "line": 92,
+      "literal": ".hai_env/roles/specification-manager"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "line": 99,
+      "literal": ".hai_env/roles/specification-manager/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "line": 100,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "line": 102,
+      "literal": ".hai_env/roles/specification-manager/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "line": 60,
+      "literal": ".hai_env/config/roles/custom.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "line": 60,
+      "literal": ".hai_env/config/roles/custom.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+      "line": 109,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 135,
+      "literal": ".hai_env/roles/local/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 141,
+      "literal": "hai_agents_library/agents/worker"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 144,
+      "literal": "hai_agents_library/README.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 150,
+      "literal": ".agents/skills/real/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 151,
+      "literal": ".hai_env/agents/worker/skills/real/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 173,
+      "literal": "[Worker](roles/worker/ROLE.md)"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 301,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 176,
+      "literal": ".hai_env/roles/role-definition-manager/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 347,
+      "literal": "skills/x/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 168,
+      "literal": ".hai_env/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 169,
+      "literal": "hai_roles_library/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 172,
+      "literal": "hai_roles_library/README.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 306,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 163,
+      "literal": ".hai_env/roles/worker/skills/real/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 164,
+      "literal": ".hai_env/roles/worker/resources/real/SKILL.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 165,
+      "literal": ".hai_env/roles/worker/resources/real/procedures/test.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 166,
+      "literal": ".hai_env/config/roles/role-definition-manager.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 175,
+      "literal": ".hai_env/roles/local-advisor/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 214,
+      "literal": "*/candidate/.hai_env/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_role_migration.py",
+      "line": 294,
+      "literal": ".hai_env/config/roles/specification-manager.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflows.py",
+      "line": 93,
+      "literal": "roles/software-developer"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflows.py",
+      "line": 97,
+      "literal": "roles/software-developer"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflows.py",
+      "line": 103,
+      "literal": "roles/software-developer"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflows.py",
+      "line": 106,
+      "literal": ".hai_env/roles/software-developer/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflows.py",
+      "line": 119,
+      "literal": ".hai_env/roles/pkg"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 61,
+      "literal": "roles/activities"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 61,
+      "literal": ".hai_env/skills/activities"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 61,
+      "literal": ".hai_env/roles/activities"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 61,
+      "literal": "hai_roles_library"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 61,
+      "literal": "hai_agents_library"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 61,
+      "literal": ".hai_env/workflows/activities"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 36,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 70,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 110,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+      "line": 126,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 102,
+      "literal": ".hai_env/roles/worker"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 398,
+      "literal": ".hai_env/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 414,
+      "literal": ".hai_env/roles/worker/ROLE.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 421,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 425,
+      "literal": ".hai_env/roles/worker/configuration/contract.json"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 165,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 442,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 468,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 508,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 147,
+      "literal": ".hai_env/roles/catalogue.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 453,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 488,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 308,
+      "literal": ".hai_env/workflows/sample.md"
+    },
+    {
+      "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+      "line": 460,
+      "literal": ".hai_env/workflows/sample.md"
+    }
+  ]
+}

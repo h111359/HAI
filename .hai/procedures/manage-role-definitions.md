@@ -53,7 +53,7 @@ Apply fixed instructions, workspace boundaries and valid current Activity requir
 
 - Create, update, validate, and audit workspace definitions and
   their necessary supporting resources.
-- Maintain explicitly selected golden source packages under `roles/` as data.
+- Maintain explicitly selected source packages as data, at their caller-selected locations.
 - Return validated canonical identity, decoded description, contract/check evidence and required catalogue changes through host coordinator to runtime; do not mutate the workspace catalogue or install packages.
 - Perform repairs or migrations only within an explicitly requested scope.
 - Do not invoke agents, coordinate execution, change environment state or model

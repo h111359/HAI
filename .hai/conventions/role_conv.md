@@ -4,7 +4,7 @@
 
 Optional installed workspace definitions live at `.hai_env/roles/<name>/ROLE.md`. Names match `[a-z][a-z0-9]*(?:-[a-z0-9]+)*`, are at most 64 characters, match their parent directory and are unique case-insensitively. `.hai_env/roles/catalogue.md` contains explicit registrations and exact decoded description copies. Creation or installation does not register a package or grant permission to execute it. Unregistered packages may be inspected and validated as data. Selection requires an authorized task and the host's actual execution capability; a profile or catalogue row does not prove that capability. Core startup and administration do not depend on any optional package.
 
-Source packages under `roles/` are data, not an execution origin. Source maintenance, installed replacement, registration and execution are separate scopes. Preserve external settings and records, review local differences or unknown baselines before replacing a package, and do not infer execution authority from installation.
+Explicitly supplied source packages are data, not an execution origin; core never discovers a workspace source collection. Source maintenance, installed replacement, registration and execution are separate scopes. Preserve external settings and records, review local differences or unknown baselines before replacing a package, and do not infer execution authority from installation.
 
 Apply the safe fixed `.hai_env/config/agent_instructions.md` and higher-priority instructions before dependent work. Substantive work uses the current Activity; startup, necessary setup and read-only diagnosis can establish context first. Pass relevant task scope, authority, Activity identity and evidence to any selected extension.
 

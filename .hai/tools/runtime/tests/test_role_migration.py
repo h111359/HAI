@@ -101,12 +101,12 @@ class RoleMigrationTests(unittest.TestCase):
             'agent': name, 'current_config_format_version': 7, 'supported_config_format_versions': [7], 'settings': {}}))
 
     def preview(self):
-        return role_migration.handle(self.root, {'provenance': self.prov}, False)
+        return role_migration.handle(self.root, {'provenance': self.prov, **({'legacy_source':'hai_agents_library'} if getattr(self,'include_legacy_source',False) else {})}, False)
 
     def apply(self, preview=None):
         preview = preview or self.preview()
         self.assertTrue(preview['ok'], preview)
-        return role_migration.handle(self.root, {'provenance': self.prov,
+        return role_migration.handle(self.root, {'provenance': self.prov, **({'legacy_source':'hai_agents_library'} if getattr(self,'include_legacy_source',False) else {}),
             'writers_ended': True, 'expected_snapshot': preview['result']['expected_snapshot']}, True)
 
     def test_preview_is_deterministic_and_writes_nothing(self):
@@ -138,6 +138,7 @@ class RoleMigrationTests(unittest.TestCase):
         self.assertEqual(tree(self.root), before)
 
     def test_independent_packages_settings_profiles_and_history_survive(self):
+        self.include_legacy_source = True
         self.package('hai_agents_library/agents/worker', 'worker')
         self.package('.hai_env/agents/local-advisor', 'local-advisor', 'Local custom package.')
         self.package('.hai_env/agents/agent-definition-manager', 'agent-definition-manager', 'Manager agent definition package.')

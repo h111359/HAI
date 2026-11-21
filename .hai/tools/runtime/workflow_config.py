@@ -23,7 +23,7 @@ def canonical_spelling(root, relative):
 def validate_locations(root, parsed, values):
     if not isinstance(values, dict) or set(values) != set(parsed['locations']):
         raise SafetyError('Required workflow locations missing or unknown; ask the human for all declared bases')
-    protected = ('.hai', '.hai_env/config', '.hai_env/roles', '.hai_env/skills', '.hai_env/workflows', '.hai_env/workflow-runs', '.hai_env/.runtime.lock', '.git', '.aws', '.codex', '.agents', 'roles', 'skills', 'workflows', 'hai_roles_library', 'hai_agents_library', store_path(root))
+    protected = ('.hai', '.hai_env/config', '.hai_env/roles', '.hai_env/skills', '.hai_env/workflows', '.hai_env/workflow-runs', '.hai_env/.runtime.lock', '.git', '.aws', '.codex', '.agents', store_path(root))
     prior = []
     literals = {}
     for name, value in values.items():

@@ -12,7 +12,7 @@ Provide the local vocabulary used by the host and core authoring procedures with
 
 - [term:Caller]: the human or coordinating host coordinator supplying the task and authority.
 - [term:Target]: the definition and supporting resources selected for this operation.
-- [term:Origin]: installed workspace at `.hai_env/roles/<name>/` or a golden source package at `roles/<name>/`. Only the installed workspace catalogue registers packages; sources are data. A source package and its installed snapshot may share the same name.
+- [term:Origin]: installed workspace at `.hai_env/roles/<name>/` or an explicitly selected source package location. Only the installed workspace catalogue registers packages; sources are data. A source package and its installed snapshot may share the same name.
 - [term:Registration]: a validated catalogue row making a definition eligible for selection and delegation. Creating files, updating them, validating them, and executing a registered role are separate from registration.
 
 Configuration contracts are required only when a role owns actual settings. Their settings/defaults

@@ -207,7 +207,7 @@ symlink checks may skip when unavailable; report those separately from passing t
 
 ## Library-source verification
 
-The root `roles/` source collection is not an execution origin. The former `hai_roles_library/roles/` layout is only a legacy migration bridge. Pure `validate` and
+A caller-selected source package is not an execution origin. The former `hai_roles_library/roles/` layout is only a legacy migration bridge. Pure `validate` and
 `read_definition(path, workspace)` inspect contained source packages as data;
 `resolve` accepts only `.hai_env/roles/<name>/ROLE.md`. `audit` reads only the
 workspace runtime catalogue. When package references depend on installed peers,
@@ -227,7 +227,7 @@ and apply the exact inspected snapshot after other writers have ended.
 
 ## Reusable skill dependencies
 
-Roles are job descriptions and reference reusable methods with quoted comma-separated metadata `hai-skills` plus a Skills section. Pure root `roles/` inspection validates root `skills/`; installed role inspection uses `.hai_env/skills/` only. `roles skills` returns available installed method paths without selecting a model; missing methods block dependent work. `roles resolve` retains exact host model/effort checks and includes resolved skill paths. A workflow names roles and results; the role selects suitable skills. See [skill tools](../skills/README.md) and [explicit capability migration](../../procedures/migrate-capabilities.md).
+Roles are job descriptions and reference reusable methods with quoted comma-separated metadata `hai-skills` plus a Skills section. Pure source inspection validates required installed skills; installed role inspection uses `.hai_env/skills/` only. `roles skills` returns available installed method paths without selecting a model; missing methods block dependent work. `roles resolve` retains exact host model/effort checks and includes resolved skill paths. A workflow names roles and results; the role selects suitable skills. See [skill tools](../skills/README.md) and [explicit capability migration](../../procedures/migrate-capabilities.md).
 
 The role installer preserves raw source bytes and rebases actual Markdown links outside code fences and matching-backtick inline code spans to the final installed location, mapping known source role/skill peers to their installed owners. Preview differences compare relocated candidate content. Staging uses final logical path resolution for local procedures and shared concepts, then verifies candidate hashes and installed dependencies before publication. It reports absent recognized peer references without claiming operation readiness. Chosen-setting compatibility and source/destination/settings fingerprints are checked again before replacing a package.
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import re
 import shutil
@@ -78,7 +79,7 @@ class CoreIsolationTests(unittest.TestCase):
         self.assertIn('unverified', runtime)
 
     def test_live_core_and_consumers_have_no_retired_owner_routing(self):
-        paths = [ROOT/'README.md', ROOT/'INSTALL.md', ROOT/'.hai/start.md']
+        paths = [ROOT/'.hai/start.md']
         for directory in (ROOT/'.hai/concepts', ROOT/'.hai/conventions'):
             paths.extend(directory.rglob('*.md'))
         for path in paths:
@@ -87,7 +88,7 @@ class CoreIsolationTests(unittest.TestCase):
                 self.assertNotRegex(text, r'(?i)activity-manager')
 
 
-@unittest.skipUnless((ROOT/'roles').is_dir(), 'repository source-package fixtures unavailable in core-only distribution')
+@unittest.skipUnless(os.environ.get('HAI_DEVELOPMENT_SOURCES'), 'explicit development source workspace not selected')
 class SourceStagingTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -95,10 +96,10 @@ class SourceStagingTests(unittest.TestCase):
         cls.stage = Path(cls.temp.name).resolve()
         copy_core(cls.stage)
         from runtime import environment, packages, skills as runtime_skills
-        source = ROOT/'roles'
+        source = Path(os.environ['HAI_DEVELOPMENT_SOURCES'])/'roles'
         cls.source_before = snapshot(source)
         shutil.copytree(source, cls.stage/'roles', ignore=shutil.ignore_patterns('__pycache__'))
-        shutil.copytree(ROOT/'skills', cls.stage/'skills', ignore=shutil.ignore_patterns('__pycache__'))
+        shutil.copytree(Path(os.environ['HAI_DEVELOPMENT_SOURCES'])/'skills', cls.stage/'skills', ignore=shutil.ignore_patterns('__pycache__'))
         provenance = {'source': 'isolated complete distribution fixture', 'reason': 'verify real source-to-installed portability'}
         initialized = environment.handle('environment/initialize', cls.stage, {'provenance': provenance}, True)
         if not initialized['ok']:
@@ -113,7 +114,7 @@ class SourceStagingTests(unittest.TestCase):
         names = sorted(path.name for path in (cls.stage/'roles').iterdir() if path.is_dir())
         for name in names:
             installed = packages.handle('install', cls.stage, {'source': 'roles/' + name,
-                'name': name, 'provenance': provenance}, True)
+                'name': name, 'provenance': provenance, 'source_mappings':{'roles/'+peer:'.hai_env/roles/'+peer for peer in names}}, True)
             if not installed['ok']:
                 raise AssertionError(installed)
         catalogue(cls.stage, '.hai_env', names)
@@ -137,7 +138,7 @@ class SourceStagingTests(unittest.TestCase):
         for name in NAMES:
             self.assertFalse((self.stage/'.hai/agents'/name).exists())
             self.assertTrue(validate(self.stage, f'.hai_env/roles/{name}/ROLE.md')['ok'])
-        self.assertEqual(snapshot(ROOT/'roles'), self.source_before)
+        self.assertEqual(snapshot(Path(os.environ['HAI_DEVELOPMENT_SOURCES'])/'roles'), self.source_before)
 
     def test_portable_supporting_links_resolve_after_complete_installation(self):
         missing = []

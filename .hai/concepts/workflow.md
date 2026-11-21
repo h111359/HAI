@@ -14,7 +14,7 @@ handoff. Workflows remain optional; ordinary tasks and role procedures still wor
 
 ## Explanation
 
-A reusable source in `workflows/<name>.md` is installed with explicit environment
+An explicitly supplied reusable source definition is installed with explicit environment
 locations into `.hai_env/workflows/<name>.md`. An installed definition is discoverable by its presence;
 there is no separate workflow catalogue. Discovery is not execution authority.
 The host checks the definition and current prerequisites, then coordinates actual

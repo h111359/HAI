@@ -1,0 +1,20 @@
+[
+  {
+    "name": "skills",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "F............s..............\n======================================================================\nFAIL: test_all_real_roles_install_without_any_skills (test_skill_tools.SkillTests.test_all_real_roles_install_without_any_skills)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\skills\\test_skill_tools.py\", line 257, in test_all_real_roles_install_without_any_skills\n    self.assertTrue(result['ok'],result)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true : {'ok': False, 'status': 'blocked', 'operation': 'install', 'result': {}, 'changed_files': [], 'issues': ['External package reference needs an explicit source mapping: ../business-analyst/conventions/framework-protection.md']}\n\n----------------------------------------------------------------------\nRan 28 tests in 15.301s\n\nFAILED (failures=1, skipped=1)\n"
+  },
+  {
+    "name": "sources",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 4.715s\n\nOK\n"
+  },
+  {
+    "name": "workflow-install",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "..F.s.\n======================================================================\nFAIL: test_real_package_install_and_registration (test_workflows.WorkflowTests.test_real_package_install_and_registration)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\hmhri\\Desktop\\repos\\HAI\\.hai\\tools\\runtime\\tests\\test_workflows.py\", line 107, in test_real_package_install_and_registration\n    self.assertTrue(result['ok'],result)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\nAssertionError: False is not true : {'ok': False, 'status': 'blocked', 'operation': 'install', 'result': {}, 'changed_files': [], 'issues': ['External package reference needs an explicit source mapping: ../business-analyst/conventions/framework-protection.md']}\n\n----------------------------------------------------------------------\nRan 6 tests in 3.369s\n\nFAILED (failures=1, skipped=1)\n"
+  }
+]

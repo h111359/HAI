@@ -89,4 +89,16 @@ There is no automatic rollback or recovery command.
 - [Role configuration](../conventions/role-configuration_conv.md): contracts and saved values.
 - [Runtime commands](../tools/runtime/README.md): operation requests.
 
-After this legacy naming bridge completes, explicitly review and run [capability migration](migrate-capabilities.md) to reach flat root roles/ and extracted skills/. Naming migration does not silently extract methods, merge installed customizations or rewrite its historical marker.
+After internal naming migration, installed roles are usable without a source library. Capability/source conversion is a separate optional operation only for explicitly identified legacy source packages; it is never a prerequisite for a new consumer workspace.
+
+## Deployment boundary
+
+This historical conversion is not a normal installation prerequisite. Never
+search for external source libraries. Default role naming migration handles only
+internal legacy roots. Historical external naming conversion requires the caller
+to select legacy_source: "hai_agents_library" explicitly. Capability retirement
+requires legacy_source: "hai_roles_library" explicitly. Source package destinations
+are explicit migration inputs, not required consumer layout. Preserve old markers
+and backup mappings without reinterpreting historical results. Current ordinary
+authoring uses installed definitions or caller-selected sources; a new workspace
+requires no source collection.

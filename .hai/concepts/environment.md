@@ -11,8 +11,9 @@ Chronicles are optional exact-source transcript segments stored per Activity. Se
 Optional workspace role packages and their catalogue live under `.hai_env/roles/`; their package-owned settings live separately under `.hai_env/config/roles/`. Core initialization and administration require no agent or model profile. Installing, registering and using an optional extension are distinct operations and require the appropriate scope and actual host support. See [role concept](role.md) and [role configuration](role-configuration.md).
 
 Installed skills live separately in .hai_env/skills/ and may be used directly
-within the user task scope or selected by a role. The roles/skills/workflows source
-collections do not execute as an installed environment. Workflow location choices
+within the user task scope or selected by a role. Any source packages are caller-selected data, never required workspace
+collections or installed execution origins. Core uses only .hai/ and .hai_env/
+unless a task or environment setting explicitly supplies another location. Workflow location choices
 are stored separately under .hai_env/config/workflows/; reusable definitions keep
 the artifact names and contracts, while each environment chooses safe output bases.
 Accepted workflow evidence and source lineage remain with the owning Activity.

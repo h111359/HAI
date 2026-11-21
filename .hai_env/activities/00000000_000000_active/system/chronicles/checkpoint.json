@@ -14,7 +14,7 @@
           },
           "end": {
             "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
-            "source_position": 10567
+            "source_position": 11182
           }
         }
       ],
@@ -40,33 +40,33 @@
         },
         "end": {
           "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
-          "source_position": 10567
+          "source_position": 11182
         }
       },
       "segment_path": "chronicles/20261112_195218_segment-01.md",
-      "verified_at": "2026-11-21T04:47:28Z"
+      "verified_at": "2026-11-21T05:37:49Z"
     }
   ],
   "pending_ranges": [],
   "cadence_cursors": {
     "01a1d151-7046-7d83-89ee-573c30ee6685": {
       "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
-      "source_position": 10567
+      "source_position": 11182
     }
   },
   "last_attempt": {
-    "attempt_id": "d2540b59-84a2-4607-9d12-36df726668bd",
+    "attempt_id": "4a13c252-4e6d-48e0-a2df-4abb449c895c",
     "dispatch_cursors": {
       "01a1d151-7046-7d83-89ee-573c30ee6685": {
         "source_session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
-        "source_position": 10567
+        "source_position": 11182
       }
     },
-    "started_at": "2026-11-21T04:47:28Z",
-    "finished_at": "2026-11-21T04:47:28Z",
+    "started_at": "2026-11-21T05:37:49Z",
+    "finished_at": "2026-11-21T05:37:49Z",
     "status": "verified",
     "error": null
   },
-  "last_successful_at": "2026-11-21T04:47:28Z",
+  "last_successful_at": "2026-11-21T05:37:49Z",
   "in_flight": null
 }

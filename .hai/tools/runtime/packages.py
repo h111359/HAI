@@ -33,7 +33,7 @@ def handle(operation, workspace, request, apply, _locked=False):
         from .role_migration import handle as migrate
         return migrate(root, request, apply)
     try:
-        fields = {'validate':{'definition'}, 'audit':set(), 'resolve':{'definition','runtime'}, 'skills':{'definition'}, 'install':{'source','name','replace','register','reviewed_differences','provenance'}, 'register':{'name','provenance'}}
+        fields = {'validate':{'definition'}, 'audit':set(), 'resolve':{'definition','runtime'}, 'skills':{'definition'}, 'install':{'source','name','replace','register','reviewed_differences','source_mappings','provenance'}, 'register':{'name','provenance'}}
         if not isinstance(request,dict) or (op in fields and set(request) - fields[op]): raise ValueError('Unknown or invalid request fields')
         def run():
             if op != 'validate': require_ready(root)
@@ -94,7 +94,7 @@ def handle(operation, workspace, request, apply, _locked=False):
             if src.name != name: raise ValueError('source folder name must equal package name')
             if src == target or src in target.parents or target in src.parents: raise SafetyError('source and installed paths must be distinct')
             files = snapshot(root,source)
-            candidate,relocated,unresolved=package_content.prepare(root,source,dest,files)
+            candidate,relocated,unresolved=package_content.prepare(root,source,dest,files,request.get('source_mappings'))
             if (src / 'knowledge.md').exists() or (src / 'knowledge.md').is_symlink(): raise SafetyError('conflicting legacy knowledge.md')
             fields = roles.read_definition(src / 'ROLE.md',root,check_dependencies=False)
             if fields['name'] != name: raise SafetyError('package identity mismatch')

@@ -1,0 +1,2337 @@
+[
+  {
+    "file": ".hai/concepts/definition-management.md",
+    "line": 15,
+    "text": "- [term:Origin]: installed workspace at `.hai_env/roles/<name>/` or a golden source package at `roles/<name>/`. Only the installed workspace catalogue registers packages; sources are data. A source package and its installed snapshot may share the same name."
+  },
+  {
+    "file": ".hai/concepts/environment.md",
+    "line": 11,
+    "text": "Optional workspace role packages and their catalogue live under `.hai_env/roles/`; their package-owned settings live separately under `.hai_env/config/roles/`. Core initialization and administration require no agent or model profile. Installing, registering and using an optional extension are distinct operations and require the appropriate scope and actual host support. See [role concept](role.md) and [role configuration](role-configuration.md)."
+  },
+  {
+    "file": ".hai/concepts/environment.md",
+    "line": 13,
+    "text": "Installed skills live separately in .hai_env/skills/ and may be used directly"
+  },
+  {
+    "file": ".hai/concepts/environment.md",
+    "line": 14,
+    "text": "within the user task scope or selected by a role. The roles/skills/workflows source"
+  },
+  {
+    "file": ".hai/concepts/environment.md",
+    "line": 16,
+    "text": "are stored separately under .hai_env/config/workflows/; reusable definitions keep"
+  },
+  {
+    "file": ".hai/concepts/role-configuration.md",
+    "line": 17,
+    "text": "outside packages at `.hai_env/config/roles/<role-name>.json`. Replacing a package"
+  },
+  {
+    "file": ".hai/concepts/role.md",
+    "line": 11,
+    "text": "Root `roles/<name>/ROLE.md` packages are reusable sources. Installed `.hai_env/roles/<name>/ROLE.md` packages and their explicit catalogue are separate snapshots. Installation, registration, selection and authorization are distinct. Runtime skill lookup uses only installed `.hai_env/skills/`, without source fallback. Model and permission rules remain with the host and shared core."
+  },
+  {
+    "file": ".hai/concepts/skill.md",
+    "line": 7,
+    "text": "Source skills live under root `skills/`; installed snapshots live under `.hai_env/skills/`. Runtime lookup uses installed packages only and reports unavailable dependencies. Native skills have name/description frontmatter and free-form instructions; HAI does not impose ROLE headings, an empty configuration contract or a role persona."
+  },
+  {
+    "file": ".hai/concepts/workflow.md",
+    "line": 17,
+    "text": "A reusable source in `workflows/<name>.md` is installed with explicit environment"
+  },
+  {
+    "file": ".hai/concepts/workflow.md",
+    "line": 18,
+    "text": "locations into `.hai_env/workflows/<name>.md`. An installed definition is discoverable by its presence;"
+  },
+  {
+    "file": ".hai/concepts/workflow.md",
+    "line": 44,
+    "text": "workspace-relative destination bases in `.hai_env/config/workflows/<name>.json`."
+  },
+  {
+    "file": ".hai/conventions/framework-layout_conv.md",
+    "line": 11,
+    "text": "owner settings below `roles/` and workflow location settings below `workflows/`. Explicit layout migration retains recovery"
+  },
+  {
+    "file": ".hai/conventions/framework-layout_conv.md",
+    "line": 14,
+    "text": "Optional single-file workflow definitions live directly in `.hai_env/workflows/`."
+  },
+  {
+    "file": ".hai/conventions/framework-layout_conv.md",
+    "line": 26,
+    "text": "Optional workspace role packages live at `.hai_env/roles/<name>/` and their explicit registration catalogue at `.hai_env/roles/catalogue.md`. Their reusable source packages under root `roles/` are data, not a runtime execution origin. A package's settings are stored separately in `.hai_env/config/roles/`; source changes do not automatically replace installed packages. See [role convention](role_conv.md) and [role configuration](role-configuration_conv.md)."
+  },
+  {
+    "file": ".hai/conventions/framework-layout_conv.md",
+    "line": 36,
+    "text": "Reusable source collections are root roles/, skills/ and workflows/. Role folders"
+  },
+  {
+    "file": ".hai/conventions/framework-layout_conv.md",
+    "line": 37,
+    "text": "live directly under roles/; there is no second roles/ level. Installed capabilities"
+  },
+  {
+    "file": ".hai/conventions/framework-layout_conv.md",
+    "line": 38,
+    "text": "are copied separately into .hai_env/roles/ and .hai_env/skills/, and workflow"
+  },
+  {
+    "file": ".hai/conventions/framework-layout_conv.md",
+    "line": 39,
+    "text": "definitions into .hai_env/workflows/. Skills use SKILL.md; roles use ROLE.md."
+  },
+  {
+    "file": ".hai/conventions/instruction-writing_conv.md",
+    "line": 82,
+    "text": "- [Role tools](../tools/roles/README.md): exact supported checks and their limits."
+  },
+  {
+    "file": ".hai/conventions/role-authoring_conv.md",
+    "line": 46,
+    "text": "- [Workspace catalogue](../../.hai_env/roles/catalogue.md) when present \u2014"
+  },
+  {
+    "file": ".hai/conventions/role-authoring_conv.md",
+    "line": 52,
+    "text": "- [Role tools](../tools/roles/README.md) \u2014 validation commands and limits \u2014"
+  },
+  {
+    "file": ".hai/conventions/role-authoring_conv.md",
+    "line": 69,
+    "text": "Author reusable capabilities under root `skills/<name>/SKILL.md` with native name/description frontmatter and free-form task instructions plus only necessary resources. No ROLE headings, empty configuration contract or model metadata is imposed on a skill. Native optional license, compatibility, metadata and allowed-tools remain descriptive under actual host authority. Source roles live directly in `roles/<name>/ROLE.md`; installed counterparts live in `.hai_env/roles/`. Recompute relative paths from actual package depth."
+  },
+  {
+    "file": ".hai/conventions/role-configuration_conv.md",
+    "line": 82,
+    "text": "`.hai_env/config/roles/<role-name>.json` path, independently of runtime origin:"
+  },
+  {
+    "file": ".hai/conventions/role_conv.md",
+    "line": 5,
+    "text": "Optional installed workspace definitions live at `.hai_env/roles/<name>/ROLE.md`. Names match `[a-z][a-z0-9]*(?:-[a-z0-9]+)*`, are at most 64 characters, match their parent directory and are unique case-insensitively. `.hai_env/roles/catalogue.md` contains explicit registrations and exact decoded description copies. Creation or installation does not register a package or grant permission to execute it. Unregistered packages may be inspected and validated as data. Selection requires an authorized task and the host's actual execution capability; a profile or catalogue row does not prove that capability. Core startup and administration do not depend on any optional package."
+  },
+  {
+    "file": ".hai/conventions/role_conv.md",
+    "line": 7,
+    "text": "Source packages under `roles/` are data, not an execution origin. Source maintenance, installed replacement, registration and execution are separate scopes. Preserve external settings and records, review local differences or unknown baselines before replacing a package, and do not infer execution authority from installation."
+  },
+  {
+    "file": ".hai/conventions/role_conv.md",
+    "line": 133,
+    "text": "- [Example capability](../../skills/example-capability/SKILL.md) - reusable method."
+  },
+  {
+    "file": ".hai/conventions/role_conv.md",
+    "line": 247,
+    "text": "Explicit registration is separate from package installation, authoring and execution. Validate the installed definition and its configuration contract, identity, path containment and the exact catalogue description; preserve unrelated entries and stop on conflicts. Synchronizing an existing row does not add membership. The shared role auditor checks format, not semantic equivalence, authorization or runtime availability. See [role tools](../tools/roles/README.md) and [state convention](state_conv.md)."
+  },
+  {
+    "file": ".hai/conventions/skill_conv.md",
+    "line": 5,
+    "text": "Use root `skills/<name>/SKILL.md` for reusable source packages and `.hai_env/skills/<name>/SKILL.md` for independent installed snapshots. Native `name` and `description` frontmatter describe capability and when to use it. Names match the canonical package directory and are at most 64 characters. Preserve native optional license, compatibility, metadata and allowed-tools fields. Metadata values are strings. Supporting resources are optional and justified by continuing reusable purpose."
+  },
+  {
+    "file": ".hai/conventions/skill_conv.md",
+    "line": 15,
+    "text": "Existing packages are not automatically migrated by this principle. The following settings-owner interface remains supported for compatibility pending separately authorized refactoring. Use `skills resolve` directly without a role or model selection. Optional string `metadata.hai-settings-owner` names an existing installed settings owner; resolution validates that owner contract and reads its existing `.hai_env/config/roles/<owner>.json`. No role is adopted, configuration is stored once, and invalid settings block dependent operations. No settings metadata is needed for a settings-free capability."
+  },
+  {
+    "file": ".hai/conventions/state_conv.md",
+    "line": 56,
+    "text": "`.hai_env/config/roles/specification-manager.json`; Git-manager owns its settings"
+  },
+  {
+    "file": ".hai/conventions/state_conv.md",
+    "line": 113,
+    "text": "`.hai_env/roles/catalogue.md` is the fixed authoritative workspace role catalogue and registry, separate from state. Use it for optional workspace extension selection. State has neither an `agents` nor a `roles` property; either property is incompatible registration data, not a fallback. Report and preserve it pending explicitly scoped migration."
+  },
+  {
+    "file": ".hai/conventions/state_conv.md",
+    "line": 125,
+    "text": "Use exactly one table with these three columns. A header-only table is an empty catalogue; surrounding prose is allowed and preserved. Each row registers one unique name, enclosed in backticks, a nonblank short actionable guide, and one definition link. Names and collisions follow the [role convention](role_conv.md). Current-format definition destinations MUST be exactly `<name>/ROLE.md`, relative to `.hai_env/roles/catalogue.md`, and resolve to readable files inside the workspace; reject absolute paths, traversal, queries, fragments, and escaped separators. Reject case-insensitive duplicate names."
+  },
+  {
+    "file": ".hai/conventions/tooling_conv.md",
+    "line": 60,
+    "text": "- Workspace role-owned tools live under `.hai_env/roles/<name>/scripts/`"
+  },
+  {
+    "file": ".hai/conventions/workflow-authoring-format3_conv.md",
+    "line": 3,
+    "text": "Use the shared workflow definition/run conventions as the format authority. Maintain historical format-2 definitions in their existing interpretation; never rewrite pinned historical run bytes. New portable processes use workflow_format 3. Reusable sources live in root workflows/; installed definitions live in .hai_env/workflows/. A definition contains no environment destinations or execution state."
+  },
+  {
+    "file": ".hai/conventions/workflow-authoring-format3_conv.md",
+    "line": 13,
+    "text": "Installation preview must present each location's purpose/contents and request actual human-chosen workspace-relative bases. Installation apply requires all choices. Never invent live values, install by copying a source alone, or treat installation as run start. Config belongs separately in .hai_env/config/workflows/<name>.json. Ordinary reuse/update preserves human-selected locations. Unsafe paths, partial installations or incompatible contracts block without automatic repair. Use isolated labeled test choices when proving two environments."
+  },
+  {
+    "file": ".hai/conventions/workflow-authoring_conv.md",
+    "line": 25,
+    "text": "- [Workflow tools](../tools/workflows/README.md) and [runtime](../tools/runtime/README.md) \u2014 actual validation operations \u2014 required before tool use."
+  },
+  {
+    "file": ".hai/conventions/workflow-authoring_conv.md",
+    "line": 30,
+    "text": "- [Configurable workflow authoring](workflow-authoring-format3_conv.md) - required for format-3 location declarations, per-step execution names, human gates and accepted or historical feedback input bindings. Source definitions live in root `workflows/`; installation creates the distinct `.hai_env/workflows/` snapshot and saves chosen environment locations. Workflows assign roles and results; roles select available skills."
+  },
+  {
+    "file": ".hai/conventions/workflow_conv.md",
+    "line": 6,
+    "text": "`workflows/<name>.md`; installation puts a selected definition directly under"
+  },
+  {
+    "file": ".hai/conventions/workflow_conv.md",
+    "line": 7,
+    "text": "`.hai_env/workflows/<name>.md`. File presence establishes discovery/registration;"
+  },
+  {
+    "file": ".hai/conventions/workflow_conv.md",
+    "line": 131,
+    "text": "Installation uses separate `.hai_env/config/workflows/<name>.json` with format 1,"
+  },
+  {
+    "file": ".hai/conventions/workflow_conv.md",
+    "line": 163,
+    "text": "- [Workflow tools](../tools/workflows/README.md) \u2014 actual API, diagnostics and limits."
+  },
+  {
+    "file": ".hai/procedures/author-role-create-definition.md",
+    "line": 58,
+    "text": "- [Workspace catalogue](../../.hai_env/roles/catalogue.md) when present \u2014"
+  },
+  {
+    "file": ".hai/procedures/author-role-create-definition.md",
+    "line": 64,
+    "text": "- [Role tools](../tools/roles/README.md) \u2014 validation commands and limits \u2014"
+  },
+  {
+    "file": ".hai/procedures/author-role-establish-scope-and-inspect.md",
+    "line": 29,
+    "text": "3. Validate the installed canonical target or explicitly selected `roles/<name>/` source path and resolved containment. Read relevant catalogue entries and immediate folder names under the workspace origin; compare case-insensitive runtime identity and establish registration status. A source counterpart is not a runtime collision and is never executable or registered; record its installed counterpart separately. If the workspace catalogue is absent, record no workspace registrations; If catalogue/identity information is malformed or unreadable, report unknown registration status and continue only independent read-only work."
+  },
+  {
+    "file": ".hai/procedures/author-role-establish-scope-and-inspect.md",
+    "line": 50,
+    "text": "- [Workspace catalogue](../../.hai_env/roles/catalogue.md) when present \u2014"
+  },
+  {
+    "file": ".hai/procedures/author-role-establish-scope-and-inspect.md",
+    "line": 56,
+    "text": "- [Role tools](../tools/roles/README.md) \u2014 validation commands and limits \u2014"
+  },
+  {
+    "file": ".hai/procedures/author-role-update-definition.md",
+    "line": 48,
+    "text": "- [Workspace catalogue](../../.hai_env/roles/catalogue.md) when present \u2014"
+  },
+  {
+    "file": ".hai/procedures/author-role-update-definition.md",
+    "line": 54,
+    "text": "- [Role tools](../tools/roles/README.md) \u2014 validation commands and limits \u2014"
+  },
+  {
+    "file": ".hai/procedures/author-role-validate-or-audit.md",
+    "line": 27,
+    "text": "1. Bound [input:target] and [input:audit_scope] using [input:inspection]. Read the tool README before first use. Select `validate --definition` for a canonical installed target (registered or not), or `audit` for the registered collection/profiles. For a source package, copy the complete package into a disposable `.hai_env/roles/<name>/` layout beside the compatible core and required installed peers, then validate that staged installed path; do not add a third runtime origin or invoke the source definition. Record checks outside the command's coverage for scoped manual review."
+  },
+  {
+    "file": ".hai/procedures/author-role-validate-or-audit.md",
+    "line": 50,
+    "text": "- [Workspace catalogue](../../.hai_env/roles/catalogue.md) when present \u2014"
+  },
+  {
+    "file": ".hai/procedures/author-role-validate-or-audit.md",
+    "line": 56,
+    "text": "- [Role tools](../tools/roles/README.md) \u2014 validation commands and limits \u2014"
+  },
+  {
+    "file": ".hai/procedures/author-workflow-create-workflow.md",
+    "line": 50,
+    "text": "- [Workflow tools](../tools/workflows/README.md) ? parser/validator and limits ? required before checks."
+  },
+  {
+    "file": ".hai/procedures/author-workflow-establish-scope.md",
+    "line": 32,
+    "text": "3. Resolve the exact .hai_env/workflows/<name>.md destination and existing ancestor containment. Check case-insensitive names, regular file types and unrelated definitions without scanning their content unnecessarily."
+  },
+  {
+    "file": ".hai/procedures/author-workflow-establish-scope.md",
+    "line": 48,
+    "text": "- [Workflow tools](../tools/workflows/README.md) ? parser/validator and limits ? required before checks."
+  },
+  {
+    "file": ".hai/procedures/author-workflow-update-workflow.md",
+    "line": 50,
+    "text": "- [Workflow tools](../tools/workflows/README.md) ? parser/validator and limits ? required before checks."
+  },
+  {
+    "file": ".hai/procedures/author-workflow-validate-workflow.md",
+    "line": 50,
+    "text": "- [Workflow tools](../tools/workflows/README.md) ? parser/validator and limits ? required before checks."
+  },
+  {
+    "file": ".hai/procedures/manage-role-definitions.md",
+    "line": 56,
+    "text": "- Maintain explicitly selected golden source packages under `roles/` as data."
+  },
+  {
+    "file": ".hai/procedures/manage-workflow-definitions.md",
+    "line": 44,
+    "text": "- Author and maintain requested single-file definitions in `.hai_env/workflows/`."
+  },
+  {
+    "file": ".hai/procedures/migrate-capabilities.md",
+    "line": 5,
+    "text": "Explicitly flatten the former hai_roles_library/roles source collection and extract reusable methods into skills, while independently preserving installed role customizations and settings. This is an authorized migration after design and compatibility review, never a startup effect. Legacy agent naming uses [roles migrate](migrate-roles.md) first; its historical marker remains unchanged."
+  },
+  {
+    "file": ".hai/procedures/migrate-capabilities.md",
+    "line": 26,
+    "text": "2. Prepare a complete independent candidate workspace in the current Activity allocated work area. Source role/skill targets are roles/<name> and skills/<name>; installed targets are .hai_env/roles/<name> and .hai_env/skills/<name>. Validate source and installed dependencies separately; the installed resolver must never use source fallback. Keep working inventory/evidence in the Activity, rather than reusable packages."
+  },
+  {
+    "file": ".hai/procedures/migrate-capabilities.md",
+    "line": 40,
+    "text": "- [Skill tools](../tools/skills/README.md), [workspace boundary](../conventions/workspace-boundary_conv.md) and [artifact placement](../conventions/artifact-placement_conv.md)."
+  },
+  {
+    "file": ".hai/procedures/migrate-roles.md",
+    "line": 55,
+    "text": "4. Inspect actual changed_files and the migration marker. This legacy naming migration uses .hai_env/roles/, .hai_env/config/roles/, the intermediate hai_roles_library/roles/ bridge and"
+  },
+  {
+    "file": ".hai/procedures/migrate-roles.md",
+    "line": 92,
+    "text": "After this legacy naming bridge completes, explicitly review and run [capability migration](migrate-capabilities.md) to reach flat root roles/ and extracted skills/. Naming migration does not silently extract methods, merge installed customizations or rewrite its historical marker."
+  },
+  {
+    "file": ".hai/start.md",
+    "line": 85,
+    "text": "remain explicit dependencies. Source collections in roles/, skills/ and workflows/"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 36,
+    "text": "        definition = read_definition(root/origin/'roles'/name/'ROLE.md', workspace=root)"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 39,
+    "text": "    path = root/origin/'roles/catalogue.md'"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 71,
+    "text": "            self.assertEqual(result['roles'], [])"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 72,
+    "text": "            self.assertFalse((env/'roles/codex-chronicle-manager').exists())"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 81,
+    "text": "        paths = [ROOT/'README.md', ROOT/'INSTALL.md', ROOT/'.hai/start.md']"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 90,
+    "text": "@unittest.skipUnless((ROOT/'roles').is_dir(), 'repository source-package fixtures unavailable in core-only distribution')"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 98,
+    "text": "        source = ROOT/'roles'"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 100,
+    "text": "        shutil.copytree(source, cls.stage/'roles', ignore=shutil.ignore_patterns('__pycache__'))"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 101,
+    "text": "        shutil.copytree(ROOT/'skills', cls.stage/'skills', ignore=shutil.ignore_patterns('__pycache__'))"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 106,
+    "text": "        for package in sorted((cls.stage/'skills').iterdir()):"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 109,
+    "text": "            installed = runtime_skills.handle('install', cls.stage, {'source': 'skills/' + package.name,"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 113,
+    "text": "        names = sorted(path.name for path in (cls.stage/'roles').iterdir() if path.is_dir())"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 115,
+    "text": "            installed = packages.handle('install', cls.stage, {'source': 'roles/' + name,"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 121,
+    "text": "        for collection in ('roles', 'skills'):"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 132,
+    "text": "        self.assertFalse((self.stage/'roles').exists())"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 133,
+    "text": "        self.assertFalse((self.stage/'skills').exists())"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 136,
+    "text": "        self.assertTrue(set(NAMES).issubset({agent['name'] for agent in result['roles']}))"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 139,
+    "text": "            self.assertTrue(validate(self.stage, f'.hai_env/roles/{name}/ROLE.md')['ok'])"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 140,
+    "text": "        self.assertEqual(snapshot(ROOT/'roles'), self.source_before)"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 158,
+    "text": "            skill = (self.stage/f'.hai_env/roles/{name}/ROLE.md').read_text(encoding='utf-8')"
+  },
+  {
+    "file": ".hai/tools/activities/test_role_migration.py",
+    "line": 161,
+    "text": "        package = self.stage/'.hai_env/roles/software-developer'"
+  },
+  {
+    "file": ".hai/tools/configuration/README.md",
+    "line": 7,
+    "text": "`.hai_env/config/roles/<role-name>.json`."
+  },
+  {
+    "file": ".hai/tools/configuration/README.md",
+    "line": 14,
+    "text": "  --contract .hai_env/roles/git-manager/configuration/contract.json"
+  },
+  {
+    "file": ".hai/tools/configuration/configuration_tools.py",
+    "line": 132,
+    "text": "    target = _safe_path(workspace, f\".hai_env/config/roles/{role}.json\")"
+  },
+  {
+    "file": ".hai/tools/configuration/configuration_tools.py",
+    "line": 151,
+    "text": "                PROFILES, \".hai_env/roles\", \".hai_env/agents\", \"hai_agents_library\", \"hai_roles_library\", \"roles\", \"skills\", \"workflows\", \".hai_env/skills\", \".hai_env/config\", \".hai_env/workflows\","
+  },
+  {
+    "file": ".hai/tools/configuration/configuration_tools.py",
+    "line": 222,
+    "text": "                PROFILES, \".hai_env/roles\", \".hai_env/agents\", \"hai_agents_library\", \"hai_roles_library\", \"roles\", \"skills\", \"workflows\", \".hai_env/skills\", \".hai_env/workflows\", \".hai_env/workflow-runs\", *LEGACY.values()]"
+  },
+  {
+    "file": ".hai/tools/configuration/configuration_tools.py",
+    "line": 251,
+    "text": "    config_relative = f\".hai_env/config/roles/{role}.json\""
+  },
+  {
+    "file": ".hai/tools/configuration/configuration_tools.py",
+    "line": 284,
+    "text": "    config_relative = f\".hai_env/config/roles/{role}.json\""
+  },
+  {
+    "file": ".hai/tools/configuration/configuration_tools.py",
+    "line": 330,
+    "text": "                       if args.contract == f\"{item}/roles/{expected}\"), None)"
+  },
+  {
+    "file": ".hai/tools/configuration/configuration_tools.py",
+    "line": 333,
+    "text": "        package_path = _safe_path(workspace, f\"{origin}/roles/{args.role}\")"
+  },
+  {
+    "file": ".hai/tools/configuration/test_configuration_tools.py",
+    "line": 31,
+    "text": "        self.contract_path = self.root / \".hai_env/roles/git-manager/configuration/contract.json\""
+  },
+  {
+    "file": ".hai/tools/configuration/test_configuration_tools.py",
+    "line": 37,
+    "text": "        return self.root / \".hai_env/config/roles/git-manager.json\""
+  },
+  {
+    "file": ".hai/tools/configuration/test_configuration_tools.py",
+    "line": 102,
+    "text": "        override = self.root / \".hai_env/config/roles/advisor.json\""
+  },
+  {
+    "file": ".hai/tools/configuration/test_configuration_tools.py",
+    "line": 150,
+    "text": "        path = self.root / \".hai_env/roles/specification-manager/configuration/contract.json\""
+  },
+  {
+    "file": ".hai/tools/configuration/test_configuration_tools.py",
+    "line": 158,
+    "text": "        override = self.root / \".hai_env/config/roles/specification-manager.json\""
+  },
+  {
+    "file": ".hai/tools/configuration/test_configuration_tools.py",
+    "line": 246,
+    "text": "                               \"--contract\", \".hai_env/roles/git-manager/configuration/contract.json\"],"
+  },
+  {
+    "file": ".hai/tools/role_state.py",
+    "line": 6,
+    "text": "LEGACY_ROOTS = (\".hai_env/agents\", \".hai_env/config/agents\", \"hai_agents_library\", \".hai/agents\")"
+  },
+  {
+    "file": ".hai/tools/role_state.py",
+    "line": 7,
+    "text": "ROLE_ROOTS = (\".hai_env/roles\", \".hai_env/config/roles\", \"hai_roles_library\", \"roles\")"
+  },
+  {
+    "file": ".hai/tools/role_upgrade.py",
+    "line": 8,
+    "text": "    ('hai_agents_library/agents', 'hai_roles_library/roles'),"
+  },
+  {
+    "file": ".hai/tools/role_upgrade.py",
+    "line": 9,
+    "text": "    ('hai_agents_library', 'hai_roles_library'),"
+  },
+  {
+    "file": ".hai/tools/role_upgrade.py",
+    "line": 13,
+    "text": "    ('../agents/agent_tools', '../roles/role_tools'),"
+  },
+  {
+    "file": ".hai/tools/role_upgrade.py",
+    "line": 41,
+    "text": "        # Package-local entries and canonical HAI references, never skills/x/SKILL.md."
+  },
+  {
+    "file": ".hai/tools/role_upgrade.py",
+    "line": 45,
+    "text": "            canonical_entry = re.fullmatch(r'(?:\\.hai_env/roles|hai_roles_library/roles)/[^/]+/SKILL\\.md', path)"
+  },
+  {
+    "file": ".hai/tools/role_upgrade.py",
+    "line": 52,
+    "text": "        text = re.sub(r'((?:\\.hai_env/roles|hai_roles_library/roles)/[^/\\s)]+/)SKILL\\.md', r'\\1ROLE.md', text)"
+  },
+  {
+    "file": ".hai/tools/role_upgrade.py",
+    "line": 76,
+    "text": "    if relative.startswith('skills/') or '/skills/' in relative or (relative.endswith('/SKILL.md')):"
+  },
+  {
+    "file": ".hai/tools/role_upgrade.py",
+    "line": 92,
+    "text": "            text = text.replace(\"('hai_roles_library','agents')\", \"('hai_roles_library','roles')\").replace(\"('.hai_env','agents')\", \"('.hai_env','roles')\")"
+  },
+  {
+    "file": ".hai/tools/roles/README.md",
+    "line": 44,
+    "text": "python -B .hai/tools/roles/role_tools.py audit"
+  },
+  {
+    "file": ".hai/tools/roles/README.md",
+    "line": 45,
+    "text": "python -B .hai/tools/roles/role_tools.py validate --definition .hai_env/roles/<name>/ROLE.md"
+  },
+  {
+    "file": ".hai/tools/roles/README.md",
+    "line": 46,
+    "text": "python -B .hai/tools/roles/role_tools.py resolve --definition .hai_env/roles/software-developer/ROLE.md --runtime /path/to/runtime.json"
+  },
+  {
+    "file": ".hai/tools/roles/README.md",
+    "line": 47,
+    "text": "python -B .hai/tools/roles/test_role_tools.py"
+  },
+  {
+    "file": ".hai/tools/roles/README.md",
+    "line": 158,
+    "text": "roles/name/ROLE.md layout; pass `workspace` when using an alias."
+  },
+  {
+    "file": ".hai/tools/roles/README.md",
+    "line": 210,
+    "text": "The root `roles/` source collection is not an execution origin. The former `hai_roles_library/roles/` layout is only a legacy migration bridge. Pure `validate` and"
+  },
+  {
+    "file": ".hai/tools/roles/README.md",
+    "line": 212,
+    "text": "`resolve` accepts only `.hai_env/roles/<name>/ROLE.md`. `audit` reads only the"
+  },
+  {
+    "file": ".hai/tools/roles/README.md",
+    "line": 230,
+    "text": "Roles are job descriptions and reference reusable methods with quoted comma-separated metadata `hai-skills` plus a Skills section. Pure root `roles/` inspection validates root `skills/`; installed role inspection uses `.hai_env/skills/` only. `roles skills` returns available installed method paths without selecting a model; missing methods block dependent work. `roles resolve` retains exact host model/effort checks and includes resolved skill paths. A workflow names roles and results; the role selects suitable skills. See [skill tools](../skills/README.md) and [explicit capability migration](../../procedures/migrate-capabilities.md)."
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 570,
+    "text": "    # use without it assumes a canonical resolved origin/roles/name/ROLE.md path."
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 619,
+    "text": "    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"skills\"))"
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 667,
+    "text": "    if not re.fullmatch(r\"\\.hai_env/roles/[^/]+/ROLE\\.md\", definition):"
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 676,
+    "text": "               \"reasoning_effort\": metadata[\"hai-reasoning-effort\"], \"skills\": selected_skills}"
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 702,
+    "text": "        return {\"ok\": False, \"roles\": [], \"profiles\": \"unverified\", \"issues\": context[\"issues\"]}"
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 706,
+    "text": "        relative = f\"{origin}/roles/catalogue.md\""
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 748,
+    "text": "                    path = contained(workspace, f\"{origin}/roles/{name}/ROLE.md\")"
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 754,
+    "text": "                    roles.append({\"name\": name, \"definition\": f\"{origin}/roles/{name}/ROLE.md\"})"
+  },
+  {
+    "file": ".hai/tools/roles/role_tools.py",
+    "line": 770,
+    "text": "    return {\"ok\": not issues, \"roles\": roles, \"profiles\": profile_status, \"issues\": issues}"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_state.py",
+    "line": 30,
+    "text": "        for relative in (\".hai_env/agents\", \".hai_env/config/agents\", \"hai_agents_library\", \".hai/agents\"):"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 21,
+    "text": "        self.definition = \".hai_env/roles/worker/ROLE.md\""
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 27,
+    "text": "        self.write(\".hai_env/roles/catalogue.md\", self.catalogue)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 101,
+    "text": "        self.assertEqual(len(result[\"roles\"]), 1)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 111,
+    "text": "        (self.root / \".hai_env/roles/catalogue.md\").unlink()"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 114,
+    "text": "        self.write(\".hai_env/roles/catalogue.md\", \"not a catalogue\")"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 118,
+    "text": "        self.assertEqual((self.root / \".hai_env/roles/catalogue.md\").read_text(encoding='utf-8'), 'not a catalogue')"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 130,
+    "text": "        procedure = self.write('.hai_env/roles/worker/procedures/inspect.md', '''# Inspect"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 397,
+    "text": "        other = self.write('.hai_env/roles/worker/procedures/other.md', procedure.read_text(encoding='utf-8'))"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 406,
+    "text": "        self.write('.hai_env/roles/worker/concepts/local.md', '# Local\\n\\n## Definition\\nLocal meaning.\\n')"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 447,
+    "text": "                   (self.root / '.hai_env/roles/worker/configuration/contract.json').read_text(encoding='utf-8'))"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 458,
+    "text": "        for origin in (\"hai_roles_library\", \".hai_env\", \"sources\"):"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 461,
+    "text": "                relative = f\"{origin}/roles/worker/ROLE.md\""
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 467,
+    "text": "                    (self.root / '.hai_env/roles/worker/configuration/contract.json').read_bytes())"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 473,
+    "text": "                self.assertFalse((isolated / origin / \"roles/catalogue.md\").exists())"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 474,
+    "text": "                if origin == \"hai_roles_library\":"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 529,
+    "text": "        self.definition = \".hai_env/roles/leader/ROLE.md\""
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 537,
+    "text": "        self.write(\".hai_env/roles/worker/knowledge.md\", \"preserve legacy\")"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 544,
+    "text": "        other = self.write(\"sources/roles/other/ROLE.md\","
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 557,
+    "text": "                         \"other/ROLE.md\", \".hai_env/roles/worker/../worker/ROLE.md\","
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 558,
+    "text": "                         \".hai\\\\roles\\\\worker\\\\ROLE.md\", \".hai_env/roles/worker/ROLE.md#part\","
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 559,
+    "text": "                         \".hai_env/roles/worker/ROLE.md?query\", \".hai/roles/worker\"):"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 617,
+    "text": "        self.write(\".hai_env/roles/worker/skills/helper/SKILL.md\", \"A genuine nested skill\")"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 619,
+    "text": "        self.write(\".hai_env/roles/worker/SKILL.md\", \"Legacy package entry\")"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 622,
+    "text": "            read_definition(self.root / \".hai_env/roles/worker/SKILL.md\", self.root)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 634,
+    "text": "        self.write('.hai_env/roles/catalogue.md', self.empty_catalogue())"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 638,
+    "text": "        self.assertEqual(output, {'ok': True, 'roles': [], 'profiles': 'valid', 'issues': []})"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 643,
+    "text": "        self.assertTrue((self.root / '.hai_env/roles/catalogue.md').exists())"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 650,
+    "text": "                self.write('.hai_env/roles/catalogue.md', content)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 656,
+    "text": "        self.write('.hai_env/roles/catalogue.md', self.catalogue + self.catalogue.splitlines()[-1] + '\\n')"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 660,
+    "text": "        self.assertEqual(output['roles'], [])"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 691,
+    "text": "        self.assertEqual(output['roles'], [{'name': 'worker', 'definition': self.definition}])"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 726,
+    "text": "        for relative in (\"sources/roles/missing/ROLE.md\", \"../outside/ROLE.md\", \"other/ROLE.md\"):"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 762,
+    "text": "        self.assertEqual(len(json.loads(result.stdout)[\"roles\"]), 1)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 904,
+    "text": "                self.assertEqual(output.get('roles', []), [])"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 952,
+    "text": "        self.definition = \".hai_env/roles/leader/ROLE.md\""
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 964,
+    "text": "        self.write(\".hai_env/roles/catalogue.md\", self.catalogue.replace('Call to inspect', 'Call to write'))"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 968,
+    "text": "        self.write('sources/roles/catalogue.md', self.catalogue)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 971,
+    "text": "        self.assertEqual(len(result['roles']), 1)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 972,
+    "text": "        self.write('.hai_env/roles/catalogue.md', self.catalogue + self.catalogue.splitlines()[-1] + '\\n')"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 973,
+    "text": "        self.assertFalse(audit(self.root)['roles'])"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 977,
+    "text": "        path = self.write(\".hai_env/roles/catalogue.md\", text)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 980,
+    "text": "        self.assertEqual(len(result[\"roles\"]), 1)"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 985,
+    "text": "        self.write(\".hai_env/roles/worker/knowledge.md\", \"# Old worker\\n\")"
+  },
+  {
+    "file": ".hai/tools/roles/test_role_tools.py",
+    "line": 1007,
+    "text": "        self.write(\".hai_env/roles/catalogue.md\", '\\n'.join(self.catalogue.splitlines()[:4]) + '\\n')"
+  },
+  {
+    "file": ".hai/tools/run_tests.py",
+    "line": 11,
+    "text": "SUITES = ('runtime/tests', 'startup', 'activities', 'chronicles', 'configuration', 'roles', 'skills', 'workflows/tests')"
+  },
+  {
+    "file": ".hai/tools/runtime/README.md",
+    "line": 52,
+    "text": "skills; `skills resolve` takes name and resolves only .hai_env/skills/<name>/SKILL.md."
+  },
+  {
+    "file": ".hai/tools/runtime/README.md",
+    "line": 71,
+    "text": "See the [skill tools](../skills/README.md) for supported validation and boundaries."
+  },
+  {
+    "file": ".hai/tools/runtime/README.md",
+    "line": 100,
+    "text": "For installation, first preview `{\"definition\":\"workflows/software-development.md\"}`."
+  },
+  {
+    "file": ".hai/tools/runtime/README.md",
+    "line": 105,
+    "text": "  \"definition\": \"workflows/software-development.md\","
+  },
+  {
+    "file": ".hai/tools/runtime/README.md",
+    "line": 116,
+    "text": "Settings live once in `.hai_env/config/workflows/<name>.json`, separate from the"
+  },
+  {
+    "file": ".hai/tools/runtime/activities.py",
+    "line": 14,
+    "text": "for _part in ('roles', 'startup', 'activities'):"
+  },
+  {
+    "file": ".hai/tools/runtime/activities.py",
+    "line": 44,
+    "text": "    for reserved in ('.hai', '.git', '.hai_env/roles', '.hai_env/skills', 'roles', 'skills', 'workflows', '.hai_env/agents', 'hai_roles_library', 'hai_agents_library', '.hai_env/config', '.hai_env/workflows',"
+  },
+  {
+    "file": ".hai/tools/runtime/capability_migration.py",
+    "line": 9,
+    "text": "ROOTS=('roles','skills','.hai_env/roles','.hai_env/skills')"
+  },
+  {
+    "file": ".hai/tools/runtime/capability_migration.py",
+    "line": 30,
+    "text": "        entry='ROLE.md' if '/roles/' in '/'+relative+'/' else 'SKILL.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/capability_migration.py",
+    "line": 41,
+    "text": "        expected={p.name for p in checked_path(root,'hai_roles_library/roles',allow_missing=False).iterdir() if p.is_dir()}"
+  },
+  {
+    "file": ".hai/tools/runtime/capability_migration.py",
+    "line": 42,
+    "text": "        if any('roles/'+name not in selected for name in expected): raise SafetyError('Every legacy role needs an explicit candidate before container retirement')"
+  },
+  {
+    "file": ".hai/tools/runtime/capability_migration.py",
+    "line": 43,
+    "text": "        snapshots['hai_roles_library']=_manifest(root,'hai_roles_library')"
+  },
+  {
+    "file": ".hai/tools/runtime/capability_migration.py",
+    "line": 57,
+    "text": "            result={'preview_sha256':digest,'plan':plan,'recovery':'Stop affected writers; preserve new/partial destinations separately. Explicitly restore each original directory from backup_base/originals to its recorded destination using no-replace moves; remove only reviewed newly-created destinations. Restore hai_roles_library from its original backup if retired. Keep marker and evidence until an owner reconciles state; never retry or merge automatically.'}"
+  },
+  {
+    "file": ".hai/tools/runtime/capability_migration.py",
+    "line": 70,
+    "text": "                entry='ROLE.md' if '/roles/' in '/'+relative+'/' else 'SKILL.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/cli.py",
+    "line": 11,
+    "text": "          'packages':'packages', 'roles':'packages', 'recording':'recording', 'host':'host',"
+  },
+  {
+    "file": ".hai/tools/runtime/cli.py",
+    "line": 12,
+    "text": "          'workflow':'workflows', 'skills':'skills'}"
+  },
+  {
+    "file": ".hai/tools/runtime/cli.py",
+    "line": 54,
+    "text": "        if (args.apply and args.group in ('activity', 'activities', 'packages', 'roles', 'skills')"
+  },
+  {
+    "file": ".hai/tools/runtime/cli.py",
+    "line": 55,
+    "text": "                and not (args.group in ('packages', 'roles', 'skills') and args.action == 'migrate')):"
+  },
+  {
+    "file": ".hai/tools/runtime/environment.py",
+    "line": 8,
+    "text": "sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'roles'))"
+  },
+  {
+    "file": ".hai/tools/runtime/environment.py",
+    "line": 131,
+    "text": "        contract_rel = f'.hai_env/roles/{role}/configuration/contract.json'"
+  },
+  {
+    "file": ".hai/tools/runtime/environment.py",
+    "line": 133,
+    "text": "            definition_path=checked_path(workspace,f'.hai_env/roles/{role}/ROLE.md',allow_missing=False)"
+  },
+  {
+    "file": ".hai/tools/runtime/environment.py",
+    "line": 138,
+    "text": "            existing=checked_path(workspace,f'.hai_env/config/roles/{role}.json')"
+  },
+  {
+    "file": ".hai/tools/runtime/environment.py",
+    "line": 153,
+    "text": "        rel = f'.hai_env/config/roles/{role}.json'; target = checked_path(workspace, rel); before = fingerprint(target)"
+  },
+  {
+    "file": ".hai/tools/runtime/layout_migration.py",
+    "line": 53,
+    "text": "    for relative in ('.hai/templates/state.json', '.hai_env/config/roles/specification-manager.json',"
+  },
+  {
+    "file": ".hai/tools/runtime/package_content.py",
+    "line": 59,
+    "text": "                    if len(parts)>=2 and parts[0] in ('roles','skills'):mapped=root/'.hai_env'/relative"
+  },
+  {
+    "file": ".hai/tools/runtime/package_content.py",
+    "line": 82,
+    "text": "                    if relative.startswith(('.hai_env/roles/','.hai_env/skills/')):unresolved.append({'file':name,'target':relative,'status':'unavailable peer/owner dependency; no source fallback'})"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 13,
+    "text": "sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'roles'))"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 36,
+    "text": "        fields = {'validate':{'definition'}, 'audit':set(), 'resolve':{'definition','runtime'}, 'skills':{'definition'}, 'install':{'source','name','replace','register','reviewed_differences','provenance'}, 'register':{'name','provenance'}}"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 49,
+    "text": "            if op == 'skills':"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 51,
+    "text": "                if not isinstance(definition,str) or not re.fullmatch(r'\\.hai_env/roles/[^/]+/ROLE\\.md',definition): raise ValueError('Select an installed role definition')"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 53,
+    "text": "                sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'skills'))"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 55,
+    "text": "                return envelope(operation,result={'role':fields['name'],'skills':skill_tools.dependencies(root,root/definition,fields),'authority':'unchanged'})"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 62,
+    "text": "            dest = '.hai_env/roles/' + name; target = checked_path(root,dest)"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 67,
+    "text": "                cat = '.hai_env/roles/catalogue.md'; path = checked_path(root,cat); fp = fingerprint(path)"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 101,
+    "text": "            sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'skills'))"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 104,
+    "text": "            saved=checked_path(root,f'.hai_env/config/roles/{name}.json')"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 127,
+    "text": "            stage = '.hai_env/roles/.hai-stage-' + uuid.uuid4().hex; container = checked_path(root,stage); container.mkdir(); changed.append(stage)"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 141,
+    "text": "                backup = '.hai_env/roles/.hai-backup-' + uuid.uuid4().hex"
+  },
+  {
+    "file": ".hai/tools/runtime/packages.py",
+    "line": 146,
+    "text": "                cat = checked_path(root, '.hai_env/roles/catalogue.md')"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 20,
+    "text": "         ('hai_agents_library', 'hai_roles_library'))"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 99,
+    "text": "        parts[0] = 'roles'"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 101,
+    "text": "        index = 1 if library and parts[0] in ('agents', 'roles') else 0"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 109,
+    "text": "        if len(parts) == depth and (not library or parts[0] == 'roles'):"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 144,
+    "text": "            package_root = checked_path(root, source + ('/agents' if source == 'hai_agents_library' else ''))"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 156,
+    "text": "        library = source == 'hai_agents_library'"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 189,
+    "text": "                    text = re.sub(r'(?<![\\w/])agents/', 'roles/', text)"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 193,
+    "text": "                    text = re.sub(r'(?<=\\()agents/([^/()]+)/SKILL\\.md(?=\\))', r'roles/\\1/ROLE.md', text)"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 220,
+    "text": "    for origin in ('.hai_env/roles', 'hai_roles_library/roles', 'roles'):"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 231,
+    "text": "        if path.startswith('.hai_env/workflows/'):"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 245,
+    "text": "    migrated = {item['source'].rsplit('/', 1)[1] for item in plan['moves'] if item['source'].startswith('.hai_env/workflows/')}"
+  },
+  {
+    "file": ".hai/tools/runtime/role_migration.py",
+    "line": 325,
+    "text": "            if source.startswith('.hai_env/workflows/'):"
+  },
+  {
+    "file": ".hai/tools/runtime/skills.py",
+    "line": 8,
+    "text": "sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'skills'))"
+  },
+  {
+    "file": ".hai/tools/runtime/skills.py",
+    "line": 35,
+    "text": "        src=checked_path(root,source,allow_missing=False); dest=f'.hai_env/skills/{name}'; target=checked_path(root,dest)"
+  },
+  {
+    "file": ".hai/tools/runtime/skills.py",
+    "line": 53,
+    "text": "            stage=f'.hai_env/skills/.hai-stage-{uuid.uuid4().hex}'; container=checked_path(root,stage); container.mkdir(); changed.append(stage)"
+  },
+  {
+    "file": ".hai/tools/runtime/skills.py",
+    "line": 63,
+    "text": "                backup=f'.hai_env/skills/.hai-backup-{uuid.uuid4().hex}'; rename_exclusive(target,checked_path(root,backup)); changed.append(backup); result['backup']=backup"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 14,
+    "text": "SOURCE = fixtures.TOOLS.parents[1] / 'workflows/software-development.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 33,
+    "text": "        self.source = self.root / 'workflows/software-development.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 40,
+    "text": "            shutil.copytree(self.root / '.hai_env/roles/worker', package)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 46,
+    "text": "        (self.root / '.hai_env/roles/catalogue.md').write_text('# Roles\\n\\n| Role | Selection guide | Definition |\\n| --- | --- | --- |\\n' + ''.join('| `' + role + '` | Perform fixture work. | [ROLE.md](' + role + '/ROLE.md) |\\n' for role in roles), encoding='utf-8')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 51,
+    "text": "        return workflows.handle('install', self.root, {'definition': 'workflows/software-development.md',"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 56,
+    "text": "            'definition': '.hai_env/workflows/software-development.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 102,
+    "text": "        installed = self.root / '.hai_env/workflows/software-development.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 104,
+    "text": "        missing = workflows.handle('start', self.root, {'activity_id': self.aid, 'definition': '.hai_env/workflows/software-development.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 126,
+    "text": "        for unsafe in ('../escape', '/absolute', 'C:/absolute', '.hai_env/config', '.git/x', 'roles/x', 'skills/x', 'workflows/x', '.hai', '.hai_env/roles', '.hai_env/skills', '.hai_env/workflows', 'delivery/../x', 'NUL', '.hai_env/activities'):"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 137,
+    "text": "        installed = self.root / '.hai_env/workflows/software-development.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 159,
+    "text": "        installed = self.root / '.hai_env/workflows/software-development.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 167,
+    "text": "        backups = self.root / '.hai_env/config/workflows/history/software-development'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 174,
+    "text": "        self.assertEqual(installed.read_bytes(), current['.hai_env/workflows/software-development.md'])"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 320,
+    "text": "                    'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_configurable_workflows.py",
+    "line": 338,
+    "text": "        self.assertNotIn('skill', raw.lower().split('## steps',1)[1].replace('skills', ''))"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+    "line": 29,
+    "text": "        self.write('.hai_env/config/roles/custom.json', b'{\"keep\":\"untouched\"}\\n')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+    "line": 60,
+    "text": "        self.assertEqual((self.root / '.hai_env/config/roles/custom.json').read_bytes(), before['.hai_env/config/roles/custom.json'])"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+    "line": 92,
+    "text": "        owner = TOOLS.parent.parent / '.hai_env/roles/specification-manager'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+    "line": 99,
+    "text": "        self.write('.hai_env/roles/specification-manager/ROLE.md', b'Installed fixture')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+    "line": 100,
+    "text": "        self.write('.hai_env/roles/catalogue.md', b'| Role | Selection guide | Definition |\\n| --- | --- | --- |\\n| `specification-manager` | Manage specifications. | [ROLE.md](specification-manager/ROLE.md) |\\n')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+    "line": 102,
+    "text": "        self.write('.hai_env/roles/specification-manager/configuration/contract.json', source_contract.read_bytes())"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_layout_migration.py",
+    "line": 109,
+    "text": "        owner = json.loads((self.root / '.hai_env/config/roles/specification-manager.json').read_bytes())"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 135,
+    "text": "        self.write('.hai_env/roles/local/ROLE.md', 'collision')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 141,
+    "text": "        self.package('hai_agents_library/agents/worker', 'worker')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 144,
+    "text": "        self.write('hai_agents_library/README.md', '[Worker](agents/worker/SKILL.md)\\nEnvironment-manager installs packages through Leader.\\n')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 150,
+    "text": "        native = self.write('.agents/skills/real/SKILL.md', 'actual skill SKILL.md\\n')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 151,
+    "text": "        skill = self.write('.hai_env/agents/worker/skills/real/SKILL.md', 'A genuine skill keeps SKILL.md and agent package data.\\n')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 163,
+    "text": "        self.assertEqual((self.root / '.hai_env/roles/worker/skills/real/SKILL.md').read_bytes(), original_skill)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 164,
+    "text": "        self.assertEqual((self.root / '.hai_env/roles/worker/resources/real/SKILL.md').read_bytes(), nested_bytes[0])"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 165,
+    "text": "        self.assertEqual((self.root / '.hai_env/roles/worker/resources/real/procedures/test.md').read_bytes(), nested_bytes[1])"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 166,
+    "text": "        self.assertEqual((self.root / '.hai_env/config/roles/role-definition-manager.json').read_bytes(), raw_settings)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 168,
+    "text": "        installed = (self.root / '.hai_env/roles/worker/ROLE.md').read_text()"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 169,
+    "text": "        source = (self.root / 'hai_roles_library/roles/worker/ROLE.md').read_text()"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 172,
+    "text": "        library_readme = (self.root / 'hai_roles_library/README.md').read_text()"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 173,
+    "text": "        self.assertIn('[Worker](roles/worker/ROLE.md)', library_readme)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 175,
+    "text": "        self.assertTrue((self.root / '.hai_env/roles/local-advisor/ROLE.md').is_file())"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 176,
+    "text": "        contract = read_json(self.root / '.hai_env/roles/role-definition-manager/configuration/contract.json')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 214,
+    "text": "                candidates = list((self.root / self.base / 'work/coordinator/role-migration').glob('*/candidate/.hai_env/roles/worker/ROLE.md'))"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 285,
+    "text": "                              '--request-stdin', '--apply', 'roles', 'migrate'], input=json.dumps(request),"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 294,
+    "text": "        self.assertEqual(read_json(self.root / '.hai_env/config/roles/specification-manager.json')['settings'],"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 301,
+    "text": "        self.write('.hai_env/workflows/sample.md', legacy)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 306,
+    "text": "        converted = (self.root / '.hai_env/workflows/sample.md').read_bytes()"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 329,
+    "text": "               b'[Genuine](.hai_env/agents/peer/skills/example/SKILL.md#usage)')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 333,
+    "text": "        self.assertIn(b'[Canonical](.hai_env/roles/peer/ROLE.md#scope)', converted)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 334,
+    "text": "        self.assertIn(b'[Genuine](.hai_env/roles/peer/skills/example/SKILL.md#usage)', converted)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 335,
+    "text": "        guards = b\"protected = {('hai_agents_library','agents'),('.hai_env','agents')}\""
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 337,
+    "text": "                         b\"protected = {('hai_roles_library','roles'),('.hai_env','roles')}\")"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 340,
+    "text": "        raw = b'[Own](../SKILL.md) [Real](../skills/x/SKILL.md) [SKILL.md](../../skills/x/SKILL.md)'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 343,
+    "text": "        self.assertIn(b'[Real](../skills/x/SKILL.md)', converted)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 344,
+    "text": "        self.assertIn(b'[SKILL.md](../../skills/x/SKILL.md)', converted)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_role_migration.py",
+    "line": 347,
+    "text": "        self.assertEqual(transform('skills/x/SKILL.md', raw), raw)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+    "line": 36,
+    "text": "            'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+    "line": 61,
+    "text": "        for path in ('roles', 'roles/activities', 'skills', 'workflows', '.hai_env/skills', '.hai_env/skills/activities', '.hai_env/roles', '.hai_env/roles/activities', 'hai_roles_library', 'hai_agents_library', '.hai_env/workflows', '.hai_env/workflows/activities',"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+    "line": 70,
+    "text": "            'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+    "line": 110,
+    "text": "            'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_integration.py",
+    "line": 126,
+    "text": "                'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, apply)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 102,
+    "text": "        package = self.root / '.hai_env/roles/worker'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 147,
+    "text": "        (self.root / '.hai_env/roles/catalogue.md').write_text('# Roles\\n\\n| Role | Selection guide | Definition |\\n| --- | --- | --- |\\n| `worker` | Perform fixture work. | [ROLE.md](worker/ROLE.md) |\\n', encoding='utf-8')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 165,
+    "text": "            'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, apply)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 308,
+    "text": "                    'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, apply)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 398,
+    "text": "        role = self.root / '.hai_env/roles/worker/ROLE.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 414,
+    "text": "        role = self.root / '.hai_env/roles/worker/ROLE.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 421,
+    "text": "        self.start(); missing = self.root / '.hai_env/roles/catalogue.md'; original = missing.read_bytes(); missing.unlink()"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 425,
+    "text": "        contract = self.root / '.hai_env/roles/worker/configuration/contract.json'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 442,
+    "text": "        r = workflows.handle('start', self.root, {'activity_id': self.aid, 'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 453,
+    "text": "                'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 460,
+    "text": "                    'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 468,
+    "text": "            'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 488,
+    "text": "                'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflow_runs.py",
+    "line": 508,
+    "text": "            'definition': '.hai_env/workflows/sample.md', 'provenance': self.prov}, True)"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflows.py",
+    "line": 93,
+    "text": "        optional_package = source_repo / 'roles/software-developer'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflows.py",
+    "line": 97,
+    "text": "        source = self.root / 'roles/software-developer'"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflows.py",
+    "line": 101,
+    "text": "        shutil.copytree(source_repo / 'skills', self.root / 'skills')"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflows.py",
+    "line": 103,
+    "text": "        req = {'source':'roles/software-developer', 'name':'software-developer', 'provenance':self.prov, 'register':True}"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflows.py",
+    "line": 106,
+    "text": "        self.assertTrue((self.root / '.hai_env/roles/software-developer/ROLE.md').is_file())"
+  },
+  {
+    "file": ".hai/tools/runtime/tests/test_workflows.py",
+    "line": 119,
+    "text": "        self.assertFalse(r['ok']); self.assertFalse((self.root/'.hai_env/roles/pkg').exists())"
+  },
+  {
+    "file": ".hai/tools/runtime/workflow_config.py",
+    "line": 10,
+    "text": "    return '.hai_env/config/workflows/' + name + '.json'"
+  },
+  {
+    "file": ".hai/tools/runtime/workflow_config.py",
+    "line": 26,
+    "text": "    protected = ('.hai', '.hai_env/config', '.hai_env/roles', '.hai_env/skills', '.hai_env/workflows', '.hai_env/workflow-runs', '.hai_env/.runtime.lock', '.git', '.aws', '.codex', '.agents', 'roles', 'skills', 'workflows', 'hai_roles_library', 'hai_agents_library', store_path(root))"
+  },
+  {
+    "file": ".hai/tools/runtime/workflow_config.py",
+    "line": 71,
+    "text": "        destination = '.hai_env/workflows/' + parsed['name'] + '.md'"
+  },
+  {
+    "file": ".hai/tools/runtime/workflow_config.py",
+    "line": 123,
+    "text": "                backup = '.hai_env/config/workflows/history/' + parsed['name'] + '/' + str(uuid.uuid4())"
+  },
+  {
+    "file": ".hai/tools/runtime/workflows.py",
+    "line": 74,
+    "text": "    if not isinstance(relative, str) or (registered and not re.fullmatch(r'\\.hai_env/workflows/[a-z][a-z0-9-]*\\.md', relative)):"
+  },
+  {
+    "file": ".hai/tools/runtime/workflows.py",
+    "line": 265,
+    "text": "    registrations = [row for row in catalogue['roles'] if row['name'] == role_name]"
+  },
+  {
+    "file": ".hai/tools/runtime/workflows.py",
+    "line": 276,
+    "text": "        if checked_path(root, '.hai_env/config/roles/' + role_name + '.json').exists():"
+  },
+  {
+    "file": ".hai/tools/skills/README.md",
+    "line": 14,
+    "text": "`validate` accepts `{\"definition\":\"skills/crete-design-package/SKILL.md\"}` and performs source inspection without initialized environment state. The conservative safe YAML reader supports standard mappings/scalars, reports unsupported syntax without guessing and does not execute a skill. Installed `list` takes no request; `resolve` accepts `{\"name\":\"crete-design-package\"}`. The source example is not assumed installed: resolve requires an explicitly installed snapshot. Runtime resolution uses only `.hai_env/skills/`, rejects linked/aliased packages and never falls back to root source skills. All three operations are read-only and reject --apply."
+  },
+  {
+    "file": ".hai/tools/skills/README.md",
+    "line": 16,
+    "text": "Roles declare quoted comma-separated `metadata.hai-skills`. `roles skills` accepts `{\"definition\":\".hai_env/roles/software-developer/ROLE.md\"}` and returns installed method paths independently of optional model resolution. Pure role validation checks source references against root skills and installed references against installed skills. Missing skills are dependencies rather than successful assignments. Workflow definitions name roles and expected results; roles choose suitable skills."
+  },
+  {
+    "file": ".hai/tools/skills/README.md",
+    "line": 18,
+    "text": "A skill may declare string `metadata.hai-settings-owner`. Direct resolution validates that existing installed owner contract and reads its single `.hai_env/config/roles/<owner>.json`. Invalid or missing owner contracts block dependency resolution; saved settings are not copied and the owner role is not selected. No configuration metadata is required for a settings-free skill."
+  },
+  {
+    "file": ".hai/tools/skills/README.md",
+    "line": 26,
+    "text": "Source-to-installed installation rebases actual Markdown links outside fenced examples and matching-backtick inline code spans from root roles/skills to canonical installed peers and core owners. Own resources and fenced examples keep their meaning; raw source bytes remain unchanged. Preview differences compare relocated candidate bytes, and staging verifies those transformed hashes. Missing recognized peer/owner links are reported as unavailable dependencies, without source fallback or a readiness claim; this permits skill-first installation followed by the settings-owner role. Missing own-package/core references or unsafe paths block the affected installation. Staged role procedures are validated using the final logical destination rather than the extra staging-folder depth."
+  },
+  {
+    "file": ".hai/tools/skills/skill_tools.py",
+    "line": 8,
+    "text": "sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'roles'))"
+  },
+  {
+    "file": ".hai/tools/skills/skill_tools.py",
+    "line": 81,
+    "text": "            definition = f'.hai_env/skills/{child.name}/SKILL.md'"
+  },
+  {
+    "file": ".hai/tools/skills/skill_tools.py",
+    "line": 93,
+    "text": "        issues.append({'code': 'skills', 'path': '.hai_env/skills', 'message': str(exc)})"
+  },
+  {
+    "file": ".hai/tools/skills/skill_tools.py",
+    "line": 95,
+    "text": "            'skills': entries, 'issues': issues}"
+  },
+  {
+    "file": ".hai/tools/skills/skill_tools.py",
+    "line": 110,
+    "text": "    base='.hai_env/skills' if installed else 'skills'"
+  },
+  {
+    "file": ".hai/tools/skills/skill_tools.py",
+    "line": 125,
+    "text": "    definition=f'.hai_env/skills/{name}/SKILL.md'; checked=validate(root,definition)"
+  },
+  {
+    "file": ".hai/tools/skills/skill_tools.py",
+    "line": 134,
+    "text": "        contract_path=checked_path(root,f'.hai_env/roles/{owner}/configuration/contract.json',allow_missing=False)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 6,
+    "text": "sys.path.insert(0,str(TOOLS));sys.path.insert(0,str(TOOLS/'roles'));sys.path.insert(0,str(TOOLS/'skills'))"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 18,
+    "text": "    def skill(self,base='skills',name='inspect',metadata=''):"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 27,
+    "text": "        return {'activity_id':result['result']['state']['activity_id'],'candidate_workspace':candidate,'packages':['skills/inspect'],'writers_ended':True,'provenance':self.prov}"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 31,
+    "text": "        self.write('.hai_env/skills/inspect/scripts/never.py',\"raise RuntimeError('must not execute')\\n\")"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 34,
+    "text": "        self.assertEqual(result['status'],'available');entry=result['skills'][0]"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 36,
+    "text": "        self.assertEqual(entry['definition'],'.hai_env/skills/inspect/SKILL.md')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 41,
+    "text": "        self.write('.hai_env/skills/broken/SKILL.md','not frontmatter\\n'+'x'*100000)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 44,
+    "text": "        self.assertTrue(first['result']['skills'][1]['ok'])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 45,
+    "text": "        self.assertEqual(first['result']['skills'][1]['description'],'Inspect supplied material.')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 47,
+    "text": "        self.assertEqual(skill_tools.inventory(self.root)['skills'][1]['description'],'Updated capability.')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 48,
+    "text": "        (self.root/'.hai_env/skills/inspect/SKILL.md').unlink()"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 49,
+    "text": "        self.assertFalse(any(e.get('ok') for e in skill_tools.inventory(self.root)['skills']))"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 56,
+    "text": "        self.assertTrue(result['ok'],result);self.assertEqual(result['result']['skill_context']['skills'],[])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 66,
+    "text": "        self.write('.hai_env/skills/broken/SKILL.md','---\\nname: broken\\n---\\n')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 70,
+    "text": "        self.assertTrue(packages.handle('skills',self.root,{'definition':'.hai_env/roles/worker/ROLE.md'},False)['ok'])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 71,
+    "text": "        (self.root/'.hai_env/skills/inspect/SKILL.md').unlink()"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 72,
+    "text": "        self.assertFalse(packages.handle('skills',self.root,{'definition':'.hai_env/roles/worker/ROLE.md'},False)['ok'])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 76,
+    "text": "        self.write('.hai_env/skills/large/SKILL.md','---\\nname: large\\ndescription: Text.\\n'+'x'*70000)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 88,
+    "text": "            self.role(name);result=packages.handle('skills',self.root,{'definition':f'.hai_env/roles/{name}/ROLE.md'},False);self.assertTrue(result['ok'],result);self.assertEqual(result['result']['skills'][0]['definition'],'.hai_env/skills/inspect/SKILL.md')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 91,
+    "text": "        self.role('worker',base='roles');self.assertFalse(role_tools.validate(self.root,'roles/worker/ROLE.md')['ok'])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 92,
+    "text": "        self.assertFalse(packages.handle('install',self.root,{'source':'roles/worker','name':'worker','provenance':self.prov},False)['ok']);self.assertFalse((self.root/'.hai_env/roles/worker').exists())"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 94,
+    "text": "        self.skill();self.role('worker',base='roles');self.assertTrue(role_tools.validate(self.root,'roles/worker/ROLE.md')['ok'])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 96,
+    "text": "        self.skill('.hai_env/skills',metadata='metadata:\\n  hai-settings-owner: \"service-owner\"\\n');self.write('.hai_env/roles/service-owner/configuration/contract.json',json.dumps({'contract_format_version':3,'role':'service-owner','current_config_format_version':1,'supported_config_format_versions':[1],'settings':{'enabled':{'type':'boolean','default':False}}}))"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 97,
+    "text": "        p=self.write('.hai_env/config/roles/service-owner.json',json.dumps({'config_format_version':1,'settings':{'enabled':True},'custom':'retain'}));before=p.read_bytes();result=skills.handle('resolve',self.root,{'name':'inspect'},False);self.assertTrue(result['ok'],result);self.assertTrue(result['result']['configuration']['settings']['enabled']);self.assertEqual(p.read_bytes(),before);self.assertFalse((p.parent/'inspect.json').exists())"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 100,
+    "text": "        request['expected_preview']=preview['result']['preview_sha256'];result=skills.handle('migrate',self.root,request,True);self.assertTrue(result['ok'],result);backup=self.root/result['result']['backup_base']/'originals/skills/inspect/SKILL.md';self.assertEqual(backup.read_bytes(),original);self.assertEqual(p.read_bytes(),candidate);self.assertFalse(skills.handle('migrate',self.root,request,True)['ok'])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 113,
+    "text": "        self.assertFalse(packages.handle('skills',self.root,{'definition':'.hai_env/roles/worker/ROLE.md'},False)['ok'])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 119,
+    "text": "        request={'source':'skills/inspect','name':'inspect','replace':True,'reviewed_differences':[],'provenance':self.prov}"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 127,
+    "text": "        for operation,request in [('resolve',{'name':'inspect'}),('list',{}),('validate',{'definition':'.hai_env/skills/inspect/SKILL.md'})]:self.assertFalse(skills.handle(operation,self.root,request,True)['ok'])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 130,
+    "text": "        try:(base/'inspect').symlink_to(self.root/'skills/inspect',target_is_directory=True)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 141,
+    "text": "        self.assertTrue(result['ok'],result);self.assertFalse((self.root/'skills').exists())"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 146,
+    "text": "        self.assertTrue(result['ok'],result);self.assertEqual(result['status'],'not_required');self.assertFalse((self.root/'.hai_env/config/roles/worker.json').exists())"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 148,
+    "text": "        self.skill('.hai_env/skills');self.role('worker',base='incoming');saved=self.write('.hai_env/config/roles/worker.json',json.dumps({'config_format_version':1,'settings':{'chosen':True}}));before=saved.read_bytes()"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 150,
+    "text": "        self.assertFalse(result['ok'],result);self.assertEqual(saved.read_bytes(),before);self.assertFalse((self.root/'.hai_env/roles/worker').exists())"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 157,
+    "text": "        shutil.copytree(repo/'roles',self.root/'roles');shutil.copytree(repo/'skills',self.root/'skills')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 158,
+    "text": "        self.write('.hai_env/roles/catalogue.md','# Role catalogue\\n\\n| Role | Selection guide | Definition |\\n| --- | --- | --- |\\n')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 159,
+    "text": "        original={p.relative_to(self.root).as_posix():p.read_bytes() for directory in ['roles','skills'] for p in (self.root/directory).rglob('*') if p.is_file()}"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 160,
+    "text": "        for source in sorted((self.root/'skills').iterdir()):"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 165,
+    "text": "        for source in sorted((self.root/'roles').iterdir()):"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 169,
+    "text": "        self.assertEqual(original,{p.relative_to(self.root).as_posix():p.read_bytes() for directory in ['roles','skills'] for p in (self.root/directory).rglob('*') if p.is_file()})"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 170,
+    "text": "        (self.root/'roles').rename(self.root/'retained-source-roles');(self.root/'skills').rename(self.root/'retained-source-skills')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 181,
+    "text": "            definition=f'.hai_env/roles/{role}/ROLE.md'"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 182,
+    "text": "            result=packages.handle('skills',self.root,{'definition':definition},False)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 183,
+    "text": "            self.assertTrue(result['ok'],result);self.assertEqual(result['result']['skills'],[])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 185,
+    "text": "            definition=f'.hai_env/roles/{role}/ROLE.md'"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 186,
+    "text": "            result=packages.handle('skills',self.root,{'definition':definition},False)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 188,
+    "text": "            self.assertEqual(result['result']['skills'],[])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 191,
+    "text": "        example=(self.root/'.hai_env/roles/backlog-manager/conventions/backlog_conv.md').read_text(encoding='utf-8');self.assertIn('[BL-0001](new/BL-0001.md)',example)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 196,
+    "text": "        shutil.copytree(repo/'roles/backlog-manager',self.root/'roles/backlog-manager')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 197,
+    "text": "        result=packages.handle('install',self.root,{'source':'roles/backlog-manager','name':'backlog-manager','provenance':self.prov},True)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 199,
+    "text": "        (self.root/'roles').rename(self.root/'retained-source-roles')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 200,
+    "text": "        self.assertFalse((self.root/'roles').exists());self.assertFalse((self.root/'skills').exists())"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 202,
+    "text": "        definition='.hai_env/roles/backlog-manager/ROLE.md'"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 204,
+    "text": "        dependencies=packages.handle('skills',self.root,{'definition':definition},False)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 205,
+    "text": "        self.assertTrue(dependencies['ok'],dependencies);self.assertEqual(dependencies['result']['skills'],[])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 211,
+    "text": "                self.write('.hai_env/config/roles/backlog-manager.json',json.dumps({'config_format_version':1,'settings':{'location':location}}))"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 213,
+    "text": "            checked=subprocess.run([sys.executable,'-B',str(self.root/'.hai_env/roles/backlog-manager/scripts/audit_backlog.py'),'--workspace',str(self.root)],capture_output=True,text=True,timeout=30)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 222,
+    "text": "        shutil.copytree(repo/'roles/specification-manager',self.root/'roles/specification-manager')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 223,
+    "text": "        source=self.root/'roles/specification-manager'"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 225,
+    "text": "        result=packages.handle('install',self.root,{'source':'roles/specification-manager','name':'specification-manager','provenance':self.prov},True)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 227,
+    "text": "        (self.root/'roles').rename(self.root/'retained-source-roles')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 228,
+    "text": "        self.assertFalse((self.root/'roles').exists());self.assertFalse((self.root/'skills').exists())"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 230,
+    "text": "        definition='.hai_env/roles/specification-manager/ROLE.md'"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 232,
+    "text": "        dependencies=packages.handle('skills',self.root,{'definition':definition},False)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 233,
+    "text": "        self.assertTrue(dependencies['ok'],dependencies);self.assertEqual(dependencies['result']['skills'],[])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 235,
+    "text": "        installed=self.root/'.hai_env/roles/specification-manager'"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 238,
+    "text": "            if settings:self.write('.hai_env/config/roles/specification-manager.json',json.dumps(settings))"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 249,
+    "text": "        shutil.copytree(repo/'roles',self.root/'roles')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 250,
+    "text": "        names=[p.name for p in (self.root/'roles').iterdir() if p.is_dir()]"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 252,
+    "text": "            result=packages.handle('install',self.root,{'source':'roles/'+name,'name':name,'provenance':self.prov},True)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 254,
+    "text": "        (self.root/'roles').rename(self.root/'retained-source-roles')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 255,
+    "text": "        self.assertFalse((self.root/'skills').exists());self.assertFalse((self.root/'.hai_env/skills').exists())"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 257,
+    "text": "            definition='.hai_env/roles/'+name+'/ROLE.md'"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 259,
+    "text": "            result=packages.handle('skills',self.root,{'definition':definition},False)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 260,
+    "text": "            self.assertTrue(result['ok'],result);self.assertEqual(result['result']['skills'],[])"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 274,
+    "text": "        self.assertEqual(before,{p.relative_to(self.root/'.hai_env/skills/portable-document'):p.read_bytes() for p in (self.root/'.hai_env/skills/portable-document').rglob('*') if p.is_file()})"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 278,
+    "text": "        self.environment_only();self.skill('.hai_env/skills');p=self.role('worker',base='roles')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 281,
+    "text": "        self.write('roles/worker/ROLE.md',text)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 282,
+    "text": "        self.write('roles/worker/procedures/inspect.md','# Inspect\\n\\n## Description\\n\\nInspect the supplied artifact.\\n\\n## Inputs\\n\\n| Input | Meaning | Requirement | Source | If absent |\\n| --- | --- | --- | --- | --- |\\n| [input:artifact] | Explicit artifact | Mandatory | Caller | Report dependency. |\\n\\n## Prerequisites\\n\\nAuthorized [input:artifact].\\n\\n## Rules\\n\\nNone.\\n\\n## Steps\\n\\n1. Read [input:artifact] and return [output:finding].\\n\\n## Outputs\\n\\n| Output | Meaning | Completion criteria |\\n| --- | --- | --- |\\n| [output:finding] | Actual finding | Input inspected. |\\n\\n## References\\n\\n- [term:example] -> [Example](../../../.hai/concepts/example.md)\\n')"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 283,
+    "text": "        request={'source':'roles/worker','name':'worker','provenance':self.prov}"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 285,
+    "text": "        installed=self.root/'.hai_env/roles/worker/procedures/inspect.md';self.assertIn('../../../../.hai/concepts/example.md',installed.read_text(encoding='utf-8'))"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 293,
+    "text": "        result=skills.handle('install',self.root,{'source':'skills/inspect','name':'inspect','provenance':self.prov},True)"
+  },
+  {
+    "file": ".hai/tools/skills/test_skill_tools.py",
+    "line": 294,
+    "text": "        self.assertTrue(result['ok'],result);installed=(self.root/'.hai_env/skills/inspect/SKILL.md').read_text(encoding='utf-8')"
+  },
+  {
+    "file": ".hai/tools/startup/README.md",
+    "line": 5,
+    "text": "with `../roles/role_tools.py`. It never installs a runtime, writes files,"
+  },
+  {
+    "file": ".hai/tools/startup/README.md",
+    "line": 113,
+    "text": "`.hai_env/config/roles/specification-manager.json`, changes only the core state"
+  },
+  {
+    "file": ".hai/tools/startup/migrate_specification_configuration.py",
+    "line": 13,
+    "text": "sys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"roles\"))"
+  },
+  {
+    "file": ".hai/tools/startup/migrate_specification_configuration.py",
+    "line": 22,
+    "text": "CONTRACT = f\".hai_env/roles/{SPEC_ROLE}/configuration/contract.json\""
+  },
+  {
+    "file": ".hai/tools/startup/migrate_specification_configuration.py",
+    "line": 76,
+    "text": "    package = startup.safe_path(workspace, f\".hai_env/roles/{SPEC_ROLE}\")"
+  },
+  {
+    "file": ".hai/tools/startup/migrate_specification_configuration.py",
+    "line": 116,
+    "text": "    owner_contract, contract_bytes = _contract(workspace, startup_result[\"roles\"])"
+  },
+  {
+    "file": ".hai/tools/startup/migrate_specification_configuration.py",
+    "line": 144,
+    "text": "            \"configuration\": _write_status(\".hai_env/config/roles/specification-manager.json\", False),"
+  },
+  {
+    "file": ".hai/tools/startup/migrate_specification_configuration.py",
+    "line": 176,
+    "text": "        plan[\"configuration\"] = _write_status(\".hai_env/config/roles/specification-manager.json\", target.exists())"
+  },
+  {
+    "file": ".hai/tools/startup/migrate_specification_configuration.py",
+    "line": 178,
+    "text": "            workspace, \".hai_env/config/roles/specification-manager.json\", kind=\"file\")"
+  },
+  {
+    "file": ".hai/tools/startup/migrate_specification_configuration.py",
+    "line": 201,
+    "text": "                or _ensure_unaliased(workspace, \".hai_env/config/roles/specification-manager.json\","
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 17,
+    "text": "sys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"roles\"))"
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 146,
+    "text": "            or \"agents\" in state or \"roles\" in state or \"requests\" in state or \"current_request\" in state or \"current_activity\" in state"
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 160,
+    "text": "    reserved = [\".hai\", \".git\", STATE, \".hai_env/roles\", \".hai_env/agents\", \"hai_agents_library\", \"hai_roles_library\", \"roles\", \"skills\", \"workflows\", \".hai_env/skills\","
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 218,
+    "text": "    relative = f\"{origin}/roles/catalogue.md\""
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 273,
+    "text": "                definition = f\"{origin}/roles/{name}/ROLE.md\""
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 276,
+    "text": "                legacy = safe_path(workspace, f\"{origin}/roles/{name}/knowledge.md\")"
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 279,
+    "text": "                legacy_entry = safe_path(workspace, f\"{origin}/roles/{name}/SKILL.md\")"
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 295,
+    "text": "    result = {\"status\": \"unavailable\", \"path\": \".hai_env/config/roles/specification-manager.json\","
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 302,
+    "text": "    contract_relative = \".hai_env/roles/specification-manager/configuration/contract.json\""
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 332,
+    "text": "              \"roles\": [], \"catalogues\": {},"
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 402,
+    "text": "    result[\"roles\"].extend(local[\"entries\"])"
+  },
+  {
+    "file": ".hai/tools/startup/startup_check.py",
+    "line": 408,
+    "text": "        specification = specification_configuration(workspace, result[\"roles\"])"
+  },
+  {
+    "file": ".hai/tools/startup/startup_context.py",
+    "line": 16,
+    "text": "sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'skills'))"
+  },
+  {
+    "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+    "line": 31,
+    "text": "        self.write(\".hai/roles/leader/ROLE.md\", \"Unparsed leader fixture.\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+    "line": 33,
+    "text": "        self.write(\".hai_env/roles/specification-manager/ROLE.md\", \"Unparsed installed fixture.\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+    "line": 60,
+    "text": "        self.write(f\"{origin}/roles/catalogue.md\", \"\\n\".join(rows) + \"\\n\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+    "line": 90,
+    "text": "        configuration = json.loads((self.root / \".hai_env/config/roles/specification-manager.json\").read_text(encoding='utf-8'))"
+  },
+  {
+    "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+    "line": 102,
+    "text": "        target = self.root / \".hai_env/config/roles/specification-manager.json\""
+  },
+  {
+    "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+    "line": 128,
+    "text": "        self.assertTrue((self.root / \".hai_env/config/roles/specification-manager.json\").exists())"
+  },
+  {
+    "file": ".hai/tools/startup/test_migrate_specification_configuration.py",
+    "line": 143,
+    "text": "        self.assertFalse((self.root / \".hai_env/config/roles/specification-manager.json\").exists())"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 46,
+    "text": "        return self.write(f\"{origin}/roles/catalogue.md\", newline.join(rows) + newline)"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 53,
+    "text": "        self.write(\".hai_env/roles/specification-manager/ROLE.md\", \"Not parsed during startup.\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 61,
+    "text": "        self.write(\".hai_env/roles/specification-manager/configuration/contract.json\", json.dumps(contract))"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 65,
+    "text": "            self.write(\".hai_env/config/roles/specification-manager.json\", json.dumps({"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 89,
+    "text": "        self.assertEqual([a[\"name\"] for a in result[\"roles\"]], [])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 121,
+    "text": "        self.assertFalse((self.root / \".hai/roles/git-manager\").exists())"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 122,
+    "text": "        self.assertFalse((self.root / \".hai_env/roles/git-manager\").exists())"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 165,
+    "text": "        self.write('.hai_env/roles/git-manager/ROLE.md', 'Not parsed during startup.')"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 167,
+    "text": "        self.assertEqual([role['name'] for role in before['roles']], [])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 172,
+    "text": "        entry = next(role for role in result['roles'] if role['name'] == 'git-manager')"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 174,
+    "text": "        self.assertEqual(entry['definition'], '.hai_env/roles/git-manager/ROLE.md')"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 213,
+    "text": "        self.write(\".hai_env/roles/specification-manager/SKILL.md\", \"Legacy entry\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 217,
+    "text": "        self.assertEqual(result[\"roles\"], [])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 228,
+    "text": "        self.assertEqual(result[\"roles\"], [])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 252,
+    "text": "                 {**self.state, \"compatible_version\": 1}, {**self.state, \"roles\": {}},"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 266,
+    "text": "        self.write(\".hai/roles/environment-manager/contract.json\","
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 324,
+    "text": "                         \".hai_env/roles/x\", \"CON\", \"data. \"):"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 363,
+    "text": "        self.assertEqual(result[\"roles\"], [])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 547,
+    "text": "        self.write(\".hai_env/roles/good/ROLE.md\", \"No YAML loaded\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 554,
+    "text": "        self.assertEqual([a[\"name\"] for a in result[\"roles\"]], [\"good\"])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 555,
+    "text": "        self.assertEqual(result[\"roles\"][0][\"selection_guide\"], \"Call: A & B | C \\\\ D.\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 559,
+    "text": "        self.write(\".hai_env/roles/good/ROLE.md\", \"content\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 563,
+    "text": "        self.assertEqual([a[\"name\"] for a in result[\"roles\"]], [])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 567,
+    "text": "        self.write(\".hai_env/roles/good/ROLE.md\", \"content\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 572,
+    "text": "        self.assertEqual([a[\"name\"] for a in result[\"roles\"]], [\"good\"])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 579,
+    "text": "        self.write(\".hai/roles/catalogue.md\", \"malformed\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 593,
+    "text": "        self.write(\".hai_env/roles/catalogue.md\", \"malformed\")"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 598,
+    "text": "        self.assertFalse(result[\"roles\"])"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 694,
+    "text": "            self.make_link(\".hai_env/roles/escape/ROLE.md\", target)"
+  },
+  {
+    "file": ".hai/tools/startup/test_startup_check.py",
+    "line": 697,
+    "text": "            self.assertEqual([a[\"name\"] for a in result[\"roles\"]], [])"
+  },
+  {
+    "file": ".hai/tools/workflows/README.md",
+    "line": 76,
+    "text": "and checkpoint-bound host attestations. Reusable source workflows/ stays separate"
+  },
+  {
+    "file": ".hai/tools/workflows/README.md",
+    "line": 77,
+    "text": "from installed .hai_env/workflows/ and config/workflows settings. See the shared"
+  },
+  {
+    "file": ".hai/tools/workflows/README.md",
+    "line": 87,
+    "text": "<absolute-python> -B .hai/tools/run_tests.py --workspace . --work-dir <Activity-owned-test-work> --suite workflows/tests"
+  }
+]

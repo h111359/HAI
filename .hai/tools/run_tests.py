@@ -48,7 +48,7 @@ def main():
     work.mkdir(parents=True, exist_ok=True)
     temporary = checked_path(root, args.work_dir + '/tmp')
     temporary.mkdir(exist_ok=True)
-    env = dict(os.environ, TMP=str(temporary), TEMP=str(temporary), TMPDIR=str(temporary), PYTHONDONTWRITEBYTECODE='1')
+    env = dict(os.environ, TMP=str(temporary), TEMP=str(temporary), TMPDIR=str(temporary), PYTHONDONTWRITEBYTECODE='1', HAI_TEST_TMP=str(temporary))
     tools = Path(__file__).resolve().parent
     failed = False
     for suite in args.suite or SUITES:

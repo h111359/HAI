@@ -1,6 +1,6 @@
 # Author configurable workflows
 
-Use the shared workflow definition/run conventions as the format authority. Maintain historical format-2 definitions in their existing interpretation; never rewrite pinned historical run bytes. New portable processes use workflow_format 3. Reusable sources live in root workflows/; installed definitions live in .hai_env/workflows/. A definition contains no environment destinations or execution state.
+Use the shared workflow definition/run conventions as the format authority. Maintain historical format-2 definitions in their existing interpretation; never rewrite pinned historical run bytes. New portable processes use workflow_format 3. Reusable sources are optional explicitly selected definitions; installed definitions live in .hai_env/workflows/. A definition contains no environment destinations or execution state.
 
 Before authoring, establish actual process authority, responsible roles, expected outcomes and artifact ownership. Steps name roles and expected results; the role chooses suitable available skills. Do not prescribe a workflow skill binding or duplicate skill methods. Missing capability is a dependency, not success.
 

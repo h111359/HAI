@@ -22,7 +22,7 @@ Valid compatible core state, readable fixed instructions, the sole current Activ
 
 ## Steps
 
-1. Inventory every existing role capability and file. Assign reusable methods/resources to coherent skills and retain responsibility, conduct, decision limits and handoffs in roles. Keep actual settings-owner contracts with their role and omit unnecessary empty contracts. Preserve native existing skills unchanged. Adapt links/imports for flat root roles versus installed package depth.
+1. Inventory every existing role capability and file. Assign reusable methods/resources to coherent skills and retain responsibility, conduct, decision limits and handoffs in roles. Keep actual settings-owner contracts with their role and omit unnecessary empty contracts. Preserve native existing skills unchanged. Adapt links/imports for the explicitly supplied source and installed contexts.
 2. Prepare a complete independent candidate workspace in the current Activity allocated work area. Source role/skill targets are roles/<name> and skills/<name>; installed targets are .hai_env/roles/<name> and .hai_env/skills/<name>. Validate source and installed dependencies separately; the installed resolver must never use source fallback. Keep working inventory/evidence in the Activity, rather than reusable packages.
 3. Preview `skills migrate` without --apply. Its JSON request contains `activity_id`, `candidate_workspace`, a distinct `packages` list of the exact package target paths, optional Boolean `retire_legacy_source`, `writers_ended: true`, and actual `provenance` source/reason. Candidate_workspace must be under the current Activity work area. Targets are restricted to canonical immediate packages in the four allowed roots; aliases, traversal, unsafe parents and unfinished workflow executions block preview. With retire_legacy_source every legacy role needs an explicit flat candidate.
 4. Review the returned plan and `preview_sha256`. It binds full candidate and destination manifests, chosen role settings and workflow-state dependencies. Review source/installed variants independently; installation does not grant authority or start work.
@@ -42,3 +42,15 @@ A reviewed complete migration has flat source roles, reusable native skills, ind
 ## Scope of the legacy conversion
 
 This versioned migration preserves its historical conversion behavior. It is not a requirement to extract every role method into a skill. New authoring and separately authorized refactoring follow the current [ownership rules](../conventions/role-authoring_conv.md#ownership-and-extraction-checks); do not rerun a migration to impose a thin-role design.
+
+## Deployment boundary
+
+This historical conversion is not a normal installation prerequisite. Never
+search for external source libraries. Default role naming migration handles only
+internal legacy roots. Historical external naming conversion requires the caller
+to select legacy_source: "hai_agents_library" explicitly. Capability retirement
+requires legacy_source: "hai_roles_library" explicitly. Source package destinations
+are explicit migration inputs, not required consumer layout. Preserve old markers
+and backup mappings without reinterpreting historical results. Current ordinary
+authoring uses installed definitions or caller-selected sources; a new workspace
+requires no source collection.

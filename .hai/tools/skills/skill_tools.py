@@ -106,8 +106,7 @@ def names(fields):
 
 def dependencies(workspace, role_path, fields):
     root=Path(workspace).resolve(strict=True); path=Path(role_path)
-    installed=path.is_relative_to(root/'.hai_env/roles')
-    base='.hai_env/skills' if installed else 'skills'
+    base='.hai_env/skills'  # Source inspection never infers a workspace library.
     result=[]
     for name in names(fields):
         definition=f'{base}/{name}/SKILL.md'; checked=validate(root,definition)

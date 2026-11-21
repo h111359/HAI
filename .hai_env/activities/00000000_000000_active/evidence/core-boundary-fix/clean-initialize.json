@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "status": "applied",
+  "result": {
+    "planned_files": [
+      ".hai_env/config/state.json",
+      ".hai_env/config/agent_instructions.md"
+    ]
+  },
+  "changed_files": [
+    ".hai_env/",
+    ".hai_env/config/",
+    ".hai_env/config/state.json",
+    ".hai_env/config/agent_instructions.md"
+  ],
+  "issues": [],
+  "operation": "environment initialize"
+}

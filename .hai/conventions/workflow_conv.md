@@ -2,8 +2,7 @@
 
 ## Identity and structure
 
-Reusable source definitions are UTF-8 Markdown files directly under root
-`workflows/<name>.md`; installation puts a selected definition directly under
+Reusable source definitions are explicitly selected UTF-8 Markdown files; installation puts a selected definition directly under
 `.hai_env/workflows/<name>.md`. File presence establishes discovery/registration;
 the host MUST validate before execution. No catalogue or recursive includes exist.
 Names use lowercase letters/digits separated by single hyphens, start with a letter
