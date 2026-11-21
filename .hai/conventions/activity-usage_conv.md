@@ -2,27 +2,26 @@
 
 ## Purpose and files
 
-A layout-2 Activity's `system/usage.md` is its readable token/credit snapshot; `system/usage.json` is the
-managed source/checkpoint record behind it. Both are optional until the first
-update, and both move with the Activity on archival. Core state format is unchanged.
-
-The runtime updates these files on `activity usage-update` and automatically before
-an applied `activity close`. `activity usage-read` reads the retained snapshot,
+A layout-2 Activity's `system/usage.json` is the managed usage checkpoint.
+The runtime initializes it when the Activity is created. It refreshes usage
+after applied recording bind or synchronization, on `activity usage-update`,
+and before an applied `activity close`. The checkpoint moves with the Activity
+on archival. `activity usage-read` reads the retained snapshot,
 including archived Activities, without refreshing or creating files. Closed
 Activities reject ordinary updates so live sources cannot silently charge later
 work to a finished Activity.
 
-These files are runtime-managed, not free-form notes. Existing malformed state,
-an edited report, or a report without its checkpoint is preserved and reported for
-explicit resolution. No implicit adoption, repair or rollback occurs. Usage format 2 contains tokens and
-credits only. Unreleased format-1 checkpoints with null monetary fields remain
-readable and are written as format 2 on the next applied update; non-null legacy
-monetary data requires explicit preservation before replacement.
-Notes and audit explanations belong in the Activity's ordinary supporting files.
+Usage format 3 contains tokens and credits. Formats 1 and 2 remain readable
+and are written as format 3 on the next applied update. Non-null legacy monetary
+data requires explicit preservation before replacement. Existing malformed JSON
+requires explicit resolution. Existing Markdown reports are historical files.
+Generate any new human-readable report separately from the checkpoint.
 
 ## Explicit source attribution
 
-The host assigns every relevant session explicitly. A binding contains `path`,
+The host assigns every relevant session explicitly. Usage reuses authorized
+layout-2 recording bindings. The host can also supply usage-specific ranges
+through `activity usage-update`. A binding contains `path`,
 `session_id`, inclusive `start_position` and optional inclusive `end_position`.
 Positions are physical zero-based JSONL record positions; omitted/null end means
 read the latest complete saved source during each update. A canonical regular
@@ -79,8 +78,13 @@ Remaining credit balances and rate-limit percentages are never subtracted or
 presented as Activity spend. Subscription allowance consumption is not inferred
 from API pricing or credit rates.
 
-An optional `pricing` snapshot contains a `rates` model map, nonblank `source` and
-UTC `captured_at`. Each model declares these nonnegative decimal-string rates:
+At Activity creation the runtime attempts to capture the published Standard-speed
+Codex credit rates for configured model IDs. Missing profiles, unavailable
+network access and unrecognized rates leave prices unavailable without blocking
+creation. A host with independently verified rates can supply `pricing` to
+`activity create` or `activity usage-update`. A pricing snapshot contains a
+`rates` model map, nonblank `source` and UTC `captured_at`. Each model declares
+these nonnegative decimal-string rates:
 
 - `input_credits_per_million`
 - `cached_input_credits_per_million`
@@ -88,8 +92,9 @@ UTC `captured_at`. Each model declares these nonnegative decimal-string rates:
 
 The credit equivalent uses `(input - cached) × input_rate + cached × cached_rate
 + output × output_rate`, divided by one million, per observed model. Reasoning is
-already included in output. Estimates require current observations and rates for
-every observed model. Arithmetic uses decimal values, not binary floating point.
+already included in output. With current observations, each priced model gets a
+credit estimate. A total requires rates for every observed model. Arithmetic uses
+decimal values.
 
 Money estimates, currency conversion and monetary configuration are outside scope.
 Omitting pricing retains its previous snapshot; explicit `pricing: null` clears it.
@@ -108,8 +113,8 @@ convention does not freeze a current rate card as a framework default.
 ## Update, closure and partial results
 
 An applied update holds the shared runtime lock, validates the current stable
-Activity, checks existing checkpoint/report identities, reads assigned sources and
-optimistically writes checkpoint then Markdown with readback. Preview performs
+Activity, reads assigned sources and writes the JSON checkpoint with an optimistic
+identity check and readback. Preview performs
 the calculation but writes nothing. Concurrent changes and partial persistence
 return changed paths without rollback or automatic retry.
 
@@ -136,5 +141,5 @@ lifecycle writes. Exact-source chronicle verification remains a separate obligat
 - [Invocation working folders](agent-invocation_conv.md) — real host evidence and writers.
 - [Recording evidence](recording-evidence_conv.md) — independent closure-source proof.
 
-Layout-1 reports retain their original root paths. The shared Activity layout resolver
+Layout-1 checkpoints retain their original root paths. The shared Activity layout resolver
 selects physical storage; reads do not migrate records or reset observed counters.

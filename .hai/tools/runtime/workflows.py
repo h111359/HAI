@@ -451,7 +451,9 @@ def handle(operation, workspace, request, apply):
                     _slot(root, aid, None)
                     bindings, questions = bind(root, context['path'], base, parsed, request.get('paths', {}), store_path(root))
                     if questions:
-                        return envelope(operation, 'needs_input', {'questions': questions, 'definition': parsed['name']})
+                        return envelope(operation, 'needs_input', {'questions': questions, 'definition': parsed['name'],
+                            'user_notice': {'action_owner': 'user',
+                                'message': 'I need the file locations below before I can start.'}})
                 inputs = {}
                 for name, row in parsed['inputs'].items():
                     if inventory and bindings[name].get('available') is False:

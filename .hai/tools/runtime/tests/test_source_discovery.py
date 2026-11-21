@@ -18,7 +18,7 @@ OTHER = 'ae9f1b34-0a77-4eae-bdbf-00d035c57d4c'
 
 
 class SourceDiscoveryTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self, *, layout_version=1):
         self.temp = tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
         self.home = self.root / 'codex'
@@ -38,7 +38,7 @@ class SourceDiscoveryTests(unittest.TestCase):
                       'features': {'chronicles': {'enabled': True, 'record_every_prompts': 5}}}
         self.save_state()
         self.prov = {'source': 'fixture explicit enabled-current-session policy', 'reason': 'test registration'}
-        created = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
+        created = activities.handle('create', self.root, {'layout_version': layout_version, 'initial_input': '', 'provenance': self.prov}, True)
         self.assertTrue(created['ok'], created)
         self.ident = created['result']['state']['activity_id']; self.base = self.root / created['result']['path']
 
@@ -299,6 +299,37 @@ class SourceDiscoveryTests(unittest.TestCase):
         self.assertIn('Verified reviewer outcome', segments)
         self.assertNotIn('environment_context', segments)
         self.assertNotIn('Native assignment;', segments)
+
+
+class SessionRetryTests(unittest.TestCase):
+    setup_fixture = SourceDiscoveryTests.setUp
+    record = SourceDiscoveryTests.record
+    message = SourceDiscoveryTests.message
+    save = SourceDiscoveryTests.save
+    save_state = SourceDiscoveryTests.save_state
+    call = SourceDiscoveryTests.call
+
+    def setUp(self):
+        self.setup_fixture(layout_version=2)
+
+    def test_later_sync_discovers_a_log_that_was_initially_unavailable(self):
+        request = {'activity_id': self.ident, 'provenance': self.prov}
+        self.source.unlink()
+        first = self.call('synchronize', request, True)
+        self.assertTrue(first['ok'], first)
+        self.assertEqual(first['result']['current_session']['status'], 'unavailable')
+        self.assertEqual(first['result']['current_session']['user_notice']['action_owner'], 'host')
+        self.assertIn('next turn', first['result']['current_session']['user_notice']['message'])
+        self.save()
+        second = self.call('synchronize', request, True)
+        self.assertTrue(second['ok'], second)
+        self.assertEqual(second['result']['current_session']['status'], 'needs_boundary')
+        self.assertEqual(second['result']['source_count'], 0)
+        bound = self.call('bind', {**request, 'start_position': 1}, True)
+        self.assertTrue(bound['ok'], bound)
+        with mock.patch.object(sources, 'resolve', side_effect=AssertionError('Already bound')):
+            last = self.call('synchronize', request, True)
+        self.assertEqual(last['result']['current_session']['status'], 'bound')
 
 
 if __name__ == '__main__':

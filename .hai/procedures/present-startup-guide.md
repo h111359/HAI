@@ -15,6 +15,10 @@ same interaction for startup, repeat Help and selections from the displayed menu
 
 ## Prerequisites
 
+Use the [user communication convention](../conventions/user-communication_conv.md).
+Translate runtime states into what the user can do now. Keep menu command names
+available for selection and explain each choice in everyday language.
+
 The host has applied the safe fixed mandatory instructions and higher-priority
 session instructions before dependent work. Independent read-only diagnosis and
 reporting of missing prerequisites remain possible under `.hai/start.md`.

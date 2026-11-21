@@ -1,5 +1,9 @@
 # Startup
 
+Apply the [user communication convention](conventions/user-communication_conv.md)
+to every user-facing message throughout HAI work, including startup and
+administration.
+
 Apply the [workspace write boundary](conventions/workspace-boundary_conv.md)
 throughout HAI work, including startup and administration. All host, agent and
 tool writes stay inside the validated current workspace unless the user explicitly
@@ -35,7 +39,7 @@ Interpret the user's request, existing authority and the observed context. Resum
 
 Before optional role work, apply the shared [role execution and delegation policy](conventions/role_conv.md#role-execution-and-delegation) to choose direct execution or a separate sub-agent; core startup and administration require no built-in role or model profile. Before each new spawn, obtain an applied [invocation folder allocation](conventions/agent-invocation_conv.md), supply it in the first assignment and record the actual host handle; retain it for same-instance follow-ups. Verify relevant writers have ended before closure. Supply assigned agents with the Activity ID and [chat operations](conventions/activity-chat_conv.md) for shared read/append communication. Do not infer background continuation or available integrations. Recording remains governed by validated settings and applicable instructions; report pending work and do not claim coverage without evidence. See [runtime commands](tools/runtime/README.md).
 
-Organize substantive work under a valid current Activity, creating one through the runtime when authorized meaningful work starts and none exists. Do not close an Activity without an instruction permitting closure. Register known Activity-attributed usage sources when available; [usage records](conventions/activity-usage_conv.md) refresh on request and automatically before closure, keeping missing charges explicit. Preserve source provenance and record only actual decisions, work and check results; never invent approvals, artifacts, or successful checks. Use only the work needed for the user's objective, without forcing a sequence of optional extensions.
+Organize substantive work under a valid current Activity, creating one through the runtime when authorized meaningful work starts and none exists. Do not close an Activity without an instruction permitting closure. The runtime initializes [usage JSON](conventions/activity-usage_conv.md) and attempts to capture model rates at Activity creation. It refreshes usage from assigned recording sources on synchronization, on request and before closure. Register additional Activity-attributed usage sources when available. Preserve source provenance and record only actual decisions, work and check results; never invent approvals, artifacts, or successful checks. Use only the work needed for the user's objective, without forcing a sequence of optional extensions.
 
 For an explicit workflow selection or run-control request, follow
 the layout-specific artifact rules below and
@@ -66,6 +70,8 @@ disposable paths after collecting outputs. Never delete allocation manifests or
 unexplained evidence. Runtime owns canonical operational and workflow records.
 
 Conversation recording is always enabled. Apply the [conversation recording contract](conventions/chronicles_conv.md): capture every human message in typed chat before dependent work; run `recording synchronize --apply` at every turn and before commits/closure; use `recording verify` to check every assigned source for missing saved messages. Applied chat-post also reconciles registered sources. Startup checks are read-only and report missing messages; the host must perform the indicated synchronization. Source availability/format warnings do not turn recording off or suppress recognized messages. Never claim an undelivered reply was captured; without a real delivery hook, collect the saved final reply at the next interaction.
+
+On each turn, inspect the synchronization result for the current session. When it reports `needs_boundary`, follow [Establish a conversation source](procedures/establish-recording-source.md) and bind the session once the Activity boundary is verified. Synchronization retries discovery on later turns when the log is unavailable.
 
 When an existing Activity has legacy transcripts, preview and apply `recording migrate` before unified synchronization. Preserve exact predecessor evidence and the existing chat prefix. Use only explicitly assigned source ranges; never search unrelated conversations or infer Activity boundaries. `system/chat.jsonl` owns all conversation text; `system/recording.json` owns bookkeeping, with predecessors under `history/recording/`.
 

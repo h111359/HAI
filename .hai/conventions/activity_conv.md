@@ -20,7 +20,6 @@ paths and duplicate Activity identities require explicit resolution.
   system/state.json                 Identity, lifecycle and phase metadata
   system/log.md                     Append-only work and decision history
   system/chat.jsonl                 Persistent typed conversation
-  system/usage.md                   Readable usage summary, when available
   system/usage.json                 Usage bindings and checkpoint
   system/recording.json             Always-enabled source reconciliation state
   workflow-runs/<run-id>/            Optional run records and declared outputs

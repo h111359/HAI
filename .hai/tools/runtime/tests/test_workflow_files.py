@@ -133,6 +133,8 @@ class WorkflowFileTests(unittest.TestCase):
         missing = self.start()
         self.assertEqual(missing['status'], 'needs_input')
         self.assertEqual([row['file'] for row in missing['result']['questions']], ['proposal'])
+        self.assertEqual(missing['result']['user_notice']['action_owner'], 'user')
+        self.assertEqual(missing['result']['questions'][0]['prompt'], 'Where is the proposal file saved?')
         self.assertEqual(missing['changed_files'], [])
         self.assertFalse(self.start({'proposal': 'proposal.md', 'optional': 'proposal.md'})['ok'])
         self.assertFalse(self.start({'proposal': 'proposal.md', 'report': 'activity:system/state.json'})['ok'])

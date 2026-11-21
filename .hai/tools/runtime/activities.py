@@ -132,6 +132,7 @@ def handle(operation, workspace, request, apply):
         fields['migrate-layout'] = {'activity_id', 'summary', 'allow_closed', 'provenance'}
         fields['work-cleanup'] = {'activity_id', 'paths', 'writers_ended', 'evidence_retained', 'provenance'}
         fields['invocation-allocate'] = {'activity_id', 'role', 'provenance'}
+        fields['create'].add('pricing')
         fields['usage-read'] = {'activity_id'}
         fields['usage-update'] = {'activity_id', 'sources', 'pricing', 'reported_spend', 'provenance'}
         if not isinstance(request,dict) or (op in fields and set(request) - fields[op]): raise ValueError('Unknown or invalid request fields')
@@ -176,6 +177,8 @@ def handle(operation, workspace, request, apply):
                         request['provenance'], stamp, apply, request.get('summary'), allow_closed=True)
                     return envelope(operation, 'ok' if apply else 'planned', result, created)
             if op == 'create':
+                from . import usage, usage_pricing
+                prices = usage.pricing(request['pricing']) if 'pricing' in request else None
                 initial = request.get('initial_input')
                 if not isinstance(initial, str): raise ValueError('initial_input must be text')
                 layout = request.get('layout_version', 2)
@@ -200,7 +203,9 @@ def handle(operation, workspace, request, apply):
                 else:
                     paths = [base + '/' + n for n in ('state.json', 'input.md', 'log.md')]
                     payloads = [None, initial.encode(), f'# Activity log\n\n- {stamp} Created Activity ({prov}).\n'.encode()]
-                if not apply: return envelope(operation, 'planned', {'state': state, 'paths': paths})
+                if not apply:
+                    usage_path = base + ('/system/usage.json' if layout == 2 else '/usage.json')
+                    return envelope(operation, 'planned', {'state': state, 'paths': [*paths, usage_path]})
                 store = checked_path(root, location)
                 if not store.exists():
                     store.mkdir(parents=True); changed.append(location)
@@ -210,11 +215,17 @@ def handle(operation, workspace, request, apply):
                     if data is None: write_json(root, path, state)
                     else: write_bytes(root, path, data)
                     changed.append(path)
+                if 'pricing' not in request:
+                    prices = usage_pricing.lookup(root, stamp)
+                usage_result, usage_changed = usage.update(root, base, state['activity_id'],
+                    {'pricing': prices, 'provenance': request['provenance']}, stamp, True,
+                    fingerprint(checked_path(root, paths[0], allow_missing=False)))
+                changed.extend(usage_changed)
                 if layout == 2:
                     readme = checked_path(root, base + '/README.md', allow_missing=False)
                     write_bytes(root, base + '/README.md', activity_documents.navigation(root, base, readme.read_bytes()), fingerprint(readme))
                 if discover(root,location)['activity_id'] != state['activity_id']: raise SafetyError('Created Activity readback failed')
-                return envelope(operation, result={'state': state, 'path': base}, changed=changed)
+                return envelope(operation, result={'state': state, 'path': base, 'usage': usage_result}, changed=changed)
             ident = required_text(request.get('activity_id'), 'activity_id')
             if op == 'supplement':
                 found = []
@@ -440,7 +451,7 @@ def handle(operation, workspace, request, apply):
                 if unified: conversation.check_closure(root, base, ident, core_result)
                 rename_exclusive(checked_path(root,base,allow_missing=False), checked_path(root,dest)); changed.append(dest)
                 if read_json(checked_path(root,artifact(root, dest, 'state.json'),allow_missing=False)) != state or discover(root,location)['status'] != 'absent': raise SafetyError('Closure readback mismatch')
-                usage_result.update(path=artifact(root, dest, 'usage.md'), checkpoint_path=artifact(root, dest, 'usage.json'))
+                usage_result.update(path=artifact(root, dest, 'usage.json'), checkpoint_path=artifact(root, dest, 'usage.json'))
                 return envelope(operation,result={'archive_path':dest,'state':state,'recording':rec,'usage':usage_result},changed=changed)
             raise ValueError('unsupported Activity operation')
         if apply and op in MUTATIONS:

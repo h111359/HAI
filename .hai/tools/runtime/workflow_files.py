@@ -57,7 +57,9 @@ def bind(root, owner_path, base, definition, overrides, store):
     if not isinstance(overrides, dict) or set(overrides) - set(contracts):
         raise ValueError('paths must map only declared file names to paths')
     bindings, seen = {}, []
-    questions = [{'file': name, 'format': contract['format'], 'expectation': contract['expectation']}
+    questions = [{'file': name, 'format': contract['format'], 'expectation': contract['expectation'],
+                  'prompt': (f'Where is the {name.replace("-", " ")} file saved?' if name in definition['inputs']
+                             else f'Where should I save the {name.replace("-", " ")} file?')}
                  for name, contract in contracts.items() if contract['mode'] == 'ask' and name not in overrides]
     if questions:
         return {}, questions

@@ -3,20 +3,20 @@ from datetime import datetime
 from decimal import Decimal, InvalidOperation, localcontext
 import hashlib
 import json
-from pathlib import Path
 import re
 import stat
 from path_contract import source_path_string, native_source_path, is_link_or_reparse
 
-from activity_layout import artifact
+from activity_layout import artifact, version
 
-from .storage import SafetyError, _pairs, checked_path, fingerprint, read_json, write_bytes, write_json
+from .storage import SafetyError, _pairs, checked_path, fingerprint, read_json, write_json
+from .user_messages import usage_notice
 
 METRICS = ('input_tokens', 'cached_input_tokens', 'output_tokens',
            'reasoning_output_tokens', 'total_tokens')
 RATE_KEYS = {'input_credits_per_million', 'cached_input_credits_per_million', 'output_credits_per_million'}
 ROOT_KEYS = {'usage_format_version', 'activity_id', 'updated_at', 'provenance',
-             'sources', 'pricing', 'reported_spend', 'summary', 'markdown_sha256'}
+             'sources', 'pricing', 'reported_spend', 'summary'}
 
 
 def nonblank(value, name):
@@ -191,81 +191,42 @@ def summarize(sources, rates, spend):
             for k in METRICS:
                 merged[k] += value[k]
     estimate = None
-    if rates and coverage == 'observed' and set(models) <= rates['rates'].keys():
+    by_model_cost = {}
+    if rates and coverage == 'observed':
         with localcontext() as context:
             context.prec = 10000  # Exact for bounded decimal rates and JSON integer counters.
-            estimate = Decimal(0)
             for model, t in models.items():
-                rate = rates['rates'][model]
-                estimate += ((t['input_tokens'] - t['cached_input_tokens']) * Decimal(rate['input_credits_per_million'])
-                             + t['cached_input_tokens'] * Decimal(rate['cached_input_credits_per_million'])
-                             + t['output_tokens'] * Decimal(rate['output_credits_per_million'])) / Decimal(1000000)
-            estimate = format(estimate, 'f')
+                rate = rates['rates'].get(model)
+                if rate:
+                    cost = ((t['input_tokens'] - t['cached_input_tokens']) * Decimal(rate['input_credits_per_million'])
+                            + t['cached_input_tokens'] * Decimal(rate['cached_input_credits_per_million'])
+                            + t['output_tokens'] * Decimal(rate['output_credits_per_million'])) / Decimal(1000000)
+                    by_model_cost[model] = format(cost, 'f')
+            if set(by_model_cost) == set(models):
+                estimate = format(sum(Decimal(cost) for cost in by_model_cost.values()), 'f')
     expected = {s['binding']['session_id']: s['observation']['through_position'] for s in sources if s['observation']}
     report_current = spend is not None and spend['through'] == expected and all(s['status'] == 'current' for s in sources)
     return {'coverage': coverage, 'tokens': total, 'by_model': models,
             'estimated_credits': estimate,
+            'estimated_credits_by_model': by_model_cost,
             'reported_credits': spend['credits'] if report_current else None,
             'reported_spend_current': report_current,
             'missing_rate_models': sorted(set(models) - rates['rates'].keys()) if rates else sorted(models)}
 
 
-def cell(value):
-    return str(value).replace('&', '&amp;').replace('|', '&#124;').replace('<', '&lt;').replace('>', '&gt;').replace('\n', ' ')
-
-
-def render(data):
-    s = data['summary']
-    lines = ['# Activity usage', '', 'Activity: `' + data['activity_id'] + '`', '',
-             'Updated: ' + data['updated_at'], '', 'Coverage: **' + s['coverage'] + '** for explicitly assigned source ranges only.', '',
-             'This is the latest observed snapshot, not an invoice. Unregistered sessions and future or unsaved usage are not included.', '',
-             '## Tokens', '', '| Metric | Observed value |', '| --- | --- |']
-    for key in METRICS:
-        lines.append('| ' + key + ' | ' + (str(s['tokens'][key]) if s['tokens'] is not None else 'Unavailable') + ' |')
-    lines += ['', 'Cached input is included in input; reasoning is included in output. Total is input plus output, without adding those subsets again.', '',
-              'Partial/stale coverage shows last-known token values; it does not establish complete current usage.', '',
-              '## Credits', '', '| Kind | Value |', '| --- | --- |']
-    for label, value in [('Caller-reported credits', s['reported_credits']),
-                         ('Estimated credit equivalent', s['estimated_credits'])]:
-        lines.append('| ' + label + ' | ' + (cell(value) if value is not None else 'Unavailable') + ' |')
-    lines += ['', 'Estimates use the supplied rate snapshot; they are not actual debited credits or subscription charges. Quota percentages and remaining credit balances are never spend.', '']
-    if data['pricing']:
-        rate = data['pricing']
-        lines += ['Rate source: ' + cell(rate['source']), '', 'Rate captured: ' + rate['captured_at'], '',
-                  '| Model | Input credits / 1M | Cached input credits / 1M | Output credits / 1M |', '| --- | --- | --- | --- |']
-        for model, values in sorted(rate['rates'].items()):
-            lines.append('| ' + ' | '.join(cell(v) for v in [model, values['input_credits_per_million'], values['cached_input_credits_per_million'], values['output_credits_per_million']]) + ' |')
-        lines += ['']
-    if data['reported_spend']:
-        lines += ['Reported-spend evidence: ' + cell(data['reported_spend']['source']), '',
-                  'Reported evidence matches current source cutoffs: ' + str(s['reported_spend_current']), '']
-    lines += ['## Sources', '', '| Session | Assigned positions | Latest token position | Status |', '| --- | --- | --- | --- |']
-    errors = []
-    for source in data['sources']:
-        b, o = source['binding'], source['observation']
-        lines.append('| ' + ' | '.join(cell(v) for v in [b['session_id'], str(b['start_position']) + '..' + (str(b['end_position']) if b['end_position'] is not None else 'live'), o['through_position'] if o else 'Unavailable', source['status']]) + ' |')
-        if source['error']:
-            errors.append('- ' + cell(b['session_id']) + ': ' + cell(source['error']))
-    if errors:
-        lines += ['', *errors]
-    if not data['sources']:
-        lines += ['', 'No usage sources have been assigned. Values are unavailable, not zero.']
-    lines += ['', 'Source cutoffs, last-good observations and provenance are retained in `usage.json`. Updates before closure include only usage already available at that time.', '']
-    return '\n'.join(lines).encode('utf-8')
-
-
 def load(root, base, activity_id):
     ledger = checked_path(root, artifact(root, base, 'usage.json'))
-    report = checked_path(root, artifact(root, base, 'usage.md'))
-    ledger_fp, report_fp = fingerprint(ledger), fingerprint(report)
+    ledger_fp = fingerprint(ledger)
     if ledger_fp is None:
-        if report_fp is not None:
-            raise SafetyError('Existing usage.md has no checkpoint; preserve it for explicit adoption')
-        return None, ledger_fp, report_fp
+        return None, ledger_fp
     try:
         data = read_json(ledger)
-        if not isinstance(data, dict) or set(data) != ROOT_KEYS or type(data['usage_format_version']) is not int or data['usage_format_version'] not in (1, 2) or data['activity_id'] != activity_id:
+        fmt = data.get('usage_format_version') if isinstance(data, dict) else None
+        keys = ROOT_KEYS | {'markdown_sha256'} if fmt in (1, 2) else ROOT_KEYS
+        if type(fmt) is not int or fmt not in (1, 2, 3) or set(data) != keys or data['activity_id'] != activity_id:
             raise ValueError('Invalid or mismatched usage checkpoint')
+        if fmt in (1, 2) and not isinstance(data['markdown_sha256'], str):
+            raise ValueError('Invalid historical Markdown fingerprint')
         # Read the unreleased v1 checkpoint only when discarded monetary fields
         # are null. Non-null historical values require explicit preservation.
         if data['usage_format_version'] == 1:
@@ -312,17 +273,18 @@ def load(root, base, activity_id):
                 nonblank(o['through_timestamp'], 'observation time')
                 if o['baseline_position'] is not None and (type(o['baseline_position']) is not int or not 0 <= o['baseline_position'] < b['start_position']):
                     raise ValueError('Invalid baseline boundary')
-        if json.dumps(data['summary'], sort_keys=True) != json.dumps(summarize(data['sources'], data['pricing'], data['reported_spend']), sort_keys=True):
+        expected_summary = summarize(data['sources'], data['pricing'], data['reported_spend'])
+        if fmt in (1, 2):
+            expected_summary.pop('estimated_credits_by_model')
+        if json.dumps(data['summary'], sort_keys=True) != json.dumps(expected_summary, sort_keys=True):
             raise ValueError('Usage summary differs from retained observations')
-        if report_fp is None or data['markdown_sha256'] != hashlib.sha256(report.read_bytes()).hexdigest():
-            raise ValueError('Usage report is missing or changed; inspect before replacing it')
-        return data, ledger_fp, report_fp
+        return data, ledger_fp
     except (ValueError, TypeError, KeyError) as exc:
         raise SafetyError(str(exc)) from exc
 
 
-def update(root, base, activity_id, request, time, apply, expected_state):
-    old, ledger_fp, report_fp = load(root, base, activity_id)
+def update(root, base, activity_id, request, time, apply, expected_state, *, only_if_changed=False):
+    old, ledger_fp = load(root, base, activity_id)
     entries = json.loads(json.dumps(old['sources'])) if old else []
     if 'sources' in request:
         if not isinstance(request['sources'], list):
@@ -338,6 +300,22 @@ def update(root, base, activity_id, request, time, apply, expected_state):
                 raise ValueError('Existing source assignments are immutable; resolve changed attribution explicitly')
             if not existing:
                 entries.append({'binding': b, 'observation': None, 'status': 'unavailable', 'error': 'Not yet observed'})
+    warnings = []
+    if version(root, base) == 2:
+        from .conversation import load as load_recording
+        try:
+            recording = load_recording(root, base, activity_id)[0]
+            registered = {entry['binding']['session_id'] for entry in entries}
+            if not recording['migration'] or recording['migration']['status'] == 'complete':
+                for source in recording['sources']:
+                    # The chat cutoff can precede the last saved token event.
+                    raw = source.get('closure_binding') or source['binding']
+                    b = binding(root, {k: raw[k] for k in ('path', 'session_id', 'start_position', 'end_position')})
+                    if b['session_id'] not in registered:
+                        entries.append({'binding': b, 'observation': None, 'status': 'unavailable', 'error': 'Not yet observed'})
+                        registered.add(b['session_id'])
+        except (SafetyError, OSError, ValueError, TypeError, KeyError) as exc:
+            warnings.append('Recording source assignments unavailable: ' + str(exc))
     rates = pricing(request['pricing']) if 'pricing' in request else old['pricing'] if old else None
     spend = reported(request['reported_spend']) if 'reported_spend' in request else old['reported_spend'] if old else None
     for entry in entries:
@@ -347,23 +325,23 @@ def update(root, base, activity_id, request, time, apply, expected_state):
         except (SafetyError, OSError, ValueError, UnicodeError, KeyError, TypeError) as exc:
             entry['status'] = 'stale' if entry['observation'] is not None else 'unavailable'
             entry['error'] = str(exc)
-    data = {'usage_format_version': 2, 'activity_id': activity_id, 'updated_at': time,
+    data = {'usage_format_version': 3, 'activity_id': activity_id, 'updated_at': time,
             'provenance': provenance(request['provenance']), 'sources': entries,
             'pricing': rates, 'reported_spend': spend, 'summary': summarize(entries, rates, spend)}
-    markdown = render(data)
-    data['markdown_sha256'] = hashlib.sha256(markdown).hexdigest()
-    result = {'activity_id': activity_id, 'path': artifact(root, base, 'usage.md'),
-              'checkpoint_path': artifact(root, base, 'usage.json'), 'updated_at': time, 'summary': data['summary']}
+    path = artifact(root, base, 'usage.json')
+    result = {'activity_id': activity_id, 'path': path, 'checkpoint_path': path,
+              'updated_at': time, 'summary': data['summary'], 'pricing': rates, 'warnings': warnings,
+              'user_notice': usage_notice(data['summary'], has_sources=bool(entries))}
     if not apply:
         return result, []
+    if only_if_changed and old and all(old.get(key) == data[key] for key in ROOT_KEYS - {'updated_at', 'provenance'}):
+        return {**result, 'updated_at': old['updated_at']}, []
     changed = []
     try:
         if fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)) != expected_state:
             raise SafetyError('Activity changed before usage update')
-        write_json(root, artifact(root, base, 'usage.json'), data, ledger_fp)
-        changed.append(artifact(root, base, 'usage.json'))
-        write_bytes(root, artifact(root, base, 'usage.md'), markdown, report_fp)
-        changed.append(artifact(root, base, 'usage.md'))
+        write_json(root, path, data, ledger_fp)
+        changed.append(path)
         load(root, base, activity_id)
         if fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)) != expected_state:
             raise SafetyError('Activity changed during usage update')
@@ -374,7 +352,9 @@ def update(root, base, activity_id, request, time, apply, expected_state):
 
 
 def read(root, base, activity_id):
-    data, _, _ = load(root, base, activity_id)
-    return {'activity_id': activity_id, 'path': artifact(root, base, 'usage.md'), 'available': data is not None,
+    data, _ = load(root, base, activity_id)
+    summary = data['summary'] if data else {'coverage': 'unavailable', 'tokens': None}
+    return {'activity_id': activity_id, 'path': artifact(root, base, 'usage.json'), 'available': data is not None,
             'updated_at': data['updated_at'] if data else None,
-            'summary': data['summary'] if data else {'coverage': 'unavailable', 'tokens': None}}
+            'pricing': data['pricing'] if data else None,
+            'summary': summary, 'user_notice': usage_notice(summary, has_sources=bool(data and data['sources']))}

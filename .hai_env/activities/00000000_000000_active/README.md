@@ -13,5 +13,6 @@ Original message: `989f76c9-f6a7-4baf-aa78-351c90bd93e5` in [conversation](syste
 
 - [Conversation](system/chat.jsonl)
 - [Work log](system/log.md)
+- [Usage](system/usage.json)
 - [Previous versions](history)
 <!-- hai-navigation:end -->

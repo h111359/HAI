@@ -118,6 +118,24 @@ def enabled(workspace, request):
     return True  # Conversation recording is an invariant, not an optional feature.
 
 
+def retry_unbound(root, base, activity_id):
+    """Refresh discovery for the current session without guessing its Activity boundary."""
+    from . import conversation
+
+    current = os.environ.get('CODEX_THREAD_ID') or os.environ.get('CODEX_SESSION_ID')
+    if not current:
+        return {'status': 'needs_session_identity'}
+    try:
+        data, _, _, _ = conversation.load(root, base, activity_id)
+        if any(row['binding']['session_id'] == current for row in data['sources']):
+            return {'status': 'bound'}
+        source = resolve(root, {})
+    except (SafetyError, OSError, ValueError) as exc:
+        return {'status': 'unavailable', 'reason': str(exc)}
+    return {'status': 'needs_boundary', 'session_id': source['session_id'],
+            'path': source['path'], 'representation': source['representation']}
+
+
 def readiness(workspace, activity):
     """Separate recording readiness from environment validity; never write."""
     from .recording_policy import effective

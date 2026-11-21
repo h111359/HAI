@@ -25,7 +25,7 @@ class ActivityLayoutTests(unittest.TestCase):
     def test_default_creates_only_readme_and_system_with_exact_original_reference(self):
         base = self.root / self.base
         self.assertEqual({p.name for p in base.iterdir()}, {'README.md', 'system'})
-        self.assertEqual({p.name for p in (base / 'system').iterdir()}, {'state.json', 'log.md', 'chat.jsonl'})
+        self.assertEqual({p.name for p in (base / 'system').iterdir()}, {'state.json', 'log.md', 'chat.jsonl', 'usage.json'})
         state = json.loads((base / 'system/state.json').read_text())
         message = json.loads((base / 'system/chat.jsonl').read_text())
         self.assertEqual(state['initial_message_id'], message['message_id'])
@@ -45,8 +45,9 @@ class ActivityLayoutTests(unittest.TestCase):
         copies = list((archived / 'history/readme').glob('*.md'))
         self.assertEqual(len(copies), 1)
         self.assertEqual(copies[0].read_bytes(), before)
-        self.assertTrue((archived / 'system/usage.md').exists())
-        self.assertIn('[Usage](system/usage.md)', (archived / 'README.md').read_text())
+        self.assertTrue((archived / 'system/usage.json').exists())
+        self.assertFalse((archived / 'system/usage.md').exists())
+        self.assertIn('[Usage](system/usage.json)', (archived / 'README.md').read_text())
         self.assertIn('[Previous versions](history)', (archived / 'README.md').read_text())
         self.assertEqual(json.loads((archived / 'system/state.json').read_text())['lifecycle'], 'closed')
 

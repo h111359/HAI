@@ -18,7 +18,7 @@ def navigation(root, base, raw):
         raise ValueError('README navigation markers require inspection')
     links = []
     for relative, label in [('system/chat.jsonl', 'Conversation'), ('system/log.md', 'Work log'),
-                            ('system/usage.md', 'Usage'), ('results', 'Reviewable outputs'),
+                            ('system/usage.json', 'Usage'), ('results', 'Reviewable outputs'),
                             ('evidence', 'Verification evidence'),
                             ('workflow-runs', 'Workflow runs'), ('history', 'Previous versions')]:
         if checked_path(root, base + '/' + relative).exists():

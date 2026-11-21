@@ -52,6 +52,20 @@ def handle(operation, workspace, request, apply):
                 from activity_layout import version
                 from . import conversation
                 unified = version(root, base) == 2
+                def refresh_usage(result, changed):
+                    if not apply:
+                        return
+                    from . import usage
+                    try:
+                        state_fp = fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False))
+                        result['usage'], files = usage.update(root, base, ident, {'provenance': request['provenance']},
+                                                             now(), True, state_fp, only_if_changed=True)
+                        changed.extend(files)
+                    except (SafetyError, OSError, ValueError, TypeError, KeyError) as exc:
+                        changed.extend(path for path in getattr(exc, 'changed_files', []) if path not in changed)
+                        result['usage'] = {'status': 'unavailable', 'issues': [str(exc)], 'user_notice': {
+                            'action_owner': 'host',
+                            'message': 'I couldn’t update the usage estimate. I’ll check again when we continue. You can keep working.'}}
                 if op == 'migrate':
                     from .activities import provenance
                     provenance(request)
@@ -75,11 +89,21 @@ def handle(operation, workspace, request, apply):
                             fingerprint(checked_path(root, artifact(root, base, 'state.json'), allow_missing=False)))
                     result['source'] = source
                     result['usage_source'] = {k: binding[k] for k in ('path', 'session_id', 'start_position')}
+                    if unified:
+                        refresh_usage(result, changed)
                     return envelope(operation, 'ok' if apply else 'planned', result, changed)
                 if unified:
                     from .activities import provenance
+                    from .source_discovery import retry_unbound
                     provenance(request)
                     result, changed = conversation.synchronize(root, base, ident, request, now(), apply)
+                    if apply and not request.get('sources'):
+                        result['current_session'] = retry_unbound(root, base, ident)
+                        from .user_messages import session_notice
+                        notice = session_notice(result['current_session']['status'])
+                        if notice:
+                            result['current_session']['user_notice'] = notice
+                    refresh_usage(result, changed)
                     if request.get('mandatory') and result['coverage'] != 'complete':
                         return envelope(operation, 'blocked', result, changed, issues=['Supported messages retained; mandatory source coverage remains incomplete'])
                     return envelope(operation, 'ok' if apply else 'planned', result, changed)

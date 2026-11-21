@@ -38,7 +38,7 @@ class LayoutServiceTests(unittest.TestCase):
     def test_usage_and_invocation_paths_are_owned_by_system_and_role(self):
         result, changed = usage.update(self.root, self.base, self.aid, {'provenance': self.prov},
             self.stamp, True, self.state_fingerprint())
-        self.assertEqual(result['path'], self.base + '/system/usage.md')
+        self.assertEqual(result['path'], self.base + '/system/usage.json')
         self.assertEqual(result['checkpoint_path'], self.base + '/system/usage.json')
         self.assertTrue(usage.read(self.root, self.base, self.aid)['available'])
         self.assertFalse((self.directory / 'usage.json').exists())

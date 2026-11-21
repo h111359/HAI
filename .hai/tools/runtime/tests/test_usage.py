@@ -11,10 +11,12 @@ from unittest import mock
 
 TOOLS = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(TOOLS))
-from runtime import activities, usage
+from runtime import activities, recording, usage, usage_pricing
 
 
 class UsageTests(unittest.TestCase):
+    layout = 1
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(prefix='hai-usage-')
         self.addCleanup(self.tmp.cleanup)
@@ -27,7 +29,7 @@ class UsageTests(unittest.TestCase):
         (self.root / '.hai_env/config/state.json').write_text(json.dumps({'state_format_version': 3,
             'activities': {'location': '.hai_env/activities'}, 'features': {'chronicles': {'enabled': False}}}), encoding='utf-8')
         self.prov = {'source': 'fixture host', 'reason': 'verify assigned usage'}
-        c = activities.handle('create', self.root, {'layout_version': 1, 'initial_input': '', 'provenance': self.prov}, True)
+        c = activities.handle('create', self.root, {'layout_version': self.layout, 'initial_input': '', 'provenance': self.prov}, True)
         self.assertTrue(c['ok'], c)
         self.ident = c['result']['state']['activity_id']
         self.base = self.root / c['result']['path']
@@ -82,9 +84,8 @@ class UsageTests(unittest.TestCase):
         self.assertTrue(r['ok'], r)
         s = r['result']['summary']
         self.assertEqual(Decimal(s['estimated_credits']), Decimal('0.00139'))
-        text = (self.base / 'usage.md').read_text(encoding='utf-8')
-        self.assertIn('not actual debited credits', text)
-        self.assertIn('Caller-reported credits | Unavailable', text)
+        self.assertFalse((self.base / 'usage.md').exists())
+        self.assertIsNone(s['reported_credits'])
 
     def test_missing_model_rates_are_unavailable(self):
         rate = {**self.rate}
@@ -94,21 +95,24 @@ class UsageTests(unittest.TestCase):
         rate['rates'] = {'model-one': self.rate['rates']['model-one']}
         s = self.update(pricing=rate)['result']['summary']
         self.assertIsNone(s['estimated_credits'])
+        self.assertEqual(Decimal(s['estimated_credits_by_model']['model-one']), Decimal('0.00055'))
         self.assertEqual(s['missing_rate_models'], ['model-two'])
 
     def test_tokens_and_credits_only_and_null_legacy_checkpoint(self):
         self.assertTrue(self.update(sources=[self.assignment], pricing=self.rate)['ok'])
         ledger = self.base / 'usage.json'
         data = json.loads(ledger.read_text(encoding='utf-8'))
-        self.assertEqual(data['usage_format_version'], 2)
-        self.assertNotIn('money', (self.base / 'usage.md').read_text(encoding='utf-8').lower())
+        self.assertEqual(data['usage_format_version'], 3)
+        self.assertFalse((self.base / 'usage.md').exists())
         self.assertNotIn('currency', data['pricing'])
         data['usage_format_version'] = 1
+        data['markdown_sha256'] = '0' * 64
         data['pricing'].update(currency=None, money_per_credit=None)
         data['summary'].update(estimated_money=None, reported_money=None)
+        data['summary'].pop('estimated_credits_by_model')
         ledger.write_text(json.dumps(data), encoding='utf-8')
         self.assertTrue(self.update()['ok'])
-        self.assertEqual(json.loads(ledger.read_text(encoding='utf-8'))['usage_format_version'], 2)
+        self.assertEqual(json.loads(ledger.read_text(encoding='utf-8'))['usage_format_version'], 3)
         for extra in [{'currency': 'EUR'}, {'money_per_credit': '0.04'}]:
             self.assertFalse(self.update(pricing={**self.rate, **extra})['ok'])
         self.assertFalse(self.update(reported_spend={'credits': '1', 'money': None,
@@ -172,12 +176,16 @@ class UsageTests(unittest.TestCase):
 
     def test_preview_and_empty_read_have_no_side_effects(self):
         r = activities.handle('usage-read', self.root, {'activity_id': self.ident}, False)
-        self.assertFalse(r['result']['available'])
+        self.assertTrue(r['result']['available'])
+        self.assertEqual(r['result']['summary']['coverage'], 'unavailable')
+        self.assertEqual(r['result']['user_notice']['action_owner'], 'none')
+        self.assertIn('You can keep working', r['result']['user_notice']['message'])
         self.assertFalse((self.base / 'usage.md').exists())
+        before = (self.base / 'usage.json').read_bytes()
         r = self.update(apply=False, sources=[self.assignment])
         self.assertEqual(r['status'], 'planned')
         self.assertEqual(r['changed_files'], [])
-        self.assertFalse((self.base / 'usage.json').exists())
+        self.assertEqual((self.base / 'usage.json').read_bytes(), before)
 
     def test_invalid_rates_bindings_and_noncanonical_sources(self):
         for rate in [float('nan'), 'NaN', '-1', '1e99999999', True]:
@@ -217,36 +225,35 @@ class UsageTests(unittest.TestCase):
         self.assertEqual(json.loads((self.base / 'state.json').read_text(encoding='utf-8'))['lifecycle'], 'active')
         self.assertFalse((self.base / 'outcome.md').exists())
 
-    def test_partial_report_failure_stops_closure_and_retains_checkpoint(self):
+    def test_checkpoint_write_failure_stops_closure_and_retains_prior_snapshot(self):
         self.update(sources=[self.assignment])
         self.lines.append(self.counter(260, 160, 70, 25)); self.save()
-        with mock.patch.object(usage, 'write_bytes', side_effect=OSError('injected report failure')):
+        with mock.patch.object(usage, 'write_json', side_effect=OSError('injected checkpoint failure')):
             r = self.close()
-        self.assertEqual(r['status'], 'partial', r)
+        self.assertFalse(r['ok'], r)
         ledger = json.loads((self.base / 'usage.json').read_text(encoding='utf-8'))
-        self.assertEqual(ledger['summary']['tokens']['total_tokens'], 210)
+        self.assertEqual(ledger['summary']['tokens']['total_tokens'], 130)
         self.assertEqual(json.loads((self.base / 'state.json').read_text(encoding='utf-8'))['lifecycle'], 'active')
         self.assertFalse((self.base / 'outcome.md').exists())
 
     def test_user_report_without_checkpoint_is_preserved(self):
         (self.base / 'usage.md').write_text('Existing human notes', encoding='utf-8')
-        self.assertFalse(self.update()['ok'])
-        self.assertFalse(self.close()['ok'])
+        self.assertTrue(self.update()['ok'])
         self.assertEqual((self.base / 'usage.md').read_text(encoding='utf-8'), 'Existing human notes')
 
     def test_external_activity_change_during_update_is_partial(self):
-        original = usage.write_bytes
+        original = usage.write_json
         def changed(root, relative, content, expected=None):
             original(root, relative, content, expected)
             path = self.base / 'state.json'
             data = json.loads(path.read_text(encoding='utf-8')); data['external_change'] = True
             path.write_text(json.dumps(data), encoding='utf-8')
-        with mock.patch.object(usage, 'write_bytes', side_effect=changed):
+        with mock.patch.object(usage, 'write_json', side_effect=changed):
             result = self.update(sources=[self.assignment])
         self.assertEqual(result['status'], 'partial', result)
         self.assertIn('Activity changed', result['issues'][0])
         self.assertTrue((self.base / 'usage.json').is_file())
-        self.assertTrue((self.base / 'usage.md').is_file())
+        self.assertFalse((self.base / 'usage.md').exists())
 
     def test_linked_source_and_report_are_not_followed(self):
         alias = self.root / 'alias.jsonl'
@@ -256,9 +263,9 @@ class UsageTests(unittest.TestCase):
             self.skipTest('Symlinks unavailable')
         s = self.update(sources=[{**self.assignment, 'path': str(alias)}])['result']['summary']
         self.assertIsNone(s['tokens'])
-        (self.base / 'usage.md').unlink()
         (self.base / 'usage.md').symlink_to(self.root / 'human.md')
-        self.assertFalse(self.update()['ok'])
+        self.assertTrue(self.update()['ok'])
+        self.assertTrue((self.base / 'usage.md').is_symlink())
 
     def test_cli_update_then_read(self):
         request = self.root / 'request.json'
@@ -270,6 +277,57 @@ class UsageTests(unittest.TestCase):
         r = subprocess.run(args, capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout)
         self.assertTrue(json.loads(r.stdout)['result']['available'])
+
+
+class DefaultUsageTests(unittest.TestCase):
+    layout = 2
+    setUp = UsageTests.setUp
+    record = UsageTests.record
+    counter = UsageTests.counter
+    save = UsageTests.save
+    update = UsageTests.update
+
+    def test_creation_initializes_json_with_best_effort_pricing(self):
+        self.assertTrue(UsageTests.close(self)['ok'])
+        request = {'initial_input': 'Start another Activity', 'provenance': self.prov}
+        with mock.patch.object(usage_pricing, 'lookup', return_value=self.rate) as lookup:
+            self.assertTrue(activities.handle('create', self.root, request, False)['ok'])
+            lookup.assert_not_called()
+            result = activities.handle('create', self.root, request, True)
+            self.assertTrue(result['ok'], result)
+            lookup.assert_called_once()
+        path = self.root / result['result']['usage']['path']
+        snapshot = json.loads(path.read_text(encoding='utf-8'))
+        self.assertEqual(snapshot['pricing'], self.rate)
+        self.assertIsNone(snapshot['summary']['estimated_credits'])
+        self.assertFalse(path.with_suffix('.md').exists())
+
+    def test_recording_refresh_collects_the_assigned_source(self):
+        self.assertTrue(self.update(pricing=self.rate)['ok'])
+        result = recording.handle('synchronize', self.root, {'activity_id': self.ident,
+            'provenance': self.prov, 'sources': [{**self.assignment, 'representation': 'event_msg'}]}, True)
+        self.assertTrue(result['ok'], result)
+        snapshot = result['result']['usage']['summary']
+        self.assertEqual(snapshot['tokens']['total_tokens'], 130)
+        self.assertEqual(Decimal(snapshot['estimated_credits']), Decimal('0.00139'))
+        self.assertFalse((self.base / 'system/usage.md').exists())
+
+    def test_price_lookup_collects_exact_models_and_handles_network_failure(self):
+        profiles = self.root / '.hai_env/config/model_profiles.json'
+        profiles.write_text(json.dumps({'format_version': 1, 'models': {
+            'light': 'model-one', 'standard': 'model-two', 'advanced': 'model-three'}}))
+        html = ('<table><tr><th>Credits per 1M tokens</th><th>Input Tokens</th>'
+                '<th>Cached input tokens</th><th>Output Tokens</th></tr>'
+                '<tr><td>Model One</td><td>50 credits</td><td>2.5 credits</td><td>1,250 credits</td></tr></table>')
+        with mock.patch.object(usage_pricing, 'urlopen') as fetch:
+            response = fetch.return_value.__enter__.return_value
+            response.geturl.return_value = usage_pricing.URL
+            response.read.return_value = html.encode()
+            prices = usage_pricing.lookup(self.root, '2026-11-06T00:00:00Z')
+            self.assertEqual(list(prices['rates']), ['model-one'])
+            self.assertEqual(prices['rates']['model-one']['output_credits_per_million'], '1250')
+            fetch.side_effect = TimeoutError()
+            self.assertIsNone(usage_pricing.lookup(self.root, '2026-11-06T00:00:00Z'))
 
 
 if __name__ == '__main__':
