@@ -1,7 +1,7 @@
 {
   "core_format_version": 1,
   "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
-  "updated_at": "2026-11-21T04:18:34Z",
+  "updated_at": "2026-11-21T04:47:28Z",
   "sources": [
     {
       "binding": {
@@ -21,8 +21,8 @@
           }
         ]
       },
-      "prefix_bytes": 37050637,
-      "prefix_sha256": "9ef1d4195b682eb21dfd52962ba2912e55dbfe3bf4994aa8f188a58519646bb0",
+      "prefix_bytes": 37575220,
+      "prefix_sha256": "4b11b0eda52e2be876d593999fc1d804179366dd836656b30a7e72cba2a3b9bb",
       "segment_path": "chronicles/20261112_195218_segment-01.md",
       "original_started_at": "2026-11-12T19:52:18.056Z",
       "closure_binding": null,
@@ -794,6 +794,70 @@
           "timestamp": "2026-11-21T04:17:41.665Z",
           "message_id": "01a1fc53-051f-7e42-b844-6a5ac1eb6d84",
           "turn_id": "01a1fc53-04ce-7da3-a641-4d6532266058"
+        },
+        {
+          "source_position": 10384,
+          "role": "assistant",
+          "text": "Committed as `f153036` \u2014 `docs: align setup guides and record activity usage costs`.\n\nWorking tree is clean. The Activity remains open.",
+          "timestamp": "2026-11-21T04:18:49.076Z",
+          "message_id": "msg_08f247297895facc016b011ba8802087d2b8fe334d9cfb4991",
+          "turn_id": "01a1fc53-04ce-7da3-a641-4d6532266058"
+        },
+        {
+          "source_position": 10394,
+          "role": "user",
+          "text": "Check the HAI core how it is instructed to use the skills installed in folder .hai_env\\skills\n",
+          "timestamp": "2026-11-21T04:19:53.005Z",
+          "message_id": "01a1fc55-062b-7bb1-9b94-a86f56c9235f",
+          "turn_id": "01a1fc55-05f9-7422-a9a8-18f99523cedc"
+        },
+        {
+          "source_position": 10417,
+          "role": "assistant",
+          "text": "**HAI supports using installed skills, but its discovery instructions are incomplete.**\n\nThe current instructions say to:\n\n1. Use `.hai_env/skills/<name>/SKILL.md` for installed skills. Root `skills/` is a source collection, with no automatic fallback.\n2. Allow a skill to be requested directly, without selecting a role.\n3. Read the selected skill\u2019s instructions and task-relevant resources before using it.\n4. Let roles choose suitable skills; workflows assign roles and results rather than skills.\n5. Preserve the task\u2019s permissions and HAI\u2019s Activity rules. Selecting a skill grants no additional authority.\n\nThese rules appear in [startup instructions](C:/Users/hmhri/Desktop/repos/HAI/.hai/start.md:79) and the [skill convention](C:/Users/hmhri/Desktop/repos/HAI/.hai/conventions/skill_conv.md:9).\n\nThe gaps I found are:\n\n- Startup does **not present an inventory of installed skills**.\n- `skills list` returns names, paths and validation results, **but omits descriptions** needed to judge relevance.\n- Core does not explicitly require checking installed skills against each new task.\n- Some roles explicitly mention discovery; others merely permit using skills.\n\nConsequently, installing a relevant skill **does not reliably ensure the AI will discover and consider it**. HAI provides lookup and usage rules, but leaves discovery largely to the executor.\n\nCurrently, `.hai_env/skills/` contains no installed skills. I made no framework changes.",
+          "timestamp": "2026-11-21T04:20:48.435Z",
+          "message_id": "msg_08f247297895facc016b011c1a1f0087d2ba1326dc3d4f14fd",
+          "turn_id": "01a1fc55-05f9-7422-a9a8-18f99523cedc"
+        },
+        {
+          "source_position": 10427,
+          "role": "user",
+          "text": "Propose me how the found gaps and issues can be resolved\n",
+          "timestamp": "2026-11-21T04:23:37.105Z",
+          "message_id": "01a1fc58-718f-75a3-9656-3bec9c331da3",
+          "turn_id": "01a1fc58-7134-7843-8d75-88cca8cebfb8"
+        },
+        {
+          "source_position": 10428,
+          "role": "assistant",
+          "text": "I recommend **automatic discovery, followed by selective use**. HAI should make installed skills visible and require the AI to consider their relevance, while leaving their detailed instructions unloaded until needed.\n\n1. **Include a short skill inventory at startup.**  \n   HAI should expose each installed skill\u2019s name, description and entry-point path. An empty folder should simply produce an empty inventory.\n\n2. **Return descriptions from `skills list`.**  \n   This gives the AI enough information to select candidates without opening every `SKILL.md`. Discovery should read frontmatter only; it should not load supporting resources or execute scripts.\n\n3. **Add one core selection rule.**  \n   At the start of an assignment, the executor should compare the task with the installed skill descriptions. It should use a suitable skill when it materially helps, and continue with its own role procedures when none fits. Installation alone should never trigger execution.\n\n4. **Load a selected skill progressively.**  \n   The executor should read its `SKILL.md`, check prerequisites, then load only the resources needed for the task. The role or coordinator supplies the actual inputs, destinations and limits.\n\n5. **Keep the inventory fresh.**  \n   Refresh it after installation, replacement or removal, and when resuming work. A workflow should let each assigned role make its own selection against its particular task.\n\n6. **Distinguish required dependencies from optional candidates.**  \n   Keep `hai-skills` for explicitly required dependencies. Other installed skills remain available for consideration without adding them to every role definition. An unusable optional skill should block only work that actually needs it.\n\nThe discovery rule should live **once in core**. Role definitions should describe their particular responsibilities and any special skill adaptations, rather than repeat the discovery mechanism.\n\nVerification should cover empty collections, description visibility, changes to the inventory, direct invocation, role-based selection and missing prerequisites. A small independent trial should also check whether the AI selects a relevant skill\u2014and avoids an irrelevant one.\n\nThis would close the discovery gap without adding a separate catalogue, loading every skill in full, or forcing skills into ordinary role work.",
+          "timestamp": "2026-11-21T04:23:51.668Z",
+          "message_id": "msg_08f247297895facc016b011ccc4e3087d28f833b1a21022acb",
+          "turn_id": "01a1fc58-7134-7843-8d75-88cca8cebfb8"
+        },
+        {
+          "source_position": 10437,
+          "role": "user",
+          "text": "Apply proposed fixes\n",
+          "timestamp": "2026-11-21T04:26:14.819Z",
+          "message_id": "01a1fc5a-d9a1-7262-86ec-e0e3e6978466",
+          "turn_id": "01a1fc5a-d96e-7f52-b17a-dc6c19fc0c6a"
+        },
+        {
+          "source_position": 10557,
+          "role": "assistant",
+          "text": "Implemented the proposed fixes:\n\n- Startup lists installed skill names, descriptions and paths.\n- `skills list` returns a fresh, metadata-only inventory.\n- Core instructions require relevance-based selection, progressive loading and refresh after changes or resumption.\n- Optional discovery errors remain separate from required-dependency failures.\n\nDiscovery neither executes skills nor loads their supporting resources.\n\n**Verification:** 96 tests ran, 9 skipped, no failures. Independent review passed.\n\n[Change summary](C:/Users/hmhri/Desktop/repos/HAI/.hai_env/activities/00000000_000000_active/results/skill-discovery.md). Not committed yet.",
+          "timestamp": "2026-11-21T04:33:18.008Z",
+          "message_id": "msg_08f247297895facc016b011f0b6a2487d28e1e6b8cb701c7c8",
+          "turn_id": "01a1fc5a-d96e-7f52-b17a-dc6c19fc0c6a"
+        },
+        {
+          "source_position": 10567,
+          "role": "user",
+          "text": "make a commit\n",
+          "timestamp": "2026-11-21T04:46:46.756Z",
+          "message_id": "01a1fc6d-a5e2-7282-9f84-edb8a0806edc",
+          "turn_id": "01a1fc6d-a55a-7663-83d5-4b006a4cc676"
         }
       ]
     }
@@ -803,12 +867,12 @@
     "chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/checkpoint.json": "0700eefdebb5f264ac485ace4291beff6d980d1e189e075f787170665778f251",
     "chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/20261112_195218_segment-01.md": "e7f3c52348af8e0ec6a455217335fa2c64d75348c6bb437951af325a6e20e160",
     "chronicles/history/9cfa7845-e874-4963-839b-5fb105beef77/reconciliation.json": "2b199834b606c7c8dd3e76e8796413abda56fc6cceb8e7105e49b6589be5b913",
-    "chronicles/20261112_195218_segment-01.md": "f8f8f90d10d6b0b1b521ca2a3a443a0999ab5dcefea8f0596a86479c787d45bf",
-    "chronicles/checkpoint.json": "3555917ba6ceedd92afed226d848004801c2bbc763ded7b9900b25dff2c7294f"
+    "chronicles/20261112_195218_segment-01.md": "9456b8be53fbe2ea252fe3c3b70eb0b0b69403ee7e30691525cd9b4ffb15eae7",
+    "chronicles/checkpoint.json": "1ebb189bec31772f17d4282164fa65eb445a76faa971eba8583ffcb8261c33f4"
   },
   "provenance": {
     "source": "Human request: make a commit",
-    "reason": "Commit the scoped README/INSTALL corrections and retained Activity usage/cost calculation."
+    "reason": "Commit verified lightweight skill discovery, selection policy, tests and Activity evidence."
   },
   "enablement_revision": 2
 }

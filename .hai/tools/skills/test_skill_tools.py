@@ -25,6 +25,59 @@ class SkillTests(unittest.TestCase):
         result=activities.handle('create',self.root,{'layout_version':2,'initial_input':'Skill test','provenance':self.prov},True);self.assertTrue(result['ok'],result)
         candidate=result['result']['path']+'/work/agents/fixture/id/candidates';self.skill(candidate+'/skills')
         return {'activity_id':result['result']['state']['activity_id'],'candidate_workspace':candidate,'packages':['skills/inspect'],'writers_ended':True,'provenance':self.prov}
+    def test_discovery_reads_only_header_and_resolve_still_checks_body(self):
+        self.environment_only();p=self.skill('.hai_env/skills')
+        p.write_bytes(b'---\nname: inspect\ndescription: Inspect supplied material.\n---\n\xff')
+        self.write('.hai_env/skills/inspect/scripts/never.py',"raise RuntimeError('must not execute')\n")
+        with mock.patch.object(Path,'read_text',side_effect=AssertionError('Discovery loaded a body/resource')):
+            result=skill_tools.inventory(self.root)
+        self.assertEqual(result['status'],'available');entry=result['skills'][0]
+        self.assertEqual(entry['description'],'Inspect supplied material.')
+        self.assertEqual(entry['definition'],'.hai_env/skills/inspect/SKILL.md')
+        self.assertFalse(skills.handle('resolve',self.root,{'name':'inspect'},False)['ok'])
+
+    def test_discovery_refreshes_changes_and_retains_valid_candidates(self):
+        self.environment_only();self.skill('.hai_env/skills')
+        self.write('.hai_env/skills/broken/SKILL.md','not frontmatter\n'+'x'*100000)
+        first=skills.handle('list',self.root,{},False)
+        self.assertFalse(first['ok']);self.assertEqual(first['result']['status'],'partial')
+        self.assertTrue(first['result']['skills'][1]['ok'])
+        self.assertEqual(first['result']['skills'][1]['description'],'Inspect supplied material.')
+        self.skill('.hai_env/skills',name='inspect').write_text('---\nname: inspect\ndescription: Updated capability.\n---\nBody.\n',encoding='utf-8')
+        self.assertEqual(skill_tools.inventory(self.root)['skills'][1]['description'],'Updated capability.')
+        (self.root/'.hai_env/skills/inspect/SKILL.md').unlink()
+        self.assertFalse(any(e.get('ok') for e in skill_tools.inventory(self.root)['skills']))
+
+    def test_empty_and_unsafe_inventory_do_not_invalidate_startup(self):
+        from runtime import startup
+        self.environment_only()
+        before={p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
+        result=startup.handle('',self.root,{},False)
+        self.assertTrue(result['ok'],result);self.assertEqual(result['result']['skill_context']['skills'],[])
+        self.assertEqual(before,{p.relative_to(self.root):p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
+        self.write('.hai_env/skills','not a directory')
+        result=startup.handle('',self.root,{},False)
+        self.assertTrue(result['ok'],result);self.assertEqual(result['result']['skill_context']['status'],'unavailable')
+        self.assertTrue(result['result']['skill_context']['issues'])
+
+    def test_partial_startup_inventory_preserves_required_dependency_gate(self):
+        from runtime import startup
+        self.environment_only();self.skill('.hai_env/skills');self.role('worker')
+        self.write('.hai_env/skills/broken/SKILL.md','---\nname: broken\n---\n')
+        result=startup.handle('',self.root,{},False)
+        self.assertTrue(result['ok'],result)
+        self.assertEqual(result['result']['skill_context']['status'],'partial')
+        self.assertTrue(packages.handle('skills',self.root,{'definition':'.hai_env/roles/worker/ROLE.md'},False)['ok'])
+        (self.root/'.hai_env/skills/inspect/SKILL.md').unlink()
+        self.assertFalse(packages.handle('skills',self.root,{'definition':'.hai_env/roles/worker/ROLE.md'},False)['ok'])
+
+    def test_discovery_bounds_unterminated_frontmatter(self):
+        self.environment_only()
+        self.write('.hai_env/skills/large/SKILL.md','---\nname: large\ndescription: Text.\n'+'x'*70000)
+        result=skill_tools.inventory(self.root)
+        self.assertEqual(result['status'],'partial')
+        self.assertIn('64 KiB',str(result['issues']))
+
     def test_native_freeform_has_no_role_requirement(self):
         p=self.skill();self.assertTrue(skill_tools.validate(self.root,p.relative_to(self.root).as_posix())['ok']);self.assertFalse((self.root/'.hai_env/roles').exists())
     def test_installed_resolution_never_falls_back_to_source(self):

@@ -76,15 +76,15 @@ a partial role-migration marker require [explicit role migration](procedures/mig
 startup never renames packages or substitutes defaults. Historical Activity records
 remain readable. Core startup and administration may continue independently.
 
-Skills may be requested directly without selecting a HAI role. Load the installed
-SKILL.md and its task-relevant resources, validate dependencies and owned service
-settings, and preserve the current task authority. When following a role, load its
-responsibilities and select from its available skills; a workflow assignment does
-not bind a skill or grant additional permissions. Reusable source collections in
-roles/, skills/ and workflows/ are inspected as data, never an installed fallback.
-For an unavailable suitable skill, report the dependency rather than inventing
-capability or a successful result. Existing Activity, invocation, recording and
-artifact rules apply equally to direct skill execution.
+Skills may be requested directly without selecting a HAI role. Apply the core
+[skill discovery and task selection](conventions/skill_conv.md#discovery-and-task-selection)
+contract to new/resumed substantive assignments and workflow role assignments.
+Startup `skill_context` provides lightweight installed metadata and separate
+optional discovery issues; use `skills list` for a fresh inventory. Load only a
+selected skill and its relevant resources after resolution. Role-required skills
+remain explicit dependencies. Source collections in roles/, skills/ and workflows/
+are data, never an installed fallback. Selection grants no authority; fixed
+instructions, Activity, recording and artifact rules still apply.
 
 ## Built-in definition authoring
 

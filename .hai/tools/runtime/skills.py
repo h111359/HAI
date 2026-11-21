@@ -27,12 +27,8 @@ def handle(operation,workspace,request,apply):
             result=skills.resolve(root,request.get('name')); return envelope(operation,'ok' if result['ok'] else 'blocked',result,issues=result['issues'])
         if operation=='list':
             if apply: raise ValueError('List is read-only')
-            base=checked_path(root,'.hai_env/skills'); entries=[]
-            if base.exists():
-                for p in sorted(base.iterdir()):
-                    if p.name.startswith('.'): continue
-                    result=skills.validate(root,f'.hai_env/skills/{p.name}/SKILL.md'); entries.append(result)
-            return envelope(operation,'ok' if all(x['ok'] for x in entries) else 'blocked',{'skills':entries})
+            result=skills.inventory(root)
+            return envelope(operation,'ok' if not result['issues'] else 'blocked',result,issues=result['issues'])
         provenance(request)
         name=request.get('name'); source=request.get('source')
         if not isinstance(name,str) or not skills.roles.NAMES.fullmatch(name) or len(name)>64: raise ValueError('Invalid skill name')

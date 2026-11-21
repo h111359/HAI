@@ -262,3 +262,5 @@ skills use SKILL.md and remain distinct from HAI roles. Native .agents/ and
 
 Existing agent packages require the explicit [role migration](../procedures/migrate-roles.md).
 Core administration remains available while role-dependent operations await migration.
+
+Role executors follow the shared [skill discovery and task selection](skill_conv.md#discovery-and-task-selection) contract; optional discovery does not require adding candidates to role dependency metadata.

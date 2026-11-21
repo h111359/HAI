@@ -1,0 +1,11 @@
+{
+  "invocation_format_version": 2,
+  "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+  "invocation_id": "9b68ecac-6d88-438e-9aef-206e4793286d",
+  "role": "independent-reviewer",
+  "created_at": "2026-11-21T04:27:02Z",
+  "provenance": {
+    "source": "Human request: Apply proposed fixes",
+    "reason": "Implement lightweight installed-skill discovery, descriptions, core selection/freshness rules and progressive loading."
+  }
+}

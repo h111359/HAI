@@ -24,3 +24,13 @@ Existing monolithic role environments use [explicit capability migration](../../
 `skill_tools.py` exposes read_definition, validate, names, dependencies and resolve to trusted core callers. Parsing does not establish semantic quality or successful execution. Run `run_tests.py --suite skills` with a workspace-owned --work-dir; fixture paths explicitly reject outside-workspace temporary parents. Tests cover direct native skills, two-role reuse, source/installed separation, missing owners/dependencies, reviewed installation, stale previews, publication races and recoverable partial migration. Symlink fixtures may skip when the host lacks privilege.
 
 Source-to-installed installation rebases actual Markdown links outside fenced examples and matching-backtick inline code spans from root roles/skills to canonical installed peers and core owners. Own resources and fenced examples keep their meaning; raw source bytes remain unchanged. Preview differences compare relocated candidate bytes, and staging verifies those transformed hashes. Missing recognized peer/owner links are reported as unavailable dependencies, without source fallback or a readiness claim; this permits skill-first installation followed by the settings-owner role. Missing own-package/core references or unsafe paths block the affected installation. Staged role procedures are validated using the final logical destination rather than the extra staging-folder depth.
+
+Installed skill discovery reads entry-point frontmatter only, returning each
+candidate's name, description and definition path. Startup exposes this as
+`skill_context` with status/issues separate from core validity. `skills list`
+refreshes the same inventory, preserving valid candidates alongside malformed
+entry issues. A missing/empty collection is available with no entries. Metadata
+is not execution readiness: `skills resolve` still validates the full selected
+entry and any required settings. Supporting resources/scripts are never loaded
+by discovery. Headers without valid delimiters or exceeding 64 KiB are reported.
+Follow the core skill convention for selection and refresh rules.

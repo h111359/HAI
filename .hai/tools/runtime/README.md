@@ -513,3 +513,13 @@ The updated runtime reads previous complete format-1 ledgers/checkpoints. Older
 strict runtimes may reject gap-bearing records or their extended attempt status;
 this is not a downgrade-compatibility guarantee. Preserve evidence and update the
 reader rather than removing gap metadata to make an old reader accept it.
+
+Installed skill discovery reads entry-point frontmatter only, returning each
+candidate's name, description and definition path. Startup exposes this as
+`skill_context` with status/issues separate from core validity. `skills list`
+refreshes the same inventory, preserving valid candidates alongside malformed
+entry issues. A missing/empty collection is available with no entries. Metadata
+is not execution readiness: `skills resolve` still validates the full selected
+entry and any required settings. Supporting resources/scripts are never loaded
+by discovery. Headers without valid delimiters or exceeding 64 KiB are reported.
+Follow the core skill convention for selection and refresh rules.

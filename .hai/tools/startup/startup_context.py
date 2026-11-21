@@ -12,6 +12,10 @@ from startup_check import (Invalid, check, safe_path, load_role_contract,
                            read_configuration, ConfigurationError)
 from discovery import discover
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'skills'))
+import skill_tools
+
 
 def context(workspace):
     workspace = Path(workspace).resolve(strict=True)
@@ -21,6 +25,7 @@ def context(workspace):
     else:
         activity = {'status': 'unverified', 'store': None, 'activity_id': None,
                     'path': None, 'state': None, 'continuity': {}, 'issues': []}
+    result['skill_context'] = skill_tools.inventory(workspace)
     result['activity_context'] = activity
     result['issues'].extend(activity['issues'])
     result['ok'] = result['ok'] and activity['status'] in ('current', 'absent') and not activity['issues']

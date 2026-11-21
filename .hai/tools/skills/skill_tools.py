@@ -10,13 +10,32 @@ import role_tools as roles
 from runtime.storage import checked_path, SafetyError
 
 
-def read_definition(path, workspace):
+def read_definition(path, workspace, *, metadata_only=False):
     path = Path(path)
     checked_path(workspace, path.relative_to(workspace).as_posix(), allow_missing=False)
     if path.name != 'SKILL.md' or not path.is_file():
         raise roles.Invalid('A skill requires a readable SKILL.md')
-    source = path.read_text(encoding='utf-8-sig')
-    lines = source.split('\n')
+    if metadata_only:
+        lines = []
+        with path.open('rb') as stream:
+            first = stream.readline(9)
+            if first.decode('utf-8-sig').rstrip('\r\n') != '---':
+                raise roles.Invalid('Skill requires YAML frontmatter')
+            lines.append('---')
+            size = len(first)
+            while True:
+                raw = stream.readline(65536 - size + 1)
+                size += len(raw)
+                if size > 65536:
+                    raise roles.Invalid('Discovery frontmatter exceeds 64 KiB')
+                if not raw:
+                    break
+                line = raw.decode('utf-8').rstrip('\r\n')
+                lines.append(line)
+                if line == '---':
+                    break
+    else:
+        lines = path.read_text(encoding='utf-8-sig').split('\n')
     if not lines or lines[0] != '---': raise roles.Invalid('Skill requires YAML frontmatter')
     try: end = lines.index('---', 1)
     except ValueError as exc: raise roles.Invalid('Unterminated skill frontmatter') from exc
@@ -35,7 +54,7 @@ def read_definition(path, workspace):
     metadata = fields.get('metadata',{})
     if not isinstance(metadata,dict) or any(not isinstance(k,str) or not isinstance(v,str) for k,v in metadata.items()):
         raise roles.Invalid('Skill metadata keys and values must be strings')
-    if not '\n'.join(lines[end+1:]).strip(): raise roles.Invalid('Skill instructions are empty')
+    if not metadata_only and not '\n'.join(lines[end+1:]).strip(): raise roles.Invalid('Skill instructions are empty')
     return fields
 
 
@@ -44,9 +63,36 @@ def validate(workspace, definition):
     try:
         path=checked_path(root,definition,allow_missing=False)
         fields=read_definition(path,root)
-        return {'ok':True,'definition':definition,'skill':fields['name'],'issues':[]}
+        return {'ok':True,'definition':definition,'skill':fields['name'],'description':fields['description'],'issues':[]}
     except (roles.Invalid, roles.UnsupportedYAML, SafetyError, OSError, UnicodeError, ValueError) as exc:
         return {'ok':False,'definition':definition,'issues':[{'code':'skill','message':str(exc)}]}
+
+
+def inventory(workspace):
+    """Read installed entry metadata only; isolate optional discovery failures."""
+    root = Path(workspace).resolve(strict=True)
+    entries, issues = [], []
+    try:
+        base = checked_path(root, '.hai_env/skills')
+        children = sorted(base.iterdir()) if base.exists() else []
+        for child in children:
+            if child.name.startswith('.'):
+                continue
+            definition = f'.hai_env/skills/{child.name}/SKILL.md'
+            try:
+                path = checked_path(root, definition, allow_missing=False)
+                fields = read_definition(path, root, metadata_only=True)
+                entries.append({'ok': True, 'skill': fields['name'],
+                                'description': fields['description'],
+                                'definition': definition, 'issues': []})
+            except (roles.Invalid, roles.UnsupportedYAML, SafetyError, OSError, UnicodeError, ValueError) as exc:
+                issue = {'code': 'skill', 'path': definition, 'message': str(exc)}
+                issues.append(issue)
+                entries.append({'ok': False, 'definition': definition, 'issues': [issue]})
+    except (SafetyError, OSError, ValueError) as exc:
+        issues.append({'code': 'skills', 'path': '.hai_env/skills', 'message': str(exc)})
+    return {'status': 'partial' if issues and entries else 'unavailable' if issues else 'available',
+            'skills': entries, 'issues': issues}
 
 
 def names(fields):

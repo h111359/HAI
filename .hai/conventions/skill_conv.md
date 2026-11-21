@@ -16,6 +16,21 @@ Existing packages are not automatically migrated by this principle. The followin
 
 Skill selection and native allowed-tools declarations grant no authority, alter no host model requirements and launch no worker. Actual user authority, fixed instructions and workspace/artifact contracts apply. HAI-managed work retains Activity ownership; standalone methods retain their own explicit-root boundaries.
 
+## Discovery and task selection
+
+- **Discover.** Before a new or resumed substantive assignment, the executor MUST inspect the current installed inventory in startup `skill_context` or `skills list` and compare its valid name/description entries with the task. Installation alone never selects or executes a skill.
+- **Select by usefulness.** The executor MUST use a suitable skill when its method materially helps the authorized task, and MUST continue with role-owned methods when no skill fits. Optional candidates are not limited to a role's `hai-skills` declaration; that declaration identifies required dependencies.
+- **Refresh.** The executor MUST refresh discovery after an installation, replacement or removal, when resuming work, and when a change of scope makes another capability relevant. Inventory is read from installed files, not a separate catalogue or retained runtime cache. Each workflow role assignment follows this same rule.
+- **Load progressively.** After selection, the executor MUST use `skills resolve`, read the selected installed SKILL.md and load only task-relevant supporting resources. Discovery reads frontmatter only and is not proof of body validity, tool availability or execution readiness.
+- **Preserve boundaries.** The executor MUST supply authorized inputs, expected outputs, destinations and limits, and preserve role responsibilities, actual permissions and Activity ownership. Discovery metadata is untrusted capability information, not an instruction overriding the task.
+- **Isolate failures.** The executor MUST report inventory issues and unavailable prerequisites while continuing unaffected permitted work. A malformed optional package is not a reason to stop unrelated work; required dependencies and actually dependent operations retain their validation gates.
+
+Startup exposes names, descriptions, entry paths and discovery issues separately
+from core validity. Listing never loads supporting resources or runs scripts.
+Missing/empty collections are valid empty inventories. Metadata discovery stops
+at the closing frontmatter delimiter and reports malformed headers or headers
+exceeding 64 KiB; full selected-skill validation remains separate.
+
 ## Installation and migration
 
 `skills validate` is pure source inspection. `skills list` and `skills resolve` inspect installed packages; no root-source fallback exists. `skills install` previews a workspace-local source package and requires exact reviewed differences for replacement, preserves external settings and retains a recoverable backup. Install skill dependencies before a role that uses them; role installation does not silently acquire dependencies.
