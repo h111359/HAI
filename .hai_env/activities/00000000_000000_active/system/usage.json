@@ -1,10 +1,10 @@
 {
   "usage_format_version": 3,
   "activity_id": "f91d0067-7962-4516-b97e-e408330e2faa",
-  "updated_at": "2026-11-21T09:53:04Z",
+  "updated_at": "2026-11-21T10:04:03Z",
   "provenance": {
     "source": "user request",
-    "reason": "Refresh the saved conversation and usage before commit"
+    "reason": "Record and verify the workflow retirement before commit"
   },
   "sources": [
     {
@@ -16,27 +16,27 @@
       },
       "observation": {
         "tokens": {
-          "input_tokens": 22920597,
-          "cached_input_tokens": 22679040,
-          "output_tokens": 74628,
-          "reasoning_output_tokens": 24253,
-          "total_tokens": 22995225
+          "input_tokens": 27328094,
+          "cached_input_tokens": 27066624,
+          "output_tokens": 78047,
+          "reasoning_output_tokens": 24585,
+          "total_tokens": 27406141
         },
         "by_model": {
           "gpt-6.2-sol": {
-            "input_tokens": 22920597,
-            "cached_input_tokens": 22679040,
-            "output_tokens": 74628,
-            "reasoning_output_tokens": 24253,
-            "total_tokens": 22995225
+            "input_tokens": 27328094,
+            "cached_input_tokens": 27066624,
+            "output_tokens": 78047,
+            "reasoning_output_tokens": 24585,
+            "total_tokens": 27406141
           }
         },
-        "through_position": 960,
-        "through_timestamp": "2026-11-21T09:27:52.647Z",
-        "observed_end_position": 971,
+        "through_position": 1093,
+        "through_timestamp": "2026-11-21T10:03:11.222Z",
+        "observed_end_position": 1105,
         "baseline_position": 117,
-        "prefix_bytes": 3195627,
-        "prefix_sha256": "1261350b6a97b788daf8e34c014aceafcf8fffa199a8efdb9936a53ad121c9b8"
+        "prefix_bytes": 3581459,
+        "prefix_sha256": "7f3509a9cc8ba1f68cf63f3847be3241b075adb5a9dda07438d7b9d5efcc1487"
       },
       "status": "current",
       "error": null
@@ -72,24 +72,24 @@
   "summary": {
     "coverage": "observed",
     "tokens": {
-      "input_tokens": 22920597,
-      "cached_input_tokens": 22679040,
-      "output_tokens": 74628,
-      "reasoning_output_tokens": 24253,
-      "total_tokens": 22995225
+      "input_tokens": 27328094,
+      "cached_input_tokens": 27066624,
+      "output_tokens": 78047,
+      "reasoning_output_tokens": 24585,
+      "total_tokens": 27406141
     },
     "by_model": {
       "gpt-6.2-sol": {
-        "input_tokens": 22920597,
-        "cached_input_tokens": 22679040,
-        "output_tokens": 74628,
-        "reasoning_output_tokens": 24253,
-        "total_tokens": 22995225
+        "input_tokens": 27328094,
+        "cached_input_tokens": 27066624,
+        "output_tokens": 78047,
+        "reasoning_output_tokens": 24585,
+        "total_tokens": 27406141
       }
     },
-    "estimated_credits": "87.43245",
+    "estimated_credits": "100.25181",
     "estimated_credits_by_model": {
-      "gpt-6.2-sol": "87.43245"
+      "gpt-6.2-sol": "100.25181"
     },
     "reported_credits": null,
     "reported_spend_current": false,

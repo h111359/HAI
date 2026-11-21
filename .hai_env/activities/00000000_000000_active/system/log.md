@@ -9,3 +9,5 @@
 - 2026-11-21T08:54:23Z — Added per-turn retry for unbound host session discovery. Verified unavailable, later discovery, explicit binding and no discovery after binding. Ran 41 recording and usage tests with two platform skips. (source: local verification; reason: Verify per-turn session discovery and refresh usage).
 
 - 2026-11-21T09:27:44Z — Added the HAI-wide user communication convention and plain-language notices for usage, recording, and missing workflow file locations. Verification ran 45 focused tests with two platform skips. Two additional startup and retry checks passed. (source: local verification; reason: Record and verify plain-language user notices).
+
+- 2026-11-21T10:03:04Z — Retired the single-step change assessment workflow from discovery. Preserved revision 4 in history/workflow-definitions and updated the runtime example to use customer-request. (source: user request; reason: Retire the change assessment workflow).

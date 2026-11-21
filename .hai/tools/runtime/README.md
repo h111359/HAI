@@ -196,12 +196,12 @@ ID and provenance.
 ```json
 {
   "activity_id": "<current Activity UUID>",
-  "definition": ".hai_env/workflows/change-assessment.md",
+  "definition": ".hai_env/workflows/customer-request.md",
   "paths": {
     "request": "activity:work/request.md",
-    "assessment": "activity:results/assessment.md"
+    "documentation": "activity:results/documentation-receipt.md"
   },
-  "provenance": {"source": "user request", "reason": "Assess the supplied proposal"}
+  "provenance": {"source": "user request", "reason": "Process the supplied customer request"}
 }
 ```
 
