@@ -4,9 +4,10 @@ HAI helps you organize work with AI across projects and business activities.
 It gives AI clear instructions for planning, carrying out tasks and checking
 results, while keeping your work and decisions organized.
 
-A **HAI role** defines a responsibility, such as business analysis or review.
-A **skill** provides a reusable method, such as writing requirements. A **workflow**
-sets the steps and handoffs between roles. Your **AI agent** carries out the work.
+A **HAI role** defines a job, with responsibilities and instructions for doing it.
+A **skill** provides an independent, reusable capability, such as preparing a
+design proposal. A **workflow** sets the steps and handoffs between roles.
+Your **AI agent** carries out the work.
 
 ## What can it do?
 

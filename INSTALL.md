@@ -62,11 +62,13 @@ workflows/ single-file definitions. Download the chosen release source archive
 when these optional resources are needed; the core release ZIP does not implicitly
 install or activate them. Preserve local installed variants before updates.
 
-Roles define responsibility and select skills; skills can also be used directly.
-The installed environment uses .hai_env/roles/, .hai_env/skills/ and
-.hai_env/workflows/. Skill methods and templates are not copied into every role.
-Settings retain a single actual owner. Follow the runtime installation commands
-and inspect previews before apply. Missing dependencies block affected work.
+Roles own their responsibilities and job-specific procedures, conventions and
+scripts; a role need not depend on a skill. Skills provide independent capabilities
+that can also be used directly without HAI. Roles supply the needed workspace
+context when using a skill. The installed environment uses .hai_env/roles/,
+.hai_env/skills/ and .hai_env/workflows/. Each method and its resources retain one
+owner. Settings retain a single actual owner. Follow the runtime installation
+commands and inspect previews before apply. Missing dependencies block affected work.
 
 A workflow installation preview lists the output locations to choose, their purpose
 and expected contents. Ask the human for those workspace-relative base folders

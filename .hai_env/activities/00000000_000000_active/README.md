@@ -30,6 +30,7 @@ The initial investigation is complete. The human subsequently accepted the bound
 
 - [Conversation](system/chat.jsonl)
 - [Work log](system/log.md)
+- [Usage](system/usage.md)
 - [Reviewable outputs](results)
 - [Verification evidence](evidence)
 - [Readable chronicles](chronicles)
