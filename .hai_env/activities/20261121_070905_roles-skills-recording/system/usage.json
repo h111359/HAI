@@ -1,0 +1,73 @@
+{
+  "usage_format_version": 2,
+  "activity_id": "88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93",
+  "updated_at": "2026-11-21T07:09:05Z",
+  "provenance": {
+    "source": "Human instruction: Close the activity",
+    "reason": "Finalize completed work, refresh usage and conversation, preserve artifacts and archive without committing"
+  },
+  "sources": [
+    {
+      "binding": {
+        "path": "C:\\Users\\hmhri\\.codex\\sessions\\2026\\11\\12\\rollout-2026-11-12T21-52-18-01a1d151-7046-7d83-89ee-573c30ee6685.jsonl",
+        "session_id": "01a1d151-7046-7d83-89ee-573c30ee6685",
+        "start_position": 6901,
+        "end_position": null
+      },
+      "observation": {
+        "tokens": {
+          "input_tokens": 130439289,
+          "cached_input_tokens": 128951296,
+          "output_tokens": 421098,
+          "reasoning_output_tokens": 153214,
+          "total_tokens": 130860387
+        },
+        "by_model": {
+          "gpt-6.1-sol": {
+            "input_tokens": 130439289,
+            "cached_input_tokens": 128951296,
+            "output_tokens": 421098,
+            "reasoning_output_tokens": 153214,
+            "total_tokens": 130860387
+          }
+        },
+        "through_position": 12042,
+        "through_timestamp": "2026-11-21T07:09:08.061Z",
+        "observed_end_position": 12042,
+        "baseline_position": 6894,
+        "prefix_bytes": 43999712,
+        "prefix_sha256": "ca38de34b4ed6b2ea36ea9d3ce622104195d461692cfdec41f16138eb4b9ee3b"
+      },
+      "status": "current",
+      "error": null
+    }
+  ],
+  "pricing": null,
+  "reported_spend": null,
+  "summary": {
+    "coverage": "observed",
+    "tokens": {
+      "input_tokens": 130439289,
+      "cached_input_tokens": 128951296,
+      "output_tokens": 421098,
+      "reasoning_output_tokens": 153214,
+      "total_tokens": 130860387
+    },
+    "by_model": {
+      "gpt-6.1-sol": {
+        "input_tokens": 130439289,
+        "cached_input_tokens": 128951296,
+        "output_tokens": 421098,
+        "reasoning_output_tokens": 153214,
+        "total_tokens": 130860387
+      }
+    },
+    "estimated_credits": null,
+    "reported_credits": null,
+    "reported_spend_current": false,
+    "missing_rate_models": [
+      "gpt-6.1-sol"
+    ]
+  },
+  "markdown_sha256": "575b641888b01b7228406b1a4d7a30a6de09cb7dcdd539bd29e83a4eaf4edd8f"
+}

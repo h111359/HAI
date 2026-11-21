@@ -1,0 +1,73 @@
+# Skill portability investigation
+
+Activity: `88af2e3d-2e2e-4a0b-9ea3-50ba3b194e93`
+
+## Objective
+
+Investigate all source and installed skills, assess HAI-independent reuse and external skill adoption, research best practices, and recommend the responsibility boundary between skills, roles, workflows and HAI integration. The human will decide how to continue before implementation.
+
+## Review result
+
+Start with the [investigation and recommendation](results/skill-portability-review.md). The recommended direction is portable methods with HAI-specific usage supplied by roles and shared operational enforcement retained in the framework. The report covers all 12 distinct skills and identifies compatibility limits.
+
+The initial investigation is complete. The human subsequently accepted the boundaries and authorized a bounded source collection cleanup. Review the [cleanup result](results/source-collection-cleanup.md) for the two source removals, four source renames and preservation checks. The human then authorized matching installed identities: see [installed administration names](results/installed-admin-names.md). Four installed administration packages and their registrations now match the hai- source identities. Unrelated installed content and runtime behavior remain unchanged; broader portability refactoring has not started. The Activity remains open.
+
+## Evidence and limitations
+
+- [Static package audit](evidence/skill-portability-audit.json): 22 packages, 252 non-cache files.
+- Source/installed comparison: all 124 corresponding files differ only in Markdown link targets where differences exist.
+- Research: five primary documentation sources; links and interpretation in the report.
+- No end-to-end portability trials or independent second-agent review were performed.
+- Chronicles synchronization previously reported missing explicit source assignments. This remains a recording coverage gap; canonical human message capture is retained separately.
+
+## Navigation
+
+- [Conversation](system/chat.jsonl)
+- [Work log](system/log.md)
+
+<!-- hai-navigation:start -->
+## Navigation
+
+- [Conversation](system/chat.jsonl)
+- [Work log](system/log.md)
+- [Usage](system/usage.md)
+- [Reviewable outputs](results)
+- [Verification evidence](evidence)
+- [Previous versions](history)
+<!-- hai-navigation:end -->
+
+## Current result: authoring merged into core
+
+The human subsequently requested complete core consolidation. See [core authoring merge](results/core-authoring-merge.md). Both definition managers and their authoring skills are now core procedures/conventions; their source and installed packages and catalogue registrations have been removed after preservation checks. All 14 resources and 57 checked authoring rules are accounted for, and a core-only fresh-install check passes. Earlier source cleanup and installed-rename reports describe preceding states, not the current installation. The Activity remains open; no commit was made.
+
+## Current recording repair
+
+The native-source compatibility issue is repaired. See [chronicle repair and recovery](results/chronicle-compaction-repair.md). Current registered main-session recording now synchronizes and verifies successfully. Earlier reports describe the pre-repair blocked state. One older archived interval remains explicitly unverified; its stale open-ended assignment has been sealed without changing retained conversation text.
+
+## Current result: partial chronicle storage
+
+Unsupported records no longer prevent storing recognized messages. See [partial chronicle recording](results/partial-chronicle-recording.md) for automatic warning/gap behavior, integrity boundaries, tests and independent review. The real-session smoke saved32messages despite unsupported records; reviewed metadata recognition then resolved those warnings with predecessor evidence preserved. Current synchronization, verification and startup are verified. The Activity remains open and this change is uncommitted.
+
+## Latest research: role and skill boundaries
+
+The discussion was reset before this independent research. Read [roles/skills research](results/role-skill-boundaries-research.md) for the current evidence-grounded recommendation and [source register](evidence/role-skill-research-sources.json). It supports complete role packages with job-specific methods and selectively extracted independent skills; no earlier six-skill proposal is treated as accepted. No role, skill, runtime or workflow files were changed for this research.
+
+## Core principles updated
+
+The human authorized reflecting the agreed role/skill ownership principles in core before backlog refactoring. Updated role/skill concepts, conventions, authoring create/update/review guidance and compatibility documentation across11core documents. Roles may own job-specific conventions/procedures/helpers and use no skills; independent skills receive explicit inputs and newly authored/refactored portable skills require no HAI internals. Existing settings-owner behavior and legacy conversion remain supported without automatic package migration. All33source/installed definitions validate, local links and core whitespace checks pass. No role, skill or runtime code was changed; no commit was requested.
+
+## Current result: portable core deployment
+
+The human authorized fixing the framework for an otherwise empty workspace. See [portable core fix](results/core-boundary-fix.md). Default operations use only `.hai/` and `.hai_env/`, external sources/references require explicit choices, and shipped regressions run without development collections. The 31-module copied-core suite has 579 tests (38 skipped); all executed cases pass after a focused rerun of a Windows path-length fixture failure. Explicit development integrations and independent review also pass. Earlier investigation limits above refer to their earlier scope. The Activity remains open; this change is uncommitted.
+
+## Current result: one always-enabled conversation
+
+See [unified recording](results/unified-conversation-recording.md). The current conversation is system/chat.jsonl; system/recording.json stores bookkeeping without message bodies. Old active transcript/metadata trees were migrated into history/recording/before-unified-v1 after exact preservation checks. Every original chat byte and112 retained source messages were preserved; source synchronization backfilled earlier visible progress replies. Recording checks now run every turn and after chat posts, with explicit warnings for unavailable coverage. The latest test evidence covers607 tests/38 skips with no remaining failures; independent review passed. Earlier reports describe prior states. The Activity remains open and this implementation is uncommitted.
+
+## Final outcome
+
+Completed the Activity investigation and authorized implementation work: role/skill ownership principles and package refactoring, core definition authoring, portable two-root deployment and always-enabled unified conversation recording. Latest implementation commit250be88; latest recording verification evidence covers607 tests with38 skips and all executed tests passing after targeted reruns. Independent reviews passed and known agents/writers have ended. Legacy transcript files, original chat bytes and migration/recovery evidence are preserved under history. Registered conversation sources and usage are refreshed by closure; unavailable specialist usage remains explicit. No unrestricted Windows deep-path portability or background/post-delivery capture is claimed. This acknowledgement is outside the completed closure cutoff. Working material is retained with the Activity; no blanket cleanup, new Activity or commit is requested.
+
+Recording: verified — Single conversation synchronized and verified
+
+Provenance: source: Human instruction: Close the activity; reason: Finalize completed work, refresh usage and conversation, preserve artifacts and archive without committing
